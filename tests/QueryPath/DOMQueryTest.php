@@ -26,7 +26,6 @@ class DOMQueryTest extends TestCase
 {
     const test_tests_allowed_failures = [
         'testxinclude',
-        'testeachlambda',
     ];
 
     /**
@@ -701,14 +700,6 @@ class DOMQueryTest extends TestCase
         $file = DATA_FILE;
         $fn = 'eachCallbackFunctionFake';
         $res = qp($file, 'li')->each([$this, $fn]);
-    }
-
-    public function testEachLambda()
-    {
-        $file = DATA_FILE;
-        $fn = 'qp($item)->attr("class", "foo");';
-        $res = qp($file, 'li')->eachLambda($fn);
-        $this->assertEquals('foo', $res->eq(1)->attr('class'));
     }
 
     public function testDeepest()

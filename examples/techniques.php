@@ -50,9 +50,6 @@ function callbackFunction($index, $element) {
 // Iterate using a callback function
 $qp->each('callbackFunction');
 
-// Iterate using a Lambda-style function
-$qp->eachLambda('return $item->tagName . PHP_EOL;');
-
 // Loop through by index/count
 for ($i = 0; $i < $qp->size(); ++$i) {
   $domElement = $qp->get($i);

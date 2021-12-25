@@ -311,7 +311,6 @@ trait QueryFilters
      *  The callback to run.
      * @return \QueryPath\DOMQuery
      *  The DOMQuery.
-     * @see eachLambda()
      * @see filter()
      * @see map()
      * @throws Exception
@@ -328,35 +327,6 @@ trait QueryFilters
             }
         } else {
             throw new \QueryPath\Exception('Callback is not callable.');
-        }
-
-        return $this;
-    }
-
-    /**
-     * An each() iterator that takes a lambda function.
-     *
-     * @deprecated
-     *   Since PHP 5.3 supports anonymous functions -- REAL Lambdas -- this
-     *   method is not necessary and should be avoided.
-     * @param string $lambda
-     *  The lambda function. This will be passed ($index, &$item).
-     * @return \QueryPath\DOMQuery
-     *  The DOMQuery object.
-     * @see each()
-     * @see filterLambda()
-     * @see filterCallback()
-     * @see map()
-     */
-    public function eachLambda($lambda): Query
-    {
-        $index = 0;
-        foreach ($this->matches as $item) {
-            $fn = create_function('$index, &$item', $lambda);
-            if ($fn($index, $item) === false) {
-                return $this;
-            }
-            ++$index;
         }
 
         return $this;

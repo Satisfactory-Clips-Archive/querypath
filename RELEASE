@@ -78,7 +78,6 @@
 12. Traversing UP the DOM tree with find() is no longer allowed. Use top().
 13. :first is an alias of :nth(1) instead of :first-of-type. This follows
   jQuery now.
-14. eachLambda() is now deprecated. It WILL be removed in the future.
 15. **Extensions:** QPList, QPTPL, and QPDB have all been moved to the new
   project QueryPath-Ext.
 
