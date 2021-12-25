@@ -1391,7 +1391,7 @@ class DOMQueryTest extends TestCase
     public function testFailWriteXML()
     {
         try {
-            qp()->writeXML('./test/no-writing.xml');
+            qp()->writeXML('/dev/null');
         } catch (Exception $e) {
             //print $e->getMessage();
             throw $e;
@@ -1405,7 +1405,7 @@ class DOMQueryTest extends TestCase
     public function testFailWriteXHTML()
     {
         try {
-            qp()->writeXHTML('./test/no-writing.xml');
+            qp()->writeXHTML('/dev/null');
         } catch (\QueryPath\IOException $e) {
             //print $e->getMessage();
             throw $e;
@@ -1419,7 +1419,7 @@ class DOMQueryTest extends TestCase
     public function testFailWriteHTML()
     {
         try {
-            qp('<?xml version="1.0"?><foo/>')->writeXML('./test/no-writing.xml');
+            qp('<?xml version="1.0"?><foo/>')->writeXML('/dev/null');
         } catch (\QueryPath\IOException $e) {
             // print $e->getMessage();
             throw $e;
