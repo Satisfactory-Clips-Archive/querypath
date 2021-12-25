@@ -24,6 +24,10 @@ define('HTML_IN_XML_FILE', __DIR__ . '/../html.xml');
  */
 class DOMQueryTest extends TestCase
 {
+    const test_tests_allowed_failures = [
+        'testxinclude',
+        'testeachlambda',
+    ];
 
     /**
      * @group basic
@@ -143,12 +147,27 @@ class DOMQueryTest extends TestCase
 
         $test_methods = array_map('strtolower', $test_methods);
 
+        $expected = [];
+        $found = [];
+
         foreach ($qp_methods as $q) {
             if (in_array($q, $ignore)) {
                 continue;
             }
-            $this->assertTrue(in_array(strtolower('test' . $q), $test_methods), $q . ' does not have a test method.');
+            $test_method = strtolower('test' . $q);
+            $expected[] = $test_method;
+            if (in_array($test_method, $test_methods)) {
+                $found[] = $test_method;
+            }
         }
+
+        $diff = array_values(array_diff($expected, $found));
+
+        $this->assertSame(
+            self::test_tests_allowed_failures,
+            $diff,
+            'Some test methods not implemented.'
+        );
     }*/
 
     public function testHtml5()
