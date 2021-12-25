@@ -1500,6 +1500,60 @@ class DOMQueryTest extends TestCase
         unlink($name);
     }
 
+    public function testWriteHTML5()
+    {
+        $xml = '<html><head><title>foo</title></head><body>bar</body></html>';
+
+        if (!ob_start()) {
+            die ("Could not start OB.");
+        }
+        qp($xml, 'tml')->writeHTML5();
+        $out = ob_get_contents();
+        ob_end_clean();
+
+        // We expect a doctype declaration at the top.
+        $this->assertEquals('<!DOC', substr($out, 0, 5));
+
+        $xml = '<html><head><title>foo</title>
+    <script><!--
+    var foo = 1 < 5;
+    --></script>
+    </head><body>bar</body></html>';
+
+        if (!ob_start()) {
+            die ("Could not start OB.");
+        }
+        qp($xml, 'tml')->writeHTML5();
+        $out = ob_get_contents();
+        ob_end_clean();
+
+        // We expect a doctype declaration at the top.
+        $this->assertEquals('<!DOC', substr($out, 0, 5));
+
+        $xml = '<html><head><title>foo</title>
+    <script><![CDATA[
+    var foo = 1 < 5;
+    ]]></script>
+    </head><body>bar</body></html>';
+
+        if (!ob_start()) {
+            die ("Could not start OB.");
+        }
+        qp($xml, 'tml')->writeHTML5();
+        $out = ob_get_contents();
+        ob_end_clean();
+
+        // We expect a doctype declaration at the top.
+        $this->assertEquals('<!DOC', substr($out, 0, 5));
+
+        // Test writing to a file:
+        $name = './' . __FUNCTION__ . '.html';
+        qp($xml)->writeXML($name);
+        $this->assertTrue(file_exists($name));
+        $this->assertTrue(qp($name) instanceof DOMQuery);
+        unlink($name);
+    }
+
     public function testText()
     {
         $xml = '<?xml version="1.0"?><root><div>Text A</div><div>Text B</div></root>';
