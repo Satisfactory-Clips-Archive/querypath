@@ -6,8 +6,7 @@ Authors: Matt Butcher (lead), Emily Brand, and many others
 [API Docs](http://api.querypath.org/docs) |
 [VCS and Issue Tracking](http://github.com/satisfactory-clips-archive/querypath) |
 [Support List](http://groups.google.com/group/support-querypath) |
-[Developer List](http://groups.google.com/group/devel-querypath) |
-[Pear channel](http://pear.querypath.org) |
+[Developer List](http://groups.google.com/group/devel-querypath)
 
 This package is licensed under an MIT license (COPYING-MIT.txt).
 
