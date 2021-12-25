@@ -1,10 +1,15 @@
 # QueryPath: Find the better way
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/arthurkushman/querypath/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/arthurkushman/querypath/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/arthurkushman/querypath/badges/build.png?b=master)](https://scrutinizer-ci.com/g/arthurkushman/querypath/build-status/master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/arthurkushman/querypath/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
-[![codecov](https://codecov.io/gh/arthurkushman/querypath/branch/master/graph/badge.svg)](https://codecov.io/gh/arthurkushman/querypath)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+Authors: Matt Butcher (lead), Emily Brand, and many others
+
+[Website](http://querypath.org) |
+[API Docs](http://api.querypath.org/docs) |
+[VCS and Issue Tracking](http://github.com/satisfactory-clips-archive/querypath) |
+[Support List](http://groups.google.com/group/support-querypath) |
+[Developer List](http://groups.google.com/group/devel-querypath) |
+[Pear channel](http://pear.querypath.org) |
+
+This package is licensed under an MIT license (COPYING-MIT.txt).
 
 ## At A Glance
 
@@ -22,7 +27,7 @@ documents in PHP. It now contains support for HTML5 via the
 
 ### Installation
 ``` 
-composer require arthurkushman/query-path 
+composer require satisfactory-clips-archive/querypath
 ```
 
 ### Gettings Started
@@ -97,7 +102,7 @@ From there, the main functions you will want to use are `qp()`
 \QueryPath\DOMQuery format(callable $callback [, mixed $args [, $... ]])
 ```
 
-A quick example:
+To add QueryPath as a library in your project, run `composer require satisfactory-clips-archive/querypath`
 
 ```php
 <?php
