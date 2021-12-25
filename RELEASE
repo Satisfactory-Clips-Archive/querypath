@@ -44,7 +44,7 @@
 ** REALLY IMPORTANT CHANGE:** Many "destructive" operations now return a
   new QueryPath object. This mirrors jQuery's behavior.
 
-  THAT MEANS: find() now works like jQuery find(), branch() is 
+  THAT MEANS: find() now works like jQuery find(), branch() is
   deprecated. findInPlace() does what find() used to do.
 
 1. removeAll() now works as it does in recent jQuery. Thanks to GDMac
@@ -79,7 +79,7 @@
 13. :first is an alias of :nth(1) instead of :first-of-type. This follows
   jQuery now.
 14. eachLambda() is now deprecated. It WILL be removed in the future.
-15. **Extensions:** QPList, QPTPL, and QPDB have all been moved to the new 
+15. **Extensions:** QPList, QPTPL, and QPDB have all been moved to the new
   project QueryPath-Ext.
 
 2.1.3
@@ -103,10 +103,10 @@
 2.1.1:
 
 1. The xhtml() and writeXHTML() methods now correctly escape JS/CSS and also correctly
-   fold some tags into unaries will keeping other empty tags. See issues #10, #47. 
+   fold some tags into unaries will keeping other empty tags. See issues #10, #47.
    Thanks to Alex Lawrence for his input.
 
-2. The method document() has been added. Thanks to Alex Lawrence for suggesting this 
+2. The method document() has been added. Thanks to Alex Lawrence for suggesting this
    addition.
 
 3. The fetch_rss.php example created broken HREFs in some cases. Thanks to yaph for
@@ -115,7 +115,7 @@
 4. The xpath() method now supports setting default namespaces. Thanks to Xavier Prud'homme
    for a patch.
 
-5. The remove() method was fixed (issue #55) to now correctly return a QueryPath with 
+5. The remove() method was fixed (issue #55) to now correctly return a QueryPath with
    just the removed nodes, while not altering the base QueryPath object. Thanks to MarcusX
    for finding and reporting the problem.
 
@@ -126,12 +126,12 @@
    is no longer stripped prior to parsing. Thanks to NortherRaven for detailed report
    and help testing and debugging.
 
-8. Fixed broken :nth-of-type pseudo-class (Issue #57). Thanks to NorthernRaven for the 
+8. Fixed broken :nth-of-type pseudo-class (Issue #57). Thanks to NorthernRaven for the
    detailed report and help debugging.
-   
+
 9. Fixed broken an+b rule handling in the special case '-n+b'. Thanks to NorthernRaven for
    reporting and helping out.
-   
+
 10. Xinclude support has been added via the xinclude() method on QueryPath. Thanks to Crell
    for the suggestion and to sdboyer for help (Issue #50).
 
@@ -140,7 +140,7 @@
 
 12. is() now takes both DOMNodes and Traversables (including QueryPath) as an argument. See
    issue #53.
-   
+
 13. The dirty_html.php example (contributed by Emily Brand, thanks!) is now fixed. Thanks to
    MartyIX for tracking down the issue (#59).
 
@@ -148,13 +148,13 @@
 Big Changes:
 
 1. There is now an `htmlqp()` function that parses crufty HTML in a far
-more reliable way than `qp()`. Use this instead of any variant of 
+more reliable way than `qp()`. Use this instead of any variant of
 the older `@qp()` setup.
 
-2. The API has been brought into alignment with jQuery 1.4. See 
+2. The API has been brought into alignment with jQuery 1.4. See
 API-2.1.0 for details.
 
-3. This release was driven substantially by eabrand's GSOC 2010 
+3. This release was driven substantially by eabrand's GSOC 2010
 contributions. Thanks, Emily!
 
 5. The minimal QP distribution is no longer minified, as it reportedly
