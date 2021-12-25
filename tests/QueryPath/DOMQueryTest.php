@@ -59,7 +59,9 @@ class DOMQueryTest extends TestCase
         $this->assertTrue($qp->get(0) instanceof \DOMNode);
 
         // Test from DOMDocument
-        $qp = qp(\DOMDocument::loadXML($str));
+        $doc = new \DOMDocument();
+        $doc->loadXML($str);
+        $qp = qp($doc);
         $this->assertEquals(1, count($qp->get()));
         $this->assertTrue($qp->get(0) instanceof \DOMNode);
 
