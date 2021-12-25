@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f92e6cf6a8cd6b5e9a469c3036807fe4",
+    "content-hash": "0ed4d3b39bc7487cba36e609216dd0ee",
     "packages": [
         {
             "name": "masterminds/html5",
@@ -166,7 +166,7 @@
             ],
             "authors": [
                 {
-                    "name": "Fran�ois Zaninotto"
+                    "name": "Fran?ois Zaninotto"
                 }
             ],
             "description": "Faker is a PHP library that generates fake data for you.",
@@ -265,7 +265,7 @@
             ],
             "authors": [
                 {
-                    "name": "P�draic Brady",
+                    "name": "P?draic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 },
@@ -1649,7 +1649,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "ext-xsl": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"

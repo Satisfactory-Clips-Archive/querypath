@@ -14,7 +14,8 @@
 	],
 	"require": {
 		"php": ">=7.1",
-		"masterminds/html5": "2.*"
+		"masterminds/html5": "2.*",
+		"ext-xsl": "*"
 	},
 	"autoload": {
 		"psr-4": {
