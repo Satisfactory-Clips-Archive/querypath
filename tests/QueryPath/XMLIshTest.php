@@ -39,16 +39,3 @@ class XMLishTest extends TestCase
 		$this->assertTrue($mock->exposedIsXMLish($html), 'Testing broken HTML');
 	}
 }
-
-/**
- * A testing class for XMLish tests.
- *
- * @ingroup querypath_tests
- */
-class XMLishMock extends \QueryPath\DOMQuery
-{
-	public function exposedIsXMLish($str)
-	{
-		return $this->isXMLish($str);
-	}
-}
