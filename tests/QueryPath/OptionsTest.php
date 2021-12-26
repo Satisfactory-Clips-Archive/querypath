@@ -33,7 +33,7 @@ class OptionsTest extends TestCase
 		$qpOpts = qp(null, null, ['test1' => 'val3', 'replace_entities' => true])->getOptions();
 
 		$this->assertSame($expect['test1'], $qpOpts['test1']);
-		$this->assertSame(true, $qpOpts['replace_entities']);
+		$this->assertTrue($qpOpts['replace_entities']);
 		$this->assertNull($qpOpts['parser_flags']);
 		$this->assertSame($expect['test2'], $qpOpts['test2']);
 	}
