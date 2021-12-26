@@ -648,6 +648,8 @@ class DOMTraverser implements Traverser
 	 * Checks to see if the given DOMNode matches an "any element" (*).
 	 *
 	 * This does not handle namespaced whildcards.
+	 *
+	 * @param mixed $node
 	 */
 	/*
 	protected function matchAnyElement($node) {
@@ -828,6 +830,8 @@ class DOMTraverser implements Traverser
 	 * Set the internal match set.
 	 *
 	 * Internal utility function.
+	 *
+	 * @param mixed $matches
 	 */
 	protected function setMatches($matches)
 	{

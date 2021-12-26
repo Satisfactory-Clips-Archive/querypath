@@ -20,7 +20,6 @@ namespace QueryPath\CSS;
 /** @addtogroup querypath_css CSS Parsing
  * QueryPath includes a CSS 3 Selector parser.
  *
- *
  * Typically the parser is not accessed directly. Most developers will use it indirectly from
  * qp(), htmlqp(), or one of the methods on a QueryPath object.
  *

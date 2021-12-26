@@ -407,7 +407,7 @@ class DOMQuery extends DOM
 			if ( !empty($matches)) {
 				$result = [
 					'mime' => $matches[1] . '/' . $matches[2],
-					'data' => base64_decode($matches[3]),
+					'data' => base64_decode($matches[3], true),
 				];
 
 				return $result;
@@ -1553,6 +1553,8 @@ class DOMQuery extends DOM
 	 * registered extenstensions for a matching function name. If one is found,
 	 * it is executed with the arguments in the $arguments array.
 	 *
+	 * @param mixed $name
+	 * @param mixed $arguments
 	 *
 	 * @throws \ReflectionException
 	 * @throws queryPath::Exception

@@ -41,6 +41,10 @@ class Util
 	 * Check whether the given DOMElement has the given namespaced attribute.
 	 *
 	 * @param null|mixed $value
+	 * @param mixed $node
+	 * @param mixed $name
+	 * @param mixed $nsuri
+	 * @param mixed $operation
 	 */
 	public static function matchesAttributeNS($node, $name, $nsuri, $value = null, $operation = EventHandler::IS_EXACTLY)
 	{
@@ -57,6 +61,10 @@ class Util
 
 	/**
 	 * Check for attr value matches based on an operation.
+	 *
+	 * @param mixed $needle
+	 * @param mixed $haystack
+	 * @param mixed $operation
 	 */
 	public static function matchesAttributeValue($needle, $haystack, $operation): bool
 	{
@@ -76,7 +84,7 @@ class Util
 				return 1 == preg_match('/\b/', $haystack);
 			//return in_array($needle, explode(' ', $haystack));
 			case EventHandler::CONTAINS_WITH_HYPHEN:
-				return in_array($needle, explode('-', $haystack));
+				return in_array($needle, explode('-', $haystack), true);
 			case EventHandler::CONTAINS_IN_STRING:
 				return false !== strpos($haystack, $needle);
 			case EventHandler::BEGINS_WITH:

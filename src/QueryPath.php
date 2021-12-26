@@ -235,7 +235,6 @@ class QueryPath
 	 * following options have meaning to QueryPath.
 	 * - QueryPath_class
 	 *
-	 *
 	 * @param mixed $source
 	 *   A document as an HTML string, or a path/URL. For compatibility with
 	 *   existing functions, a DOMDocument, SimpleXMLElement, DOMNode or array

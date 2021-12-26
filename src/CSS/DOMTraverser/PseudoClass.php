@@ -200,6 +200,9 @@ class PseudoClass
 	 * Note that this does not implement the spec in its entirety because we do
 	 * not presume to "know the language" of the document. If anyone is interested
 	 * in making this more intelligent, please do so.
+	 *
+	 * @param mixed $node
+	 * @param mixed $value
 	 */
 	protected function lang($node, $value)
 	{
@@ -237,6 +240,8 @@ class PseudoClass
 
 	/**
 	 * Provides pseudoclass :empty.
+	 *
+	 * @param mixed $node
 	 */
 	protected function isEmpty($node): bool
 	{
@@ -257,6 +262,8 @@ class PseudoClass
 	 *
 	 * @todo
 	 *   This can be replaced by isNthChild().
+	 *
+	 * @param mixed $node
 	 */
 	protected function isFirst($node): bool
 	{
@@ -272,6 +279,8 @@ class PseudoClass
 
 	/**
 	 * Fast version of first-of-type.
+	 *
+	 * @param mixed $node
 	 */
 	protected function isFirstOfType($node)
 	{
@@ -288,6 +297,8 @@ class PseudoClass
 
 	/**
 	 * Fast version of jQuery :last.
+	 *
+	 * @param mixed $node
 	 */
 	protected function isLast($node)
 	{
@@ -303,6 +314,8 @@ class PseudoClass
 
 	/**
 	 * Provides last-of-type.
+	 *
+	 * @param mixed $node
 	 */
 	protected function isLastOfType($node)
 	{
@@ -321,6 +334,9 @@ class PseudoClass
 	 * Provides :contains() as the original spec called for.
 	 *
 	 * This is an INEXACT match.
+	 *
+	 * @param mixed $node
+	 * @param mixed $value
 	 */
 	protected function contains($node, $value): bool
 	{
@@ -334,6 +350,9 @@ class PseudoClass
 	 * Provides :contains-exactly QueryPath pseudoclass.
 	 *
 	 * This is an EXACT match.
+	 *
+	 * @param mixed $node
+	 * @param mixed $value
 	 */
 	protected function containsExactly($node, $value): bool
 	{
@@ -346,6 +365,8 @@ class PseudoClass
 	/**
 	 * Provides :has pseudoclass.
 	 *
+	 * @param mixed $node
+	 * @param mixed $selector
 	 *
 	 * @throws ParseException
 	 */
@@ -362,6 +383,8 @@ class PseudoClass
 	/**
 	 * Provides :not pseudoclass.
 	 *
+	 * @param mixed $node
+	 * @param mixed $selector
 	 *
 	 * @throws ParseException
 	 */
@@ -372,6 +395,9 @@ class PseudoClass
 
 	/**
 	 * Get the relative position of a node in its sibling set.
+	 *
+	 * @param mixed $node
+	 * @param mixed $byType
 	 */
 	protected function nodePositionFromStart($node, $byType = false): int
 	{

@@ -153,12 +153,12 @@ class DOMQueryTest extends TestCase
 		$found = [];
 
 		foreach ($qp_methods as $q) {
-			if (in_array($q, $ignore)) {
+			if (in_array($q, $ignore, true)) {
 				continue;
 			}
 			$test_method = strtolower('test' . $q);
 			$expected[] = $test_method;
-			if (in_array($test_method, $test_methods)) {
+			if (in_array($test_method, $test_methods, true)) {
 				$found[] = $test_method;
 			}
 		}
@@ -1089,6 +1089,9 @@ class DOMQueryTest extends TestCase
 	/**
 	 * Helper function for testContents().
 	 * Based on problem reported in issue 51.
+	 *
+	 * @param mixed $source
+	 * @param mixed $pack
 	 */
 	private function contentsRecurse($source, &$pack = [])
 	{

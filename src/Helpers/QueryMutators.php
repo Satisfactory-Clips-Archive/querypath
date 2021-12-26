@@ -689,7 +689,7 @@ trait QueryMutators
 					$vals = array_filter(explode(' ', $m->getAttribute('class')));
 					$buf = [];
 					foreach ($vals as $v) {
-						if ( !in_array($v, $to_remove)) {
+						if ( !in_array($v, $to_remove, true)) {
 							$buf[] = $v;
 						}
 					}

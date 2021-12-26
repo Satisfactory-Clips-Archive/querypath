@@ -43,6 +43,8 @@ class ExtensionRegistry
 
 	/**
 	 * Extend a Query with the given extension class.
+	 *
+	 * @param mixed $classname
 	 */
 	public static function extend($classname)
 	{
@@ -84,7 +86,7 @@ class ExtensionRegistry
 	 */
 	public static function hasExtension($name)
 	{
-		return in_array($name, self::$extensionRegistry);
+		return in_array($name, self::$extensionRegistry, true);
 	}
 
 	/**

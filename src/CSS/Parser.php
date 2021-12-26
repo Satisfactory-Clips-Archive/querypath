@@ -290,6 +290,7 @@ class Parser
 	 * This will call EventHandler::pseudoClass() when a
 	 * pseudo-class is parsed.
 	 *
+	 * @param mixed $restricted
 	 *
 	 * @throws ParseException
 	 * @throws Exception
@@ -611,6 +612,9 @@ class Parser
 
 	/**
 	 * Utility for throwing a consistantly-formatted parse error.
+	 *
+	 * @param mixed $expected
+	 * @param mixed $got
 	 */
 	private function throwError($expected, $got)
 	{

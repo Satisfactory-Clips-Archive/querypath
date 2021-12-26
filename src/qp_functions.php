@@ -212,7 +212,6 @@ function htmlqp($document = null, $selector = null, $options = [])
  * following options have meaning to QueryPath.
  * - QueryPath_class
  *
- *
  * @param null $document
  * @param string $selector
  *   A CSS3 selector

@@ -419,7 +419,6 @@ trait QueryFilters
 	/**
 	 * Get the first matching element.
 	 *
-	 *
 	 * @throws ParseException
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -446,7 +445,6 @@ trait QueryFilters
 
 	/**
 	 * Get the first child of the matching element.
-	 *
 	 *
 	 * @throws ParseException
 	 *
@@ -483,7 +481,6 @@ trait QueryFilters
 	/**
 	 * Get the last matching element.
 	 *
-	 *
 	 * @throws ParseException
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -513,7 +510,6 @@ trait QueryFilters
 
 	/**
 	 * Get the last child of the matching element.
-	 *
 	 *
 	 * @throws ParseException
 	 *

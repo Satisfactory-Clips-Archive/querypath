@@ -146,7 +146,7 @@ trait QueryChecks
 		foreach ($this->matches as $m) {
 			if ($m->hasAttribute('class')) {
 				$vals = explode(' ', $m->getAttribute('class'));
-				if (in_array($class, $vals)) {
+				if (in_array($class, $vals, true)) {
 					return true;
 				}
 			}
