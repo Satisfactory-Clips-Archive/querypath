@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
-
 use DOMNode;
 use QueryPath\CSS\DOMTraverser;
 use QueryPath\Entities;

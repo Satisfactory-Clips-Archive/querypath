@@ -93,7 +93,6 @@ declare(strict_types=1);
  * QueryPathExtension is the master interface for all extensions.
  */
 
-
 /** @page CSSReference CSS Selector Reference
  * QueryPath provides two query 'languages' that you can use to search through XML and HTML
  * documents. The main query language is an implementation of the CSS3 Selectors specification. This

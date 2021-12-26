@@ -6,6 +6,7 @@ declare(strict_types=1);
  * An exception for CSS errors.
  */
 namespace QueryPath\CSS;
+
 /**
  * Exception thrown for unimplemented CSS.
  *

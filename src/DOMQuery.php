@@ -500,7 +500,6 @@ class DOMQuery extends DOM
 		}
 		//$this->setMatches($found);
 
-
 		// Do DOM modifications only if necessary.
 		if ($modifyDOM) {
 			$placeholder = $oldFirst->ownerDocument->createElement('_PLACEHOLDER_');

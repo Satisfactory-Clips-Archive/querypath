@@ -166,7 +166,6 @@ final class Scanner
 				break;
 		}
 
-
 		// Catch all characters that are legal within strings.
 		if ($tok === -1) {
 			// TODO: This should be UTF-8 compatible, but PHP doesn't

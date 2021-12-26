@@ -182,7 +182,6 @@ class QueryPath
   <body></body>
   </html>';
 
-
 	/**
 	 * @param null $document
 	 * @param null $selector
@@ -336,7 +335,6 @@ class QueryPath
 	{
 		return ExtensionRegistry::extensionNames();
 	}
-
 
 	/**
 	 * A static function for transforming data into a Data URL.

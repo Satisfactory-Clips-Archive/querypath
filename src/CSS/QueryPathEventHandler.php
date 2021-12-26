@@ -72,7 +72,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	protected $alreadyMatched; // Matches found before current selector.
 	protected $findAnyElement = true;
 
-
 	/**
 	 * Create a new event handler.
 	 *
@@ -1058,7 +1057,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 		// Do second pass: attributes in 'xml' namespace.
 		$this->attributeNS('lang', 'xml', $value, $operator);
-
 
 		// Merge results.
 		// FIXME: Note that we lose natural ordering in

@@ -792,7 +792,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame(1, $matches->count());
 		$this->assertSame('one', $this->firstMatch($matches)->getAttribute('id'));
 
-
 		$xml = '<?xml version="1.0" ?>
     <test>
       <i class="odd" id="one"/>
@@ -989,7 +988,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(1, $matches->count());
 		$this->assertSame('three', $this->firstMatch($matches)->getAttribute('id'));
-
 
 		// Issue #56: an+b not working.
 		$xml = '<?xml version="1.0"?>

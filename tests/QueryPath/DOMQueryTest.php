@@ -557,7 +557,6 @@ class DOMQueryTest extends TestCase
 		return ($index + 1) % 2 === 0;
 	}
 
-
 	public function testFilterCallback()
 	{
 		$file = DATA_FILE;
@@ -580,7 +579,6 @@ class DOMQueryTest extends TestCase
 		$this->expectException(\QueryPath\Exception::class);
 		qp($file, 'li')->map($cb)->count();
 	}
-
 
 	public function testNot()
 	{
@@ -987,7 +985,6 @@ class DOMQueryTest extends TestCase
 		$data = '<?xml version="1.0"?><root><a>test</a><b> FAIL</b></root>';
 		$qp = qp($data);
 		$rem = $qp->remove('b');
-
 
 		$this->assertSame(' FAIL', $rem->text());
 		$this->assertSame('test', $qp->text());

@@ -7,6 +7,7 @@ declare(strict_types=1);
  * The top-level QueryPath exception.
  */
 namespace QueryPath;
+
 /**
  * Exception indicating that a problem has occured inside of a QueryPath object.
  *

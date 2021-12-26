@@ -382,7 +382,6 @@ class ParserTest extends TestCase
 			new TestEvent(TestEvent::PSEUDO_ELEMENT, 'pseudoElement'),
 		];
 
-
 		$handler = new TestEventHandler();
 		$handler->expectsSmth($expect);
 		$parser = new Parser($selector, $handler);

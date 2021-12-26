@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace QueryPathTests\Extension;
 
-
 use QueryPath\QueryPath;
 use QueryPathTests\TestCase;
 use QueryPath\Extension\Format;

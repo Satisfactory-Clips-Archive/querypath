@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace QueryPath\Helpers;
 
-
 use QueryPath\CSS\ParseException;
 use QueryPath\CSS\QueryPathEventHandler;
 use QueryPath\DOMQuery;

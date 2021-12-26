@@ -49,7 +49,6 @@ class PseudoClassTest extends TestCase
 		$ret = $ps->elementMatches('lang', $ele, $root, 'fr');
 		$this->assertFalse($ret);
 
-
 		// Check on ele that doesn't have lang.
 		$ret = $ps->elementMatches('lang', $root, $root, 'fr');
 		$this->assertFalse($ret);
@@ -70,7 +69,6 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 		$ret = $ps->elementMatches('lang', $ele, $root, 'fr');
 		$this->assertFalse($ret);
-
 
 		// Check on ele that doesn't have lang.
 		$ret = $ps->elementMatches('lang', $root, $root, 'fr');

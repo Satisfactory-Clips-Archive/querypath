@@ -6,7 +6,6 @@ namespace QueryPathTests;
 
 use QueryPath\CSS\EventHandler;
 
-
 /**
  * Testing harness for the EventHandler.
  *

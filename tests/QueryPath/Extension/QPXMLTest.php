@@ -8,7 +8,6 @@ use QueryPath\QueryPath;
 use QueryPath\Extension\QPXML;
 use QueryPathTests\TestCase;
 
-
 /**
  * @ingroup querypath_tests
  * @group   extension

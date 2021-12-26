@@ -94,7 +94,6 @@ class DOMTraverserTest extends TestCase
 		$actual = $traverser->getDocument()->getElementsByTagName('*');
 		$this->assertSame($actual->length, count($matches));
 
-
 		// Test with namespace
 		//$this->markTestIncomplete();
 		$matches = $this->find('ns_test');

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace QueryPathTests;
 
-
 /**
  * Simple utility object for use with the TestEventHandler.
  *
