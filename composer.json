@@ -14,12 +14,16 @@
 	],
 	"autoload": {
 		"psr-4": {
-			"QueryPath\\": "src/",
-			"QueryPathTests\\": "tests/QueryPath/"
+			"QueryPath\\": "src/"
 		},
 		"files": [
 			"src/qp_functions.php"
 		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"QueryPathTests\\": "tests/QueryPath/"
+		}
 	},
 	"scripts": {
 		"static-analysis": [
