@@ -26,7 +26,7 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><foo>test</foo></root>';
 
-		list($ele, $root) = $this->doc($xml, 'foo');
+		[$ele, $root] = $this->doc($xml, 'foo');
 		$ps = new PseudoClass();
 
 		$this->expectException(\QueryPath\CSS\ParseException::class);
@@ -37,7 +37,7 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><foo lang="en-US">test</foo></root>';
 
-		list($ele, $root) = $this->doc($xml, 'foo');
+		[$ele, $root] = $this->doc($xml, 'foo');
 		$ps = new PseudoClass();
 
 		$ret = $ps->elementMatches('lang', $ele, $root, 'en-US');
@@ -58,7 +58,7 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><foo xml:lang="en-US">test</foo></root>';
 
-		list($ele, $root) = $this->doc($xml, 'foo');
+		[$ele, $root] = $this->doc($xml, 'foo');
 		$ps = new PseudoClass();
 
 		$ret = $ps->elementMatches('lang', $ele, $root, 'en-US');
@@ -79,7 +79,7 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><foo type="submit">test</foo></root>';
 
-		list($ele, $root) = $this->doc($xml, 'foo');
+		[$ele, $root] = $this->doc($xml, 'foo');
 		$ps = new PseudoClass();
 
 		$ret = $ps->elementMatches('submit', $ele, $root);
@@ -93,7 +93,7 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><foo enabled="enabled">test</foo></root>';
 
-		list($ele, $root) = $this->doc($xml, 'foo');
+		[$ele, $root] = $this->doc($xml, 'foo');
 		$ps = new PseudoClass();
 
 		$ret = $ps->elementMatches('enabled', $ele, $root);
@@ -106,23 +106,23 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><h1>TEST</h1><H6></H6><hi/><h12/><h1i/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'h1');
+		[$ele, $root] = $this->doc($xml, 'h1');
 		$ps = new PseudoClass();
 
 		$ret = $ps->elementMatches('header', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'H6');
+		[$ele, $root] = $this->doc($xml, 'H6');
 		$ret = $ps->elementMatches('header', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'hi');
+		[$ele, $root] = $this->doc($xml, 'hi');
 		$ret = $ps->elementMatches('header', $ele, $root);
 		$this->assertFalse($ret);
-		list($ele, $root) = $this->doc($xml, 'h1i');
+		[$ele, $root] = $this->doc($xml, 'h1i');
 		$ret = $ps->elementMatches('header', $ele, $root);
 		$this->assertFalse($ret);
-		list($ele, $root) = $this->doc($xml, 'h12');
+		[$ele, $root] = $this->doc($xml, 'h12');
 		$ret = $ps->elementMatches('header', $ele, $root);
 		$this->assertFalse($ret);
 	}
@@ -131,7 +131,7 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><h>This is a test of :contains.</h></root>';
 
-		list($ele, $root) = $this->doc($xml, 'h');
+		[$ele, $root] = $this->doc($xml, 'h');
 		$ps = new PseudoClass();
 
 		$ret = $ps->elementMatches('contains', $ele, $root, 'test');
@@ -154,7 +154,7 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><h>This is a test of :contains-exactly.</h></root>';
 
-		list($ele, $root) = $this->doc($xml, 'h');
+		[$ele, $root] = $this->doc($xml, 'h');
 		$ps = new PseudoClass();
 
 		$ret = $ps->elementMatches('contains-exactly', $ele, $root, 'test');
@@ -174,7 +174,7 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><button disabled="disabled"/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'button');
+		[$ele, $root] = $this->doc($xml, 'button');
 		$ps = new PseudoClass();
 
 		// Example from CSS 4 spec
@@ -184,7 +184,7 @@ class PseudoClassTest extends TestCase
 		// Regression for Issue #84:
 		$xml = '<?xml version="1.0"?><root><a/><a/><a src="/foo/bar"/><b src="http://example.com/foo/bar"/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $ele->childNodes;
 		$ps = new PseudoClass();
 
@@ -203,22 +203,22 @@ class PseudoClassTest extends TestCase
 		$ps = new PseudoClass();
 
 		$xml = '<?xml version="1.0"?><root><p/></root>';
-		list($ele, $root) = $this->doc($xml, 'p');
+		[$ele, $root] = $this->doc($xml, 'p');
 		$ret = $ps->elementMatches('parent', $ele, $root);
 		$this->assertFalse($ret);
 
 		$xml = '<?xml version="1.0"?><root><p></p>></root>';
-		list($ele, $root) = $this->doc($xml, 'p');
+		[$ele, $root] = $this->doc($xml, 'p');
 		$ret = $ps->elementMatches('parent', $ele, $root);
 		$this->assertFalse($ret);
 
 		$xml = '<?xml version="1.0"?><root><p>TEST</p></root>';
-		list($ele, $root) = $this->doc($xml, 'p');
+		[$ele, $root] = $this->doc($xml, 'p');
 		$ret = $ps->elementMatches('parent', $ele, $root);
 		$this->assertTrue($ret);
 
 		$xml = '<?xml version="1.0"?><root><p><q/></p></root>';
-		list($ele, $root) = $this->doc($xml, 'p');
+		[$ele, $root] = $this->doc($xml, 'p');
 		$ret = $ps->elementMatches('parent', $ele, $root);
 		$this->assertTrue($ret);
 	}
@@ -228,15 +228,15 @@ class PseudoClassTest extends TestCase
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><p><q/></p><a></a><b/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'q');
+		[$ele, $root] = $this->doc($xml, 'q');
 		$ret = $ps->elementMatches('first', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'p');
+		[$ele, $root] = $this->doc($xml, 'p');
 		$ret = $ps->elementMatches('first', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'b');
+		[$ele, $root] = $this->doc($xml, 'b');
 		$ret = $ps->elementMatches('first', $ele, $root);
 		$this->assertFalse($ret);
 	}
@@ -246,15 +246,15 @@ class PseudoClassTest extends TestCase
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><p><q/></p><a></a><b/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'q');
+		[$ele, $root] = $this->doc($xml, 'q');
 		$ret = $ps->elementMatches('last', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'p');
+		[$ele, $root] = $this->doc($xml, 'p');
 		$ret = $ps->elementMatches('last', $ele, $root);
 		$this->assertFalse($ret);
 
-		list($ele, $root) = $this->doc($xml, 'b');
+		[$ele, $root] = $this->doc($xml, 'b');
 		$ret = $ps->elementMatches('last', $ele, $root);
 		$this->assertTrue($ret);
 	}
@@ -263,7 +263,7 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><button/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'button');
+		[$ele, $root] = $this->doc($xml, 'button');
 		$ps = new PseudoClass();
 
 		// Example from CSS 4 spec
@@ -271,7 +271,7 @@ class PseudoClassTest extends TestCase
 		$this->assertTrue($ret);
 
 		$xml = '<?xml version="1.0"?><root><b/><b/><c/><b/></root>';
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $ele->childNodes;
 
 		$i = 0;
@@ -288,17 +288,17 @@ class PseudoClassTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root><foo lang="en-US">test</foo><bar/><baz></baz></root>';
 
-		list($ele, $root) = $this->doc($xml, 'foo');
+		[$ele, $root] = $this->doc($xml, 'foo');
 		$ps = new PseudoClass();
 
 		$ret = $ps->elementMatches('empty', $ele, $root);
 		$this->assertFalse($ret);
 
-		list($ele, $root) = $this->doc($xml, 'bar');
+		[$ele, $root] = $this->doc($xml, 'bar');
 		$ret = $ps->elementMatches('empty', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'baz');
+		[$ele, $root] = $this->doc($xml, 'baz');
 		$ret = $ps->elementMatches('empty', $ele, $root);
 		$this->assertTrue($ret);
 	}
@@ -308,15 +308,15 @@ class PseudoClassTest extends TestCase
 		$xml = '<?xml version="1.0"?><root><foo>test<a/></foo><b><c/></b></root>';
 		$ps = new PseudoClass();
 
-		list($ele, $root) = $this->doc($xml, 'foo');
+		[$ele, $root] = $this->doc($xml, 'foo');
 		$ret = $ps->elementMatches('only-child', $ele, $root);
 		$this->assertFalse($ret);
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$ret = $ps->elementMatches('only-child', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'c');
+		[$ele, $root] = $this->doc($xml, 'c');
 		$ret = $ps->elementMatches('only-child', $ele, $root);
 		$this->assertTrue($ret);
 	}
@@ -326,11 +326,11 @@ class PseudoClassTest extends TestCase
 		$xml = '<?xml version="1.0"?><root><one><a/><b/><c/></one><two><d/><d/><b/></two></root>';
 		$ps = new PseudoClass();
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$ret = $ps->elementMatches('last-of-type', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$nl = $root->getElementsByTagName('d');
 
 		$ret = $ps->elementMatches('last-of-type', $nl->item(0), $root);
@@ -345,11 +345,11 @@ class PseudoClassTest extends TestCase
 		$xml = '<?xml version="1.0"?><root><one><a/><b/><c/></one><two><d/><d/><b/></two></root>';
 		$ps = new PseudoClass();
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$ret = $ps->elementMatches('first-of-type', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$nl = $root->getElementsByTagName('d');
 
 		$ret = $ps->elementMatches('first-of-type', $nl->item(0), $root);
@@ -364,11 +364,11 @@ class PseudoClassTest extends TestCase
 		$xml = '<?xml version="1.0"?><root><one><a/><b/><c/></one><two><d/><d/><b/></two></root>';
 		$ps = new PseudoClass();
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$ret = $ps->elementMatches('only-of-type', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$nl = $root->getElementsByTagName('d');
 
 		$ret = $ps->elementMatches('only-of-type', $nl->item(0), $root);
@@ -385,7 +385,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// 2n + 1 -- Every odd row, from the last element.
@@ -431,7 +431,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// 2n + 1 -- Every odd row.
@@ -582,7 +582,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		$i = 0;
@@ -605,7 +605,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -630,7 +630,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -651,7 +651,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '<a/><b/><c/><a/><a/><a/>';
 		$xml .= '</root>';
 
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -674,7 +674,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Third from beginning is second from last.
@@ -701,15 +701,15 @@ class PseudoClassTest extends TestCase
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><a href="foo"><b hreff="bar">test</b></a><c/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'c');
+		[$ele, $root] = $this->doc($xml, 'c');
 		$ret = $ps->elementMatches('link', $ele, $root);
 		$this->assertFalse($ret);
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$ret = $ps->elementMatches('link', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'b');
+		[$ele, $root] = $this->doc($xml, 'b');
 		$ret = $ps->elementMatches('link', $ele, $root);
 		$this->assertFalse($ret);
 	}
@@ -719,11 +719,11 @@ class PseudoClassTest extends TestCase
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><p><q/></p><a></a><b/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'q');
+		[$ele, $root] = $this->doc($xml, 'q');
 		$ret = $ps->elementMatches('root', $ele, $root);
 		$this->assertFalse($ret);
 
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$ret = $ps->elementMatches('root', $ele, $root);
 		$this->assertTrue($ret);
 	}
@@ -741,7 +741,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -763,7 +763,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -785,7 +785,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		list($ele, $root) = $this->doc($xml, 'root');
+		[$ele, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		$i = 0;
@@ -816,19 +816,19 @@ class PseudoClassTest extends TestCase
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><a href="foo"><b hreff="bar">test</b></a><c/><d src="foo"/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'c');
+		[$ele, $root] = $this->doc($xml, 'c');
 		$ret = $ps->elementMatches('any-link', $ele, $root);
 		$this->assertFalse($ret);
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$ret = $ps->elementMatches('any-link', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'd');
+		[$ele, $root] = $this->doc($xml, 'd');
 		$ret = $ps->elementMatches('any-link', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'b');
+		[$ele, $root] = $this->doc($xml, 'b');
 		$ret = $ps->elementMatches('any-link', $ele, $root);
 		$this->assertFalse($ret);
 	}
@@ -838,19 +838,19 @@ class PseudoClassTest extends TestCase
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><a href="foo"><b href="http://example.com/bar">test</b></a><c/><d href="file://foo"/></root>';
 
-		list($ele, $root) = $this->doc($xml, 'c');
+		[$ele, $root] = $this->doc($xml, 'c');
 		$ret = $ps->elementMatches('local-link', $ele, $root);
 		$this->assertFalse($ret);
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$ret = $ps->elementMatches('local-link', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'd');
+		[$ele, $root] = $this->doc($xml, 'd');
 		$ret = $ps->elementMatches('local-link', $ele, $root);
 		$this->assertTrue($ret);
 
-		list($ele, $root) = $this->doc($xml, 'b');
+		[$ele, $root] = $this->doc($xml, 'b');
 		$ret = $ps->elementMatches('local-link', $ele, $root);
 		$this->assertFalse($ret);
 	}
@@ -860,7 +860,7 @@ class PseudoClassTest extends TestCase
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><a href="foo"><b>test</b></a></root>';
 
-		list($ele, $root) = $this->doc($xml, 'a');
+		[$ele, $root] = $this->doc($xml, 'a');
 		$node = $ele->childNodes->item(0);
 		$ret = $ps->elementMatches('scope', $node, $ele);
 		$this->assertFalse($ret);

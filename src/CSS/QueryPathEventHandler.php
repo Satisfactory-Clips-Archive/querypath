@@ -486,19 +486,19 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 			// Standard child-checking items.
 			case 'nth-child':
-				list($aVal, $bVal) = $this->parseAnB($value);
+				[$aVal, $bVal] = $this->parseAnB($value);
 				$this->nthChild($aVal, $bVal);
 				break;
 			case 'nth-last-child':
-				list($aVal, $bVal) = $this->parseAnB($value);
+				[$aVal, $bVal] = $this->parseAnB($value);
 				$this->nthLastChild($aVal, $bVal);
 				break;
 			case 'nth-of-type':
-				list($aVal, $bVal) = $this->parseAnB($value);
+				[$aVal, $bVal] = $this->parseAnB($value);
 				$this->nthOfTypeChild($aVal, $bVal, false);
 				break;
 			case 'nth-last-of-type':
-				list($aVal, $bVal) = $this->parseAnB($value);
+				[$aVal, $bVal] = $this->parseAnB($value);
 				$this->nthLastOfTypeChild($aVal, $bVal);
 				break;
 			case 'first-child':

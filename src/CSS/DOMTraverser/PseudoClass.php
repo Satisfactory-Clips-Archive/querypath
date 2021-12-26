@@ -464,7 +464,7 @@ class PseudoClass
 	 */
 	protected function isNthChild($node, $value, $reverse = false, $byType = false): bool
 	{
-		list($groupSize, $elementInGroup) = Util::parseAnB($value);
+		[$groupSize, $elementInGroup] = Util::parseAnB($value);
 		$parent = $node->parentNode;
 		if (empty($parent)
 			|| (0 === $groupSize && 0 === $elementInGroup)
