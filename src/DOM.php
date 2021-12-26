@@ -497,7 +497,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 */
 	protected function isXMLish($string)
 	{
-		return (strpos($string, '<') !== false && strpos($string, '>') !== false);
+		return strpos($string, '<') !== false && strpos($string, '>') !== false;
 	}
 
 	/**

@@ -49,7 +49,7 @@ class TestEventHandler implements EventHandler
 
 	public function success()
 	{
-		return ($this->expect == $this->stack);
+		return $this->expect == $this->stack;
 	}
 
 	public function elementID($id)

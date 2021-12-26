@@ -1200,7 +1200,7 @@ class DOMQuery extends DOM
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
-			return ($omit_xml_decl ? $this->document->saveXML($first->ownerDocument->documentElement) : $this->document->saveXML());
+			return $omit_xml_decl ? $this->document->saveXML($first->ownerDocument->documentElement) : $this->document->saveXML();
 		}
 
 		return $this->document->saveXML($first);

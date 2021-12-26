@@ -554,7 +554,7 @@ class DOMQueryTest extends TestCase
 
 	public function filterCallbackFunction($index, $item)
 	{
-		return (($index + 1) % 2 === 0);
+		return ($index + 1) % 2 === 0;
 	}
 
 
