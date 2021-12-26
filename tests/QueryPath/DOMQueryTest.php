@@ -139,7 +139,7 @@ class DOMQueryTest extends TestCase
         $this->assertEquals(1, htmlqp($borken, '#after')->count());
     }
 
-    /*public function testForTests()
+    public function testForTests()
     {
         $qp_methods = get_class_methods(DOMQuery::class);
         $test_methods = get_class_methods(DOMQueryTest::class);
@@ -169,7 +169,7 @@ class DOMQueryTest extends TestCase
             $diff,
             'Some test methods not implemented.'
         );
-    }*/
+    }
 
     public function testHtml5()
     {
