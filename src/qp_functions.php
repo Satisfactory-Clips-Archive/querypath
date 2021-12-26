@@ -156,7 +156,7 @@ use QueryPath\QueryPath;
  */
 function qp($document = NULL, $string = NULL, array $options = [])
 {
-    return QueryPath::with($document, $string, $options);
+	return QueryPath::with($document, $string, $options);
 }
 
 /**
@@ -190,7 +190,7 @@ function qp($document = NULL, $string = NULL, array $options = [])
 function htmlqp($document = NULL, $selector = NULL, $options = [])
 {
 
-    return QueryPath::withHTML($document, $selector, $options);
+	return QueryPath::withHTML($document, $selector, $options);
 }
 
 /**
@@ -219,5 +219,5 @@ function htmlqp($document = NULL, $selector = NULL, $options = [])
  */
 function html5qp($document = NULL, $selector = NULL, array $options = [])
 {
-    return QueryPath::withHTML5($document, $selector, $options);
+	return QueryPath::withHTML5($document, $selector, $options);
 }

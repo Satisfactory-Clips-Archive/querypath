@@ -23,19 +23,19 @@ use QueryPath\QueryPath;
 class QueryPathIterator extends \IteratorIterator
 {
 
-    public $options = [];
-    private $qp;
+	public $options = [];
+	private $qp;
 
-    public function current() : mixed
-    {
-        if (!isset($this->qp)) {
-            $this->qp = QueryPath::with(parent::current(), NULL, $this->options);
-        } else {
-            $splos = new \SplObjectStorage();
-            $splos->attach(parent::current());
-            $this->qp->setMatches($splos);
-        }
+	public function current() : mixed
+	{
+		if (!isset($this->qp)) {
+			$this->qp = QueryPath::with(parent::current(), NULL, $this->options);
+		} else {
+			$splos = new \SplObjectStorage();
+			$splos->attach(parent::current());
+			$this->qp->setMatches($splos);
+		}
 
-        return $this->qp;
-    }
+		return $this->qp;
+	}
 }

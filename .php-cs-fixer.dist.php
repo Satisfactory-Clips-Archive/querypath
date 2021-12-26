@@ -10,19 +10,19 @@ namespace SignpostMarv\CS;
 
 class QueryPathConfig extends ConfigUsedWithStaticAnalysis
 {
-    protected static function RuntimeResolveRules() : array
-    {
-        $rules = parent::RuntimeResolveRules();
+	protected static function RuntimeResolveRules() : array
+	{
+		$rules = parent::RuntimeResolveRules();
 
-        $rules['php_unit_method_casing'] = false;
-        $rules['php_unit_test_case_static_method_calls'] = false;
+		$rules['php_unit_method_casing'] = false;
+		$rules['php_unit_test_case_static_method_calls'] = false;
 
-        return $rules;
-    }
+		return $rules;
+	}
 }
 
 return QueryPathConfig::createWithPaths(...[
-    __FILE__,
-    __DIR__ . '/src/',
-    __DIR__ . '/tests/',
+	__FILE__,
+	__DIR__ . '/src/',
+	__DIR__ . '/tests/',
 ]);
