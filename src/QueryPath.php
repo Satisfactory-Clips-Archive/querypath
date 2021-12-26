@@ -88,7 +88,7 @@ declare(strict_types=1);
  */
 namespace QueryPath;
 
-use \Masterminds\HTML5;
+use Masterminds\HTML5;
 use QueryPath\ExtensionRegistry;
 
 /**

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace QueryPathTests;
 
-use \QueryPath\Extension;
-use \QueryPath\ExtensionRegistry;
+use QueryPath\Extension;
+use QueryPath\ExtensionRegistry;
 
 /**
  * Run all of the usual tests, plus some extras, with some extensions loaded.

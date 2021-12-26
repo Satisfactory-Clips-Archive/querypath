@@ -16,8 +16,8 @@ declare(strict_types=1);
 namespace QueryPath;
 
 use QueryPath\CSS\DOMTraverser;
-use \QueryPath\CSS\QueryPathEventHandler;
-use \Masterminds\HTML5;
+use QueryPath\CSS\QueryPathEventHandler;
+use Masterminds\HTML5;
 use QueryPath\Entities;
 use QueryPath\Exception;
 use QueryPath\Helpers\QueryChecks;

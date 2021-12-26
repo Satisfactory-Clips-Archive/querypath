@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPathTests\CSS;
 
-use \QueryPath\CSS\DOMTraverser;
+use QueryPath\CSS\DOMTraverser;
 use QueryPathTests\TestCase;
 
 define('TRAVERSER_XML', __DIR__ . '/../../DOMTraverserTest.xml');

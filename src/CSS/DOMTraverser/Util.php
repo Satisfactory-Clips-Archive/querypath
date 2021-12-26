@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS\DOMTraverser;
 
-use \QueryPath\CSS\EventHandler;
+use QueryPath\CSS\EventHandler;
 
 /**
  * Utilities for DOM Traversal.

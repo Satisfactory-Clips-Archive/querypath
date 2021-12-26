@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPathTests;
 
-use \QueryPath\Options;
+use QueryPath\Options;
 
 /**
  * @ingroup querypath_tests

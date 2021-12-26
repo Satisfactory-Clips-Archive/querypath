@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPathTests\CSS;
 
-use \QueryPath\CSS\DOMTraverser\PseudoClass;
+use QueryPath\CSS\DOMTraverser\PseudoClass;
 use QueryPathTests\TestCase;
 
 /**
