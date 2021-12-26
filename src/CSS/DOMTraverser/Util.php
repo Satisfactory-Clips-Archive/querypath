@@ -140,7 +140,7 @@ class Util
 		}
 
 		if (is_numeric($rule)) {
-			return [0, (int)$rule];
+			return [0, (int) $rule];
 		}
 
 		$regex = '/^\s*([+\-]?[0-9]*)n\s*([+\-]?)\s*([0-9]*)\s*$/';
@@ -156,12 +156,12 @@ class Util
 		if ('-' === $aVal) {
 			$aVal = -1;
 		} else {
-			$aVal = (int)$aVal;
+			$aVal = (int) $aVal;
 		}
 
 		$bVal = 0;
 		if (isset($matches[3])) {
-			$bVal = (int)$matches[3];
+			$bVal = (int) $matches[3];
 			if (isset($matches[2]) && '-' === $matches[2]) {
 				$bVal *= -1;
 			}

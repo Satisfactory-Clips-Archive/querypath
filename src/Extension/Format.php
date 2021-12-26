@@ -195,7 +195,7 @@ class Format implements Extension
 	{
 		if (is_string($callback)) {
 			[$callback, $trail] = $this->splitFunctionName($callback);
-			$pos = (int)$trail;
+			$pos = (int) $trail;
 		} elseif (is_array($callback) && isset($callback[2])) {
 			$pos = $callback[2];
 			$callback = array($callback[0], $callback[1]);

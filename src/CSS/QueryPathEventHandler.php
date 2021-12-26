@@ -733,7 +733,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		} elseif ('n' == $rule) {
 			return [1, 0];
 		} elseif (is_numeric($rule)) {
-			return [0, (int)$rule];
+			return [0, (int) $rule];
 		}
 
 		$rule = explode('n', $rule);
@@ -743,9 +743,9 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 		// Each of these is legal: 1, -1, and -. '-' is shorthand for -1.
 		$aVal = trim($rule[0]);
-		$aVal = ('-' == $aVal) ? -1 : (int)$aVal;
+		$aVal = ('-' == $aVal) ? -1 : (int) $aVal;
 
-		$bVal = !empty($rule[1]) ? (int)trim($rule[1]) : 0;
+		$bVal = !empty($rule[1]) ? (int) trim($rule[1]) : 0;
 
 		return [$aVal, $bVal];
 	}

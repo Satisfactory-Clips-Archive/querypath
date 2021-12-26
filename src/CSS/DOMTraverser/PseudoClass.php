@@ -79,7 +79,7 @@ class PseudoClass
 				return false;
 			case 'indeterminate':
 				// Because sometimes screwing with people is fun.
-				return (boolean)mt_rand(0, 1);
+				return (bool) mt_rand(0, 1);
 			case 'lang':
 				// No value = exception.
 				if ( !isset($value)) {
@@ -128,17 +128,17 @@ class PseudoClass
 			// Additional pseudo-classes defined in jQuery:
 			case 'lt':
 				// I'm treating this as "less than or equal to".
-				$rule = sprintf('-n + %d', (int)$value);
+				$rule = sprintf('-n + %d', (int) $value);
 
 				// $rule = '-n+15';
 				return $this->isNthChild($node, $rule);
 			case 'gt':
 				// I'm treating this as "greater than"
 				// return $this->nodePositionFromEnd($node) > (int) $value;
-				return $this->nodePositionFromStart($node) > (int)$value;
+				return $this->nodePositionFromStart($node) > (int) $value;
 			case 'nth':
 			case 'eq':
-				$rule = (int)$value;
+				$rule = (int) $value;
 
 				return $this->isNthChild($node, $rule);
 			case 'first':
