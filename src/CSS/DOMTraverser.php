@@ -58,7 +58,7 @@ use SplObjectStorage;
  */
 class DOMTraverser implements Traverser
 {
-	protected $matches     = [];
+	protected $matches = [];
 	protected $selector;
 	protected $dom;
 	protected $initialized = true;
@@ -76,7 +76,7 @@ class DOMTraverser implements Traverser
 	 */
 	public function __construct(\SPLObjectStorage $splos, bool $initialized = false, $scopeNode = null)
 	{
-		$this->psHandler   = new PseudoClass();
+		$this->psHandler = new PseudoClass();
 		$this->initialized = $initialized;
 
 		// Re-use the initial splos
@@ -127,7 +127,7 @@ class DOMTraverser implements Traverser
 	{
 		// Setup
 		$handler = new Selector();
-		$parser  = new Parser($selector, $handler);
+		$parser = new Parser($selector, $handler);
 		$parser->parse();
 		$this->selector = $handler;
 
@@ -448,7 +448,7 @@ class DOMTraverser implements Traverser
 	 */
 	protected function initialMatchOnID(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
-		$id    = $selector->id;
+		$id = $selector->id;
 		$found = $this->newMatches();
 
 		// Issue #145: DOMXPath will through an exception if the DOM is
@@ -457,7 +457,7 @@ class DOMTraverser implements Traverser
 			return $found;
 		}
 		$baseQuery = ".//*[@id='{$id}']";
-		$xpath     = new \DOMXPath($this->dom);
+		$xpath = new \DOMXPath($this->dom);
 
 		// Now we try to find any matching IDs.
 		/** @var \DOMElement $node */
@@ -499,7 +499,7 @@ class DOMTraverser implements Traverser
 			return $found;
 		}
 		$baseQuery = './/*[@class]';
-		$xpath     = new \DOMXPath($this->dom);
+		$xpath = new \DOMXPath($this->dom);
 
 		// Now we try to find any matching IDs.
 		/** @var \DOMElement $node */
@@ -515,7 +515,7 @@ class DOMTraverser implements Traverser
 			$nl = $this->initialXpathQuery($xpath, $node, $baseQuery);
 			/** @var \DOMElement $subNode */
 			foreach ($nl as $subNode) {
-				$classes    = $subNode->getAttribute('class');
+				$classes = $subNode->getAttribute('class');
 				$classArray = explode(' ', $classes);
 
 				$intersect = array_intersect($selector->classes, $classArray);
@@ -709,10 +709,10 @@ class DOMTraverser implements Traverser
 				// Cycle through all of the attributes in the node. Note that
 				// these are DOMAttr objects.
 				$matches = false;
-				$name    = $attr['name'];
+				$name = $attr['name'];
 				foreach ($node->attributes as $attrNode) {
 					if ($attrNode->localName === $name) {
-						$nsuri   = $attrNode->namespaceURI;
+						$nsuri = $attrNode->namespaceURI;
 						$matches = Util::matchesAttributeNS($node, $name, $nsuri, $val, $attr['op']);
 					}
 				}
@@ -785,7 +785,7 @@ class DOMTraverser implements Traverser
 			$name = $pseudoClass['name'];
 			// Avoid E_STRICT violation.
 			$value = $pseudoClass['value'] ?? null;
-			$ret   &= $this->psHandler->elementMatches($name, $node, $this->scopeNode, $value);
+			$ret &= $this->psHandler->elementMatches($name, $node, $this->scopeNode, $value);
 		}
 
 		return (bool) $ret;

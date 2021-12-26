@@ -33,10 +33,10 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 */
 	public const DEFAULT_PARSER_FLAGS = null;
 
-	public const JS_CSS_ESCAPE_CDATA             = '\\1';
-	public const JS_CSS_ESCAPE_CDATA_CCOMMENT    = '/* \\1 */';
+	public const JS_CSS_ESCAPE_CDATA = '\\1';
+	public const JS_CSS_ESCAPE_CDATA_CCOMMENT = '/* \\1 */';
 	public const JS_CSS_ESCAPE_CDATA_DOUBLESLASH = '// \\1';
-	public const JS_CSS_ESCAPE_NONE              = '';
+	public const JS_CSS_ESCAPE_NONE = '';
 
 	protected $errTypes = 771; //E_ERROR; | E_USER_ERROR;
 
@@ -45,11 +45,11 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * The base DOMDocument.
 	 */
 	protected $options = [
-		'parser_flags'                 => null,
-		'omit_xml_declaration'         => false,
-		'replace_entities'             => false,
-		'exception_level'              => 771, // E_ERROR | E_USER_ERROR | E_USER_WARNING | E_WARNING
-		'ignore_parser_warnings'       => false,
+		'parser_flags' => null,
+		'omit_xml_declaration' => false,
+		'replace_entities' => false,
+		'exception_level' => 771, // E_ERROR | E_USER_ERROR | E_USER_WARNING | E_WARNING
+		'ignore_parser_warnings' => false,
 		'escape_xhtml_js_css_sections' => self::JS_CSS_ESCAPE_CDATA_CCOMMENT,
 	];
 
@@ -441,7 +441,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 
 		$htmlExtensions = [
 			'.html' => 1,
-			'.htm'  => 1,
+			'.htm' => 1,
 		];
 
 		// Allow users to override parser settings.

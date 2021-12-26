@@ -17,14 +17,14 @@ class XMLishTest extends TestCase
 	public function testXMLishMock()
 	{
 		$tests = [
-			'this/is/a/path'                                   => false,
+			'this/is/a/path' => false,
 			"this is just some plain\ntext with a line break." => false,
-			'2 > 1'                                            => false,
-			'1 < 2'                                            => false,
+			'2 > 1' => false,
+			'1 < 2' => false,
 			//'1 < 2 > 1' => FALSE,
-			'<html/>'                                          => true,
-			'<?xml version="1.0"?><root/>'                     => true,
-			'<tag/><tag/><tag/>'                               => true, // It's not valid, but HTML parser will try it.
+			'<html/>' => true,
+			'<?xml version="1.0"?><root/>' => true,
+			'<tag/><tag/><tag/>' => true, // It's not valid, but HTML parser will try it.
 		];
 		foreach ($tests as $test => $correct) {
 			$mock = new XMLishMock();

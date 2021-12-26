@@ -210,10 +210,10 @@ class QueryPath
 
 		$options += [
 			'ignore_parser_warnings' => true,
-			'convert_to_encoding'    => 'ISO-8859-1',
-			'convert_from_encoding'  => 'auto',
+			'convert_to_encoding' => 'ISO-8859-1',
+			'convert_from_encoding' => 'auto',
 			//'replace_entities' => TRUE,
-			'use_parser'             => 'html',
+			'use_parser' => 'html',
 			// This is stripping actually necessary low ASCII.
 			//'strip_low_ascii' => TRUE,
 		];

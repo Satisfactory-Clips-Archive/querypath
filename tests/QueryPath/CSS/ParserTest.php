@@ -228,10 +228,10 @@ class ParserTest extends TestCase
 	public function testAttribute()
 	{
 		$selectors = [
-			'element[attr]'       => 'attr',
-			'*[attr]'             => 'attr',
+			'element[attr]' => 'attr',
+			'*[attr]' => 'attr',
 			'element[attr]:class' => 'attr',
-			'element[attr2]'      => 'attr2', // Issue #
+			'element[attr2]' => 'attr2', // Issue #
 		];
 		foreach ($selectors as $filter => $expected) {
 			$mock = $this->createMock(TestEventHandler::class);
@@ -244,30 +244,30 @@ class ParserTest extends TestCase
 		}
 
 		$selectors = [
-			'*[attr="value"]'    => ['attr', 'value', EventHandler::IS_EXACTLY],
-			'*[attr^="value"]'   => ['attr', 'value', EventHandler::BEGINS_WITH],
-			'*[attr$="value"]'   => ['attr', 'value', EventHandler::ENDS_WITH],
-			'*[attr*="value"]'   => ['attr', 'value', EventHandler::CONTAINS_IN_STRING],
-			'*[attr~="value"]'   => ['attr', 'value', EventHandler::CONTAINS_WITH_SPACE],
-			'*[attr|="value"]'   => ['attr', 'value', EventHandler::CONTAINS_WITH_HYPHEN],
+			'*[attr="value"]' => ['attr', 'value', EventHandler::IS_EXACTLY],
+			'*[attr^="value"]' => ['attr', 'value', EventHandler::BEGINS_WITH],
+			'*[attr$="value"]' => ['attr', 'value', EventHandler::ENDS_WITH],
+			'*[attr*="value"]' => ['attr', 'value', EventHandler::CONTAINS_IN_STRING],
+			'*[attr~="value"]' => ['attr', 'value', EventHandler::CONTAINS_WITH_SPACE],
+			'*[attr|="value"]' => ['attr', 'value', EventHandler::CONTAINS_WITH_HYPHEN],
 
 			// This should act like [attr="value"]
-			'*[|attr="value"]'   => ['attr', 'value', EventHandler::IS_EXACTLY],
+			'*[|attr="value"]' => ['attr', 'value', EventHandler::IS_EXACTLY],
 
 			// This behavior is displayed in the spec, but not accounted for in the
 			// grammar:
-			'*[attr=value]'      => ['attr', 'value', EventHandler::IS_EXACTLY],
+			'*[attr=value]' => ['attr', 'value', EventHandler::IS_EXACTLY],
 
 			// Should be able to escape chars using backslash.
-			'*[attr="\.value"]'  => ['attr', '.value', EventHandler::IS_EXACTLY],
+			'*[attr="\.value"]' => ['attr', '.value', EventHandler::IS_EXACTLY],
 			'*[attr="\.\]\]\]"]' => ['attr', '.]]]', EventHandler::IS_EXACTLY],
 
 			// Backslash-backslash should resolve to single backslash.
-			'*[attr="\\\c"]'     => ['attr', '\\c', EventHandler::IS_EXACTLY],
+			'*[attr="\\\c"]' => ['attr', '\\c', EventHandler::IS_EXACTLY],
 
 			// Should return an empty value. It seems, though, that a value should be
 			// passed here.
-			'*[attr=""]'         => ['attr', '', EventHandler::IS_EXACTLY],
+			'*[attr=""]' => ['attr', '', EventHandler::IS_EXACTLY],
 		];
 		foreach ($selectors as $filter => $expected) {
 			$mock = $this->createMock(TestEventHandler::class);
