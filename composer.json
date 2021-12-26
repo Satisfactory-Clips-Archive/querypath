@@ -27,6 +27,7 @@
 	},
 	"scripts": {
 		"static-analysis": [
+			"psalm",
 			"php-cs-fixer fix --diff --dry-run --verbose"
 		]
 	},
@@ -44,6 +45,8 @@
 		"fzaninotto/faker": "^1.5",
 		"mockery/mockery": "^1.4",
 		"phpunit/phpunit": "^9.5",
-		"signpostmarv/php-cs-fixer-config": "^0.22.0"
+		"psalm/plugin-phpunit": "^0.16.1",
+		"signpostmarv/php-cs-fixer-config": "^0.22.0",
+		"vimeo/psalm": "^4.16"
 	}
 }
