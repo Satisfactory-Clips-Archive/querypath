@@ -20,7 +20,7 @@ class FormatTest extends TestCase
 	{
 		QueryPath::enable(Format::class);
 		$qp = qp('<?xml version="1.0"?><root><div>_apple_</div><div>_orange_</div></root>');
-		$qp->find('div')->format('strtoupper')->format('trim', '_')->format(function ($text) {
+		$qp->find('div')->format('strtoupper')->format('trim', '_')->format(static function ($text) {
 			return '*' . $text . '*';
 		});
 

@@ -1934,7 +1934,7 @@ class DOMQueryTest extends TestCase
 		}
 
 		// Test simple ordering.
-		$comp = function (\DOMNode $a, \DOMNode $b) {
+		$comp = static function (\DOMNode $a, \DOMNode $b) {
 			if ($a->textContent === $b->textContent) {
 				return 0;
 			}
@@ -1947,7 +1947,7 @@ class DOMQueryTest extends TestCase
 			$this->assertSame(array_shift($expect), $item->text());
 		}
 
-		$comp = function (\DOMNode $a, \DOMNode $b) {
+		$comp = static function (\DOMNode $a, \DOMNode $b) {
 			$qpa = qp($a);
 			$qpb = qp($b);
 
@@ -1964,7 +1964,7 @@ class DOMQueryTest extends TestCase
 		}
 
 		// Test DOM re-ordering
-		$comp = function (\DOMNode $a, \DOMNode $b) {
+		$comp = static function (\DOMNode $a, \DOMNode $b) {
 			if ($a->textContent === $b->textContent) {
 				return 0;
 			}

@@ -95,11 +95,11 @@ class Format implements Extension
 			array_shift($args);
 		}
 
-		$getter = function ($qp) {
+		$getter = static function ($qp) {
 			return $qp->text();
 		};
 
-		$setter = function ($qp, $value) {
+		$setter = static function ($qp, $value) {
 			$qp->text($value);
 		};
 
@@ -149,11 +149,11 @@ class Format implements Extension
 			$args = array_slice(func_get_args(), 2);
 		}
 
-		$getter = function ($qp) use ($attrName) {
+		$getter = static function ($qp) use ($attrName) {
 			return $qp->attr($attrName);
 		};
 
-		$setter = function ($qp, $value) use ($attrName) {
+		$setter = static function ($qp, $value) use ($attrName) {
 			return $qp->attr($attrName, $value);
 		};
 
