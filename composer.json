@@ -12,17 +12,6 @@
 		"xslt",
 		"php7"
 	],
-	"scripts": {
-		"static-analysis": [
-			"php-cs-fixer fix --diff --dry-run --verbose"
-		]
-	},
-	"require": {
-		"php": "^8.1",
-		"masterminds/html5": "^2.7",
-		"ext-xsl": "*",
-		"lombax85/create_function": "^1.0"
-	},
 	"autoload": {
 		"psr-4": {
 			"QueryPath\\": "src/",
@@ -32,10 +21,25 @@
 			"src/qp_functions.php"
 		]
 	},
+	"scripts": {
+		"static-analysis": [
+			"php-cs-fixer fix --diff --dry-run --verbose"
+		]
+	},
+	"config": {
+		"classmap-authoritative": true,
+		"sort-packages": true
+	},
+	"require": {
+		"php": "^8.1",
+		"ext-xsl": "*",
+		"lombax85/create_function": "^1.0",
+		"masterminds/html5": "^2.7"
+	},
 	"require-dev": {
-		"phpunit/phpunit": "^9.5",
 		"fzaninotto/faker": "^1.5",
 		"mockery/mockery": "^1.4",
+		"phpunit/phpunit": "^9.5",
 		"signpostmarv/php-cs-fixer-config": "^0.22.0"
 	}
 }

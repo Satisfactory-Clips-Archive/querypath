@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66e423167a57f20acdd7eab615e193c0",
+    "content-hash": "67db258b08354f5db18ae44f98764263",
     "packages": [
         {
             "name": "lombax85/create_function",
