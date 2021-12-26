@@ -249,7 +249,7 @@ trait QueryFilters
 				if (isset($c)) {
 					if (is_array($c) || $c instanceof \Iterable) {
 						foreach ($c as $retval) {
-							if (!is_object($retval)) {
+							if ( ! is_object($retval)) {
 								$tmp = new \stdClass();
 								$tmp->textContent = $retval;
 								$retval = $tmp;
@@ -257,7 +257,7 @@ trait QueryFilters
 							$found->attach($retval);
 						}
 					} else {
-						if (!is_object($c)) {
+						if ( ! is_object($c)) {
 							$tmp = new \stdClass();
 							$tmp->textContent = $c;
 							$c = $tmp;
@@ -658,7 +658,7 @@ trait QueryFilters
 				$m = $m->parentNode;
 				// Is there any case where parent node is not an element?
 				if ($m->nodeType === XML_ELEMENT_NODE) {
-					if (!empty($selector)) {
+					if ( ! empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							break;
 						}
@@ -723,7 +723,7 @@ trait QueryFilters
 			}
 		} elseif (is_array($selector)) {
 			foreach ($this->matches as $m) {
-				if (!in_array($m, $selector, true)) {
+				if ( ! in_array($m, $selector, true)) {
 					$found->attach($m);
 				}
 			}
@@ -735,7 +735,7 @@ trait QueryFilters
 			}
 		} else {
 			foreach ($this->matches as $m) {
-				if (!QueryPath::with($m, null, $this->options)->is($selector)) {
+				if ( ! QueryPath::with($m, null, $this->options)->is($selector)) {
 					$found->attach($m);
 				}
 			}
@@ -812,7 +812,7 @@ trait QueryFilters
 				$m = $m->parentNode;
 				// Is there any case where parent node is not an element?
 				if ($m->nodeType === XML_ELEMENT_NODE) {
-					if (!empty($selector)) {
+					if ( ! empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							$found->attach($m);
 							break;
@@ -855,7 +855,7 @@ trait QueryFilters
 				$m = $m->parentNode;
 				// Is there any case where parent node is not an element?
 				if ($m->nodeType === XML_ELEMENT_NODE) {
-					if (!empty($selector)) {
+					if ( ! empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							$found->attach($m);
 						}
@@ -897,7 +897,7 @@ trait QueryFilters
 			while (isset($m->nextSibling)) {
 				$m = $m->nextSibling;
 				if ($m->nodeType === XML_ELEMENT_NODE) {
-					if (!empty($selector)) {
+					if ( ! empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							$found->attach($m);
 							break;
@@ -941,7 +941,7 @@ trait QueryFilters
 			while (isset($m->nextSibling)) {
 				$m = $m->nextSibling;
 				if ($m->nodeType === XML_ELEMENT_NODE) {
-					if (!empty($selector)) {
+					if ( ! empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							$found->attach($m);
 						}
@@ -984,7 +984,7 @@ trait QueryFilters
 			while (isset($m->previousSibling)) {
 				$m = $m->previousSibling;
 				if ($m->nodeType === XML_ELEMENT_NODE) {
-					if (!empty($selector)) {
+					if ( ! empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector)) {
 							$found->attach($m);
 							break;
@@ -1028,7 +1028,7 @@ trait QueryFilters
 			while (isset($m->previousSibling)) {
 				$m = $m->previousSibling;
 				if ($m->nodeType === XML_ELEMENT_NODE) {
-					if (!empty($selector)) {
+					if ( ! empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector)) {
 							$found->attach($m);
 						}

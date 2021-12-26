@@ -36,7 +36,7 @@ class QPXML implements Extension
 	{
 		$doc = $this->qp->branch()->top()->get(0)->ownerDocument;
 
-		if (!$doc->schemaValidate($file)) {
+		if ( ! $doc->schemaValidate($file)) {
 			throw new \QueryPath\Exception('Document did not validate against the schema.');
 		}
 	}

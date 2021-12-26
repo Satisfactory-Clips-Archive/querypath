@@ -51,7 +51,7 @@ class InputStream
 	public function consume()
 	{
 		$ret = array_shift($this->stream);
-		if (!empty($ret)) {
+		if ( ! empty($ret)) {
 			$this->position++;
 		}
 

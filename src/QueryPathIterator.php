@@ -27,7 +27,7 @@ class QueryPathIterator extends \IteratorIterator
 
 	public function current() : mixed
 	{
-		if (!isset($this->qp)) {
+		if ( ! isset($this->qp)) {
 			$this->qp = QueryPath::with(parent::current(), null, $this->options);
 		} else {
 			$splos = new \SplObjectStorage();

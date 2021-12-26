@@ -232,7 +232,7 @@ final class Scanner
 			// The second conjunct is probably not necessary.
 			while ($this->token !== false && $this->token > -1) {
 				//print "Char: $this->value \n";
-				if ($this->token == Token::BSLASH && !$escape) {
+				if ($this->token == Token::BSLASH && ! $escape) {
 					// XXX: The backslash (\) is removed here.
 					// Turn on escaping.
 					//$buf .= $this->value;
@@ -269,7 +269,7 @@ final class Scanner
 			// The second conjunct is probably not necessary.
 			while ($this->token !== false && $this->token > -1) {
 				//print "Char: $this->value \n";
-				if ($this->token === Token::BSLASH && !$escape) {
+				if ($this->token === Token::BSLASH && ! $escape) {
 					// XXX: The backslash (\) is removed here.
 					// Turn on escaping.
 					//$buf .= $this->value;

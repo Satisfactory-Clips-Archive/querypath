@@ -1272,7 +1272,7 @@ class DOMQueryTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><html><head><title>foo</title></head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeXML();
@@ -1290,7 +1290,7 @@ class DOMQueryTest extends TestCase
     <![CDATA[This is CDATA]]>
     <title>foo</title></head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeXML();
@@ -1312,7 +1312,7 @@ class DOMQueryTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><html><head><title>foo</title></head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeXHTML();
@@ -1330,7 +1330,7 @@ class DOMQueryTest extends TestCase
     <![CDATA[This is CDATA]]>
     <title>foo</title></head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'html')->writeXHTML();
@@ -1349,7 +1349,7 @@ class DOMQueryTest extends TestCase
 
 		// Regression for issue #10 (keep closing tags in XHTML)
 		$xhtml = '<?xml version="1.0"?><html><head><title>foo</title><script></script><br/></head><body>bar</body></html>';
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xhtml, 'html')->writeXHTML();
@@ -1400,7 +1400,7 @@ class DOMQueryTest extends TestCase
 	{
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML();
@@ -1416,7 +1416,7 @@ class DOMQueryTest extends TestCase
     --></script>
     </head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML();
@@ -1432,7 +1432,7 @@ class DOMQueryTest extends TestCase
     ]]></script>
     </head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML();
@@ -1454,7 +1454,7 @@ class DOMQueryTest extends TestCase
 	{
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML5();
@@ -1470,7 +1470,7 @@ class DOMQueryTest extends TestCase
     --></script>
     </head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML5();
@@ -1486,7 +1486,7 @@ class DOMQueryTest extends TestCase
     ]]></script>
     </head><body>bar</body></html>';
 
-		if (!ob_start()) {
+		if ( ! ob_start()) {
 			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML5();

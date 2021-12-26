@@ -72,7 +72,7 @@ class QPXSL implements \QueryPath\Extension
 	 */
 	public function xslt($style)
 	{
-		if (!($style instanceof QueryPath)) {
+		if ( ! ($style instanceof QueryPath)) {
 			$style = QueryPath::with($style);
 		}
 		$sourceDoc = $this->src->top()->get(0)->ownerDocument;

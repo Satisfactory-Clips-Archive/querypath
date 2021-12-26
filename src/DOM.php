@@ -75,7 +75,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		$this->options = $options + Options::get() + $this->options;
 
 		$parser_flags = $options['parser_flags'] ?? self::DEFAULT_PARSER_FLAGS;
-		if (!empty($this->options['ignore_parser_warnings'])) {
+		if ( ! empty($this->options['ignore_parser_warnings'])) {
 			// Don't convert parser warnings into exceptions.
 			$this->errTypes = 257; //E_ERROR | E_USER_ERROR;
 		} elseif (isset($this->options['exception_level'])) {
@@ -98,7 +98,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 				$this->matches = $document;
 				if ($document->count() !== 0) {
 					$first = $this->getFirstMatch();
-					if (!empty($first->ownerDocument)) {
+					if ( ! empty($first->ownerDocument)) {
 						$this->document = $first->ownerDocument;
 					}
 				}
@@ -129,7 +129,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			}
 		} elseif (is_array($document)) {
 			//trigger_error('Detected deprecated array support', E_USER_NOTICE);
-			if (!empty($document) && $document[0] instanceof \DOMNode) {
+			if ( ! empty($document) && $document[0] instanceof \DOMNode) {
 				$found = new \SplObjectStorage();
 				foreach ($document as $item) {
 					$found->attach($item);
@@ -187,13 +187,13 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 
 			// This is to avoid cases where low ascii digits have slipped into HTML.
 			// AFAIK, it should not adversly effect UTF-8 documents.
-			if (!empty($this->options['strip_low_ascii'])) {
+			if ( ! empty($this->options['strip_low_ascii'])) {
 				$string = filter_var($string, FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW);
 			}
 
 			// Allow users to override parser settings.
 			$useParser = '';
-			if (!empty($this->options['use_parser'])) {
+			if ( ! empty($this->options['use_parser'])) {
 				$useParser = strtolower($this->options['use_parser']);
 			}
 
@@ -286,10 +286,10 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	protected function deepestNode(\DOMNode $ele, $depth = 0, $current = null, &$deepest = null)
 	{
 		// FIXME: Should this use SplObjectStorage?
-		if (!isset($current)) {
+		if ( ! isset($current)) {
 			$current = [$ele];
 		}
-		if (!isset($deepest)) {
+		if ( ! isset($deepest)) {
 			$deepest = $depth;
 		}
 		if ($ele->hasChildNodes()) {
@@ -422,7 +422,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 
 		// If a context is specified, we basically have to do the reading in
 		// two steps:
-		if (!empty($context)) {
+		if ( ! empty($context)) {
 			try {
 				set_error_handler(['\QueryPath\ParseException', 'initializeFromError'], $this->errTypes);
 				$contents = file_get_contents($filename, false, $context);
