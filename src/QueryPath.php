@@ -185,7 +185,6 @@ class QueryPath
 	/**
 	 * @param null $document
 	 * @param null $selector
-	 * @param array $options
 	 *
 	 * @return mixed|\QueryPath\DOMQuery
 	 */

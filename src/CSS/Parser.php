@@ -38,9 +38,6 @@ class Parser
 	 * Construct a new CSS parser object. This will attempt to
 	 * parse the string as a CSS selector. As it parses, it will
 	 * send events to the EventHandler implementation.
-	 *
-	 * @param string $string
-	 * @param EventHandler $handler
 	 */
 	public function __construct(string $string, EventHandler $handler)
 	{
@@ -219,10 +216,6 @@ class Parser
 
 	/**
 	 * Check if the token is a combinator.
-	 *
-	 * @param int $tok
-	 *
-	 * @return bool
 	 */
 	private function isCombinator(int $tok): bool
 	{
@@ -297,7 +290,6 @@ class Parser
 	 * This will call EventHandler::pseudoClass() when a
 	 * pseudo-class is parsed.
 	 *
-	 * @param mixed $restricted
 	 *
 	 * @throws ParseException
 	 * @throws Exception
@@ -619,9 +611,6 @@ class Parser
 
 	/**
 	 * Utility for throwing a consistantly-formatted parse error.
-	 *
-	 * @param mixed $expected
-	 * @param mixed $got
 	 */
 	private function throwError($expected, $got)
 	{
@@ -630,7 +619,6 @@ class Parser
 	}
 
 	/**
-	 * @return Scanner
 	 */
 	public function getScanner(): Scanner
 	{

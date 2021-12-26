@@ -52,8 +52,6 @@ class Entities implements EntitiesContract
 	 *
 	 * @param array $matches
 	 *  The regular expression replacement array
-	 *
-	 * @return string
 	 */
 	protected static function doReplacement($matches): string
 	{

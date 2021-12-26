@@ -167,8 +167,6 @@ class Format implements Extension
 	 * @param $setter
 	 *
 	 * @throws Exception
-	 *
-	 * @return Query
 	 */
 	protected function forAll($callback, $args, $getter, $setter): Query
 	{
@@ -206,8 +204,6 @@ class Format implements Extension
 	}
 
 	/**
-	 * @param string $string
-	 *
 	 * @return array[]|false|string[]
 	 */
 	protected function splitFunctionName(string $string)
@@ -219,8 +215,6 @@ class Format implements Extension
 	/**
 	 * @param $args
 	 * @param $pos
-	 *
-	 * @return array
 	 */
 	protected function prepareArgs($args, $pos): array
 	{

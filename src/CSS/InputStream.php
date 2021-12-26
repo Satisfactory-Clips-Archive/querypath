@@ -24,7 +24,6 @@ class InputStream
 	 *
 	 * @param string
 	 *  String to turn into an input stream
-	 * @param mixed $string
 	 */
 	public function __construct($string)
 	{

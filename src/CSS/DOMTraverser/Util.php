@@ -23,8 +23,6 @@ class Util
 	 * @param $name
 	 * @param null $value
 	 * @param int $operation
-	 *
-	 * @return bool
 	 */
 	public static function matchesAttribute($node, $name, $value = null, $operation = EventHandler::IS_EXACTLY): bool
 	{
@@ -42,11 +40,7 @@ class Util
 	/**
 	 * Check whether the given DOMElement has the given namespaced attribute.
 	 *
-	 * @param mixed $node
-	 * @param mixed $name
-	 * @param mixed $nsuri
 	 * @param null|mixed $value
-	 * @param mixed $operation
 	 */
 	public static function matchesAttributeNS($node, $name, $nsuri, $value = null, $operation = EventHandler::IS_EXACTLY)
 	{
@@ -63,10 +57,6 @@ class Util
 
 	/**
 	 * Check for attr value matches based on an operation.
-	 *
-	 * @param mixed $needle
-	 * @param mixed $haystack
-	 * @param mixed $operation
 	 */
 	public static function matchesAttributeValue($needle, $haystack, $operation): bool
 	{
@@ -122,8 +112,6 @@ class Util
 	 *  Some rule in the an+b format
 	 * @retval array
 	 *  `array($aVal, $bVal)` of the two values.
-	 *
-	 * @return array
 	 */
 	public static function parseAnB($rule): array
 	{

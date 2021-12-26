@@ -74,8 +74,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Create a new event handler.
-	 *
-	 * @param mixed $dom
 	 */
 	public function __construct($dom)
 	{
@@ -351,7 +349,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *
 	 * @deprecated all use cases seem to be covered by attribute()
 	 *
-	 * @param mixed $name
 	 * @param null|mixed $value
 	 */
 	protected function searchForAttr($name, $value = null)
@@ -412,7 +409,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *  - :x-reset/:x-root (reset to the main item passed into the constructor. Less drastic than :root)
 	 *  - :odd/:even (shorthand for :nth-child(odd)/:nth-child(even)).
 	 *
-	 * @param mixed $name
 	 * @param null|mixed $value
 	 */
 	public function pseudoClass($name, $value = null)
@@ -618,8 +614,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Remove leading and trailing quotes.
-	 *
-	 * @param mixed $str
 	 */
 	private function removeQuotes($str)
 	{
@@ -635,9 +629,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for a variety of jQuery pseudo-classes.
 	 * Handles lt, gt, eq, nth, first, last pseudo-classes.
-	 *
-	 * @param mixed $operator
-	 * @param mixed $pos
 	 */
 	private function getByPosition($operator, $pos)
 	{
@@ -831,9 +822,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * as arrays.
 	 *
 	 * @since QueryPath 2.0
-	 *
-	 * @param mixed $groupSize
-	 * @param mixed $elementInGroup
 	 *//*
   private function reverseMatches() {
 	// Reverse the candidate list. There must be a better way of doing
@@ -864,9 +852,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @param $requireSameTag
 	 *  Boolean flag indicating whether all matches should have the same
 	 *  element name (tagName) as $element
-	 * @param mixed $groupSize
-	 * @param mixed $elementInGroup
-	 * @param mixed $lastChild
 	 *
 	 * @return
 	 *  Array of peer elements
@@ -1023,9 +1008,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for nth-last-of-type-child.
 	 * Not implemented.
-	 *
-	 * @param mixed $groupSize
-	 * @param mixed $elementInGroup
 	 */
 	protected function nthLastOfTypeChild($groupSize, $elementInGroup)
 	{
@@ -1034,8 +1016,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Pseudo-class handler for :lang.
-	 *
-	 * @param mixed $value
 	 */
 	protected function lang($value)
 	{
@@ -1098,8 +1078,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for :has(filter).
 	 * This can also be used as a general filtering routine.
-	 *
-	 * @param mixed $filter
 	 */
 	public function has($filter)
 	{
@@ -1246,10 +1224,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Check for attr value matches based on an operation.
-	 *
-	 * @param mixed $needle
-	 * @param mixed $haystack
-	 * @param mixed $operation
 	 */
 	protected function attrValMatches($needle, $haystack, $operation)
 	{
@@ -1284,8 +1258,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * As the spec mentions, these must be at the end of a selector or
 	 * else they will cause errors. Most selectors return elements. Pseudo-elements
 	 * do not.
-	 *
-	 * @param mixed $name
 	 */
 	public function pseudoElement($name)
 	{
@@ -1510,9 +1482,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Attach all nodes in a node list to the given \SplObjectStorage.
-	 *
-	 * @param \DOMNodeList $nodeList
-	 * @param \SplObjectStorage $splos
 	 */
 	public function attachNodeList(\DOMNodeList $nodeList, \SplObjectStorage $splos)
 	{

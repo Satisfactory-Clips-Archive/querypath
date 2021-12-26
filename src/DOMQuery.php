@@ -1553,8 +1553,6 @@ class DOMQuery extends DOM
 	 * registered extenstensions for a matching function name. If one is found,
 	 * it is executed with the arguments in the $arguments array.
 	 *
-	 * @param mixed $name
-	 * @param mixed $arguments
 	 *
 	 * @throws \ReflectionException
 	 * @throws queryPath::Exception

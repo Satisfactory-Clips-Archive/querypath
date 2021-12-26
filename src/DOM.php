@@ -501,8 +501,6 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * core assumptions about how things work. Instead, classes should
 	 * override the constructor and pass in only one of the parsed types
 	 * that this class expects.
-	 *
-	 * @param mixed $string
 	 */
 	protected function isXMLish($string)
 	{

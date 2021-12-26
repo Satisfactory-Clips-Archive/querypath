@@ -43,8 +43,6 @@ class ExtensionRegistry
 
 	/**
 	 * Extend a Query with the given extension class.
-	 *
-	 * @param mixed $classname
 	 */
 	public static function extend($classname)
 	{

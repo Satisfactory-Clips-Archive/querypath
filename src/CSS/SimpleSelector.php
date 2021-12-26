@@ -47,8 +47,6 @@ class SimpleSelector
 
 	/**
 	 * @param $code
-	 *
-	 * @return string
 	 */
 	public static function attributeOperator($code): string
 	{
@@ -70,8 +68,6 @@ class SimpleSelector
 
 	/**
 	 * @param $code
-	 *
-	 * @return string
 	 */
 	public static function combinatorOperator($code): string
 	{
@@ -97,7 +93,6 @@ class SimpleSelector
 	}
 
 	/**
-	 * @return bool
 	 */
 	public function notEmpty(): bool
 	{

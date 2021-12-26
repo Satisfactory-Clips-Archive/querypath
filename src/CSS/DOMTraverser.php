@@ -70,8 +70,6 @@ class DOMTraverser implements Traverser
 	 *
 	 * This requires a DOM-like object or collection of DOM nodes.
 	 *
-	 * @param \SPLObjectStorage $splos
-	 * @param bool $initialized
 	 * @param null $scopeNode
 	 */
 	public function __construct(\SPLObjectStorage $splos, bool $initialized = false, $scopeNode = null)
@@ -195,7 +193,6 @@ class DOMTraverser implements Traverser
 	 * this checks only a simple selector (plus an optional
 	 * combinator).
 	 *
-	 * @param \DOMElement $node
 	 * @param $selectors
 	 * @param $index
 	 *
@@ -404,11 +401,6 @@ class DOMTraverser implements Traverser
 	 *
 	 * This should only be executed when not working with
 	 * an existing match set.
-	 *
-	 * @param \QueryPath\CSS\SimpleSelector $selector
-	 * @param SplObjectStorage $matches
-	 *
-	 * @return SplObjectStorage
 	 */
 	protected function initialMatch(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -454,11 +446,6 @@ class DOMTraverser implements Traverser
 	 * set, then this should be used to find by ID,
 	 * which will drastically reduce the amount of
 	 * comparison operations done in PHP.
-	 *
-	 * @param \QueryPath\CSS\SimpleSelector $selector
-	 * @param SplObjectStorage $matches
-	 *
-	 * @return SplObjectStorage
 	 */
 	protected function initialMatchOnID(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -500,10 +487,7 @@ class DOMTraverser implements Traverser
 	 * In any other case, the element finding algo is
 	 * faster and should be used instead.
 	 *
-	 * @param \QueryPath\CSS\SimpleSelector $selector
 	 * @param $matches
-	 *
-	 * @return \SplObjectStorage
 	 */
 	protected function initialMatchOnClasses(SimpleSelector $selector, SplObjectStorage $matches) : \SplObjectStorage
 	{
@@ -552,12 +536,6 @@ class DOMTraverser implements Traverser
 	 *
 	 * This is optimized for very specific use, and is not a general
 	 * purpose function.
-	 *
-	 * @param \DOMXPath $xpath
-	 * @param \DOMElement $node
-	 * @param string $query
-	 *
-	 * @return \DOMNodeList
 	 */
 	private function initialXpathQuery(\DOMXPath $xpath, \DOMElement $node, string $query) : \DOMNodeList
 	{
@@ -575,8 +553,6 @@ class DOMTraverser implements Traverser
 	 *
 	 * @param $selector
 	 * @param $matches
-	 *
-	 * @return \SplObjectStorage
 	 */
 	protected function initialMatchOnElement(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -605,11 +581,6 @@ class DOMTraverser implements Traverser
 
 	/**
 	 * Get elements and filter by namespace.
-	 *
-	 * @param \QueryPath\CSS\SimpleSelector $selector
-	 * @param SplObjectStorage $matches
-	 *
-	 * @return SplObjectStorage
 	 */
 	protected function initialMatchOnElementNS(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -651,11 +622,8 @@ class DOMTraverser implements Traverser
 	 * - namespaced wildcard (ns|*)
 	 * - wildcard (* or *|*)
 	 *
-	 * @param \DOMElement $node
 	 * @param $element
 	 * @param null $ns
-	 *
-	 * @return bool
 	 */
 	protected function matchElement(\DOMElement $node, $element, $ns = null) : bool
 	{
@@ -680,8 +648,6 @@ class DOMTraverser implements Traverser
 	 * Checks to see if the given DOMNode matches an "any element" (*).
 	 *
 	 * This does not handle namespaced whildcards.
-	 *
-	 * @param mixed $node
 	 */
 	/*
 	protected function matchAnyElement($node) {
@@ -711,10 +677,7 @@ class DOMTraverser implements Traverser
 	 * This can handle namespaced attributes, including namespace
 	 * wildcards.
 	 *
-	 * @param \DOMElement $node
 	 * @param $attributes
-	 *
-	 * @return bool
 	 */
 	protected function matchAttributes(\DOMElement $node, $attributes) : bool
 	{
@@ -759,10 +722,7 @@ class DOMTraverser implements Traverser
 	/**
 	 * Check that the given DOMNode has the given ID.
 	 *
-	 * @param \DOMElement $node
 	 * @param $id
-	 *
-	 * @return bool
 	 */
 	protected function matchId(\DOMElement $node, $id) : bool
 	{
@@ -776,10 +736,7 @@ class DOMTraverser implements Traverser
 	/**
 	 * Check that the given DOMNode has all of the given classes.
 	 *
-	 * @param \DOMElement $node
 	 * @param $classes
-	 *
-	 * @return bool
 	 */
 	protected function matchClasses(\DOMElement $node, $classes) : bool
 	{
@@ -803,13 +760,10 @@ class DOMTraverser implements Traverser
 	}
 
 	/**
-	 * @param \DOMElement $node
 	 * @param $pseudoClasses
 	 *
 	 * @throws NotImplementedException
 	 * @throws ParseException
-	 *
-	 * @return bool
 	 */
 	protected function matchPseudoClasses(\DOMElement $node, $pseudoClasses): bool
 	{
@@ -831,12 +785,9 @@ class DOMTraverser implements Traverser
 	 * <i>if conditions obtain that would allow the pseudo-element
 	 * to be created</i>. This does not modify the match in any way.
 	 *
-	 * @param \DOMElement $node
 	 * @param $pseudoElements
 	 *
 	 * @throws NotImplementedException
-	 *
-	 * @return bool
 	 */
 	protected function matchPseudoElements(\DOMElement $node, $pseudoElements) : bool
 	{
@@ -877,8 +828,6 @@ class DOMTraverser implements Traverser
 	 * Set the internal match set.
 	 *
 	 * Internal utility function.
-	 *
-	 * @param mixed $matches
 	 */
 	protected function setMatches($matches)
 	{
@@ -887,9 +836,6 @@ class DOMTraverser implements Traverser
 
 	/**
 	 * Attach all nodes in a node list to the given \SplObjectStorage.
-	 *
-	 * @param \DOMNodeList $nodeList
-	 * @param \SplObjectStorage $splos
 	 */
 	public function attachNodeList(\DOMNodeList $nodeList, \SplObjectStorage $splos)
 	{
