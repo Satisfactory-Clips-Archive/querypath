@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace QueryPathTests;
 
 /** @addtogroup querypath_tests Tests

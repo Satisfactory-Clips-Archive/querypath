@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /** @file
  * The Query Path package provides tools for manipulating a structured document.
  * Typically, the sort of structured document is one using a Document Object Model

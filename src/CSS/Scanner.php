@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /** @file
  * The scanner.
  */
@@ -59,14 +61,14 @@ final class Scanner
      * This sets the current token to the value of the next token in
      * the stream.
      *
-     * @return int
+     * @return int|false
      *  Returns an int value corresponding to one of the Token constants,
      *  or FALSE if the end of the string is reached. (Remember to use
      *  strong equality checking on FALSE, since 0 is a valid token id.)
      * @throws ParseException
      * @throws \QueryPath\Exception
      */
-    public function nextToken(): int
+    public function nextToken(): int|false
     {
         $tok = -1;
         ++$this->it;

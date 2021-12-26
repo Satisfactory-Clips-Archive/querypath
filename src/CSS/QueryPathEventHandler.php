@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /** @file
  * This file contains a full implementation of the EventHandler interface.
  *

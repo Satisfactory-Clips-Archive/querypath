@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace QueryPathTests;
 
 use QueryPath\CSS\EventHandler;

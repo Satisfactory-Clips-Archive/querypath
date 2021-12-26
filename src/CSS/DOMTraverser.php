@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /** @file
  * Traverse a DOM.
  */
@@ -786,7 +788,7 @@ class DOMTraverser implements Traverser
             $ret   &= $this->psHandler->elementMatches($name, $node, $this->scopeNode, $value);
         }
 
-        return $ret;
+        return (bool) $ret;
     }
 
     /**

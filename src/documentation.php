@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /** @mainpage QueryPath: Find Your Way
  * @image html querypath-200x333.png
  * QueryPath is a PHP library for working with XML and HTML. It is a PHP implementation of jQuery's
