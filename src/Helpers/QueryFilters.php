@@ -2,6 +2,7 @@
 
 namespace QueryPath\Helpers;
 
+use function create_function;
 use QueryPath\CSS\DOMTraverser;
 use QueryPath\CSS\ParseException;
 use QueryPath\Exception;
@@ -983,7 +984,7 @@ trait QueryFilters
     public function children($selector = NULL): Query
     {
         $found = new \SplObjectStorage();
-        $filter = strlen($selector) > 0;
+        $filter = strlen($selector ?? '') > 0;
 
         if ($filter) {
             $tmp = new \SplObjectStorage();

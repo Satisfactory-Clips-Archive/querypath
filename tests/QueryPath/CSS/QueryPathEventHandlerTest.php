@@ -105,15 +105,13 @@ class QueryPathEventHandlerTest extends TestCase
         $this->assertEquals('inside', $match->tagName);
     }
 
-    /**
-     * @expectedException \QueryPath\CSS\ParseException
-     * @throws \QueryPath\CSS\ParseException
-     */
     public function testEmptySelector()
     {
         $xml = '<?xml version="1.0" ?><t:test xmlns:t="urn:foo/bar"><t:inside id="first"/>Text<t:inside/><inside/></t:test>';
         $doc = new \DomDocument();
         $doc->loadXML($xml);
+
+        $this->expectException(\QueryPath\CSS\ParseException::class);
 
         // Basic test
         $handler = new QueryPathEventHandler($doc);
@@ -145,10 +143,6 @@ class QueryPathEventHandlerTest extends TestCase
         $this->assertEquals('t:test', $match->tagName);
     }
 
-
-    /**
-     * @expectedException \QueryPath\CSS\ParseException
-     */
     public function testFailedElementNS()
     {
         $xml = '<?xml version="1.0" ?><t:test xmlns:t="urn:foo/bar"><t:inside id="first"/>Text<t:inside/><inside/></t:test>';
@@ -156,6 +150,7 @@ class QueryPathEventHandlerTest extends TestCase
         $doc->loadXML($xml);
 
         $handler = new QueryPathEventHandler($doc);
+        $this->expectException(\QueryPath\CSS\ParseException::class);
         $handler->find('myns\:mytest');
     }
 

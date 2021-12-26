@@ -1,4 +1,5 @@
 /vendor/
+/.phpunit.result.cache
 test/coverage
 test/reports
 test/db

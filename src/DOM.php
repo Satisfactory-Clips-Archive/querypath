@@ -68,7 +68,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
      */
     public function __construct($document = NULL, $string = NULL, $options = [])
     {
-        $string = trim($string);
+        $string = trim($string ?? '');
         $this->options = $options + Options::get() + $this->options;
 
         $parser_flags = $options['parser_flags'] ?? self::DEFAULT_PARSER_FLAGS;
@@ -203,7 +203,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
                 if ($this->options['replace_entities']) {
                     $string = Entities::replaceAllEntities($string);
                 }
-                $document->loadXML($string, $flags);
+                $document->loadXML($string, $flags ?? 0);
             } // In all other cases, we try the HTML parser.
             else {
                 $document->loadHTML($string);
@@ -464,7 +464,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
                 $document->loadHTMLFile($filename);
             } // Default to XML.
             else {
-                $document->load($filename, $flags);
+                $document->load($filename, $flags ?? 0);
             }
 
         } // Emulate 'finally' behavior.

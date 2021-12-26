@@ -1232,11 +1232,11 @@ class DOMQuery extends DOM
     public function writeXML($path = NULL, $options = NULL)
     {
         if ($path === NULL) {
-            print $this->document->saveXML(NULL, $options);
+            print $this->document->saveXML(NULL, $options ?? 0);
         } else {
             try {
                 set_error_handler([IOException::class, 'initializeFromError']);
-                $this->document->save($path, $options);
+                $this->document->save($path, $options ?? 0);
             } catch (Exception $e) {
                 restore_error_handler();
                 throw $e;
@@ -1528,7 +1528,7 @@ class DOMQuery extends DOM
      * @return Iterable
      *  Returns an iterator.
      */
-    public function getIterator()
+    public function getIterator() : QueryPathIterator
     {
         $i = new QueryPathIterator($this->matches);
         $i->options = $this->options;

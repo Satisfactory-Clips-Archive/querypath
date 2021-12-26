@@ -21,9 +21,6 @@ class PseudoClassTest extends TestCase
         return [$found, $doc->documentElement];
     }
 
-    /**
-     * @expectedException \QueryPath\CSS\ParseException
-     */
     public function testUnknownPseudoClass()
     {
         $xml = '<?xml version="1.0"?><root><foo>test</foo></root>';
@@ -31,6 +28,7 @@ class PseudoClassTest extends TestCase
         list($ele, $root) = $this->doc($xml, 'foo');
         $ps = new PseudoClass();
 
+        $this->expectException(\QueryPath\CSS\ParseException::class);
         $ps->elementMatches('TotallyFake', $ele, $root);
     }
 

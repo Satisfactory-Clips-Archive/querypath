@@ -210,15 +210,13 @@ class ParserTest extends TestCase
         $parser->parse();
     }
 
-    /**
-     * @expectedException \QueryPath\CSS\ParseException
-     */
     public function testIllegalAttribute()
     {
 
         // Note that this is designed to test throwError() as well as
         // bad selector handling.
 
+        $this->expectException(\QueryPath\CSS\ParseException::class);
         $parser = new Parser('[test=~far]', new TestEventHandler());
         try {
             $parser->parse();
@@ -305,33 +303,30 @@ class ParserTest extends TestCase
 
     // Test things that should break...
 
-    /**
-     * @expectedException \QueryPath\CSS\ParseException
-     */
     public function testIllegalCombinators1()
     {
         $handler = new TestEventHandler();
         $parser = new Parser('ele1 > > ele2', $handler);
+
+        $this->expectException(\QueryPath\CSS\ParseException::class);
         $parser->parse();
     }
 
-    /**
-     * @expectedException \QueryPath\CSS\ParseException
-     */
     public function testIllegalCombinators2()
     {
         $handler = new TestEventHandler();
         $parser = new Parser('ele1+ ,ele2', $handler);
+
+        $this->expectException(\QueryPath\CSS\ParseException::class);
         $parser->parse();
     }
 
-    /**
-     * @expectedException \QueryPath\CSS\ParseException
-     */
     public function testIllegalID()
     {
         $handler = new TestEventHandler();
         $parser = new Parser('##ID', $handler);
+
+        $this->expectException(\QueryPath\CSS\ParseException::class);
         $parser->parse();
     }
 

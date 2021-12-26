@@ -220,28 +220,22 @@ class DOMQueryTest extends TestCase
 
     }
 
-    /**
-     * @expectedException \QueryPath\Exception
-     */
     public function testFailedCall()
     {
         // This should hit __call() and then fail.
+        $this->expectException(\QueryPath\Exception::class);
         qp()->fooMethod();
     }
 
-    /**
-     * @expectedException \QueryPath\Exception
-     */
     public function testFailedObjectConstruction()
     {
+        $this->expectException(\QueryPath\Exception::class);
         qp(new \stdClass());
     }
 
-    /**
-     * @expectedException \QueryPath\ParseException
-     */
     public function testFailedHTTPLoad()
     {
+        $this->expectException(\QueryPath\ParseException::class);
         try {
             qp('http://localhost:8877/no_such_file.xml');
         } catch (Exception $e) {
@@ -250,11 +244,9 @@ class DOMQueryTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \QueryPath\ParseException
-     */
     public function testFailedHTTPLoadWithContext()
     {
+        $this->expectException(\QueryPath\ParseException::class);
         try {
             qp('http://localhost:8877/no_such_file.xml', NULL, ['foo' => 'bar']);
         } catch (Exception $e) {
@@ -263,11 +255,9 @@ class DOMQueryTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \QueryPath\ParseException
-     */
     public function testFailedParseHTMLElement()
     {
+        $this->expectException(\QueryPath\ParseException::class);
         try {
             qp('<foo>&foonator;</foo>', NULL);
         } catch (Exception $e) {
@@ -276,11 +266,9 @@ class DOMQueryTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \QueryPath\ParseException
-     */
     public function testFailedParseXMLElement()
     {
+        $this->expectException(\QueryPath\ParseException::class);
         try {
             qp('<?xml version="1.0"?><foo><bar>foonator;</foo>', NULL);
         } catch (Exception $e) {
@@ -303,11 +291,9 @@ class DOMQueryTest extends TestCase
         \QueryPath\Options::set([]); // Reset to empty options.
     }
 
-    /**
-     * @expectedException \QueryPath\ParseException
-     */
     public function testFailedParseNonMarkup()
     {
+        $this->expectException(\QueryPath\ParseException::class);
         try {
             qp('<23dfadf', NULL);
         } catch (Exception $e) {
@@ -316,11 +302,9 @@ class DOMQueryTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \QueryPath\ParseException
-     */
     public function testFailedParseEntity()
     {
+        $this->expectException(\QueryPath\ParseException::class);
         try {
             qp('<?xml version="1.0"?><foo>&foonator;</foo>', NULL);
         } catch (Exception $e) {
@@ -584,23 +568,19 @@ class DOMQueryTest extends TestCase
         $this->assertEquals(2, qp($file, 'li')->filterCallback($cb)->count());
     }
 
-    /**
-     * @expectedException \QueryPath\Exception
-     */
     public function testFailedFilterCallback()
     {
         $file = DATA_FILE;
         $cb = [$this, 'noSuchFunction'];
+        $this->expectException(\QueryPath\Exception::class);
         qp($file, 'li')->filterCallback($cb)->count();
     }
 
-    /**
-     * @expectedException \QueryPath\Exception
-     */
     public function testFailedMapCallback()
     {
         $file = DATA_FILE;
         $cb = [$this, 'noSuchFunction'];
+        $this->expectException(\QueryPath\Exception::class);
         qp($file, 'li')->map($cb)->count();
     }
 
@@ -694,13 +674,11 @@ class DOMQueryTest extends TestCase
         $this->assertEquals(1, $res->count());
     }
 
-    /**
-     * @expectedException \QueryPath\Exception
-     */
     public function testEachOnInvalidCallback()
     {
         $file = DATA_FILE;
         $fn = 'eachCallbackFunctionFake';
+        $this->expectException(\QueryPath\Exception::class);
         $res = qp($file, 'li')->each([$this, $fn]);
     }
 
@@ -779,11 +757,9 @@ class DOMQueryTest extends TestCase
         $this->assertTrue(qp($file)->append('') instanceof DOMQuery);
     }
 
-    /**
-     * @expectedException \QueryPath\ParseException
-     */
     public function testAppendBadMarkup()
     {
+        $this->expectException(\QueryPath\ParseException::class);
         $file = DATA_FILE;
         try {
             qp($file, 'root')->append('<foo><bar></foo>');
@@ -793,11 +769,9 @@ class DOMQueryTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \QueryPath\Exception
-     */
     public function testAppendBadObject()
     {
+        $this->expectException(\QueryPath\Exception::class);
         $file = DATA_FILE;
         try {
             qp($file, 'root')->append(new \stdClass);
@@ -932,13 +906,11 @@ class DOMQueryTest extends TestCase
 
     }
 
-    /**
-     * @expectedException \QueryPath\Exception
-     */
     public function testFailedUnwrap()
     {
         // Cannot unwrap the root element.
         $xml = '<?xml version="1.0"?><root></root>';
+        $this->expectException(\QueryPath\Exception::class);
         $qp = qp($xml, 'root')->unwrap();
         $this->assertEquals('center', $qp->top()->tag());
     }
@@ -1210,7 +1182,7 @@ class DOMQueryTest extends TestCase
         $xml = '<html><head><title>foo</title></head><body><div id="me">Test<p>Again<br/></p></div></body></html>';
         // Look for a closing </br> tag
         $regex = '/<\/br>/';
-        $this->assertRegExp($regex, qp($xml, '#me')->innerXHTML(), 'BR should have a closing tag.');
+        $this->assertMatchesRegularExpression($regex, qp($xml, '#me')->innerXHTML(), 'BR should have a closing tag.');
     }
 
     public function testXML()
@@ -1277,19 +1249,19 @@ class DOMQueryTest extends TestCase
 
         // Look for a properly formatted BR unary tag:
         $regex = '/<br \/>/';
-        $this->assertRegExp($regex, $xhtml, 'BR should have a closing tag.');
+        $this->assertMatchesRegularExpression($regex, $xhtml, 'BR should have a closing tag.');
 
         // Look for a properly formatted HR tag:
         $regex = '/<hr width="100" \/>/';
-        $this->assertRegExp($regex, $xhtml, 'BR should have a closing tag.');
+        $this->assertMatchesRegularExpression($regex, $xhtml, 'BR should have a closing tag.');
 
         // Ensure that script tag is not collapsed:
         $regex = '/<script><\/script>/';
-        $this->assertRegExp($regex, $xhtml, 'BR should have a closing tag.');
+        $this->assertMatchesRegularExpression($regex, $xhtml, 'BR should have a closing tag.');
 
         // Ensure that frameset tag is not collapsed (it looks like <frame>):
         $regex = '/<frameset id="fooframeset"><\/frameset>/';
-        $this->assertRegExp($regex, $xhtml, 'BR should have a closing tag.');
+        $this->assertMatchesRegularExpression($regex, $xhtml, 'BR should have a closing tag.');
 
         // Ensure that script gets wrapped in CDATA:
         $find = '/* <![CDATA[ ';
@@ -1391,17 +1363,15 @@ class DOMQueryTest extends TestCase
         ob_end_clean();
 
         $pattern = '/<\/script>/';
-        $this->assertRegExp($pattern, $out, 'Should be closing script tag.');
+        $this->assertMatchesRegularExpression($pattern, $out, 'Should be closing script tag.');
 
         $pattern = '/<\/br>/';
-        $this->assertRegExp($pattern, $out, 'Should be closing br tag.');
+        $this->assertMatchesRegularExpression($pattern, $out, 'Should be closing br tag.');
     }
 
-    /**
-     * @expectedException \QueryPath\IOException
-     */
     public function testFailWriteXML()
     {
+        $this->expectException(\QueryPath\IOException::class);
         try {
             qp()->writeXML('/dev/null');
         } catch (Exception $e) {
@@ -1411,11 +1381,9 @@ class DOMQueryTest extends TestCase
 
     }
 
-    /**
-     * @expectedException \QueryPath\IOException
-     */
     public function testFailWriteXHTML()
     {
+        $this->expectException(\QueryPath\IOException::class);
         try {
             qp()->writeXHTML('/dev/null');
         } catch (\QueryPath\IOException $e) {
@@ -1425,11 +1393,9 @@ class DOMQueryTest extends TestCase
 
     }
 
-    /**
-     * @expectedException \QueryPath\IOException
-     */
     public function testFailWriteHTML()
     {
+        $this->expectException(\QueryPath\IOException::class);
         try {
             qp('<?xml version="1.0"?><foo/>')->writeXML('/dev/null');
         } catch (\QueryPath\IOException $e) {

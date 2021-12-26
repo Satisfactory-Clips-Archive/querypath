@@ -11,7 +11,7 @@ class QPXSLTest extends TestCase
 
     protected $file = './test/advanced.xml';
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass() : void
     {
         QueryPath::enable(QPXSL::class);
     }
