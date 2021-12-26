@@ -122,7 +122,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		// FIXME: Handle SimpleXML!
 		// Uh-oh... we don't support anything else.
 		else {
-			throw new \QueryPath\Exception("Unhandled type: " . get_class($dom));
+			throw new \QueryPath\Exception('Unhandled type: ' . get_class($dom));
 		}
 		$this->matches = $matches;
 	}
@@ -428,12 +428,12 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			case 'indeterminate':
 				// The assumption is that there is a UA and the format is HTML.
 				// I don't know if this should is useful without a UA.
-				throw new NotImplementedException(":indeterminate is not implemented.");
+				throw new NotImplementedException(':indeterminate is not implemented.');
 				break;
 			case 'lang':
 				// No value = exception.
 				if (!isset($value)) {
-					throw new NotImplementedException("No handler for lang pseudoclass without value.");
+					throw new NotImplementedException('No handler for lang pseudoclass without value.');
 				}
 				$this->lang($value);
 				break;
@@ -517,7 +517,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				break;
 			case 'not':
 				if (empty($value)) {
-					throw new ParseException(":not() requires a value.");
+					throw new ParseException(':not() requires a value.');
 				}
 				$this->not($value);
 				break;
@@ -604,7 +604,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				$this->matches = $found;
 				break;
 			default:
-				throw new ParseException("Unknown Pseudo-Class: " . $name);
+				throw new ParseException('Unknown Pseudo-Class: ' . $name);
 		}
 		$this->findAnyElement = false;
 	}
@@ -724,7 +724,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 		$rule = explode('n', $rule);
 		if (count($rule) == 0) {
-			throw new ParseException("nth-child value is invalid.");
+			throw new ParseException('nth-child value is invalid.');
 		}
 
 		// Each of these is legal: 1, -1, and -. '-' is shorthand for -1.

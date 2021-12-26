@@ -261,7 +261,7 @@ class Parser
 		if ($this->scanner->token === Token::OCTO) {
 			$this->scanner->nextToken();
 			if ($this->scanner->token !== Token::CHAR) {
-				throw new ParseException("Expected string after #");
+				throw new ParseException('Expected string after #');
 			}
 			$id = $this->scanner->getNameString();
 			$this->handler->elementID($id);

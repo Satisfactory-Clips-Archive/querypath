@@ -491,8 +491,8 @@ class DOMQueryTest extends TestCase
 		$this->assertEquals($qp->attr('id'), 'one');
 		$this->assertEquals(1, qp($file, 'inner')->eq(0)->count());
 		$this->assertEquals(1, qp($file, 'li')->eq(0)->count());
-		$this->assertEquals("Hello", qp($file, 'li')->eq(0)->text());
-		$this->assertEquals("Last", qp($file, 'li')->eq(3)->text());
+		$this->assertEquals('Hello', qp($file, 'li')->eq(0)->text());
+		$this->assertEquals('Last', qp($file, 'li')->eq(3)->text());
 	}
 
 	public function testIs()
@@ -598,7 +598,7 @@ class DOMQueryTest extends TestCase
 		// Test with DOM Element
 		$qp = qp($file, 'li');
 		$el = $qp->branch()->filter('#one')->get(0);
-		$this->assertTrue($el instanceof \DOMElement, "Is DOM element.");
+		$this->assertTrue($el instanceof \DOMElement, 'Is DOM element.');
 		$this->assertEquals(4, $qp->not($el)->count());
 
 		// Test with array of DOM Elements
@@ -1089,7 +1089,7 @@ class DOMQueryTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><root xmlns="foo:bar"><e>test</e></root>';
 
-		$q = qp($xml, "e");
+		$q = qp($xml, 'e');
 
 		$this->assertEquals(1, $q->count());
 
@@ -1281,7 +1281,7 @@ class DOMQueryTest extends TestCase
 		$xml = '<?xml version="1.0"?><html><head><title>foo</title></head><body>bar</body></html>';
 
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeXML();
 		$out = ob_get_contents();
@@ -1299,7 +1299,7 @@ class DOMQueryTest extends TestCase
     <title>foo</title></head><body>bar</body></html>';
 
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeXML();
 		$out = ob_get_contents();
@@ -1321,7 +1321,7 @@ class DOMQueryTest extends TestCase
 		$xml = '<?xml version="1.0"?><html><head><title>foo</title></head><body>bar</body></html>';
 
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeXHTML();
 		$out = ob_get_contents();
@@ -1358,7 +1358,7 @@ class DOMQueryTest extends TestCase
 		// Regression for issue #10 (keep closing tags in XHTML)
 		$xhtml = '<?xml version="1.0"?><html><head><title>foo</title><script></script><br/></head><body>bar</body></html>';
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xhtml, 'html')->writeXHTML();
 		$out = ob_get_contents();
@@ -1412,7 +1412,7 @@ class DOMQueryTest extends TestCase
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
 
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML();
 		$out = ob_get_contents();
@@ -1428,7 +1428,7 @@ class DOMQueryTest extends TestCase
     </head><body>bar</body></html>';
 
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML();
 		$out = ob_get_contents();
@@ -1444,7 +1444,7 @@ class DOMQueryTest extends TestCase
     </head><body>bar</body></html>';
 
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML();
 		$out = ob_get_contents();
@@ -1466,7 +1466,7 @@ class DOMQueryTest extends TestCase
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
 
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML5();
 		$out = ob_get_contents();
@@ -1482,7 +1482,7 @@ class DOMQueryTest extends TestCase
     </head><body>bar</body></html>';
 
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML5();
 		$out = ob_get_contents();
@@ -1498,7 +1498,7 @@ class DOMQueryTest extends TestCase
     </head><body>bar</body></html>';
 
 		if (!ob_start()) {
-			die ("Could not start OB.");
+			die ('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML5();
 		$out = ob_get_contents();
@@ -1586,7 +1586,7 @@ class DOMQueryTest extends TestCase
 		//throw new Exception($qp->top()->xml());
 
 		$qp = $qp->top('p:first-of-type');
-		$this->assertEquals('Hello', $qp->text(), "Test First P " . $qp->top()->html());
+		$this->assertEquals('Hello', $qp->text(), 'Test First P ' . $qp->top()->html());
 		$i = 0;
 		while ($qp->next('p')->html() != NULL) {
 			$qp = $qp->next('p');
@@ -1905,14 +1905,14 @@ class DOMQueryTest extends TestCase
 		$file = DATA_FILE;
 		$this->assertEquals(1, qp($file, 'inner')->first()->count());
 		$this->assertEquals(1, qp($file, 'li')->first()->count());
-		$this->assertEquals("Hello", qp($file, 'li')->first()->text());
+		$this->assertEquals('Hello', qp($file, 'li')->first()->text());
 	}
 
 	public function testFirstChild()
 	{
 		$file = DATA_FILE;
 		$this->assertEquals(1, qp($file, '#inner-one')->firstChild()->count());
-		$this->assertEquals("Hello", qp($file, '#inner-one')->firstChild()->text());
+		$this->assertEquals('Hello', qp($file, '#inner-one')->firstChild()->text());
 	}
 
 	public function testLast()
@@ -1927,7 +1927,7 @@ class DOMQueryTest extends TestCase
 	{
 		$file = DATA_FILE;
 		$this->assertEquals(1, qp($file, '#inner-one')->lastChild()->count());
-		$this->assertEquals("Last", qp($file, '#inner-one')->lastChild()->text());
+		$this->assertEquals('Last', qp($file, '#inner-one')->lastChild()->text());
 	}
 
 	public function testParentsUntil()

@@ -34,14 +34,14 @@ class QPXMLTest extends TestCase
 	public function testComment()
 	{
 		$this->assertEquals('This is a comment.', trim(qp($this->file, 'root')->comment()));
-		$msg = "Message";
+		$msg = 'Message';
 		$this->assertEquals($msg, qp($this->file, 'second')->comment($msg)->top()->find('second')->comment());
 	}
 
 	public function testProcessingInstruction()
 	{
 		$this->assertEquals('This is a processing instruction.', trim(qp($this->file, 'third')->pi()));
-		$msg = "Message";
+		$msg = 'Message';
 		$this->assertEquals($msg, qp($this->file, 'second')->pi('qp', $msg)->top()->find('second')->pi());
 	}
 }

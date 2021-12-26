@@ -194,7 +194,7 @@ class QPXML implements Extension
 					$nsUri = $element->ownerDocument->lookupNamespaceURI($ns);
 
 					if ($nsUri === NULL) {
-						throw new \QueryPath\Exception("Undefined namespace for: " . $text);
+						throw new \QueryPath\Exception('Undefined namespace for: ' . $text);
 					}
 				}
 
