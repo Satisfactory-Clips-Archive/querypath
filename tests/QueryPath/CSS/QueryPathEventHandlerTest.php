@@ -56,7 +56,7 @@ class QueryPathEventHandlerTest extends TestCase
 	private function nthMatch($matches, $n = 0)
 	{
 		foreach ($matches as $m) {
-			if ($matches->key() == $n) {
+			if ($matches->key() === $n) {
 				return $m;
 			}
 		}
@@ -72,7 +72,7 @@ class QueryPathEventHandlerTest extends TestCase
 		// Test handing it a DOM Document
 		$handler = new QueryPathEventHandler($doc);
 		$matches = $handler->getMatches();
-		$this->assertTrue($matches->count() == 1);
+		$this->assertTrue($matches->count() === 1);
 		$match = $this->firstMatch($matches);
 		$this->assertSame('test', $match->tagName);
 

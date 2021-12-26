@@ -14,15 +14,17 @@ use QueryPath\CSS\EventHandler;
  */
 class TestEventHandler implements EventHandler
 {
-	public $stack;
-	public $expect = [];
+	/** @var list<TestEvent> */
+	public array $stack = [];
+
+	/** @var list<TestEvent> */
+	public array $expect = [];
 
 	public function __construct()
 	{
-		$this->stack = [];
 	}
 
-	public function getStack()
+	public function getStack() : array
 	{
 		return $this->stack;
 	}
@@ -41,14 +43,26 @@ class TestEventHandler implements EventHandler
 		}
 	}
 
-	public function expectsSmth($stack)
+	public function expectsSmth(array $stack) : void
 	{
 		$this->expect = $stack;
 	}
 
-	public function success()
+	public function success() : bool
 	{
-		return $this->expect == $this->stack;
+		$maybe = count($this->expect) === count($this->stack);
+
+		if ( ! $maybe) {
+			return false;
+		}
+
+		foreach ($this->expect as $k => $value) {
+			if ( ! $value->compare($this->stack[$k])) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public function elementID($id)

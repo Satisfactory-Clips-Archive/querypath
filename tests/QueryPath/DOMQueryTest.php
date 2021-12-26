@@ -187,18 +187,18 @@ class DOMQueryTest extends TestCase
 	public function testOptionXMLEncoding()
 	{
 		$xml = qp(null, null, ['encoding' => 'iso-8859-1'])->append('<test/>')->xml();
-		$iso_found = preg_match('/iso-8859-1/', $xml) == 1;
+		$iso_found = preg_match('/iso-8859-1/', $xml) === 1;
 
 		$this->assertTrue($iso_found, 'Encoding should be iso-8859-1 in ' . $xml . 'Found ' . $iso_found);
 
-		$iso_found = preg_match('/utf-8/', $xml) == 1;
+		$iso_found = preg_match('/utf-8/', $xml) === 1;
 		$this->assertFalse($iso_found, 'Encoding should not be utf-8 in ' . $xml);
 
 		$xml = qp('<?xml version="1.0" encoding="utf-8"?><test/>', null, ['encoding' => 'iso-8859-1'])->xml();
-		$iso_found = preg_match('/utf-8/', $xml) == 1;
+		$iso_found = preg_match('/utf-8/', $xml) === 1;
 		$this->assertTrue($iso_found, 'Encoding should be utf-8 in ' . $xml);
 
-		$iso_found = preg_match('/iso-8859-1/', $xml) == 1;
+		$iso_found = preg_match('/iso-8859-1/', $xml) === 1;
 		$this->assertFalse($iso_found, 'Encoding should not be utf-8 in ' . $xml);
 	}
 
@@ -629,10 +629,10 @@ class DOMQueryTest extends TestCase
 
 	public function mapCallbackFunction($index, $item)
 	{
-		if ($index == 1) {
+		if ($index === 1) {
 			return false;
 		}
-		if ($index == 2) {
+		if ($index === 2) {
 			return [1, 2, 3];
 		}
 
@@ -1576,7 +1576,7 @@ class DOMQueryTest extends TestCase
 		$qp = $qp->top('p:first-of-type');
 		$this->assertSame('Hello', $qp->text(), 'Test First P ' . $qp->top()->html());
 		$i = 0;
-		while ($qp->next('p')->html() != null) {
+		while ($qp->next('p')->html() !== null) {
 			$qp = $qp->next('p');
 			$this->assertCount(1, $qp);
 			$this->assertSame($testarray[$i], $qp->text(), $i . " didn't match " . $qp->top()->xml());
@@ -1935,7 +1935,7 @@ class DOMQueryTest extends TestCase
 
 		// Test simple ordering.
 		$comp = function (\DOMNode $a, \DOMNode $b) {
-			if ($a->textContent == $b->textContent) {
+			if ($a->textContent === $b->textContent) {
 				return 0;
 			}
 
@@ -1951,7 +1951,7 @@ class DOMQueryTest extends TestCase
 			$qpa = qp($a);
 			$qpb = qp($b);
 
-			if ($qpa->text() == $qpb->text()) {
+			if ($qpa->text() === $qpb->text()) {
 				return 0;
 			}
 
@@ -1965,7 +1965,7 @@ class DOMQueryTest extends TestCase
 
 		// Test DOM re-ordering
 		$comp = function (\DOMNode $a, \DOMNode $b) {
-			if ($a->textContent == $b->textContent) {
+			if ($a->textContent === $b->textContent) {
 				return 0;
 			}
 

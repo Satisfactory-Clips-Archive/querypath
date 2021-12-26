@@ -17,6 +17,7 @@ class QueryPathConfig extends ConfigUsedWithStaticAnalysis
 		$rules['php_unit_method_casing'] = false;
 		$rules['php_unit_test_case_static_method_calls'] = false;
 		$rules['mb_str_functions'] = false;
+		$rules['strict_comparison'] = false;
 
 		return $rules;
 	}

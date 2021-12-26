@@ -48,4 +48,12 @@ class TestEvent
 	{
 		return $this->params;
 	}
+
+	public function compare(self $against) : bool
+	{
+		return
+			$this->type === $against->type
+			&& $this->params === $against->params
+		;
+	}
 }
