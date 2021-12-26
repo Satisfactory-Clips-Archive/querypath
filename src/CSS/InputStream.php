@@ -52,7 +52,7 @@ class InputStream
 	{
 		$ret = array_shift($this->stream);
 		if ( !empty($ret)) {
-			$this->position++;
+			++$this->position;
 		}
 
 		return $ret;

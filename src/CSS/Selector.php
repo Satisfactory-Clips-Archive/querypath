@@ -164,7 +164,7 @@ class Selector implements EventHandler, \IteratorAggregate, \Countable
 
 	public function anotherSelector()
 	{
-		$this->groupIndex++;
+		++$this->groupIndex;
 		$this->currSelector = new SimpleSelector();
 		$this->selectors[$this->groupIndex] = [$this->currSelector];
 	}

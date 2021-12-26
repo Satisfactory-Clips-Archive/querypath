@@ -1580,7 +1580,7 @@ class DOMQueryTest extends TestCase
 			$qp = $qp->next('p');
 			$this->assertCount(1, $qp);
 			$this->assertSame($testarray[$i], $qp->text(), $i . " didn't match " . $qp->top()->xml());
-			$i++;
+			++$i;
 		}
 		$this->assertSame(3, $i);
 		//    $this->assertEquals('new paragraph', $qp->next()->text(), "Test Newly Added P");
