@@ -13,7 +13,7 @@ use QueryPathTests\TestCase;
  */
 class UtilTest extends TestCase
 {
-	public function testRemoveQuotes()
+	public function testRemoveQuotes() : void
 	{
 		$this->assertSame('foo', Util::removeQuotes('"foo"'));
 		$this->assertSame('foo', Util::removeQuotes("'foo'"));
@@ -21,7 +21,7 @@ class UtilTest extends TestCase
 		$this->assertSame('f"o"o', Util::removeQuotes('f"o"o'));
 	}
 
-	public function testParseAnB()
+	public function testParseAnB() : void
 	{
 		// even
 		$this->assertSame([2, 0], Util::parseAnB('even'));

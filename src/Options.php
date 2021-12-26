@@ -50,7 +50,7 @@ class Options
 	 * @param array $array
 	 *  An associative array of options
 	 */
-	public static function set($array)
+	public static function set($array) : void
 	{
 		self::$options = $array;
 	}
@@ -79,7 +79,7 @@ class Options
 	 * @param array $array
 	 *  Associative array of options to merge into the existing options
 	 */
-	public static function merge($array)
+	public static function merge($array) : void
 	{
 		self::$options = $array + self::$options;
 	}

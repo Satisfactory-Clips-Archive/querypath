@@ -414,7 +414,7 @@ class Parser
 	 *  ns|* (EventHandler::elementNS())
 	 * </code>
 	 */
-	private function elementName()
+	private function elementName() : void
 	{
 		if ($this->DEBUG) {
 			echo "ELEMENT NAME\n";
@@ -456,7 +456,7 @@ class Parser
 	 *
 	 * Calls EventHandler::anyElement() or EventHandler::elementName().
 	 */
-	private function allElements()
+	private function allElements() : void
 	{
 		if (Token::STAR === $this->scanner->token) {
 			$this->scanner->nextToken();
@@ -492,7 +492,7 @@ class Parser
 	 * @throws \QueryPath\CSS\ParseException
 	 * @throws Exception
 	 */
-	private function attribute()
+	private function attribute() : void
 	{
 		if (Token::LSQUARE === $this->scanner->token) {
 			$attrVal = $op = $ns = null;
@@ -623,7 +623,7 @@ class Parser
 	 * @param mixed $expected
 	 * @param mixed $got
 	 */
-	private function throwError($expected, $got)
+	private function throwError($expected, $got) : void
 	{
 		$filter = sprintf('Expected %s, got %s', Token::name($expected), Token::name($got));
 		throw new ParseException($filter);

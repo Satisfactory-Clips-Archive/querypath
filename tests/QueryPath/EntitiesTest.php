@@ -9,7 +9,7 @@ namespace QueryPathTests;
  */
 class EntitiesTest extends TestCase
 {
-	public function testReplaceEntity()
+	public function testReplaceEntity() : void
 	{
 		$entity = 'amp';
 		$this->assertSame(38, \QueryPath\Entities::replaceEntity($entity));
@@ -18,7 +18,7 @@ class EntitiesTest extends TestCase
 		$this->assertSame(8968, \QueryPath\Entities::replaceEntity($entity));
 	}
 
-	public function testReplaceAllEntities()
+	public function testReplaceAllEntities() : void
 	{
 		$test = '<?xml version="1.0"?><root>&amp;&copy;&#38;& nothing.</root>';
 		$expect = '<?xml version="1.0"?><root>&#38;&#169;&#38;&#38; nothing.</root>';
@@ -33,14 +33,14 @@ class EntitiesTest extends TestCase
 		$this->assertSame($expect, \QueryPath\Entities::replaceAllEntities($test));
 	}
 
-	public function testReplaceHexEntities()
+	public function testReplaceHexEntities() : void
 	{
 		$test = '&#xA9;';
 		$expect = '&#xA9;';
 		$this->assertSame($expect, \QueryPath\Entities::replaceAllEntities($test));
 	}
 
-	public function testQPEntityReplacement()
+	public function testQPEntityReplacement() : void
 	{
 		$test = '<?xml version="1.0"?><root>&amp;&copy;&#38;& nothing.</root>';
 		/*$expect = '<?xml version="1.0"?><root>&#38;&#169;&#38;&#38; nothing.</root>';*/

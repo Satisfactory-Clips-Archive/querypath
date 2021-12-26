@@ -23,12 +23,12 @@ class DOMTraverserTest extends TestCase
 {
 	protected $xml_file = TRAVERSER_XML;
 
-	public function debug($msg)
+	public function debug($msg) : void
 	{
 		fwrite(STDOUT, PHP_EOL . $msg);
 	}
 
-	public function testConstructor()
+	public function testConstructor() : void
 	{
 		$dom = new DOMDocument('1.0');
 		$dom->load($this->xml_file);
@@ -42,7 +42,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertInstanceOf('\QueryPath\CSS\DOMTraverser', $traverser);
 	}
 
-	public function testFind()
+	public function testFind() : void
 	{
 		$res = $this->traverser()->find('root');
 
@@ -50,13 +50,13 @@ class DOMTraverserTest extends TestCase
 		$this->assertInstanceOf('\QueryPath\CSS\Traverser', $res);
 	}
 
-	public function testMatches()
+	public function testMatches() : void
 	{
 		$res = $this->traverser()->matches();
 		$this->assertCount(1, $res);
 	}
 
-	public function testMatchElement()
+	public function testMatchElement() : void
 	{
 		// Canary: If element does not exist, must return FALSE.
 		$matches = $this->find('NO_SUCH_ELEMENT');
@@ -119,7 +119,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(1, $matches);
 	}
 
-	public function testMatchAttributes()
+	public function testMatchAttributes() : void
 	{
 		$matches = $this->find('crowded[attr1]');
 		$this->assertCount(1, $matches);
@@ -178,7 +178,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(1, $matches);
 	}
 
-	public function testMatchId()
+	public function testMatchId() : void
 	{
 		$matches = $this->find('idtest#idtest-one');
 		$this->assertCount(1, $matches);
@@ -193,7 +193,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(0, $matches);
 	}
 
-	public function testMatchClasses()
+	public function testMatchClasses() : void
 	{
 		// Basic test.
 		$matches = $this->find('a.a1');
@@ -212,7 +212,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(1, $matches);
 	}
 
-	public function testMatchPseudoClasses()
+	public function testMatchPseudoClasses() : void
 	{
 		$matches = $this->find('ul>li:first');
 		$this->assertCount(1, $matches);
@@ -221,7 +221,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(5, $matches);
 	}
 
-	public function testMatchPseudoElements()
+	public function testMatchPseudoElements() : void
 	{
 		$matches = $this->find('p::first-line');
 		$this->assertCount(1, $matches);
@@ -239,7 +239,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(0, $matches);
 	}
 
-	public function testCombineAdjacent()
+	public function testCombineAdjacent() : void
 	{
 		// Simple test
 		$matches = $this->find('idtest + p');
@@ -270,7 +270,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(0, $matches, 'Match only if b is after a');
 	}
 
-	public function testCombineSibling()
+	public function testCombineSibling() : void
 	{
 		// Canary:
 		$matches = $this->find('one ~ two');
@@ -299,7 +299,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(0, $matches);
 	}
 
-	public function testCombineDirectDescendant()
+	public function testCombineDirectDescendant() : void
 	{
 		// Canary:
 		$matches = $this->find('one > four');
@@ -324,7 +324,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(2, $matches);
 	}
 
-	public function testCombineAnyDescendant()
+	public function testCombineAnyDescendant() : void
 	{
 		// Canary
 		$matches = $this->find('four one');
@@ -346,7 +346,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(1, $matches);
 	}
 
-	public function testMultipleSelectors()
+	public function testMultipleSelectors() : void
 	{
 		// fprintf(STDOUT, "=========TEST=========\n\n");
 		$matches = $this->find('one, two');

@@ -30,7 +30,7 @@ class TestEventHandler implements EventHandler
 		return $this->stack;
 	}
 
-	public function dumpStack()
+	public function dumpStack() : void
 	{
 		echo "\nExpected:\n";
 		$format = "Element %d: %s\n";
@@ -66,77 +66,77 @@ class TestEventHandler implements EventHandler
 		return true;
 	}
 
-	public function elementID($id)
+	public function elementID($id) : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ELEMENT_ID, $id);
 	}
 
-	public function element($name)
+	public function element($name) : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ELEMENT, $name);
 	}
 
-	public function elementNS($name, $namespace = null)
+	public function elementNS($name, $namespace = null) : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ELEMENT_NS, $name, $namespace);
 	}
 
-	public function anyElement()
+	public function anyElement() : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ANY_ELEMENT);
 	}
 
-	public function anyElementInNS($ns)
+	public function anyElementInNS($ns) : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ANY_ELEMENT_IN_NS, $ns);
 	}
 
-	public function elementClass($name)
+	public function elementClass($name) : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ELEMENT_CLASS, $name);
 	}
 
-	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY)
+	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY) : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ATTRIBUTE, $name, $value, $operation);
 	}
 
-	public function attributeNS($name, $ns, $value = null, $operation = EventHandler::IS_EXACTLY)
+	public function attributeNS($name, $ns, $value = null, $operation = EventHandler::IS_EXACTLY) : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ATTRIBUTE_NS, $name, $ns, $value, $operation);
 	}
 
-	public function pseudoClass($name, $value = null)
+	public function pseudoClass($name, $value = null) : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::PSEUDO_CLASS, $name, $value);
 	}
 
-	public function pseudoElement($name)
+	public function pseudoElement($name) : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::PSEUDO_ELEMENT, $name);
 	}
 
-	public function directDescendant()
+	public function directDescendant() : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::DIRECT_DESCENDANT);
 	}
 
-	public function anyDescendant()
+	public function anyDescendant() : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ANY_DESCENDANT);
 	}
 
-	public function adjacent()
+	public function adjacent() : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ADJACENT);
 	}
 
-	public function anotherSelector()
+	public function anotherSelector() : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::ANOTHER_SELECTOR);
 	}
 
-	public function sibling()
+	public function sibling() : void
 	{
 		$this->stack[] = new TestEvent(TestEvent::SIBLING);
 	}

@@ -48,7 +48,7 @@ class QueryPathEventHandlerTest extends TestCase
   </html>
   ';
 
-	public function testGetMatches()
+	public function testGetMatches() : void
 	{
 		// Test root element:
 		$xml = '<?xml version="1.0" ?><test><inside/>Text<inside/></test>';
@@ -91,7 +91,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('inside', $match->tagName);
 	}
 
-	public function testEmptySelector()
+	public function testEmptySelector() : void
 	{
 		$xml = '<?xml version="1.0" ?><t:test xmlns:t="urn:foo/bar"><t:inside id="first"/>Text<t:inside/><inside/></t:test>';
 		$doc = new DomDocument();
@@ -106,7 +106,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame(0, $matches->count());
 	}
 
-	public function testElementNS()
+	public function testElementNS() : void
 	{
 		$xml = '<?xml version="1.0" ?><t:test xmlns:t="urn:foo/bar"><t:inside id="first"/>Text<t:inside/><inside/></t:test>';
 		$doc = new DomDocument();
@@ -129,7 +129,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('t:test', $match->tagName);
 	}
 
-	public function testFailedElementNS()
+	public function testFailedElementNS() : void
 	{
 		$xml = '<?xml version="1.0" ?><t:test xmlns:t="urn:foo/bar"><t:inside id="first"/>Text<t:inside/><inside/></t:test>';
 		$doc = new DomDocument();
@@ -140,7 +140,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$handler->find('myns\:mytest');
 	}
 
-	public function testElement()
+	public function testElement() : void
 	{
 		$xml = '<?xml version="1.0" ?><test><inside id="first"/>Text<inside/></test>';
 		$doc = new DomDocument();
@@ -184,7 +184,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('html', $match->tagName);
 	}
 
-	public function testElementId()
+	public function testElementId() : void
 	{
 		// Test root element:
 		$xml = '<?xml version="1.0" ?><test><inside id="first"/>Text<inside/></test>';
@@ -208,7 +208,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('inside', $match->tagName);
 	}
 
-	public function testAnyElementInNS()
+	public function testAnyElementInNS() : void
 	{
 		$xml = '<?xml version="1.0" ?><ns1:test xmlns:ns1="urn:foo/bar"><ns1:inside/>Text<ns1:inside/></ns1:test>';
 		$doc = new DomDocument();
@@ -242,7 +242,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('ns1:inside', $match->tagName);
 	}
 
-	public function testAnyElement()
+	public function testAnyElement() : void
 	{
 		$xml = '<?xml version="1.0" ?><test><inside/>Text<inside/></test>';
 		$doc = new DomDocument();
@@ -278,7 +278,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $match->getAttribute('id'), 'Should match ID #two');
 	}
 
-	public function testElementClass()
+	public function testElementClass() : void
 	{
 		$xml = '<?xml version="1.0" ?><test><inside class="foo" id="one"/>Text<inside/></test>';
 		$doc = new DomDocument();
@@ -311,7 +311,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('li-nine', $match->getAttribute('id'));
 	}
 
-	public function testDirectDescendant()
+	public function testDirectDescendant() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -333,7 +333,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $match->getAttribute('id'));
 	}
 
-	public function testAttribute()
+	public function testAttribute() : void
 	{
 		$xml = '<?xml version="1.0" ?><test><inside id="one" name="antidisestablishmentarianism"/>Text<inside/></test>';
 		$doc = new DomDocument();
@@ -412,7 +412,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('one', $match->getAttribute('id'));
 	}
 
-	public function testPseudoClassLang()
+	public function testPseudoClassLang() : void
 	{
 		$xml = '<?xml version="1.0" ?><test><inside lang="en-us" id="one"/>Text<inside/></test>';
 		$doc = new DomDocument();
@@ -466,7 +466,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $match->getAttribute('id'));
 	}
 
-	public function testPseudoClassEnabledDisabledChecked()
+	public function testPseudoClassEnabledDisabledChecked() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -499,14 +499,14 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('three', $match->getAttribute('id'));
 	}
 
-	public function testPseudoClassLink()
+	public function testPseudoClassLink() : void
 	{
 		$xml = '<?xml version="1.0"?><a><b href="foo"/><c href="foo"/></a>';
 		$qp = qp($xml, ':link');
 		$this->assertSame(2, $qp->size());
 	}
 
-	public function testPseudoClassXReset()
+	public function testPseudoClassXReset() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -527,7 +527,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('test', $this->firstMatch($matches)->tagName);
 	}
 
-	public function testPseudoClassRoot()
+	public function testPseudoClassRoot() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -549,7 +549,7 @@ class QueryPathEventHandlerTest extends TestCase
 
 	// Test removed so I can re-declare
 	// listPeerElements as private.
-	public function xtestListPeerElements()
+	public function xtestListPeerElements() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -593,7 +593,7 @@ class QueryPathEventHandlerTest extends TestCase
 	  $this->assertEquals('one', $this->nthMatch($matches, 1)->getAttribute('id'));
 	}*/
 
-	public function testPseudoClassNthChild()
+	public function testPseudoClassNthChild() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -727,7 +727,7 @@ class QueryPathEventHandlerTest extends TestCase
 		//$this->assertEquals('inner-one', $matches[3]->getAttribute('id'));
 	}
 
-	public function testPseudoClassOnlyChild()
+	public function testPseudoClassOnlyChild() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -759,7 +759,7 @@ class QueryPathEventHandlerTest extends TestCase
 		//$this->assertEquals('one', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassOnlyOfType()
+	public function testPseudoClassOnlyOfType() : void
 	{
 		// TODO: Added this late (it was missing in original test),
 		// and I'm not sure if the assumed behavior is correct.
@@ -793,7 +793,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame(0, $matches->count());
 	}
 
-	public function testPseudoClassFirstChild()
+	public function testPseudoClassFirstChild() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -827,7 +827,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('inner-one', $this->nthMatch($matches, 1)->getAttribute('id'));
 	}
 
-	public function testPseudoClassLastChild()
+	public function testPseudoClassLastChild() : void
 	{
 		//print '----' . PHP_EOL;
 		$xml = '<?xml version="1.0" ?>
@@ -863,7 +863,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('five', $this->nthMatch($matches, 1)->getAttribute('id'));
 	}
 
-	public function testPseudoClassNthLastChild()
+	public function testPseudoClassNthLastChild() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -900,7 +900,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('inner-four', $this->nthMatch($matches, 1)->getAttribute('id'));
 	}
 
-	public function testPseudoClassFirstOfType()
+	public function testPseudoClassFirstOfType() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -919,7 +919,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassNthFirstOfType()
+	public function testPseudoClassNthFirstOfType() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -938,7 +938,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassLastOfType()
+	public function testPseudoClassLastOfType() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -957,7 +957,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('three', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoNthClassLastOfType()
+	public function testPseudoNthClassLastOfType() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -997,7 +997,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('five', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassEmpty()
+	public function testPseudoClassEmpty() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1020,7 +1020,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassFirst()
+	public function testPseudoClassFirst() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1039,7 +1039,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('one', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassLast()
+	public function testPseudoClassLast() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1058,7 +1058,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('three', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassGT()
+	public function testPseudoClassGT() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1077,7 +1077,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassLT()
+	public function testPseudoClassLT() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1097,7 +1097,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $this->nthMatch($matches, 1)->getAttribute('id'));
 	}
 
-	public function testPseudoClassNTH()
+	public function testPseudoClassNTH() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1121,7 +1121,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassNthOfType()
+	public function testPseudoClassNthOfType() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1139,7 +1139,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassFormElements()
+	public function testPseudoClassFormElements() : void
 	{
 		$form = ['text', 'radio', 'checkbox', 'button', 'password'];
 		$xml = '<?xml version="1.0" ?>
@@ -1159,7 +1159,7 @@ class QueryPathEventHandlerTest extends TestCase
 		}
 	}
 
-	public function testPseudoClassHeader()
+	public function testPseudoClassHeader() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1177,7 +1177,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('three', $this->nthMatch($matches, 2)->getAttribute('id'));
 	}
 
-	public function testPseudoClassContains()
+	public function testPseudoClassContains() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1219,7 +1219,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('one', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassContainsExactly()
+	public function testPseudoClassContainsExactly() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1254,7 +1254,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('one', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassHas()
+	public function testPseudoClassHas() : void
 	{
 		$xml = '<?xml version="1.0" ?>
     <test>
@@ -1273,7 +1273,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('one', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoClassNot()
+	public function testPseudoClassNot() : void
 	{
 		$xml = '<?xml version="1.0" ?>
       <test>
@@ -1304,7 +1304,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('one', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testPseudoElement()
+	public function testPseudoElement() : void
 	{
 		$xml = '<?xml version="1.0" ?>
       <test>
@@ -1329,7 +1329,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('Texts', $this->firstMatch($matches)->textContent);
 	}
 
-	public function testAdjacent()
+	public function testAdjacent() : void
 	{
 		$xml = '<?xml version="1.0" ?>
       <test>
@@ -1363,7 +1363,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('five', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testAnotherSelector()
+	public function testAnotherSelector() : void
 	{
 		$xml = '<?xml version="1.0" ?>
       <test>
@@ -1388,7 +1388,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('two', $this->nthMatch($matches, 1)->getAttribute('id'));
 	}
 
-	public function testSibling()
+	public function testSibling() : void
 	{
 		$xml = '<?xml version="1.0" ?>
       <test>
@@ -1428,7 +1428,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('inner-inner-two', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
-	public function testAnyDescendant()
+	public function testAnyDescendant() : void
 	{
 		$xml = '<?xml version="1.0" ?>
       <test>

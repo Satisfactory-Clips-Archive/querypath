@@ -13,7 +13,7 @@ use QueryPathTests\TestCase;
  */
 class TokenTest extends TestCase
 {
-	public function testName()
+	public function testName() : void
 	{
 		$this->assertSame('character', (Token::name(0)));
 		$this->assertSame('a legal non-alphanumeric character', (Token::name(99)));

@@ -21,7 +21,7 @@ class QPXMLTest extends TestCase
 		QueryPath::enable(QPXML::class);
 	}
 
-	public function testCDATA()
+	public function testCDATA() : void
 	{
 		$this->assertSame('This is a CDATA section.', qp($this->file, 'first')->cdata());
 
@@ -29,14 +29,14 @@ class QPXMLTest extends TestCase
 		$this->assertSame($msg, qp($this->file, 'second')->cdata($msg)->top()->find('second')->cdata());
 	}
 
-	public function testComment()
+	public function testComment() : void
 	{
 		$this->assertSame('This is a comment.', trim(qp($this->file, 'root')->comment()));
 		$msg = 'Message';
 		$this->assertSame($msg, qp($this->file, 'second')->comment($msg)->top()->find('second')->comment());
 	}
 
-	public function testProcessingInstruction()
+	public function testProcessingInstruction() : void
 	{
 		$this->assertSame('This is a processing instruction.', trim(qp($this->file, 'third')->pi()));
 		$msg = 'Message';

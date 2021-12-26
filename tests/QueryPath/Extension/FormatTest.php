@@ -15,7 +15,7 @@ class FormatTest extends TestCase
 	 *
 	 * @throws \QueryPath\CSS\ParseException
 	 */
-	public function it_formats_tag_text_node()
+	public function it_formats_tag_text_node() : void
 	{
 		QueryPath::enable(Format::class);
 		$qp = qp('<?xml version="1.0"?><root><div>_apple_</div><div>_orange_</div></root>');
@@ -31,7 +31,7 @@ class FormatTest extends TestCase
 	 *
 	 * @throws \QueryPath\CSS\ParseException
 	 */
-	public function it_formats_attribute()
+	public function it_formats_attribute() : void
 	{
 		QueryPath::enable(Format::class);
 		$qp = qp('<?xml version="1.0"?><root>' .

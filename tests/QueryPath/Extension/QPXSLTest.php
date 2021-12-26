@@ -17,7 +17,7 @@ class QPXSLTest extends TestCase
 		QueryPath::enable(QPXSL::class);
 	}
 
-	public function testXSLT()
+	public function testXSLT() : void
 	{
 		// XML and XSLT taken from http://us.php.net/manual/en/xsl.examples-collection.php
 		// and then modified to be *actually welformed* XML.

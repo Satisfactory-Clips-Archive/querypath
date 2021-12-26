@@ -8,35 +8,35 @@ use QueryPath\QueryPath;
 
 class QueryPathTest extends TestCase
 {
-	public function testWith()
+	public function testWith() : void
 	{
 		$qp = QueryPath::with(QueryPath::XHTML_STUB);
 
 		$this->assertInstanceOf('\QueryPath\DOMQuery', $qp);
 	}
 
-	public function testWithHTML()
+	public function testWithHTML() : void
 	{
 		$qp = QueryPath::with(QueryPath::HTML_STUB);
 
 		$this->assertInstanceOf('\QueryPath\DOMQuery', $qp);
 	}
 
-	public function testWithHTML5()
+	public function testWithHTML5() : void
 	{
 		$qp = QueryPath::withHTML5(QueryPath::HTML5_STUB);
 
 		$this->assertInstanceOf('\QueryPath\DOMQuery', $qp);
 	}
 
-	public function testWithXML()
+	public function testWithXML() : void
 	{
 		$qp = QueryPath::with(QueryPath::XHTML_STUB);
 
 		$this->assertInstanceOf('\QueryPath\DOMQuery', $qp);
 	}
 
-	public function testEnable()
+	public function testEnable() : void
 	{
 		QueryPath::enable(DummyExtension::class);
 

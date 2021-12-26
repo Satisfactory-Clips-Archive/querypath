@@ -48,7 +48,7 @@ class ExtensionRegistry
 	 *
 	 * @param mixed $classname
 	 */
-	public static function extend($classname)
+	public static function extend($classname) : void
 	{
 		self::$extensionRegistry[] = $classname;
 		$class = new ReflectionClass($classname);

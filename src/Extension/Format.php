@@ -105,7 +105,7 @@ class Format implements Extension
 			return $qp->text();
 		};
 
-		$setter = static function ($qp, $value) {
+		$setter = static function ($qp, $value) : void {
 			$qp->text($value);
 		};
 

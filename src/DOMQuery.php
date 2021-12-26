@@ -1423,7 +1423,7 @@ class DOMQuery extends DOM
 	 * @throws exception
 	 *  In the event that a file cannot be written, an Exception will be thrown
 	 */
-	public function writeHTML5($path = null)
+	public function writeHTML5($path = null) : void
 	{
 		$html5 = new HTML5();
 		if (null === $path) {

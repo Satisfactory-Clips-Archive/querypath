@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace QueryPathTests\CSS;
 
 use Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use QueryPath\CSS\EventHandler;
 use QueryPath\CSS\Parser;
 use QueryPathTests\TestCase;
@@ -18,30 +17,7 @@ use QueryPathTests\TestEventHandler;
  */
 class ParserTest extends TestCase
 {
-	public function testElementID()
-	{
-		$mock = $this->getMockHandler('elementID');
-		$parser = new Parser('#mytest', $mock);
-		$parser->parse();
-		$this->assertSame(7, $parser->getScanner()->position());
-	}
-
-	public function testElement()
-	{
-		// Without namespace
-		$mock = $this->getMockHandler('element');
-		$parser = new Parser('mytest', $mock);
-		$parser->parse();
-		$this->assertSame(6, $parser->getScanner()->position());
-
-		// With empty namespace
-		$mock = $this->getMockHandler('element');
-		$parser = new Parser('|mytest', $mock);
-		$parser->parse();
-		$this->assertSame(7, $parser->getScanner()->position());
-	}
-
-	public function testElementNS()
+	public function testElementNS() : void
 	{
 		$mock = $this->createMock(TestEventHandler::class);
 		$mock->expects($this->once())
@@ -71,7 +47,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testAnyElement()
+	public function testAnyElement() : void
 	{
 		$mock = $this->createMock(TestEventHandler::class);
 		$mock->expects($this->once())
@@ -82,7 +58,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testAnyElementInNS()
+	public function testAnyElementInNS() : void
 	{
 		$mock = $this->createMock(TestEventHandler::class);
 		$mock->expects($this->once())
@@ -94,7 +70,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testElementClass()
+	public function testElementClass() : void
 	{
 		$mock = $this->createMock(TestEventHandler::class);
 		$mock->expects($this->once())
@@ -106,7 +82,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testPseudoClass()
+	public function testPseudoClass() : void
 	{
 		// Test empty pseudoclass
 		$mock = $this->createMock(TestEventHandler::class);
@@ -139,7 +115,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testPseudoElement()
+	public function testPseudoElement() : void
 	{
 		// Test pseudo-element
 		$mock = $this->createMock(TestEventHandler::class);
@@ -152,7 +128,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testDirectDescendant()
+	public function testDirectDescendant() : void
 	{
 		// Test direct Descendant
 		$mock = $this->createMock(TestEventHandler::class);
@@ -164,7 +140,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testAnyDescendant()
+	public function testAnyDescendant() : void
 	{
 		// Test direct Descendant
 		$mock = $this->createMock(TestEventHandler::class);
@@ -176,7 +152,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testAdjacent()
+	public function testAdjacent() : void
 	{
 		// Test sibling
 		$mock = $this->createMock(TestEventHandler::class);
@@ -188,7 +164,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testSibling()
+	public function testSibling() : void
 	{
 		// Test adjacent
 		$mock = $this->createMock(TestEventHandler::class);
@@ -200,7 +176,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testAnotherSelector()
+	public function testAnotherSelector() : void
 	{
 		// Test adjacent
 		$mock = $this->createMock(TestEventHandler::class);
@@ -212,7 +188,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testIllegalAttribute()
+	public function testIllegalAttribute() : void
 	{
 		// Note that this is designed to test throwError() as well as
 		// bad selector handling.
@@ -227,7 +203,7 @@ class ParserTest extends TestCase
 		}
 	}
 
-	public function testAttribute()
+	public function testAttribute() : void
 	{
 		$selectors = [
 			'element[attr]' => 'attr',
@@ -284,7 +260,7 @@ class ParserTest extends TestCase
 		}
 	}
 
-	public function testAttributeNS()
+	public function testAttributeNS() : void
 	{
 		$selectors = [
 			'*[ns|attr="value"]' => ['attr', 'ns', 'value', EventHandler::IS_EXACTLY],
@@ -307,7 +283,7 @@ class ParserTest extends TestCase
 
 	// Test things that should break...
 
-	public function testIllegalCombinators1()
+	public function testIllegalCombinators1() : void
 	{
 		$handler = new TestEventHandler();
 		$parser = new Parser('ele1 > > ele2', $handler);
@@ -316,7 +292,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testIllegalCombinators2()
+	public function testIllegalCombinators2() : void
 	{
 		$handler = new TestEventHandler();
 		$parser = new Parser('ele1+ ,ele2', $handler);
@@ -325,7 +301,7 @@ class ParserTest extends TestCase
 		$parser->parse();
 	}
 
-	public function testIllegalID()
+	public function testIllegalID() : void
 	{
 		$handler = new TestEventHandler();
 		$parser = new Parser('##ID', $handler);
@@ -336,7 +312,7 @@ class ParserTest extends TestCase
 
 	// Test combinations
 
-	public function testElementNSClassAndAttribute()
+	public function testElementNSClassAndAttribute() : void
 	{
 		$expect = [
 			new TestEvent(TestEvent::ELEMENT_NS, 'element', 'ns'),
@@ -363,7 +339,7 @@ class ParserTest extends TestCase
 		$this->assertTrue($handler->success());
 	}
 
-	public function testAllCombo()
+	public function testAllCombo() : void
 	{
 		$selector = '*|ele1 > ele2.class1 + ns1|ele3.class2[attr=simple] ~
      .class2[attr2~="longer string of text."]:pseudoClass(value)
@@ -407,18 +383,5 @@ class ParserTest extends TestCase
 		$handler->dumpStack();
 		$this->assertTrue($handler->success());
 		*/
-	}
-
-	/**
-	 * @param $method
-	 *
-	 * @return EventHandler|MockObject
-	 */
-	private function getMockHandler($method)
-	{
-		$mock = $this->createMock(TestEventHandler::class);
-		$mock->method($method)->willReturn('mytest');
-
-		return $mock;
 	}
 }

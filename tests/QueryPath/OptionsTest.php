@@ -11,7 +11,7 @@ use QueryPath\Options;
  */
 class OptionsTest extends TestCase
 {
-	public function testOptions()
+	public function testOptions() : void
 	{
 		$expect = ['test1' => 'val1', 'test2' => 'val2'];
 		$options = ['test1' => 'val1', 'test2' => 'val2'];
@@ -24,7 +24,7 @@ class OptionsTest extends TestCase
 		$this->assertSame('val1', $results['test1']);
 	}
 
-	public function testQPOverrideOrder()
+	public function testQPOverrideOrder() : void
 	{
 		$expect = ['test1' => 'val3', 'test2' => 'val2'];
 		$options = ['test1' => 'val1', 'test2' => 'val2'];
@@ -38,7 +38,7 @@ class OptionsTest extends TestCase
 		$this->assertSame($expect['test2'], $qpOpts['test2']);
 	}
 
-	public function testQPHas()
+	public function testQPHas() : void
 	{
 		$options = ['test1' => 'val1', 'test2' => 'val2'];
 
@@ -47,7 +47,7 @@ class OptionsTest extends TestCase
 		$this->assertFalse(Options::has('test3'));
 	}
 
-	public function testQPMerge()
+	public function testQPMerge() : void
 	{
 		$options = ['test1' => 'val1', 'test2' => 'val2'];
 		$options2 = ['test1' => 'val3', 'test4' => 'val4'];

@@ -10,7 +10,7 @@ use QueryPathTests\TestCase;
 
 class SelectorTest extends TestCase
 {
-	public function testElement()
+	public function testElement() : void
 	{
 		$selector = $this->parse('test')->toArray();
 
@@ -18,7 +18,7 @@ class SelectorTest extends TestCase
 		$this->assertSame('test', $selector[0]['0']->element);
 	}
 
-	public function testElementNS()
+	public function testElementNS() : void
 	{
 		$selector = $this->parse('foo|test')->toArray();
 
@@ -27,7 +27,7 @@ class SelectorTest extends TestCase
 		$this->assertSame('foo', $selector[0]['0']->ns);
 	}
 
-	public function testId()
+	public function testId() : void
 	{
 		$selector = $this->parse('#test')->toArray();
 
@@ -35,7 +35,7 @@ class SelectorTest extends TestCase
 		$this->assertSame('test', $selector[0][0]->id);
 	}
 
-	public function testClasses()
+	public function testClasses() : void
 	{
 		$selector = $this->parse('.test')->toArray();
 
@@ -48,7 +48,7 @@ class SelectorTest extends TestCase
 		$this->assertSame('bar', $selector[0][0]->classes[2]);
 	}
 
-	public function testAttributes()
+	public function testAttributes() : void
 	{
 		$selector = $this->parse('foo[bar=baz]')->toArray();
 		$this->assertCount(1, $selector);
@@ -67,7 +67,7 @@ class SelectorTest extends TestCase
 		$this->assertSame('one', $attrs[1]['value']);
 	}
 
-	public function testAttributesNS()
+	public function testAttributesNS() : void
 	{
 		$selector = $this->parse('[myns|foo=bar]')->toArray();
 
@@ -77,7 +77,7 @@ class SelectorTest extends TestCase
 		$this->assertSame('foo', $attr['name']);
 	}
 
-	public function testPseudoClasses()
+	public function testPseudoClasses() : void
 	{
 		$selector = $this->parse('foo:first')->toArray();
 		$pseudo = $selector[0][0]->pseudoClasses;
@@ -87,7 +87,7 @@ class SelectorTest extends TestCase
 		$this->assertSame('first', $pseudo[0]['name']);
 	}
 
-	public function testPseudoElements()
+	public function testPseudoElements() : void
 	{
 		$selector = $this->parse('foo::bar')->toArray();
 		$pseudo = $selector[0][0]->pseudoElements;
@@ -97,7 +97,7 @@ class SelectorTest extends TestCase
 		$this->assertSame('bar', $pseudo[0]);
 	}
 
-	public function testCombinators()
+	public function testCombinators() : void
 	{
 		// This implies *>foo
 		$selector = $this->parse('>foo')->toArray();
@@ -114,7 +114,7 @@ class SelectorTest extends TestCase
 		$this->assertSame(SimpleSelector::DIRECT_DESCENDANT, $selector[0][2]->combinator);
 	}
 
-	public function testIterator()
+	public function testIterator() : void
 	{
 		$selector = $this->parse('foo::bar');
 

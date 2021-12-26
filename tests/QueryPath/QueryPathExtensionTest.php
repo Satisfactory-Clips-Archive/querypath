@@ -26,27 +26,27 @@ class QueryPathExtensionTest extends TestCase
 		ExtensionRegistry::$useRegistry = true;
 	}
 
-	public function testExtensions()
+	public function testExtensions() : void
 	{
 		$this->assertNotNull(qp());
 	}
 
-	public function testHasExtension()
+	public function testHasExtension() : void
 	{
 		$this->assertTrue(ExtensionRegistry::hasExtension(StubExtensionOne::class));
 	}
 
-	public function testStubToe()
+	public function testStubToe() : void
 	{
 		$this->assertSame(1, qp(self::DATA_FILE_XML, 'unary')->stubToe()->top(':root > toe')->size());
 	}
 
-	public function testStuble()
+	public function testStuble() : void
 	{
 		$this->assertSame('arg1arg2', qp(self::DATA_FILE_XML)->stuble('arg1', 'arg2'));
 	}
 
-	public function testNoRegistry()
+	public function testNoRegistry() : void
 	{
 		ExtensionRegistry::$useRegistry = false;
 		$this->expectException(\QueryPath\Exception::class);
@@ -58,14 +58,14 @@ class QueryPathExtensionTest extends TestCase
 		}
 	}
 
-	public function testExtend()
+	public function testExtend() : void
 	{
 		$this->assertFalse(ExtensionRegistry::hasExtension(StubExtensionThree::class));
 		ExtensionRegistry::extend(StubExtensionThree::class);
 		$this->assertTrue(ExtensionRegistry::hasExtension(StubExtensionThree::class));
 	}
 
-	public function testAutoloadExtensions()
+	public function testAutoloadExtensions() : void
 	{
 		// FIXME: This isn't really much of a test.
 		ExtensionRegistry::autoloadExtensions(false);
@@ -78,7 +78,7 @@ class QueryPathExtensionTest extends TestCase
 		}
 	}
 
-	public function testCallFailure()
+	public function testCallFailure() : void
 	{
 		$this->expectException(\QueryPath\Exception::class);
 		qp()->foo();

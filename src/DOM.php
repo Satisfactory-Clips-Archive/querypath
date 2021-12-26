@@ -186,7 +186,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 *
 	 * @param $matches
 	 */
-	public function setMatches($matches)
+	public function setMatches($matches) : void
 	{
 		// This causes a lot of overhead....
 		//if ($unique) $matches = self::unique($matches);

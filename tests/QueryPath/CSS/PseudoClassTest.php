@@ -14,7 +14,7 @@ use QueryPathTests\TestCase;
  */
 class PseudoClassTest extends TestCase
 {
-	public function testUnknownPseudoClass()
+	public function testUnknownPseudoClass() : void
 	{
 		$xml = '<?xml version="1.0"?><root><foo>test</foo></root>';
 
@@ -25,7 +25,7 @@ class PseudoClassTest extends TestCase
 		$ps->elementMatches('TotallyFake', $ele, $root);
 	}
 
-	public function testLang()
+	public function testLang() : void
 	{
 		$xml = '<?xml version="1.0"?><root><foo lang="en-US">test</foo></root>';
 
@@ -46,7 +46,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testLangNS()
+	public function testLangNS() : void
 	{
 		$xml = '<?xml version="1.0"?><root><foo xml:lang="en-US">test</foo></root>';
 
@@ -67,7 +67,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testFormType()
+	public function testFormType() : void
 	{
 		$xml = '<?xml version="1.0"?><root><foo type="submit">test</foo></root>';
 
@@ -81,7 +81,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testHasAttribute()
+	public function testHasAttribute() : void
 	{
 		$xml = '<?xml version="1.0"?><root><foo enabled="enabled">test</foo></root>';
 
@@ -94,7 +94,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testHeader()
+	public function testHeader() : void
 	{
 		$xml = '<?xml version="1.0"?><root><h1>TEST</h1><H6></H6><hi/><h12/><h1i/></root>';
 
@@ -119,7 +119,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testContains()
+	public function testContains() : void
 	{
 		$xml = '<?xml version="1.0"?><root><h>This is a test of :contains.</h></root>';
 
@@ -142,7 +142,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testContainsExactly()
+	public function testContainsExactly() : void
 	{
 		$xml = '<?xml version="1.0"?><root><h>This is a test of :contains-exactly.</h></root>';
 
@@ -162,7 +162,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testHas()
+	public function testHas() : void
 	{
 		$xml = '<?xml version="1.0"?><root><button disabled="disabled"/></root>';
 
@@ -190,7 +190,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(1, $i);
 	}
 
-	public function testParent()
+	public function testParent() : void
 	{
 		$ps = new PseudoClass();
 
@@ -215,7 +215,7 @@ class PseudoClassTest extends TestCase
 		$this->assertTrue($ret);
 	}
 
-	public function testFirst()
+	public function testFirst() : void
 	{
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><p><q/></p><a></a><b/></root>';
@@ -233,7 +233,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testLast()
+	public function testLast() : void
 	{
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><p><q/></p><a></a><b/></root>';
@@ -251,7 +251,7 @@ class PseudoClassTest extends TestCase
 		$this->assertTrue($ret);
 	}
 
-	public function testNot()
+	public function testNot() : void
 	{
 		$xml = '<?xml version="1.0"?><root><button/></root>';
 
@@ -276,7 +276,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(3, $i);
 	}
 
-	public function testEmpty()
+	public function testEmpty() : void
 	{
 		$xml = '<?xml version="1.0"?><root><foo lang="en-US">test</foo><bar/><baz></baz></root>';
 
@@ -295,7 +295,7 @@ class PseudoClassTest extends TestCase
 		$this->assertTrue($ret);
 	}
 
-	public function testOnlyChild()
+	public function testOnlyChild() : void
 	{
 		$xml = '<?xml version="1.0"?><root><foo>test<a/></foo><b><c/></b></root>';
 		$ps = new PseudoClass();
@@ -313,7 +313,7 @@ class PseudoClassTest extends TestCase
 		$this->assertTrue($ret);
 	}
 
-	public function testLastOfType()
+	public function testLastOfType() : void
 	{
 		$xml = '<?xml version="1.0"?><root><one><a/><b/><c/></one><two><d/><d/><b/></two></root>';
 		$ps = new PseudoClass();
@@ -332,7 +332,7 @@ class PseudoClassTest extends TestCase
 		$this->assertTrue($ret);
 	}
 
-	public function testFirstOftype()
+	public function testFirstOftype() : void
 	{
 		$xml = '<?xml version="1.0"?><root><one><a/><b/><c/></one><two><d/><d/><b/></two></root>';
 		$ps = new PseudoClass();
@@ -351,7 +351,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testOnlyOfType()
+	public function testOnlyOfType() : void
 	{
 		$xml = '<?xml version="1.0"?><root><one><a/><b/><c/></one><two><d/><d/><b/></two></root>';
 		$ps = new PseudoClass();
@@ -370,7 +370,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testNthLastChild()
+	public function testNthLastChild() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';
 		$xml .= str_repeat('<a/><b/><c/><d/>', 5);
@@ -416,7 +416,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(3, $i);
 	}
 
-	public function testNthChild()
+	public function testNthChild() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';
 		$xml .= str_repeat('<a/><b/><c/><d/>', 5);
@@ -567,7 +567,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(0, $i);
 	}
 
-	public function testEven()
+	public function testEven() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';
 		$xml .= str_repeat('<a/><b/><c/><d/>', 5);
@@ -590,7 +590,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(10, $i, ' even is ten items.');
 	}
 
-	public function testOdd()
+	public function testOdd() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';
 		$xml .= str_repeat('<a/><b/><c/><d/>', 5);
@@ -615,7 +615,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(10, $i, 'Ten odds.');
 	}
 
-	public function testNthOfTypeChild()
+	public function testNthOfTypeChild() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';
 		$xml .= str_repeat('<a/><a/><a/><a/>', 5);
@@ -659,7 +659,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(4, $i, 'Four odds.');
 	}
 
-	public function testNthLastOfTypeChild()
+	public function testNthLastOfTypeChild() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';
 		$xml .= '<a/><a/><OOPS/><a/><a/>';
@@ -688,7 +688,7 @@ class PseudoClassTest extends TestCase
 		$this->assertTrue($res);
 	}
 
-	public function testLink()
+	public function testLink() : void
 	{
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><a href="foo"><b hreff="bar">test</b></a><c/></root>';
@@ -706,7 +706,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testRoot()
+	public function testRoot() : void
 	{
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><p><q/></p><a></a><b/></root>';
@@ -726,7 +726,7 @@ class PseudoClassTest extends TestCase
 	public function testXReset() {
 	}
 	 */
-	public function testLt()
+	public function testLt() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';
 		$xml .= str_repeat('<a/><a/><a/><a/>', 5);
@@ -748,7 +748,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(15, $i, 'Less than or equal to 15.');
 	}
 
-	public function testGt()
+	public function testGt() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';
 		$xml .= str_repeat('<a/><a/><a/><a/>', 5);
@@ -770,7 +770,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(5, $i, 'Greater than the 15th element.');
 	}
 
-	public function testEq()
+	public function testEq() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';
 		$xml .= str_repeat('<a/><b/><c/><a/>', 5);
@@ -803,7 +803,7 @@ class PseudoClassTest extends TestCase
 		$this->assertSame(1, $i, 'The 15th element.');
 	}
 
-	public function testAnyLink()
+	public function testAnyLink() : void
 	{
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><a href="foo"><b hreff="bar">test</b></a><c/><d src="foo"/></root>';
@@ -825,7 +825,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testLocalLink()
+	public function testLocalLink() : void
 	{
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><a href="foo"><b href="http://example.com/bar">test</b></a><c/><d href="file://foo"/></root>';
@@ -847,7 +847,7 @@ class PseudoClassTest extends TestCase
 		$this->assertFalse($ret);
 	}
 
-	public function testScope()
+	public function testScope() : void
 	{
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><a href="foo"><b>test</b></a></root>';

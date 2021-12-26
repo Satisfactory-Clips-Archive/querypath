@@ -43,7 +43,7 @@ class DOMQueryTest extends TestCase
 	/**
 	 * @group basic
 	 */
-	public function testDOMQueryConstructors()
+	public function testDOMQueryConstructors() : void
 	{
 		// From XML file
 		$file = DATA_FILE;
@@ -104,7 +104,7 @@ class DOMQueryTest extends TestCase
 	 *
 	 * @group basic
 	 */
-	public function testDOMQueryHtmlConstructors()
+	public function testDOMQueryHtmlConstructors() : void
 	{
 		$qp = htmlqp(QueryPath::HTML_STUB);
 		$this->assertCount(1, $qp->get());
@@ -149,7 +149,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(1, htmlqp($borken, '#after')->count());
 	}
 
-	public function testForTests()
+	public function testForTests() : void
 	{
 		$qp_methods = get_class_methods(DOMQuery::class);
 		$test_methods = get_class_methods(DOMQueryTest::class);
@@ -181,19 +181,19 @@ class DOMQueryTest extends TestCase
 		);
 	}
 
-	public function testHtml5()
+	public function testHtml5() : void
 	{
 		$doc = qp(DATA_HTML_FILE);
 		$this->assertSame('range', $doc->find('input')->attr('type'));
 	}
 
-	public function testInnerHtml5()
+	public function testInnerHtml5() : void
 	{
 		$doc = qp(DATA_HTML_FILE);
 		$this->assertSame('1', $doc->find('input')->attr('min'));
 	}
 
-	public function testOptionXMLEncoding()
+	public function testOptionXMLEncoding() : void
 	{
 		$xml = qp(null, null, ['encoding' => 'iso-8859-1'])->append('<test/>')->xml();
 		$iso_found = 1 === preg_match('/iso-8859-1/', $xml);
@@ -211,7 +211,7 @@ class DOMQueryTest extends TestCase
 		$this->assertFalse($iso_found, 'Encoding should not be utf-8 in ' . $xml);
 	}
 
-	public function testQPAbstractFactory()
+	public function testQPAbstractFactory() : void
 	{
 		$options = ['QueryPath_class' => QueryPathExtended::class];
 		$qp = qp(null, null, $options);
@@ -219,7 +219,7 @@ class DOMQueryTest extends TestCase
 		$this->assertTrue($qp->foonator(), 'Has special foonator() function.');
 	}
 
-	public function testQPAbstractFactoryIterating()
+	public function testQPAbstractFactoryIterating() : void
 	{
 		$xml = '<?xml version="1.0"?><l><i/><i/><i/><i/><i/></l>';
 		$options = ['QueryPath_class' => QueryPathExtended::class];
@@ -228,20 +228,20 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testFailedCall()
+	public function testFailedCall() : void
 	{
 		// This should hit __call() and then fail.
 		$this->expectException(\QueryPath\Exception::class);
 		qp()->fooMethod();
 	}
 
-	public function testFailedObjectConstruction()
+	public function testFailedObjectConstruction() : void
 	{
 		$this->expectException(\QueryPath\Exception::class);
 		qp(new stdClass());
 	}
 
-	public function testFailedHTTPLoad()
+	public function testFailedHTTPLoad() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
@@ -252,7 +252,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testFailedHTTPLoadWithContext()
+	public function testFailedHTTPLoadWithContext() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
@@ -263,7 +263,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testFailedParseHTMLElement()
+	public function testFailedParseHTMLElement() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
@@ -274,7 +274,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testFailedParseXMLElement()
+	public function testFailedParseXMLElement() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
@@ -285,7 +285,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testIgnoreParserWarnings()
+	public function testIgnoreParserWarnings() : void
 	{
 		$qp = @qp('<html><body><b><i>BAD!</b></i></body>', null, ['ignore_parser_warnings' => true]);
 		$this->assertTrue(false !== strpos($qp->html(), '<i>BAD!</i>'));
@@ -299,7 +299,7 @@ class DOMQueryTest extends TestCase
 		\QueryPath\Options::set([]); // Reset to empty options.
 	}
 
-	public function testFailedParseNonMarkup()
+	public function testFailedParseNonMarkup() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
@@ -310,7 +310,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testFailedParseEntity()
+	public function testFailedParseEntity() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
@@ -321,7 +321,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testReplaceEntitiesOption()
+	public function testReplaceEntitiesOption() : void
 	{
 		$path = '<?xml version="1.0"?><root/>';
 		$xml = qp($path, null, ['replace_entities' => true])->xml('<foo>&</foo>')->xml();
@@ -341,7 +341,7 @@ class DOMQueryTest extends TestCase
 	/**
 	 * @group basic
 	 */
-	public function testFind()
+	public function testFind() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file)->find('#head');
@@ -361,7 +361,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame($qp->get(0)->tagName, 'root');
 	}
 
-	public function testFindInPlace()
+	public function testFindInPlace() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file)->find('#head');
@@ -384,7 +384,7 @@ class DOMQueryTest extends TestCase
 	/**
 	 * @group basic
 	 */
-	public function testTop()
+	public function testTop() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file)->find('li');
@@ -401,7 +401,7 @@ class DOMQueryTest extends TestCase
 	/**
 	 * @group basic
 	 */
-	public function testAttr()
+	public function testAttr() : void
 	{
 		$file = DATA_FILE;
 
@@ -429,7 +429,7 @@ class DOMQueryTest extends TestCase
 	/**
 	 * @group basic
 	 */
-	public function testHasAttr()
+	public function testHasAttr() : void
 	{
 		$xml = '<?xml version="1.0"?><root><div foo="bar"/></root>';
 
@@ -446,7 +446,7 @@ class DOMQueryTest extends TestCase
 		$this->assertFalse(qp($xml, 'div')->hasAttr('foo'));
 	}
 
-	public function testVal()
+	public function testVal() : void
 	{
 		$qp = qp('<?xml version="1.0"?><foo><bar value="test"/></foo>', 'bar');
 		$this->assertSame('test', $qp->val());
@@ -455,7 +455,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('test', $qp->attr('value'));
 	}
 
-	public function testCss()
+	public function testCss() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame('foo: bar;', qp($file, 'unary')->css('foo', 'bar')->attr('style'));
@@ -479,7 +479,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('a: c;b: b;', $qp->css());
 	}
 
-	public function testRemoveAttr()
+	public function testRemoveAttr() : void
 	{
 		$file = DATA_FILE;
 
@@ -488,7 +488,7 @@ class DOMQueryTest extends TestCase
 		$this->assertFalse($qp->get(0)->hasAttribute('class'));
 	}
 
-	public function testEq()
+	public function testEq() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file)->find('li')->eq(0);
@@ -500,7 +500,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('Last', qp($file, 'li')->eq(3)->text());
 	}
 
-	public function testIs()
+	public function testIs() : void
 	{
 		$file = DATA_FILE;
 		$this->assertTrue(qp($file)->find('#one')->is('#one'));
@@ -522,7 +522,7 @@ class DOMQueryTest extends TestCase
 		$this->assertTrue($qp->top('#one,#two')->is($list));
 	}
 
-	public function testIndex()
+	public function testIndex() : void
 	{
 		$xml = '<?xml version="1.0"?><foo><bar id="one"/><baz id="two"/></foo>';
 		$qp = qp($xml, 'bar');
@@ -531,7 +531,7 @@ class DOMQueryTest extends TestCase
 		$this->assertFalse($qp->top()->find('#two')->index($e1));
 	}
 
-	public function testFilter()
+	public function testFilter() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file)->filter('li')->count());
@@ -539,7 +539,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('inner-two', qp($file, 'inner')->filter('li')->eq(1)->attr('id'));
 	}
 
-	public function testFilterPreg()
+	public function testFilterPreg() : void
 	{
 		$xml = '<?xml version="1.0"?><root><div id="one">Foo</div><div>Moo</div></root>';
 		$qp = qp($xml, 'div')->filterPreg('/Foo/');
@@ -553,7 +553,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(1, $qp->count());
 	}
 
-	public function testFilterLambda()
+	public function testFilterLambda() : void
 	{
 		$file = DATA_FILE;
 		// Get all evens:
@@ -566,14 +566,14 @@ class DOMQueryTest extends TestCase
 		return ($index + 1) % 2 === 0;
 	}
 
-	public function testFilterCallback()
+	public function testFilterCallback() : void
 	{
 		$file = DATA_FILE;
 		$cb = [$this, 'filterCallbackFunction'];
 		$this->assertSame(2, qp($file, 'li')->filterCallback($cb)->count());
 	}
 
-	public function testFailedFilterCallback()
+	public function testFailedFilterCallback() : void
 	{
 		$file = DATA_FILE;
 		$cb = [$this, 'noSuchFunction'];
@@ -581,7 +581,7 @@ class DOMQueryTest extends TestCase
 		qp($file, 'li')->filterCallback($cb)->count();
 	}
 
-	public function testFailedMapCallback()
+	public function testFailedMapCallback() : void
 	{
 		$file = DATA_FILE;
 		$cb = [$this, 'noSuchFunction'];
@@ -589,7 +589,7 @@ class DOMQueryTest extends TestCase
 		qp($file, 'li')->map($cb)->count();
 	}
 
-	public function testNot()
+	public function testNot() : void
 	{
 		$file = DATA_FILE;
 
@@ -611,7 +611,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(1, $qp->not($arr)->count());
 	}
 
-	public function testSlice()
+	public function testSlice() : void
 	{
 		$file = DATA_FILE;
 		// There are five <li> elements
@@ -648,7 +648,7 @@ class DOMQueryTest extends TestCase
 		return $index;
 	}
 
-	public function testMap()
+	public function testMap() : void
 	{
 		$file = DATA_FILE;
 		$fn = 'mapCallbackFunction';
@@ -664,7 +664,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testEach()
+	public function testEach() : void
 	{
 		$file = DATA_FILE;
 		$fn = 'eachCallbackFunction';
@@ -678,7 +678,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(1, $res->count());
 	}
 
-	public function testEachOnInvalidCallback()
+	public function testEachOnInvalidCallback() : void
 	{
 		$file = DATA_FILE;
 		$fn = 'eachCallbackFunctionFake';
@@ -686,7 +686,7 @@ class DOMQueryTest extends TestCase
 		$res = qp($file, 'li')->each([$this, $fn]);
 	}
 
-	public function testDeepest()
+	public function testDeepest() : void
 	{
 		$str = '<?xml version="1.0" ?>
     <root>
@@ -714,13 +714,13 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(1, qp($str)->deepest()->count());
 	}
 
-	public function testTag()
+	public function testTag() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame('li', qp($file, 'li')->tag());
 	}
 
-	public function testAppend()
+	public function testAppend() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'unary')->append('<test/>')->find(':root > unary > test')->count());
@@ -761,7 +761,7 @@ class DOMQueryTest extends TestCase
 		$this->assertTrue(qp($file)->append('') instanceof DOMQuery);
 	}
 
-	public function testAppendBadMarkup()
+	public function testAppendBadMarkup() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		$file = DATA_FILE;
@@ -773,7 +773,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testAppendBadObject()
+	public function testAppendBadObject() : void
 	{
 		$this->expectException(\QueryPath\Exception::class);
 		$file = DATA_FILE;
@@ -785,7 +785,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testAppendTo()
+	public function testAppendTo() : void
 	{
 		$file = DATA_FILE;
 		$dest = qp('<?xml version="1.0"?><root><dest/></root>', 'dest');
@@ -793,7 +793,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(5, $dest->find(':root li')->count());
 	}
 
-	public function testPrepend()
+	public function testPrepend() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'unary')->prepend('<test/>')->find(':root > unary > test')->count());
@@ -807,7 +807,7 @@ class DOMQueryTest extends TestCase
 			'test'))->top()->find('test')->count());
 	}
 
-	public function testPrependTo()
+	public function testPrependTo() : void
 	{
 		$file = DATA_FILE;
 		$dest = qp('<?xml version="1.0"?><root><dest/></root>', 'dest');
@@ -815,7 +815,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(5, $dest->find(':root li')->count());
 	}
 
-	public function testBefore()
+	public function testBefore() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'unary')->before('<test/>')->find(':root > test ~ unary')->count());
@@ -829,7 +829,7 @@ class DOMQueryTest extends TestCase
 			'test'))->top()->find('test')->count());
 	}
 
-	public function testAfter()
+	public function testAfter() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'unary')->after('<test/>')->top(':root > unary ~ test')->count());
@@ -841,7 +841,7 @@ class DOMQueryTest extends TestCase
 			'test'))->top()->find('test')->count());
 	}
 
-	public function testInsertBefore()
+	public function testInsertBefore() : void
 	{
 		$file = DATA_FILE;
 		$dest = qp('<?xml version="1.0"?><root><dest/></root>', 'dest');
@@ -850,7 +850,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('li', $dest->end()->find('dest')->get(0)->previousSibling->tagName);
 	}
 
-	public function testInsertAfter()
+	public function testInsertAfter() : void
 	{
 		$file = DATA_FILE;
 		$dest = qp('<?xml version="1.0"?><root><dest/></root>', 'dest');
@@ -859,7 +859,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(5, $dest->top(':root > li')->count());
 	}
 
-	public function testReplaceWith()
+	public function testReplaceWith() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file, 'unary')->replaceWith('<test><foo/></test>')->top('test');
@@ -871,7 +871,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(2, $qp->top()->find('test')->count());
 	}
 
-	public function testReplaceAll()
+	public function testReplaceAll() : void
 	{
 		$qp1 = qp('<?xml version="1.0"?><root><l/><l/></root>');
 		$doc = qp('<?xml version="1.0"?><bob><m/><m/></bob>')->get(0)->ownerDocument;
@@ -881,7 +881,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(2, $qp2->top()->find('l')->count());
 	}
 
-	public function testUnwrap()
+	public function testUnwrap() : void
 	{
 		// Unwrap center, and make sure junk goes away.
 		$xml = '<?xml version="1.0"?><root><wrapper><center/><junk/></wrapper></root>';
@@ -908,7 +908,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('center', $qp->top()->tag());
 	}
 
-	public function testFailedUnwrap()
+	public function testFailedUnwrap() : void
 	{
 		// Cannot unwrap the root element.
 		$xml = '<?xml version="1.0"?><root></root>';
@@ -917,7 +917,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('center', $qp->top()->tag());
 	}
 
-	public function testWrap()
+	public function testWrap() : void
 	{
 		$file = DATA_FILE;
 		$xml = qp($file, 'unary')->wrap('');
@@ -939,7 +939,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(5, qp($xml, '.testWrap > inside > center > li')->count());
 	}
 
-	public function testWrapAll()
+	public function testWrapAll() : void
 	{
 		$file = DATA_FILE;
 
@@ -959,7 +959,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(5, qp($xml, '.testWrap > inside > center > li')->count());
 	}
 
-	public function testWrapInner()
+	public function testWrapInner() : void
 	{
 		$file = DATA_FILE;
 
@@ -980,7 +980,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(0, $qp->find('.ignore')->count());
 	}
 
-	public function testRemove()
+	public function testRemove() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file, 'li');
@@ -1003,7 +1003,7 @@ class DOMQueryTest extends TestCase
 		$this->assertCount(0, $rem);
 	}
 
-	public function testHasClass()
+	public function testHasClass() : void
 	{
 		$file = DATA_FILE;
 		$this->assertTrue(qp($file, '#inner-one')->hasClass('innerClass'));
@@ -1012,13 +1012,13 @@ class DOMQueryTest extends TestCase
 		$this->assertFalse(qp($file, '#inner-one')->hasClass('noSuchClass'));
 	}
 
-	public function testAddClass()
+	public function testAddClass() : void
 	{
 		$file = DATA_FILE;
 		$this->assertTrue(qp($file, '#inner-one')->addClass('testClass')->hasClass('testClass'));
 	}
 
-	public function testRemoveClass()
+	public function testRemoveClass() : void
 	{
 		$file = DATA_FILE;
 		// The add class tests to make sure that this works with multiple values.
@@ -1027,25 +1027,25 @@ class DOMQueryTest extends TestCase
 			'#inner-one')->addClass('testClass')->removeClass('innerClass')->hasClass('testClass'));
 	}
 
-	public function testAdd()
+	public function testAdd() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(7, qp($file, 'li')->add('inner')->count());
 	}
 
-	public function testEnd()
+	public function testEnd() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(2, qp($file, 'inner')->find('li')->end()->count());
 	}
 
-	public function testAndSelf()
+	public function testAndSelf() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(7, qp($file, 'inner')->find('li')->andSelf()->count());
 	}
 
-	public function testChildren()
+	public function testChildren() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(5, qp($file, 'inner')->children()->count());
@@ -1056,13 +1056,13 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(1, qp($file, ':root')->children('unary')->count());
 	}
 
-	public function testRemoveChildren()
+	public function testRemoveChildren() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(0, qp($file, '#inner-one')->removeChildren()->find('li')->count());
 	}
 
-	public function testContents()
+	public function testContents() : void
 	{
 		$file = DATA_FILE;
 		$this->assertGreaterThan(5, qp($file, 'inner')->contents()->count());
@@ -1083,7 +1083,7 @@ class DOMQueryTest extends TestCase
 		$this->assertCount(14, $cr, implode("\n", $cr));
 	}
 
-	public function testNS()
+	public function testNS() : void
 	{
 		$xml = '<?xml version="1.0"?><root xmlns="foo:bar"><e>test</e></root>';
 
@@ -1094,14 +1094,14 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('foo:bar', $q->ns());
 	}
 
-	public function testSiblings()
+	public function testSiblings() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(3, qp($file, '#one')->siblings()->count());
 		$this->assertSame(2, qp($file, 'unary')->siblings('inner')->count());
 	}
 
-	public function testHTML()
+	public function testHTML() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file, 'unary');
@@ -1125,14 +1125,14 @@ class DOMQueryTest extends TestCase
 		$this->assertNull(qp($file, 'li')->map([$this, $fn])->html());
 	}
 
-	public function testInnerHTML()
+	public function testInnerHTML() : void
 	{
 		$html = '<html><head></head><body><div id="me">Test<p>Again</p></div></body></html>';
 
 		$this->assertSame('Test<p>Again</p>', qp($html, '#me')->innerHTML());
 	}
 
-	public function testInnerXML()
+	public function testInnerXML() : void
 	{
 		$html = '<?xml version="1.0"?><root><div id="me">Test<p>Again1</p></div></root>';
 		$test = 'Test<p>Again1</p>';
@@ -1153,7 +1153,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame($test, qp($html, '#me')->innerXML());
 	}
 
-	public function testInnerXHTML()
+	public function testInnerXHTML() : void
 	{
 		$html = '<?xml version="1.0"?><html><head></head><body><div id="me">Test<p>Again</p></div></body></html>';
 
@@ -1166,7 +1166,7 @@ class DOMQueryTest extends TestCase
 		$this->assertMatchesRegularExpression($regex, qp($xml, '#me')->innerXHTML(), 'BR should have a closing tag.');
 	}
 
-	public function testXML()
+	public function testXML() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file, 'unary');
@@ -1189,7 +1189,7 @@ class DOMQueryTest extends TestCase
 		$this->assertNull(qp($file, 'li')->map([$this, $fn])->xml());
 	}
 
-	public function testXHTML()
+	public function testXHTML() : void
 	{
 		// throw new Exception();
 
@@ -1254,7 +1254,7 @@ class DOMQueryTest extends TestCase
 		qp($xhtml);
 	}
 
-	public function testWriteXML()
+	public function testWriteXML() : void
 	{
 		$xml = '<?xml version="1.0"?><html><head><title>foo</title></head><body>bar</body></html>';
 
@@ -1294,7 +1294,7 @@ class DOMQueryTest extends TestCase
 		unlink($name);
 	}
 
-	public function testWriteXHTML()
+	public function testWriteXHTML() : void
 	{
 		$xml = '<?xml version="1.0"?><html><head><title>foo</title></head><body>bar</body></html>';
 
@@ -1349,7 +1349,7 @@ class DOMQueryTest extends TestCase
 		$this->assertMatchesRegularExpression($pattern, $out, 'Should be closing br tag.');
 	}
 
-	public function testFailWriteXML()
+	public function testFailWriteXML() : void
 	{
 		$this->expectException(\QueryPath\IOException::class);
 		try {
@@ -1360,7 +1360,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testFailWriteXHTML()
+	public function testFailWriteXHTML() : void
 	{
 		$this->expectException(\QueryPath\IOException::class);
 		try {
@@ -1371,7 +1371,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testFailWriteHTML()
+	public function testFailWriteHTML() : void
 	{
 		$this->expectException(\QueryPath\IOException::class);
 		try {
@@ -1382,7 +1382,7 @@ class DOMQueryTest extends TestCase
 		}
 	}
 
-	public function testWriteHTML()
+	public function testWriteHTML() : void
 	{
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
 
@@ -1436,7 +1436,7 @@ class DOMQueryTest extends TestCase
 		unlink($name);
 	}
 
-	public function testWriteHTML5()
+	public function testWriteHTML5() : void
 	{
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
 
@@ -1490,7 +1490,7 @@ class DOMQueryTest extends TestCase
 		unlink($name);
 	}
 
-	public function testText()
+	public function testText() : void
 	{
 		$xml = '<?xml version="1.0"?><root><div>Text A</div><div>Text B</div></root>';
 		$this->assertSame('Text AText B', qp($xml)->text());
@@ -1498,21 +1498,21 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('BarBar', qp($xml, 'div')->text('Bar')->text());
 	}
 
-	public function testTextAfter()
+	public function testTextAfter() : void
 	{
 		$xml = '<?xml version="1.0"?><root><br/>After<foo/><br/>After2<div/>After3</root>';
 		$this->assertSame('AfterAfter2', qp($xml, 'br')->textAfter());
 		$this->assertSame('Blarg', qp($xml, 'foo')->textAfter('Blarg')->top('foo')->textAfter());
 	}
 
-	public function testTextBefore()
+	public function testTextBefore() : void
 	{
 		$xml = '<?xml version="1.0"?><root>Before<br/><foo/>Before2<br/>Before3<div/></root>';
 		$this->assertSame('BeforeBefore2', qp($xml, 'br')->textBefore());
 		$this->assertSame('Blarg', qp($xml, 'foo')->textBefore('Blarg')->top('foo')->textBefore());
 	}
 
-	public function testTextImplode()
+	public function testTextImplode() : void
 	{
 		$xml = '<?xml version="1.0"?><root><div>Text A</div><div>Text B</div></root>';
 		$this->assertSame('Text A, Text B', qp($xml, 'div')->textImplode());
@@ -1531,7 +1531,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('Text A- -Text B', qp($xml, 'div')->textImplode('-', false));
 	}
 
-	public function testChildrenText()
+	public function testChildrenText() : void
 	{
 		$xml = '<?xml version="1.0"?><root><wrapper>
     NOT ME!
@@ -1541,7 +1541,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('Text A , Text B', qp($xml, 'div')->childrenText(', '), 'Just inner text.');
 	}
 
-	public function testNext()
+	public function testNext() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame('inner', qp($file, 'unary')->next()->tag());
@@ -1575,7 +1575,7 @@ class DOMQueryTest extends TestCase
 		//    $this->assertEquals('new paragraph', $qp->next()->text(), "Test Other Newly Added P");
 	}
 
-	public function testPrev()
+	public function testPrev() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame('head', qp($file, 'unary')->prev()->tag());
@@ -1583,21 +1583,21 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('head', qp($file, 'foot')->prev('head')->tag());
 	}
 
-	public function testNextAll()
+	public function testNextAll() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(3, qp($file, '#one')->nextAll()->count());
 		$this->assertSame(2, qp($file, 'unary')->nextAll('inner')->count());
 	}
 
-	public function testPrevAll()
+	public function testPrevAll() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(3, qp($file, '#four')->prevAll()->count());
 		$this->assertSame(2, qp($file, 'foot')->prevAll('inner')->count());
 	}
 
-	public function testParent()
+	public function testParent() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame('root', qp($file, 'unary')->parent()->tag());
@@ -1605,7 +1605,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(2, qp($file, 'li')->parent()->count());
 	}
 
-	public function testClosest()
+	public function testClosest() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame('root', qp($file, 'li')->parent('root')->tag());
@@ -1620,7 +1620,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(2, qp($xml, 'b')->closest('.foo')->count());
 	}
 
-	public function testParents()
+	public function testParents() : void
 	{
 		$file = DATA_FILE;
 
@@ -1629,7 +1629,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('root', qp($file, 'li')->parents('root')->tag());
 	}
 
-	public function testCloneAll()
+	public function testCloneAll() : void
 	{
 		$file = DATA_FILE;
 		// Shallow test
@@ -1648,7 +1648,7 @@ class DOMQueryTest extends TestCase
 		$this->assertNotSame($one, $two);
 	}
 
-	public function testBranch()
+	public function testBranch() : void
 	{
 		$qp = qp(QueryPath::HTML_STUB);
 		$branch = $qp->branch();
@@ -1665,14 +1665,14 @@ class DOMQueryTest extends TestCase
 		$this->assertSame($qp->top()->find('title')->text(), $branch->text());
 	}
 
-	public function testXpath()
+	public function testXpath() : void
 	{
 		$file = DATA_FILE;
 
 		$this->assertSame('head', qp($file)->xpath("//*[@id='head']")->tag());
 	}
 
-	public function test__clone()
+	public function test__clone() : void
 	{
 		$file = DATA_FILE;
 
@@ -1684,12 +1684,12 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('bar', $qp2->attr('foo'), $qp2->top()->xml());
 	}
 
-	public function testStub()
+	public function testStub() : void
 	{
 		$this->assertSame(1, qp(QueryPath::HTML_STUB)->find('title')->count());
 	}
 
-	public function testIterator()
+	public function testIterator() : void
 	{
 		$qp = qp(QueryPath::HTML_STUB, 'body')->append('<li/><li/><li/><li/>');
 
@@ -1703,7 +1703,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('foofoofoofoo', $qp->top()->find('li')->text());
 	}
 
-	public function testModeratelySizedDocument()
+	public function testModeratelySizedDocument() : void
 	{
 		$this->assertSame(1, qp(MEDIUM_FILE)->count());
 
@@ -1714,14 +1714,14 @@ class DOMQueryTest extends TestCase
 	/**
 	 * @deprecated
 	 */
-	public function testSize()
+	public function testSize() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file, 'li');
 		$this->assertSame(5, $qp->count());
 	}
 
-	public function testCount()
+	public function testCount() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file, 'li');
@@ -1731,7 +1731,7 @@ class DOMQueryTest extends TestCase
 		$this->assertCount(5, qp($file, 'li'));
 	}
 
-	public function testLength()
+	public function testLength() : void
 	{
 		// Test that the length attribute works exactly the same as size.
 		$file = DATA_FILE;
@@ -1739,7 +1739,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(5, $qp->length);
 	}
 
-	public function testDocument()
+	public function testDocument() : void
 	{
 		$file = DATA_FILE;
 		$doc1 = new DOMDocument('1.0');
@@ -1776,7 +1776,7 @@ class DOMQueryTest extends TestCase
    }
    */
 
-	public function testDetach()
+	public function testDetach() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file, 'li');
@@ -1786,7 +1786,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(0, $qp->find(':root li')->count());
 	}
 
-	public function testAttach()
+	public function testAttach() : void
 	{
 		$file = DATA_FILE;
 		$qp = qp($file, 'li');
@@ -1797,7 +1797,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(5, $dest->find(':root li')->count());
 	}
 
-	public function testEmptyElement()
+	public function testEmptyElement() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(0, qp($file, '#inner-two')->emptyElement()->find('li')->count());
@@ -1807,7 +1807,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('', qp($file, 'foot')->emptyElement()->text());
 	}
 
-	public function testHas()
+	public function testHas() : void
 	{
 		$file = DATA_FILE;
 
@@ -1841,35 +1841,35 @@ class DOMQueryTest extends TestCase
 		*/
 	}
 
-	public function testNextUntil()
+	public function testNextUntil() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(3, qp($file, '#one')->nextUntil()->count());
 		$this->assertSame(2, qp($file, 'li')->nextUntil('#three')->count());
 	}
 
-	public function testPrevUntil()
+	public function testPrevUntil() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(3, qp($file, '#four')->prevUntil()->count());
 		$this->assertSame(2, qp($file, 'foot')->prevUntil('unary')->count());
 	}
 
-	public function testEven()
+	public function testEven() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'inner')->even()->count());
 		$this->assertSame(2, qp($file, 'li')->even()->count());
 	}
 
-	public function testOdd()
+	public function testOdd() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'inner')->odd()->count());
 		$this->assertSame(3, qp($file, 'li')->odd()->count());
 	}
 
-	public function testFirst()
+	public function testFirst() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'inner')->first()->count());
@@ -1877,14 +1877,14 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('Hello', qp($file, 'li')->first()->text());
 	}
 
-	public function testFirstChild()
+	public function testFirstChild() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, '#inner-one')->firstChild()->count());
 		$this->assertSame('Hello', qp($file, '#inner-one')->firstChild()->text());
 	}
 
-	public function testLast()
+	public function testLast() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'inner')->last()->count());
@@ -1892,14 +1892,14 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('', qp($file, 'li')->last()->text());
 	}
 
-	public function testLastChild()
+	public function testLastChild() : void
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, '#inner-one')->lastChild()->count());
 		$this->assertSame('Last', qp($file, '#inner-one')->lastChild()->text());
 	}
 
-	public function testParentsUntil()
+	public function testParentsUntil() : void
 	{
 		$file = DATA_FILE;
 
@@ -1908,7 +1908,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(2, qp($file, 'li')->parentsUntil('root')->count());
 	}
 
-	public function testSort()
+	public function testSort() : void
 	{
 		$xml = '<?xml version="1.0"?><r><s/><i>1</i><i>5</i><i>2</i><i>1</i><e/></r>';
 
@@ -1970,7 +1970,7 @@ class DOMQueryTest extends TestCase
 	/**
 	 * Regression test for issue #14.
 	 */
-	public function testRegressionFindOptimizations()
+	public function testRegressionFindOptimizations() : void
 	{
 		$xml = '<?xml version="1.0"?><root>
       <item id="outside">
@@ -1994,7 +1994,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(0, qp($xml, '.inside')->find('.outside')->count());
 	}
 
-	public function testDataURL()
+	public function testDataURL() : void
 	{
 		$text = 'Hi!'; // Base-64 encoded value would be SGkh
 		$xml = '<?xml version="1.0"?><root><item/></root>';
@@ -2011,7 +2011,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('text/plain', $result['mime'], 'Should return the original MIME');
 	}
 
-	public function testEncodeDataURL()
+	public function testEncodeDataURL() : void
 	{
 		$data = QueryPath::encodeDataURL('Hi!', 'text/plain');
 		$this->assertSame('data:text/plain;base64,SGkh', $data);

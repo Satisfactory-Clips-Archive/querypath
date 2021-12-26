@@ -111,7 +111,7 @@ class DOMTraverser implements Traverser
 		 */
 	}
 
-	public function debug($msg)
+	public function debug($msg) : void
 	{
 		fwrite(STDOUT, PHP_EOL . $msg);
 	}
@@ -406,7 +406,7 @@ class DOMTraverser implements Traverser
 	/**
 	 * Attach all nodes in a node list to the given \SplObjectStorage.
 	 */
-	public function attachNodeList(DOMNodeList $nodeList, SplObjectStorage $splos)
+	public function attachNodeList(DOMNodeList $nodeList, SplObjectStorage $splos) : void
 	{
 		foreach ($nodeList as $item) {
 			$splos->attach($item);
@@ -838,7 +838,7 @@ class DOMTraverser implements Traverser
 	 *
 	 * @param mixed $matches
 	 */
-	protected function setMatches($matches)
+	protected function setMatches($matches) : void
 	{
 		$this->matches = $matches;
 	}

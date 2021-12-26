@@ -200,7 +200,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @param $id
 	 *  String ID for an element
 	 */
-	public function elementID($id)
+	public function elementID($id) : void
 	{
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
@@ -216,7 +216,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	}
 
 	// Inherited
-	public function element($name)
+	public function element($name) : void
 	{
 		$matches = $this->candidateList();
 		$this->findAnyElement = false;
@@ -237,7 +237,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	}
 
 	// Inherited
-	public function elementNS($lname, $namespace = null)
+	public function elementNS($lname, $namespace = null) : void
 	{
 		$this->findAnyElement = false;
 		$found = new SplObjectStorage();
@@ -288,7 +288,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->matches = $found;
 	}
 
-	public function anyElement()
+	public function anyElement() : void
 	{
 		$found = new SplObjectStorage();
 		//$this->findAnyElement = TRUE;
@@ -305,7 +305,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function anyElementInNS($ns)
+	public function anyElementInNS($ns) : void
 	{
 		//$this->findAnyElement = TRUE;
 		$nsuri = $this->dom->lookupNamespaceURI($ns);
@@ -322,7 +322,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function elementClass($name)
+	public function elementClass($name) : void
 	{
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
@@ -339,7 +339,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY)
+	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY) : void
 	{
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
@@ -360,7 +360,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function attributeNS($lname, $ns, $value = null, $operation = EventHandler::IS_EXACTLY)
+	public function attributeNS($lname, $ns, $value = null, $operation = EventHandler::IS_EXACTLY) : void
 	{
 		$matches = $this->candidateList();
 		$found = new SplObjectStorage();
@@ -402,7 +402,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @param mixed|null $value
 	 * @param mixed $name
 	 */
-	public function pseudoClass($name, $value = null)
+	public function pseudoClass($name, $value = null) : void
 	{
 		$name = strtolower($name);
 		// Need to handle known pseudoclasses.
@@ -633,7 +633,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *
 	 * @param mixed $name
 	 */
-	public function pseudoElement($name)
+	public function pseudoElement($name) : void
 	{
 		// process the pseudoElement
 		switch ($name) {
@@ -684,7 +684,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function directDescendant()
+	public function directDescendant() : void
 	{
 		$this->findAnyElement = false;
 
@@ -715,7 +715,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * $doc->loadXML('<test/> <test/>', LIBXML_NOBLANKS);
 	 * </code>
 	 */
-	public function adjacent()
+	public function adjacent() : void
 	{
 		$this->findAnyElement = false;
 		// List of nodes that are immediately adjacent to the current one.
@@ -733,7 +733,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->matches = $found;
 	}
 
-	public function anotherSelector()
+	public function anotherSelector() : void
 	{
 		$this->findAnyElement = false;
 		// Copy old matches into buffer.
@@ -757,7 +757,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * be included in the list of siblings. Their status as being candidates
 	 * excludes them from being considered siblings.
 	 */
-	public function sibling()
+	public function sibling() : void
 	{
 		$this->findAnyElement = false;
 		// Get the nodes at the same level.
@@ -786,7 +786,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Get any descendant.
 	 */
-	public function anyDescendant()
+	public function anyDescendant() : void
 	{
 		// Get children:
 		$found = new SplObjectStorage();
@@ -815,7 +815,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Attach all nodes in a node list to the given \SplObjectStorage.
 	 */
-	public function attachNodeList(DOMNodeList $nodeList, SplObjectStorage $splos)
+	public function attachNodeList(DOMNodeList $nodeList, SplObjectStorage $splos) : void
 	{
 		foreach ($nodeList as $item) {
 			$splos->attach($item);
@@ -830,7 +830,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @param mixed|null $value
 	 * @param mixed $name
 	 */
-	protected function searchForAttr($name, $value = null)
+	protected function searchForAttr($name, $value = null) : void
 	{
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
@@ -898,7 +898,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *  Whether counting should begin with the last child. By default, this is false.
 	 *  Pseudo-classes that start with the last-child can set this to true.
 	 */
-	protected function nthChild($groupSize, $elementInGroup, $lastChild = false)
+	protected function nthChild($groupSize, $elementInGroup, $lastChild = false) : void
 	{
 		// EXPERIMENTAL: New in Quark. This should be substantially faster
 		// than the old (jQuery-ish) version. It still has E_STRICT violations
@@ -985,7 +985,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for :nth-last-child and related pseudo-classes.
 	 */
-	protected function nthLastChild($groupSize, $elementInGroup)
+	protected function nthLastChild($groupSize, $elementInGroup) : void
 	{
 		// New in Quark.
 		$this->nthChild($groupSize, $elementInGroup, true);
@@ -1097,7 +1097,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * Pseudo-class handler for nth-of-type-child.
 	 * Not implemented.
 	 */
-	protected function nthOfTypeChild($groupSize, $elementInGroup, $lastChild)
+	protected function nthOfTypeChild($groupSize, $elementInGroup, $lastChild) : void
 	{
 		// EXPERIMENTAL: New in Quark. This should be substantially faster
 		// than the old (jQuery-ish) version. It still has E_STRICT violations
@@ -1164,7 +1164,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @param mixed $groupSize
 	 * @param mixed $elementInGroup
 	 */
-	protected function nthLastOfTypeChild($groupSize, $elementInGroup)
+	protected function nthLastOfTypeChild($groupSize, $elementInGroup) : void
 	{
 		$this->nthOfTypeChild($groupSize, $elementInGroup, true);
 	}
@@ -1174,7 +1174,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *
 	 * @param mixed $value
 	 */
-	protected function lang($value)
+	protected function lang($value) : void
 	{
 		// TODO: This checks for cases where an explicit language is
 		// set. The spec seems to indicate that an element should inherit
@@ -1215,7 +1215,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @param string $filter
 	 *  A CSS selector
 	 */
-	protected function not($filter)
+	protected function not($filter) : void
 	{
 		$matches = $this->candidateList();
 		//$found = array();
@@ -1235,7 +1235,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for :first-of-type.
 	 */
-	protected function firstOfType()
+	protected function firstOfType() : void
 	{
 		$matches = $this->candidateList();
 		$found = new SplObjectStorage();
@@ -1257,7 +1257,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for :last-of-type.
 	 */
-	protected function lastOfType()
+	protected function lastOfType() : void
 	{
 		$matches = $this->candidateList();
 		$found = new SplObjectStorage();
@@ -1280,7 +1280,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for :only-child.
 	 */
-	protected function onlyChild()
+	protected function onlyChild() : void
 	{
 		$matches = $this->candidateList();
 		$found = new SplObjectStorage();
@@ -1304,7 +1304,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for :empty.
 	 */
-	protected function emptyElement()
+	protected function emptyElement() : void
 	{
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
@@ -1328,7 +1328,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for :only-of-type.
 	 */
-	protected function onlyOfType()
+	protected function onlyOfType() : void
 	{
 		$matches = $this->candidateList();
 		$found = new SplObjectStorage();
@@ -1417,7 +1417,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @param mixed $operator
 	 * @param mixed $pos
 	 */
-	private function getByPosition($operator, $pos)
+	private function getByPosition($operator, $pos) : void
 	{
 		$matches = $this->candidateList();
 		$found = new SplObjectStorage();

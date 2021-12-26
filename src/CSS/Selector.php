@@ -88,39 +88,39 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 		return count($this->selectors);
 	}
 
-	public function elementID($id)
+	public function elementID($id) : void
 	{
 		$this->currSelector->id = $id;
 	}
 
-	public function element($name)
+	public function element($name) : void
 	{
 		$this->currSelector->element = $name;
 	}
 
-	public function elementNS($name, $namespace = null)
+	public function elementNS($name, $namespace = null) : void
 	{
 		$this->currSelector->ns = $namespace;
 		$this->currSelector->element = $name;
 	}
 
-	public function anyElement()
+	public function anyElement() : void
 	{
 		$this->currSelector->element = '*';
 	}
 
-	public function anyElementInNS($ns)
+	public function anyElementInNS($ns) : void
 	{
 		$this->currSelector->ns = $ns;
 		$this->currSelector->element = '*';
 	}
 
-	public function elementClass($name)
+	public function elementClass($name) : void
 	{
 		$this->currSelector->classes[] = $name;
 	}
 
-	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY)
+	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY) : void
 	{
 		$this->currSelector->attributes[] = [
 			'name' => $name,
@@ -129,7 +129,7 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 		];
 	}
 
-	public function attributeNS($name, $ns, $value = null, $operation = EventHandler::IS_EXACTLY)
+	public function attributeNS($name, $ns, $value = null, $operation = EventHandler::IS_EXACTLY) : void
 	{
 		$this->currSelector->attributes[] = [
 			'name' => $name,
@@ -139,17 +139,17 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 		];
 	}
 
-	public function pseudoClass($name, $value = null)
+	public function pseudoClass($name, $value = null) : void
 	{
 		$this->currSelector->pseudoClasses[] = ['name' => $name, 'value' => $value];
 	}
 
-	public function pseudoElement($name)
+	public function pseudoElement($name) : void
 	{
 		$this->currSelector->pseudoElements[] = $name;
 	}
 
-	public function combinator($combinatorName)
+	public function combinator($combinatorName) : void
 	{
 		$this->currSelector->combinator = $combinatorName;
 		$this->currSelector = new SimpleSelector();
@@ -157,29 +157,29 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 		//$this->selectors[]= $this->currSelector;
 	}
 
-	public function directDescendant()
+	public function directDescendant() : void
 	{
 		$this->combinator(SimpleSelector::DIRECT_DESCENDANT);
 	}
 
-	public function adjacent()
+	public function adjacent() : void
 	{
 		$this->combinator(SimpleSelector::ADJACENT);
 	}
 
-	public function anotherSelector()
+	public function anotherSelector() : void
 	{
 		++$this->groupIndex;
 		$this->currSelector = new SimpleSelector();
 		$this->selectors[$this->groupIndex] = [$this->currSelector];
 	}
 
-	public function sibling()
+	public function sibling() : void
 	{
 		$this->combinator(SimpleSelector::SIBLING);
 	}
 
-	public function anyDescendant()
+	public function anyDescendant() : void
 	{
 		$this->combinator(SimpleSelector::ANY_DESCENDANT);
 	}

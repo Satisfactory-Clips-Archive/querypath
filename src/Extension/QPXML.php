@@ -35,7 +35,7 @@ class QPXML implements Extension
 		$this->qp = $qp;
 	}
 
-	public function schema($file)
+	public function schema($file) : void
 	{
 		$doc = $this->qp->branch()->top()->get(0)->ownerDocument;
 

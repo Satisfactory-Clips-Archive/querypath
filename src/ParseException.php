@@ -44,7 +44,7 @@ class ParseException extends \QueryPath\Exception
 		parent::__construct($msg, $code);
 	}
 
-	public static function initializeFromError($code, $str, $file, $line, $cxt = null)
+	public static function initializeFromError($code, $str, $file, $line, $cxt = null) : void
 	{
 		//printf("\n\nCODE: %s %s\n\n", $code, $str);
 		$class = __CLASS__;
