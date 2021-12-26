@@ -93,7 +93,7 @@ final class Scanner
 			return $tok;
 		}
 
-		if ($ch === '-' || $ch === '_' || ctype_alnum($ch)) {
+		if ('-' === $ch || '_' === $ch || ctype_alnum($ch)) {
 			// It's a character
 			$this->value = $ch; //strtolower($ch);
 			$this->token = $tok = Token::CHAR;
@@ -167,7 +167,7 @@ final class Scanner
 		}
 
 		// Catch all characters that are legal within strings.
-		if ($tok === -1) {
+		if (-1 === $tok) {
 			// TODO: This should be UTF-8 compatible, but PHP doesn't
 			// have a native UTF-8 string. Should we use external
 			// mbstring library?
@@ -196,7 +196,7 @@ final class Scanner
 	public function getNameString()
 	{
 		$buf = '';
-		while ($this->token === Token::CHAR) {
+		while (Token::CHAR === $this->token) {
 			$buf .= $this->value;
 			$this->nextToken();
 		}
@@ -222,17 +222,17 @@ final class Scanner
 	 */
 	public function getQuotedString()
 	{
-		if ($this->token === Token::QUOTE || $this->token === Token::SQUOTE || $this->token === Token::LPAREN) {
-			$end = ($this->token === Token::LPAREN) ? Token::RPAREN : $this->token;
+		if (Token::QUOTE === $this->token || Token::SQUOTE === $this->token || Token::LPAREN === $this->token) {
+			$end = (Token::LPAREN === $this->token) ? Token::RPAREN : $this->token;
 			$buf = '';
 			$escape = false;
 
 			$this->nextToken(); // Skip the opening quote/paren
 
 			// The second conjunct is probably not necessary.
-			while ($this->token !== false && $this->token > -1) {
+			while (false !== $this->token && $this->token > -1) {
 				//print "Char: $this->value \n";
-				if ($this->token == Token::BSLASH && !$escape) {
+				if (Token::BSLASH == $this->token && !$escape) {
 					// XXX: The backslash (\) is removed here.
 					// Turn on escaping.
 					//$buf .= $this->value;
@@ -259,17 +259,17 @@ final class Scanner
 	// Get the contents inside of a pseudoClass().
 	public function getPseudoClassString()
 	{
-		if ($this->token === Token::QUOTE || $this->token === Token::SQUOTE || $this->token === Token::LPAREN) {
-			$end = ($this->token === Token::LPAREN) ? Token::RPAREN : $this->token;
+		if (Token::QUOTE === $this->token || Token::SQUOTE === $this->token || Token::LPAREN === $this->token) {
+			$end = (Token::LPAREN === $this->token) ? Token::RPAREN : $this->token;
 			$buf = '';
 			$escape = false;
 
 			$this->nextToken(); // Skip the opening quote/paren
 
 			// The second conjunct is probably not necessary.
-			while ($this->token !== false && $this->token > -1) {
+			while (false !== $this->token && $this->token > -1) {
 				//print "Char: $this->value \n";
-				if ($this->token === Token::BSLASH && !$escape) {
+				if (Token::BSLASH === $this->token && !$escape) {
 					// XXX: The backslash (\) is removed here.
 					// Turn on escaping.
 					//$buf .= $this->value;
@@ -279,7 +279,7 @@ final class Scanner
 					$buf .= $this->value;
 					$escape = false;
 				} // Allow nested pseudoclasses.
-				elseif ($this->token === Token::LPAREN) {
+				elseif (Token::LPAREN === $this->token) {
 					$buf .= '(';
 					$buf .= $this->getPseudoClassString();
 					$buf .= ')';

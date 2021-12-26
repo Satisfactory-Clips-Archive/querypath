@@ -78,11 +78,11 @@ final class Token
 			return $a[$const_int];
 		}
 
-		if ($const_int === self::STRING_LEGAL) {
+		if (self::STRING_LEGAL === $const_int) {
 			return 'a legal non-alphanumeric character';
 		}
 
-		if ($const_int === false) {
+		if (false === $const_int) {
 			return 'end of file';
 		}
 

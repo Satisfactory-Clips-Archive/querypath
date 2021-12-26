@@ -77,7 +77,7 @@ class QPXML implements Extension
 		// Look for CDATA sections.
 		foreach ($this->qp->get() as $ele) {
 			foreach ($ele->childNodes as $node) {
-				if ($node->nodeType === XML_CDATA_SECTION_NODE) {
+				if (XML_CDATA_SECTION_NODE === $node->nodeType) {
 					// Return first match.
 					return $node->textContent;
 				}
@@ -121,7 +121,7 @@ class QPXML implements Extension
 		}
 		foreach ($this->qp->get() as $ele) {
 			foreach ($ele->childNodes as $node) {
-				if ($node->nodeType == XML_COMMENT_NODE) {
+				if (XML_COMMENT_NODE == $node->nodeType) {
 					// Return first match.
 					return $node->textContent;
 				}
@@ -147,7 +147,7 @@ class QPXML implements Extension
 		}
 		foreach ($this->qp->get() as $ele) {
 			foreach ($ele->childNodes as $node) {
-				if ($node->nodeType == XML_PI_NODE) {
+				if (XML_PI_NODE == $node->nodeType) {
 					if (isset($prefix)) {
 						if ($node->tagName == $prefix) {
 							return $node->textContent;
@@ -195,17 +195,17 @@ class QPXML implements Extension
 	{
 		if (isset ($text)) {
 			foreach ($this->qp->get() as $element) {
-				if ($nsUri === null && strpos($text, ':') !== false) {
+				if (null === $nsUri && false !== strpos($text, ':')) {
 					$ns = array_shift(explode(':', $text));
 					$nsUri = $element->ownerDocument->lookupNamespaceURI($ns);
 
-					if ($nsUri === null) {
+					if (null === $nsUri) {
 						throw new \QueryPath\Exception('Undefined namespace for: ' . $text);
 					}
 				}
 
 				$node = null;
-				if ($nsUri !== null) {
+				if (null !== $nsUri) {
 					$node = $element->ownerDocument->createElementNS(
 						$nsUri,
 						$text

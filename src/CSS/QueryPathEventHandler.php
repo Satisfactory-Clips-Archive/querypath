@@ -86,7 +86,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		if (is_array($dom) || $dom instanceof \SplObjectStorage) {
 			//$matches = array();
 			foreach ($dom as $item) {
-				if ($item instanceof \DOMNode && $item->nodeType == XML_ELEMENT_NODE) {
+				if ($item instanceof \DOMNode && XML_ELEMENT_NODE == $item->nodeType) {
 					//$matches[] = $item;
 					$matches->attach($item);
 				}
@@ -112,7 +112,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		elseif ($dom instanceof \DOMNodeList) {
 			$a = []; // Not sure why we are doing this....
 			foreach ($dom as $item) {
-				if ($item->nodeType == XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE == $item->nodeType) {
 					$matches->attach($item);
 					$a[] = $item;
 				}
@@ -377,7 +377,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	{
 		$matches = $this->candidateList();
 		$found = new \SplObjectStorage();
-		if (count($matches) == 0) {
+		if (0 == count($matches)) {
 			$this->matches = $found;
 
 			return;
@@ -573,7 +573,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				foreach ($matches as $item) {
 					$tag = $item->tagName;
 					$f = strtolower(substr($tag, 0, 1));
-					if ($f == 'h' && strlen($tag) == 2 && ctype_digit(substr($tag, 1, 1))) {
+					if ('h' == $f && 2 == strlen($tag) && ctype_digit(substr($tag, 1, 1))) {
 						$found->attach($item);
 					}
 				}
@@ -590,7 +590,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				$matches = $this->candidateList();
 				$found = new \SplObjectStorage();
 				foreach ($matches as $item) {
-					if (strpos($item->textContent, $value) !== false) {
+					if (false !== strpos($item->textContent, $value)) {
 						$found->attach($item);
 					}
 				}
@@ -625,7 +625,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	{
 		$f = substr($str, 0, 1);
 		$l = substr($str, -1);
-		if ($f === $l && ($f == '"' || $f == "'")) {
+		if ($f === $l && ('"' == $f || "'" == $f)) {
 			$str = substr($str, 1, -1);
 		}
 
@@ -643,7 +643,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	{
 		$matches = $this->candidateList();
 		$found = new \SplObjectStorage();
-		if ($matches->count() == 0) {
+		if (0 == $matches->count()) {
 			return;
 		}
 
@@ -726,24 +726,24 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 */
 	protected function parseAnB($rule)
 	{
-		if ($rule == 'even') {
+		if ('even' == $rule) {
 			return [2, 0];
-		} elseif ($rule == 'odd') {
+		} elseif ('odd' == $rule) {
 			return [2, 1];
-		} elseif ($rule == 'n') {
+		} elseif ('n' == $rule) {
 			return [1, 0];
 		} elseif (is_numeric($rule)) {
 			return [0, (int)$rule];
 		}
 
 		$rule = explode('n', $rule);
-		if (count($rule) == 0) {
+		if (0 == count($rule)) {
 			throw new ParseException('nth-child value is invalid.');
 		}
 
 		// Each of these is legal: 1, -1, and -. '-' is shorthand for -1.
 		$aVal = trim($rule[0]);
-		$aVal = ($aVal == '-') ? -1 : (int)$aVal;
+		$aVal = ('-' == $aVal) ? -1 : (int)$aVal;
 
 		$bVal = !empty($rule[1]) ? (int)trim($rule[1]) : 0;
 
@@ -784,7 +784,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 					// !!! This last part is a grey area in the CSS 3 Selector spec. It seems
 					// necessary to make the implementation match the examples in the spec. However,
 					// jQuery 1.2 does not do this.
-					if ($child->nodeType == XML_ELEMENT_NODE && ($this->findAnyElement || $child->tagName == $item->tagName)) {
+					if (XML_ELEMENT_NODE == $child->nodeType && ($this->findAnyElement || $child->tagName == $item->tagName)) {
 						// This may break E_STRICT.
 						$child->nodeIndex = ++$c;
 					}
@@ -804,7 +804,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			}
 
 			// If group size is 0, then we return element at the right index.
-			if ($groupSize == 0) {
+			if (0 == $groupSize) {
 				if ($indexToMatch == $elementInGroup) {
 					$matches->attach($item);
 				}
@@ -980,7 +980,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				foreach ($parent->childNodes as $child) {
 					// This doesn't totally make sense, since the CSS 3 spec does not require that
 					// this pseudo-class be adjoined to an element (e.g. ' :nth-of-type' is allowed).
-					if ($child->nodeType == XML_ELEMENT_NODE && $child->tagName == $item->tagName) {
+					if (XML_ELEMENT_NODE == $child->nodeType && $child->tagName == $item->tagName) {
 						// This may break E_STRICT.
 						$child->nodeIndex = ++$c;
 					}
@@ -1000,7 +1000,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			}
 
 			// If group size is 0, then we return element at the right index.
-			if ($groupSize == 0) {
+			if (0 == $groupSize) {
 				if ($indexToMatch == $elementInGroup) {
 					$matches->attach($item);
 				}
@@ -1042,7 +1042,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		// TODO: This checks for cases where an explicit language is
 		// set. The spec seems to indicate that an element should inherit
 		// language from the parent... but this is unclear.
-		$operator = (strpos($value, '-') !== false) ? self::IS_EXACTLY : self::CONTAINS_WITH_HYPHEN;
+		$operator = (false !== strpos($value, '-')) ? self::IS_EXACTLY : self::CONTAINS_WITH_HYPHEN;
 
 		$orig = $this->matches;
 		$origDepth = $this->findAnyElement;
@@ -1086,7 +1086,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		foreach ($matches as $item) {
 			$handler = new QueryPathEventHandler($item);
 			$not_these = $handler->find($filter)->getMatches();
-			if ($not_these->count() == 0) {
+			if (0 == $not_these->count()) {
 				$found->attach($item);
 			}
 		}
@@ -1129,7 +1129,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			$type = $item->tagName;
 			$parent = $item->parentNode;
 			foreach ($parent->childNodes as $kid) {
-				if ($kid->nodeType == XML_ELEMENT_NODE && $kid->tagName == $type) {
+				if (XML_ELEMENT_NODE == $kid->nodeType && $kid->tagName == $type) {
 					if ( !$found->contains($kid)) {
 						$found->attach($kid);
 					}
@@ -1152,7 +1152,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			$parent = $item->parentNode;
 			for ($i = $parent->childNodes->length - 1; $i >= 0; --$i) {
 				$kid = $parent->childNodes->item($i);
-				if ($kid->nodeType == XML_ELEMENT_NODE && $kid->tagName == $type) {
+				if (XML_ELEMENT_NODE == $kid->nodeType && $kid->tagName == $type) {
 					if ( !$found->contains($kid)) {
 						$found->attach($kid);
 					}
@@ -1174,13 +1174,13 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			$parent = $item->parentNode;
 			$kids = [];
 			foreach ($parent->childNodes as $kid) {
-				if ($kid->nodeType == XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE == $kid->nodeType) {
 					$kids[] = $kid;
 				}
 			}
 			// There should be only one child element, and
 			// it should be the one being tested.
-			if (count($kids) == 1 && $kids[0] === $item) {
+			if (1 == count($kids) && $kids[0] === $item) {
 				$found->attach($kids[0]);
 			}
 		}
@@ -1199,7 +1199,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			foreach ($item->childNodes as $kid) {
 				// From the spec: Elements and Text nodes are the only ones to
 				// affect emptiness.
-				if ($kid->nodeType == XML_ELEMENT_NODE || $kid->nodeType == XML_TEXT_NODE) {
+				if (XML_ELEMENT_NODE == $kid->nodeType || XML_TEXT_NODE == $kid->nodeType) {
 					$empty = false;
 					break;
 				}
@@ -1227,7 +1227,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 			// See if any peers are of the same type
 			foreach ($parent->childNodes as $kid) {
-				if ($kid->nodeType == XML_ELEMENT_NODE
+				if (XML_ELEMENT_NODE == $kid->nodeType
 					&& $kid->tagName == $item->tagName
 					&& $kid !== $item) {
 					//$this->matches = new \SplObjectStorage();
@@ -1269,12 +1269,12 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			case EventHandler::CONTAINS_WITH_HYPHEN:
 				return in_array($needle, explode('-', $haystack));
 			case EventHandler::CONTAINS_IN_STRING:
-				return strpos($haystack, $needle) !== false;
+				return false !== strpos($haystack, $needle);
 			case EventHandler::BEGINS_WITH:
-				return strpos($haystack, $needle) === 0;
+				return 0 === strpos($haystack, $needle);
 			case EventHandler::ENDS_WITH:
 				//return strrpos($haystack, $needle) === strlen($needle) - 1;
-				return preg_match('/' . $needle . '$/', $haystack) == 1;
+				return 1 == preg_match('/' . $needle . '$/', $haystack);
 		}
 
 		return false; // Shouldn't be able to get here.
@@ -1346,7 +1346,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		foreach ($this->matches as $item) {
 			$kidsNL = $item->childNodes;
 			foreach ($kidsNL as $kidNode) {
-				if ($kidNode->nodeType == XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE == $kidNode->nodeType) {
 					$kids->attach($kidNode);
 				}
 			}
@@ -1377,7 +1377,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$found = new \SplObjectStorage();
 		foreach ($this->matches as $item) {
 			while (isset($item->nextSibling)) {
-				if (isset($item->nextSibling) && $item->nextSibling->nodeType === XML_ELEMENT_NODE) {
+				if (isset($item->nextSibling) && XML_ELEMENT_NODE === $item->nextSibling->nodeType) {
 					$found->attach($item->nextSibling);
 					break;
 				}
@@ -1426,9 +1426,9 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				  }
 				}
 				*/
-				while ($item->nextSibling != null) {
+				while (null != $item->nextSibling) {
 					$item = $item->nextSibling;
-					if ($item->nodeType === XML_ELEMENT_NODE) {
+					if (XML_ELEMENT_NODE === $item->nodeType) {
 						$sibs->attach($item);
 					}
 				}

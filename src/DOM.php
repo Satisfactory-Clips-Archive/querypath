@@ -96,7 +96,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			// This is the most frequent object type.
 			if ($document instanceof \SplObjectStorage) {
 				$this->matches = $document;
-				if ($document->count() !== 0) {
+				if (0 !== $document->count()) {
 					$first = $this->getFirstMatch();
 					if ( !empty($first->ownerDocument)) {
 						$this->document = $first->ownerDocument;
@@ -152,7 +152,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 
 		// Globally set the output option.
 		$this->document->formatOutput = true;
-		if (isset($this->options['format_output']) && $this->options['format_output'] === false) {
+		if (isset($this->options['format_output']) && false === $this->options['format_output']) {
 			$this->document->formatOutput = false;
 		}
 
@@ -198,10 +198,10 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			}
 
 			// If HTML parser is requested, we use it.
-			if ($useParser === 'html') {
+			if ('html' === $useParser) {
 				$document->loadHTML($string);
 			} // Parse as XML if it looks like XML, or if XML parser is requested.
-			elseif ($lead === '<?xml' || $useParser === 'xml') {
+			elseif ('<?xml' === $lead || 'xml' === $useParser) {
 				if ($this->options['replace_entities']) {
 					$string = Entities::replaceAllEntities($string);
 				}
@@ -294,7 +294,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		}
 		if ($ele->hasChildNodes()) {
 			foreach ($ele->childNodes as $child) {
-				if ($child->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $child->nodeType) {
 					$current = $this->deepestNode($child, $depth + 1, $current, $deepest);
 				}
 			}
@@ -357,7 +357,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		}
 
 		if ($item instanceof self) {
-			if ($item->count() === 0) {
+			if (0 === $item->count()) {
 				return null;
 			}
 
@@ -435,7 +435,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			}
 			restore_error_handler();
 
-			if ($contents == false) {
+			if (false == $contents) {
 				throw new \QueryPath\ParseException(sprintf('Contents of the file %s could not be retrieved.',
 					$filename));
 			}
@@ -458,16 +458,16 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			$useParser = strtolower($this->options['use_parser']);
 		}
 
-		$ext = $lastDot !== false ? strtolower(substr($filename, $lastDot)) : '';
+		$ext = false !== $lastDot ? strtolower(substr($filename, $lastDot)) : '';
 
 		try {
 			set_error_handler([ParseException::class, 'initializeFromError'], $this->errTypes);
 
 			// If the parser is explicitly set to XML, use that parser.
-			if ($useParser === 'xml') {
+			if ('xml' === $useParser) {
 				$document->load($filename, $flags);
 			} // Otherwise, see if it looks like HTML.
-			elseif ($useParser === 'html' || isset($htmlExtensions[$ext])) {
+			elseif ('html' === $useParser || isset($htmlExtensions[$ext])) {
 				// Try parsing it as HTML.
 				$document->loadHTMLFile($filename);
 			} // Default to XML.
@@ -506,7 +506,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 */
 	protected function isXMLish($string)
 	{
-		return strpos($string, '<') !== false && strpos($string, '>') !== false;
+		return false !== strpos($string, '<') && false !== strpos($string, '>');
 	}
 
 	/**

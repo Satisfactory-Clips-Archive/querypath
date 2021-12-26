@@ -41,7 +41,7 @@ trait QueryChecks
 	{
 		if (is_object($selector)) {
 			if ($selector instanceof \DOMNode) {
-				return count($this->matches) === 1 && $selector->isSameNode($this->get(0));
+				return 1 === count($this->matches) && $selector->isSameNode($this->get(0));
 			}
 
 			if ($selector instanceof \Traversable) {

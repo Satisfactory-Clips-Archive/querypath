@@ -82,7 +82,7 @@ class DOMTraverser implements Traverser
 		// Re-use the initial splos
 		$this->matches = $splos;
 
-		if (count($splos) !== 0) {
+		if (0 !== count($splos)) {
 			$splos->rewind();
 			$first = $splos->current();
 			if ($first instanceof \DOMDocument) {
@@ -299,7 +299,7 @@ class DOMTraverser implements Traverser
 	{
 		while ( !empty($node->previousSibling)) {
 			$node = $node->previousSibling;
-			if ($node->nodeType == XML_ELEMENT_NODE) {
+			if (XML_ELEMENT_NODE == $node->nodeType) {
 				//$this->debug(sprintf('Testing %s against "%s"', $node->tagName, $selectors[$index]));
 				return $this->matchesSimpleSelector($node, $selectors, $index);
 			}
@@ -329,7 +329,7 @@ class DOMTraverser implements Traverser
 	{
 		while ( !empty($node->previousSibling)) {
 			$node = $node->previousSibling;
-			if ($node->nodeType == XML_ELEMENT_NODE && $this->matchesSimpleSelector($node, $selectors, $index)) {
+			if (XML_ELEMENT_NODE == $node->nodeType && $this->matchesSimpleSelector($node, $selectors, $index)) {
 				return true;
 			}
 		}
@@ -389,7 +389,7 @@ class DOMTraverser implements Traverser
 			// Catch case where element is child of something
 			// else. This should really only happen with a
 			// document element.
-			if ($node->nodeType != XML_ELEMENT_NODE) {
+			if (XML_ELEMENT_NODE != $node->nodeType) {
 				continue;
 			}
 
@@ -416,7 +416,7 @@ class DOMTraverser implements Traverser
 
 		// If no element is specified, we have to start with the
 		// entire document.
-		if ($element === null) {
+		if (null === $element) {
 			$element = '*';
 		}
 
@@ -438,7 +438,7 @@ class DOMTraverser implements Traverser
 		// If the element is a wildcard, using class can
 		// substantially reduce the number of elements that
 		// we start with.
-		elseif ($element === '*' && !empty($selector->classes)) {
+		elseif ('*' === $element && !empty($selector->classes)) {
 			$initialMatches = $this->initialMatchOnClasses($selector, $matches);
 		} else {
 			$initialMatches = $this->initialMatchOnElement($selector, $matches);
@@ -589,7 +589,7 @@ class DOMTraverser implements Traverser
 		foreach ($matches as $node) {
 			// Capture the case where the initial element is the root element.
 			if ($node->tagName === $element
-				|| ($element === '*' && $node->parentNode instanceof \DOMDocument)) {
+				|| ('*' === $element && $node->parentNode instanceof \DOMDocument)) {
 				$found->attach($node);
 			}
 			$nl = $node->getElementsByTagName($element);
@@ -618,7 +618,7 @@ class DOMTraverser implements Traverser
 		$elements = $this->initialMatchOnElement($selector, $matches);
 
 		// "any namespace" matches anything.
-		if ($ns === '*') {
+		if ('*' === $ns) {
 			return $elements;
 		}
 
@@ -664,7 +664,7 @@ class DOMTraverser implements Traverser
 		}
 
 		// Handle namespace.
-		if ( !empty($ns) && $ns !== '*') {
+		if ( !empty($ns) && '*' !== $ns) {
 			// Check whether we have a matching NS URI.
 			$nsuri = $node->lookupNamespaceURI($ns);
 			if (empty($nsuri) || $node->namespaceURI !== $nsuri) {
@@ -673,7 +673,7 @@ class DOMTraverser implements Traverser
 		}
 
 		// Compare local name to given element name.
-		return $element === '*' || $node->localName === $element;
+		return '*' === $element || $node->localName === $element;
 	}
 
 	/**
@@ -726,13 +726,13 @@ class DOMTraverser implements Traverser
 			$val = isset($attr['value']) ? $attr['value'] : null;
 
 			// Namespaced attributes.
-			if (isset($attr['ns']) && $attr['ns'] !== '*') {
+			if (isset($attr['ns']) && '*' !== $attr['ns']) {
 				$nsuri = $node->lookupNamespaceURI($attr['ns']);
 				if (empty($nsuri) || !$node->hasAttributeNS($nsuri, $attr['name'])) {
 					return false;
 				}
 				$matches = Util::matchesAttributeNS($node, $attr['name'], $nsuri, $val, $attr['op']);
-			} elseif (isset($attr['ns']) && $attr['ns'] === '*' && $node->hasAttributes()) {
+			} elseif (isset($attr['ns']) && '*' === $attr['ns'] && $node->hasAttributes()) {
 				// Cycle through all of the attributes in the node. Note that
 				// these are DOMAttr objects.
 				$matches = false;
@@ -799,7 +799,7 @@ class DOMTraverser implements Traverser
 		// The intersection should match the given $classes.
 		$missing = array_diff($classes, array_intersect($classes, $eleClasses));
 
-		return count($missing) === 0;
+		return 0 === count($missing);
 	}
 
 	/**

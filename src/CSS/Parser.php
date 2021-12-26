@@ -64,7 +64,7 @@ class Parser
 	{
 		$this->scanner->nextToken();
 
-		while ($this->scanner->token !== false) {
+		while (false !== $this->scanner->token) {
 			// Primitive recursion detection.
 			$position = $this->scanner->position();
 
@@ -74,7 +74,7 @@ class Parser
 			$this->selector();
 
 			$finalPosition = $this->scanner->position();
-			if ($this->scanner->token !== false && $finalPosition === $position) {
+			if (false !== $this->scanner->token && $finalPosition === $position) {
 				// If we get here, then the scanner did not pop a single character
 				// off of the input stream during a full run of the parser, which
 				// means that the current input does not match any recognizable
@@ -137,7 +137,7 @@ class Parser
 		}
 
 		$white = 0;
-		while ($this->scanner->token === Token::WHITE) {
+		while (Token::WHITE === $this->scanner->token) {
 			$this->scanner->nextToken();
 			++$white;
 		}
@@ -174,22 +174,22 @@ class Parser
 		$white = $this->consumeWhitespace();
 		$t = $this->scanner->token;
 
-		if ($t === Token::RANGLE) {
+		if (Token::RANGLE === $t) {
 			$this->handler->directDescendant();
 			$this->scanner->nextToken();
 			$inCombinator = true;
 		//$this->simpleSelectors();
-		} elseif ($t === Token::PLUS) {
+		} elseif (Token::PLUS === $t) {
 			$this->handler->adjacent();
 			$this->scanner->nextToken();
 			$inCombinator = true;
 		//$this->simpleSelectors();
-		} elseif ($t === Token::COMMA) {
+		} elseif (Token::COMMA === $t) {
 			$this->handler->anotherSelector();
 			$this->scanner->nextToken();
 			$inCombinator = true;
 		//$this->scanner->selectors();
-		} elseif ($t === Token::TILDE) {
+		} elseif (Token::TILDE === $t) {
 			$this->handler->sibling();
 			$this->scanner->nextToken();
 			$inCombinator = true;
@@ -260,9 +260,9 @@ class Parser
 			echo 'ELEMENT ID' . PHP_EOL;
 		}
 
-		if ($this->scanner->token === Token::OCTO) {
+		if (Token::OCTO === $this->scanner->token) {
 			$this->scanner->nextToken();
-			if ($this->scanner->token !== Token::CHAR) {
+			if (Token::CHAR !== $this->scanner->token) {
 				throw new ParseException('Expected string after #');
 			}
 			$id = $this->scanner->getNameString();
@@ -279,7 +279,7 @@ class Parser
 		if ($this->DEBUG) {
 			print 'ELEMENT CLASS' . PHP_EOL;
 		}
-		if ($this->scanner->token == Token::DOT) {
+		if (Token::DOT == $this->scanner->token) {
 			$this->scanner->nextToken();
 			$this->consumeWhitespace(); // We're very fault tolerent. This should prob through error.
 			$cssClass = $this->scanner->getNameString();
@@ -307,21 +307,21 @@ class Parser
 		if ($this->DEBUG) {
 			echo 'PSEUDO-CLASS' . PHP_EOL;
 		}
-		if ($this->scanner->token === Token::COLON) {
+		if (Token::COLON === $this->scanner->token) {
 			// Check for CSS 3 pseudo element:
 			$isPseudoElement = false;
-			if ($this->scanner->nextToken() === Token::COLON) {
+			if (Token::COLON === $this->scanner->nextToken()) {
 				$isPseudoElement = true;
 				$this->scanner->nextToken();
 			}
 
 			$name = $this->scanner->getNameString();
-			if ($restricted && $name === 'not') {
+			if ($restricted && 'not' === $name) {
 				throw new ParseException("The 'not' pseudo-class is illegal in this context.");
 			}
 
 			$value = null;
-			if ($this->scanner->token === Token::LPAREN) {
+			if (Token::LPAREN === $this->scanner->token) {
 				if ($isPseudoElement) {
 					throw new ParseException('Illegal left paren. Pseudo-Element cannot have arguments.');
 				}
@@ -339,7 +339,7 @@ class Parser
 				// Per the spec, pseudo-elements must be the last items in a selector, so we
 				// check to make sure that we are either at the end of the stream or that a
 				// new selector is starting. Only one pseudo-element is allowed per selector.
-				if ($this->scanner->token !== false && $this->scanner->token !== Token::COMMA) {
+				if (false !== $this->scanner->token && Token::COMMA !== $this->scanner->token) {
 					throw new ParseException('A Pseudo-Element must be the last item in a selector.');
 				}
 			} else {
@@ -360,7 +360,7 @@ class Parser
 	 */
 	private function pseudoClassValue()
 	{
-		if ($this->scanner->token === Token::LPAREN) {
+		if (Token::LPAREN === $this->scanner->token) {
 			$buf = '';
 
 			// For now, just leave pseudoClass value vague.
@@ -419,24 +419,24 @@ class Parser
 		if ($this->DEBUG) {
 			print "ELEMENT NAME\n";
 		}
-		if ($this->scanner->token === Token::PIPE) {
+		if (Token::PIPE === $this->scanner->token) {
 			// We have '|name', which is equiv to 'name'
 			$this->scanner->nextToken();
 			$this->consumeWhitespace();
 			$elementName = $this->scanner->getNameString();
 			$this->handler->element($elementName);
-		} elseif ($this->scanner->token === Token::CHAR) {
+		} elseif (Token::CHAR === $this->scanner->token) {
 			$elementName = $this->scanner->getNameString();
-			if ($this->scanner->token == Token::PIPE) {
+			if (Token::PIPE == $this->scanner->token) {
 				// Get ns|name
 				$elementNS = $elementName;
 				$this->scanner->nextToken();
 				$this->consumeWhitespace();
-				if ($this->scanner->token === Token::STAR) {
+				if (Token::STAR === $this->scanner->token) {
 					// We have ns|*
 					$this->handler->anyElementInNS($elementNS);
 					$this->scanner->nextToken();
-				} elseif ($this->scanner->token !== Token::CHAR) {
+				} elseif (Token::CHAR !== $this->scanner->token) {
 					$this->throwError(Token::CHAR, $this->scanner->token);
 				} else {
 					$elementName = $this->scanner->getNameString();
@@ -458,11 +458,11 @@ class Parser
 	 */
 	private function allElements()
 	{
-		if ($this->scanner->token === Token::STAR) {
+		if (Token::STAR === $this->scanner->token) {
 			$this->scanner->nextToken();
-			if ($this->scanner->token === Token::PIPE) {
+			if (Token::PIPE === $this->scanner->token) {
 				$this->scanner->nextToken();
-				if ($this->scanner->token === Token::STAR) {
+				if (Token::STAR === $this->scanner->token) {
 					// We got *|*. According to spec, this requires
 					// that the element has a namespace, so we pass it on
 					// to the handler:
@@ -494,13 +494,13 @@ class Parser
 	 */
 	private function attribute()
 	{
-		if ($this->scanner->token === Token::LSQUARE) {
+		if (Token::LSQUARE === $this->scanner->token) {
 			$attrVal = $op = $ns = null;
 
 			$this->scanner->nextToken();
 			$this->consumeWhitespace();
 
-			if ($this->scanner->token === Token::AT) {
+			if (Token::AT === $this->scanner->token) {
 				if ($this->strict) {
 					throw new ParseException('The @ is illegal in attributes.');
 				}
@@ -509,13 +509,13 @@ class Parser
 				$this->consumeWhitespace();
 			}
 
-			if ($this->scanner->token === Token::STAR) {
+			if (Token::STAR === $this->scanner->token) {
 				// Global namespace... requires that attr be prefixed,
 				// so we pass this on to a namespace handler.
 				$ns = '*';
 				$this->scanner->nextToken();
 			}
-			if ($this->scanner->token === Token::PIPE) {
+			if (Token::PIPE === $this->scanner->token) {
 				// Skip this. It's a global namespace.
 				$this->scanner->nextToken();
 				$this->consumeWhitespace();
@@ -526,7 +526,7 @@ class Parser
 
 			// Check for namespace attribute: ns|attr. We have to peek() to make
 			// sure that we haven't hit the |= operator, which looks the same.
-			if ($this->scanner->token === Token::PIPE && $this->scanner->peek() !== '=') {
+			if (Token::PIPE === $this->scanner->token && '=' !== $this->scanner->peek()) {
 				// We have a namespaced attribute.
 				$ns = $attrName;
 				$this->scanner->nextToken();
@@ -544,31 +544,31 @@ class Parser
 					$op = EventHandler::IS_EXACTLY;
 					break;
 				case Token::TILDE:
-					if ($this->scanner->nextToken() !== Token::EQ) {
+					if (Token::EQ !== $this->scanner->nextToken()) {
 						$this->throwError(Token::EQ, $this->scanner->token);
 					}
 					$op = EventHandler::CONTAINS_WITH_SPACE;
 					break;
 				case Token::PIPE:
-					if ($this->scanner->nextToken() !== Token::EQ) {
+					if (Token::EQ !== $this->scanner->nextToken()) {
 						$this->throwError(Token::EQ, $this->scanner->token);
 					}
 					$op = EventHandler::CONTAINS_WITH_HYPHEN;
 					break;
 				case Token::STAR:
-					if ($this->scanner->nextToken() !== Token::EQ) {
+					if (Token::EQ !== $this->scanner->nextToken()) {
 						$this->throwError(Token::EQ, $this->scanner->token);
 					}
 					$op = EventHandler::CONTAINS_IN_STRING;
 					break;
 				case Token::DOLLAR;
-					if ($this->scanner->nextToken() !== Token::EQ) {
+					if (Token::EQ !== $this->scanner->nextToken()) {
 						$this->throwError(Token::EQ, $this->scanner->token);
 					}
 					$op = EventHandler::ENDS_WITH;
 					break;
 				case Token::CARAT:
-					if ($this->scanner->nextToken() !== Token::EQ) {
+					if (Token::EQ !== $this->scanner->nextToken()) {
 						$this->throwError(Token::EQ, $this->scanner->token);
 					}
 					$op = EventHandler::BEGINS_WITH;
@@ -589,7 +589,7 @@ class Parser
 				// that bare words follow the NAME rules, while quoted strings follow
 				// the String1/String2 rules.
 
-				if ($this->scanner->token === Token::QUOTE || $this->scanner->token === Token::SQUOTE) {
+				if (Token::QUOTE === $this->scanner->token || Token::SQUOTE === $this->scanner->token) {
 					$attrVal = $this->scanner->getQuotedString();
 				} else {
 					$attrVal = $this->scanner->getNameString();
@@ -602,7 +602,7 @@ class Parser
 
 			$this->consumeWhitespace();
 
-			if ($this->scanner->token !== Token::RSQUARE) {
+			if (Token::RSQUARE !== $this->scanner->token) {
 				$this->throwError(Token::RSQUARE, $this->scanner->token);
 			}
 

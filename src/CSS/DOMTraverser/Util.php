@@ -83,17 +83,17 @@ class Util
 				return $needle == $haystack;
 			case EventHandler::CONTAINS_WITH_SPACE:
 				// XXX: This needs testing!
-				return preg_match('/\b/', $haystack) == 1;
+				return 1 == preg_match('/\b/', $haystack);
 			//return in_array($needle, explode(' ', $haystack));
 			case EventHandler::CONTAINS_WITH_HYPHEN:
 				return in_array($needle, explode('-', $haystack));
 			case EventHandler::CONTAINS_IN_STRING:
-				return strpos($haystack, $needle) !== false;
+				return false !== strpos($haystack, $needle);
 			case EventHandler::BEGINS_WITH:
-				return strpos($haystack, $needle) === 0;
+				return 0 === strpos($haystack, $needle);
 			case EventHandler::ENDS_WITH:
 				//return strrpos($haystack, $needle) === strlen($needle) - 1;
-				return preg_match('/' . $needle . '$/', $haystack) == 1;
+				return 1 == preg_match('/' . $needle . '$/', $haystack);
 		}
 
 		return false; // Shouldn't be able to get here.
@@ -106,7 +106,7 @@ class Util
 	{
 		$f = mb_substr($str, 0, 1);
 		$l = mb_substr($str, -1);
-		if ($f === $l && ($f === '"' || $f === "'")) {
+		if ($f === $l && ('"' === $f || "'" === $f)) {
 			$str = mb_substr($str, 1, -1);
 		}
 
@@ -127,15 +127,15 @@ class Util
 	 */
 	public static function parseAnB($rule): array
 	{
-		if ($rule === 'even') {
+		if ('even' === $rule) {
 			return [2, 0];
 		}
 
-		if ($rule === 'odd') {
+		if ('odd' === $rule) {
 			return [2, 1];
 		}
 
-		if ($rule === 'n') {
+		if ('n' === $rule) {
 			return [1, 0];
 		}
 
@@ -153,7 +153,7 @@ class Util
 		}
 
 		$aVal = $matches[1] ?? 1;
-		if ($aVal === '-') {
+		if ('-' === $aVal) {
 			$aVal = -1;
 		} else {
 			$aVal = (int)$aVal;
@@ -162,7 +162,7 @@ class Util
 		$bVal = 0;
 		if (isset($matches[3])) {
 			$bVal = (int)$matches[3];
-			if (isset($matches[2]) && $matches[2] === '-') {
+			if (isset($matches[2]) && '-' === $matches[2]) {
 				$bVal *= -1;
 			}
 		}

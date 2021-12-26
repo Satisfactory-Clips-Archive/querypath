@@ -286,7 +286,7 @@ class DOMQuery extends DOM
 	 */
 	public function get($index = null, $asObject = false)
 	{
-		if ($index !== null) {
+		if (null !== $index) {
 			return ($this->count() > $index) ? $this->getNthMatch($index) : null;
 		}
 		// Retain support for legacy.
@@ -395,7 +395,7 @@ class DOMQuery extends DOM
 		if (is_null($data)) {
 			// Attempt to fetch the data
 			$data = $this->attr($attr);
-			if (empty($data) || is_array($data) || strpos($data, 'data:') !== 0) {
+			if (empty($data) || is_array($data) || 0 !== strpos($data, 'data:')) {
 				return;
 			}
 
@@ -691,7 +691,7 @@ class DOMQuery extends DOM
 			return $this;
 		}
 		$length = $this->matches->count();
-		if ($length === 0) {
+		if (0 === $length) {
 			return null;
 		}
 		// Only return the first item -- that's what JQ does.
@@ -732,7 +732,7 @@ class DOMQuery extends DOM
 		$html5 = new HTML5($this->options);
 
 		// append HTML to existing
-		if ($markup === null) {
+		if (null === $markup) {
 
 			// Parse the HTML and insert it into the DOM
 			$doc = $html5->loadHTMLFragment($markup);
@@ -743,7 +743,7 @@ class DOMQuery extends DOM
 		}
 
 		$length = $this->count();
-		if ($length === 0) {
+		if (0 === $length) {
 			return null;
 		}
 		// Only return the first item -- that's what JQ does.
@@ -822,7 +822,7 @@ class DOMQuery extends DOM
 	public function innerXHTML()
 	{
 		$length = $this->matches->count();
-		if ($length === 0) {
+		if (0 === $length) {
 			return null;
 		}
 		// Only return the first item -- that's what JQ does.
@@ -863,7 +863,7 @@ class DOMQuery extends DOM
 	public function innerXML()
 	{
 		$length = $this->matches->count();
-		if ($length === 0) {
+		if (0 === $length) {
 			return null;
 		}
 		// Only return the first item -- that's what JQ does.
@@ -895,7 +895,7 @@ class DOMQuery extends DOM
 	public function innerHTML5()
 	{
 		$length = $this->matches->count();
-		if ($length === 0) {
+		if (0 === $length) {
 			return null;
 		}
 		// Only return the first item -- that's what JQ does.
@@ -1053,7 +1053,7 @@ class DOMQuery extends DOM
 		$buffer = '';
 		foreach ($this->matches as $m) {
 			$p = $m;
-			while (isset($p->previousSibling) && $p->previousSibling->nodeType === XML_TEXT_NODE) {
+			while (isset($p->previousSibling) && XML_TEXT_NODE === $p->previousSibling->nodeType) {
 				$p = $p->previousSibling;
 				$buffer .= $p->textContent;
 			}
@@ -1072,7 +1072,7 @@ class DOMQuery extends DOM
 		$buffer = '';
 		foreach ($this->matches as $m) {
 			$n = $m;
-			while (isset($n->nextSibling) && $n->nextSibling->nodeType === XML_TEXT_NODE) {
+			while (isset($n->nextSibling) && XML_TEXT_NODE === $n->nextSibling->nodeType) {
 				$n = $n->nextSibling;
 				$buffer .= $n->textContent;
 			}
@@ -1143,7 +1143,7 @@ class DOMQuery extends DOM
 		// See http://github.com/technosophos/querypath/issues#issue/10
 
 		$omit_xml_decl = $this->options['omit_xml_declaration'];
-		if ($markup === true) {
+		if (true === $markup) {
 			// Basically, we handle the special case where we don't
 			// want the XML declaration to be displayed.
 			$omit_xml_decl = true;
@@ -1152,7 +1152,7 @@ class DOMQuery extends DOM
 		}
 
 		$length = $this->matches->count();
-		if ($length === 0) {
+		if (0 === $length) {
 			return null;
 		}
 
@@ -1221,7 +1221,7 @@ class DOMQuery extends DOM
 	public function xml($markup = null)
 	{
 		$omit_xml_decl = $this->options['omit_xml_declaration'];
-		if ($markup === true) {
+		if (true === $markup) {
 			// Basically, we handle the special case where we don't
 			// want the XML declaration to be displayed.
 			$omit_xml_decl = true;
@@ -1237,7 +1237,7 @@ class DOMQuery extends DOM
 			return $this;
 		}
 		$length = $this->matches->count();
-		if ($length === 0) {
+		if (0 === $length) {
 			return null;
 		}
 		// Only return the first item -- that's what JQ does.
@@ -1282,7 +1282,7 @@ class DOMQuery extends DOM
 	 */
 	public function writeXML($path = null, $options = null)
 	{
-		if ($path === null) {
+		if (null === $path) {
 			print $this->document->saveXML(null, $options ?? 0);
 		} else {
 			try {
@@ -1322,7 +1322,7 @@ class DOMQuery extends DOM
 	 */
 	public function writeHTML($path = null)
 	{
-		if ($path === null) {
+		if (null === $path) {
 			print $this->document->saveHTML();
 		} else {
 			try {
@@ -1355,7 +1355,7 @@ class DOMQuery extends DOM
 	public function writeHTML5($path = null)
 	{
 		$html5 = new HTML5();
-		if ($path === null) {
+		if (null === $path) {
 			// Print the document to stdout.
 			print $html5->saveHTML($this->document);
 

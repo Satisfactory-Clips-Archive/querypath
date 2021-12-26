@@ -209,11 +209,11 @@ class PseudoClass
 		// TODO: This checks for cases where an explicit language is
 		// set. The spec seems to indicate that an element should inherit
 		// language from the parent... but this is unclear.
-		$operator = (strpos($value, '-') !== false) ? EventHandler::IS_EXACTLY : EventHandler::CONTAINS_WITH_HYPHEN;
+		$operator = (false !== strpos($value, '-')) ? EventHandler::IS_EXACTLY : EventHandler::CONTAINS_WITH_HYPHEN;
 
 		$match = true;
 		foreach ($node->attributes as $attrNode) {
-			if ($attrNode->localName === 'lang') {
+			if ('lang' === $attrNode->localName) {
 				if ($attrNode->nodeName === $attrNode->localName) {
 					// fprintf(STDOUT, "%s in NS %s\n", $attrNode->name, $attrNode->nodeName);
 					return Util::matchesAttribute($node, 'lang', $value, $operator);
@@ -237,7 +237,7 @@ class PseudoClass
 	 */
 	protected function header($node): bool
 	{
-		return preg_match('/^h[1-9]$/i', $node->tagName) === 1;
+		return 1 === preg_match('/^h[1-9]$/i', $node->tagName);
 	}
 
 	/**
@@ -250,7 +250,7 @@ class PseudoClass
 		foreach ($node->childNodes as $kid) {
 			// We don't want to count PIs and comments. From the spec, it
 			// appears that CDATA is also not counted.
-			if ($kid->nodeType === XML_ELEMENT_NODE || $kid->nodeType === XML_TEXT_NODE) {
+			if (XML_ELEMENT_NODE === $kid->nodeType || XML_TEXT_NODE === $kid->nodeType) {
 				// As soon as we hit a FALSE, return.
 				return false;
 			}
@@ -271,7 +271,7 @@ class PseudoClass
 	{
 		while (isset($node->previousSibling)) {
 			$node = $node->previousSibling;
-			if ($node->nodeType === XML_ELEMENT_NODE) {
+			if (XML_ELEMENT_NODE === $node->nodeType) {
 				return false;
 			}
 		}
@@ -289,7 +289,7 @@ class PseudoClass
 		$type = $node->tagName;
 		while (isset($node->previousSibling)) {
 			$node = $node->previousSibling;
-			if ($node->nodeType === XML_ELEMENT_NODE && $node->tagName === $type) {
+			if (XML_ELEMENT_NODE === $node->nodeType && $node->tagName === $type) {
 				return false;
 			}
 		}
@@ -306,7 +306,7 @@ class PseudoClass
 	{
 		while (isset($node->nextSibling)) {
 			$node = $node->nextSibling;
-			if ($node->nodeType === XML_ELEMENT_NODE) {
+			if (XML_ELEMENT_NODE === $node->nodeType) {
 				return false;
 			}
 		}
@@ -324,7 +324,7 @@ class PseudoClass
 		$type = $node->tagName;
 		while (isset($node->nextSibling)) {
 			$node = $node->nextSibling;
-			if ($node->nodeType === XML_ELEMENT_NODE && $node->tagName === $type) {
+			if (XML_ELEMENT_NODE === $node->nodeType && $node->tagName === $type) {
 				return false;
 			}
 		}
@@ -345,7 +345,7 @@ class PseudoClass
 		$text = $node->textContent;
 		$value = Util::removeQuotes($value);
 
-		return isset($text) && (stripos($text, $value) !== false);
+		return isset($text) && (false !== stripos($text, $value));
 	}
 
 	/**
@@ -407,7 +407,7 @@ class PseudoClass
 		$tag = $node->tagName;
 		while (isset($node->previousSibling)) {
 			$node = $node->previousSibling;
-			if ($node->nodeType === XML_ELEMENT_NODE && ( !$byType || $node->tagName === $tag)) {
+			if (XML_ELEMENT_NODE === $node->nodeType && ( !$byType || $node->tagName === $tag)) {
 				++$i;
 			}
 		}
@@ -429,7 +429,7 @@ class PseudoClass
 		$tag = $node->tagName;
 		while (isset($node->nextSibling)) {
 			$node = $node->nextSibling;
-			if ($node->nodeType === XML_ELEMENT_NODE && ( !$byType || $node->tagName === $tag)) {
+			if (XML_ELEMENT_NODE === $node->nodeType && ( !$byType || $node->tagName === $tag)) {
 				++$i;
 			}
 		}
@@ -467,7 +467,7 @@ class PseudoClass
 		list($groupSize, $elementInGroup) = Util::parseAnB($value);
 		$parent = $node->parentNode;
 		if (empty($parent)
-			|| ($groupSize === 0 && $elementInGroup === 0)
+			|| (0 === $groupSize && 0 === $elementInGroup)
 			|| ($groupSize > 0 && $elementInGroup > $groupSize)
 		) {
 			return false;
@@ -482,7 +482,7 @@ class PseudoClass
 
 		// If group size is 0, we just check to see if this
 		// is the nth element:
-		if ($groupSize === 0) {
+		if (0 === $groupSize) {
 			return $pos === $elementInGroup;
 		}
 
@@ -503,6 +503,6 @@ class PseudoClass
 		$url = $node->getAttribute('href');
 		$scheme = parse_url($url, PHP_URL_SCHEME);
 
-		return empty($scheme) || $scheme === 'file';
+		return empty($scheme) || 'file' === $scheme;
 	}
 }

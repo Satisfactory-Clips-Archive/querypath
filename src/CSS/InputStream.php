@@ -66,6 +66,6 @@ class InputStream
 	 */
 	public function isEmpty()
 	{
-		return count($this->stream) === 0;
+		return 0 === count($this->stream);
 	}
 }

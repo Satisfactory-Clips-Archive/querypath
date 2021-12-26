@@ -26,7 +26,7 @@ class ParseException extends \QueryPath\Exception
 	{
 		$msgs = [];
 		foreach (libxml_get_errors() as $err) {
-			$format = $err->level === LIBXML_ERR_WARNING ? self::WARN_MSG_FORMAT : self::ERR_MSG_FORMAT;
+			$format = LIBXML_ERR_WARNING === $err->level ? self::WARN_MSG_FORMAT : self::ERR_MSG_FORMAT;
 			$msgs[] = sprintf($format, $err->file, $err->line, $err->column, $err->message, $err->code);
 		}
 		$msg .= implode("\n", $msgs);

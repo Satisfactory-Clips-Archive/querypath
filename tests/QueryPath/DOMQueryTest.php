@@ -187,18 +187,18 @@ class DOMQueryTest extends TestCase
 	public function testOptionXMLEncoding()
 	{
 		$xml = qp(null, null, ['encoding' => 'iso-8859-1'])->append('<test/>')->xml();
-		$iso_found = preg_match('/iso-8859-1/', $xml) === 1;
+		$iso_found = 1 === preg_match('/iso-8859-1/', $xml);
 
 		$this->assertTrue($iso_found, 'Encoding should be iso-8859-1 in ' . $xml . 'Found ' . $iso_found);
 
-		$iso_found = preg_match('/utf-8/', $xml) === 1;
+		$iso_found = 1 === preg_match('/utf-8/', $xml);
 		$this->assertFalse($iso_found, 'Encoding should not be utf-8 in ' . $xml);
 
 		$xml = qp('<?xml version="1.0" encoding="utf-8"?><test/>', null, ['encoding' => 'iso-8859-1'])->xml();
-		$iso_found = preg_match('/utf-8/', $xml) === 1;
+		$iso_found = 1 === preg_match('/utf-8/', $xml);
 		$this->assertTrue($iso_found, 'Encoding should be utf-8 in ' . $xml);
 
-		$iso_found = preg_match('/iso-8859-1/', $xml) === 1;
+		$iso_found = 1 === preg_match('/iso-8859-1/', $xml);
 		$this->assertFalse($iso_found, 'Encoding should not be utf-8 in ' . $xml);
 	}
 
@@ -279,14 +279,14 @@ class DOMQueryTest extends TestCase
 	public function testIgnoreParserWarnings()
 	{
 		$qp = @qp('<html><body><b><i>BAD!</b></i></body>', null, ['ignore_parser_warnings' => true]);
-		$this->assertTrue(strpos($qp->html(), '<i>BAD!</i>') !== false);
+		$this->assertTrue(false !== strpos($qp->html(), '<i>BAD!</i>'));
 
 		\QueryPath\Options::merge(['ignore_parser_warnings' => true]);
 		$qp = @qp('<html><body><b><i>BAD!</b></i></body>');
-		$this->assertTrue(strpos($qp->html(), '<i>BAD!</i>') !== false);
+		$this->assertTrue(false !== strpos($qp->html(), '<i>BAD!</i>'));
 
 		$qp = @qp('<html><body><blarg>BAD!</blarg></body>');
-		$this->assertTrue(strpos($qp->html(), '<blarg>BAD!</blarg>') !== false, $qp->html());
+		$this->assertTrue(false !== strpos($qp->html(), '<blarg>BAD!</blarg>'), $qp->html());
 		\QueryPath\Options::set([]); // Reset to empty options.
 	}
 
@@ -316,16 +316,16 @@ class DOMQueryTest extends TestCase
 	{
 		$path = '<?xml version="1.0"?><root/>';
 		$xml = qp($path, null, ['replace_entities' => true])->xml('<foo>&</foo>')->xml();
-		$this->assertTrue(strpos($xml, '<foo>&amp;</foo>') !== false);
+		$this->assertTrue(false !== strpos($xml, '<foo>&amp;</foo>'));
 
 		$xml = qp($path, null, ['replace_entities' => true])->html('<foo>&</foo>')->xml();
-		$this->assertTrue(strpos($xml, '<foo>&amp;</foo>') !== false);
+		$this->assertTrue(false !== strpos($xml, '<foo>&amp;</foo>'));
 
 		$xml = qp($path, null, ['replace_entities' => true])->xhtml('<foo>&</foo>')->xml();
-		$this->assertTrue(strpos($xml, '<foo>&amp;</foo>') !== false);
+		$this->assertTrue(false !== strpos($xml, '<foo>&amp;</foo>'));
 
 		\QueryPath\Options::set(['replace_entities' => true]);
-		$this->assertTrue(strpos($xml, '<foo>&amp;</foo>') !== false);
+		$this->assertTrue(false !== strpos($xml, '<foo>&amp;</foo>'));
 		\QueryPath\Options::set([]);
 	}
 
@@ -629,10 +629,10 @@ class DOMQueryTest extends TestCase
 
 	public function mapCallbackFunction($index, $item)
 	{
-		if ($index === 1) {
+		if (1 === $index) {
 			return false;
 		}
-		if ($index === 2) {
+		if (2 === $index) {
 			return [1, 2, 3];
 		}
 
@@ -661,7 +661,7 @@ class DOMQueryTest extends TestCase
 		$fn = 'eachCallbackFunction';
 		$res = qp($file, 'li')->each([$this, $fn]);
 		$this->assertSame(5, $res->count());
-		$this->assertFalse($res->get(4)->getAttribute('class') === null);
+		$this->assertFalse(null === $res->get(4)->getAttribute('class'));
 		$this->assertSame('test', $res->eq(1)->attr('class'));
 
 		// Test when each runs out of things to test before returning.
@@ -1576,7 +1576,7 @@ class DOMQueryTest extends TestCase
 		$qp = $qp->top('p:first-of-type');
 		$this->assertSame('Hello', $qp->text(), 'Test First P ' . $qp->top()->html());
 		$i = 0;
-		while ($qp->next('p')->html() !== null) {
+		while (null !== $qp->next('p')->html()) {
 			$qp = $qp->next('p');
 			$this->assertCount(1, $qp);
 			$this->assertSame($testarray[$i], $qp->text(), $i . " didn't match " . $qp->top()->xml());

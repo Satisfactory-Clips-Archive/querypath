@@ -98,7 +98,7 @@ trait QueryFilters
 		$found = new \SplObjectStorage();
 		$i = 0;
 		foreach ($this->matches as $item) {
-			if ($function($i++, $item) !== false) {
+			if (false !== $function($i++, $item)) {
 				$found->attach($item);
 			}
 		}
@@ -196,7 +196,7 @@ trait QueryFilters
 		$i = 0;
 		if (is_callable($callback)) {
 			foreach ($this->matches as $item) {
-				if ($callback($i++, $item) !== false) {
+				if (false !== $callback($i++, $item)) {
 					$found->attach($item);
 				}
 			}
@@ -342,7 +342,7 @@ trait QueryFilters
 		if (is_callable($callback)) {
 			$i = 0;
 			foreach ($this->matches as $item) {
-				if (call_user_func($callback, $i, $item) === false) {
+				if (false === call_user_func($callback, $i, $item)) {
 					return $this;
 				}
 				++$i;
@@ -376,7 +376,7 @@ trait QueryFilters
 		$found = new \SplObjectStorage();
 		$even = false;
 		foreach ($this->matches as $m) {
-			if ($even && $m->nodeType === XML_ELEMENT_NODE) {
+			if ($even && XML_ELEMENT_NODE === $m->nodeType) {
 				$found->attach($m);
 			}
 			$even = $even ? false : true;
@@ -407,7 +407,7 @@ trait QueryFilters
 		$found = new \SplObjectStorage();
 		$odd = true;
 		foreach ($this->matches as $m) {
-			if ($odd && $m->nodeType === XML_ELEMENT_NODE) {
+			if ($odd && XML_ELEMENT_NODE === $m->nodeType) {
 				$found->attach($m);
 			}
 			$odd = $odd ? false : true;
@@ -435,7 +435,7 @@ trait QueryFilters
 	{
 		$found = new \SplObjectStorage();
 		foreach ($this->matches as $m) {
-			if ($m->nodeType === XML_ELEMENT_NODE) {
+			if (XML_ELEMENT_NODE === $m->nodeType) {
 				$found->attach($m);
 				break;
 			}
@@ -466,7 +466,7 @@ trait QueryFilters
 		$flag = false;
 		foreach ($this->matches as $m) {
 			foreach ($m->childNodes as $c) {
-				if ($c->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $c->nodeType) {
 					$found->attach($c);
 					$flag = true;
 					break;
@@ -500,7 +500,7 @@ trait QueryFilters
 		$found = new \SplObjectStorage();
 		$item = null;
 		foreach ($this->matches as $m) {
-			if ($m->nodeType === XML_ELEMENT_NODE) {
+			if (XML_ELEMENT_NODE === $m->nodeType) {
 				$item = $m;
 			}
 		}
@@ -532,7 +532,7 @@ trait QueryFilters
 		$item = null;
 		foreach ($this->matches as $m) {
 			foreach ($m->childNodes as $c) {
-				if ($c->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $c->nodeType) {
 					$item = $c;
 				}
 			}
@@ -574,7 +574,7 @@ trait QueryFilters
 		foreach ($this->matches as $m) {
 			while (isset($m->nextSibling)) {
 				$m = $m->nextSibling;
-				if ($m->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if (null !== $selector && QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 						break;
 					}
@@ -616,7 +616,7 @@ trait QueryFilters
 		foreach ($this->matches as $m) {
 			while (isset($m->previousSibling)) {
 				$m = $m->previousSibling;
-				if ($m->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if (null !== $selector && QueryPath::with($m, null, $this->options)->is($selector)) {
 						break;
 					}
@@ -654,10 +654,10 @@ trait QueryFilters
 	{
 		$found = new \SplObjectStorage();
 		foreach ($this->matches as $m) {
-			while ($m->parentNode->nodeType !== XML_DOCUMENT_NODE) {
+			while (XML_DOCUMENT_NODE !== $m->parentNode->nodeType) {
 				$m = $m->parentNode;
 				// Is there any case where parent node is not an element?
-				if ($m->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( !empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							break;
@@ -770,10 +770,10 @@ trait QueryFilters
 			if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 				$found->attach($m);
 			} else {
-				while ($m->parentNode->nodeType !== XML_DOCUMENT_NODE) {
+				while (XML_DOCUMENT_NODE !== $m->parentNode->nodeType) {
 					$m = $m->parentNode;
 					// Is there any case where parent node is not an element?
-					if ($m->nodeType === XML_ELEMENT_NODE && QueryPath::with($m, null,
+					if (XML_ELEMENT_NODE === $m->nodeType && QueryPath::with($m, null,
 							$this->options)->is($selector) > 0) {
 						$found->attach($m);
 						break;
@@ -808,10 +808,10 @@ trait QueryFilters
 	{
 		$found = new \SplObjectStorage();
 		foreach ($this->matches as $m) {
-			while ($m->parentNode->nodeType !== XML_DOCUMENT_NODE) {
+			while (XML_DOCUMENT_NODE !== $m->parentNode->nodeType) {
 				$m = $m->parentNode;
 				// Is there any case where parent node is not an element?
-				if ($m->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( !empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							$found->attach($m);
@@ -851,10 +851,10 @@ trait QueryFilters
 	{
 		$found = new \SplObjectStorage();
 		foreach ($this->matches as $m) {
-			while ($m->parentNode->nodeType !== XML_DOCUMENT_NODE) {
+			while (XML_DOCUMENT_NODE !== $m->parentNode->nodeType) {
 				$m = $m->parentNode;
 				// Is there any case where parent node is not an element?
-				if ($m->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( !empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							$found->attach($m);
@@ -896,7 +896,7 @@ trait QueryFilters
 		foreach ($this->matches as $m) {
 			while (isset($m->nextSibling)) {
 				$m = $m->nextSibling;
-				if ($m->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( !empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							$found->attach($m);
@@ -940,7 +940,7 @@ trait QueryFilters
 		foreach ($this->matches as $m) {
 			while (isset($m->nextSibling)) {
 				$m = $m->nextSibling;
-				if ($m->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( !empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 							$found->attach($m);
@@ -983,7 +983,7 @@ trait QueryFilters
 		foreach ($this->matches as $m) {
 			while (isset($m->previousSibling)) {
 				$m = $m->previousSibling;
-				if ($m->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( !empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector)) {
 							$found->attach($m);
@@ -1027,7 +1027,7 @@ trait QueryFilters
 		foreach ($this->matches as $m) {
 			while (isset($m->previousSibling)) {
 				$m = $m->previousSibling;
-				if ($m->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( !empty($selector)) {
 						if (QueryPath::with($m, null, $this->options)->is($selector)) {
 							$found->attach($m);
@@ -1072,7 +1072,7 @@ trait QueryFilters
 		}
 		foreach ($this->matches as $m) {
 			foreach ($m->childNodes as $c) {
-				if ($c->nodeType === XML_ELEMENT_NODE) {
+				if (XML_ELEMENT_NODE === $c->nodeType) {
 					// This is basically an optimized filter() just for children().
 					if ($filter) {
 						$tmp->attach($c);
@@ -1162,7 +1162,7 @@ trait QueryFilters
 		foreach ($this->matches as $m) {
 			$parent = $m->parentNode;
 			foreach ($parent->childNodes as $n) {
-				if ($n->nodeType === XML_ELEMENT_NODE && $n !== $m) {
+				if (XML_ELEMENT_NODE === $n->nodeType && $n !== $m) {
 					$found->attach($n);
 				}
 			}

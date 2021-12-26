@@ -69,7 +69,7 @@ trait QueryMutators
 	{
 		$data = $this->prepareInsert($data);
 		if (isset($data)) {
-			if (empty($this->document->documentElement) && $this->matches->count() === 0) {
+			if (empty($this->document->documentElement) && 0 === $this->matches->count()) {
 				// Then we assume we are writing to the doc root
 				$this->document->appendChild($data);
 				$found = new \SplObjectStorage();
@@ -475,7 +475,7 @@ trait QueryMutators
 	 */
 	public function wrapAll($markup)
 	{
-		if ($this->matches->count() === 0) {
+		if (0 === $this->matches->count()) {
 			return;
 		}
 
@@ -851,7 +851,7 @@ trait QueryMutators
 
 		// Return a clone DOMQuery with just the removed items. If
 		// no items are found, this will return an empty DOMQuery.
-		return count($found) === 0 ? new static() : new static($found);
+		return 0 === count($found) ? new static() : new static($found);
 	}
 
 	/**
@@ -984,7 +984,7 @@ trait QueryMutators
 	{
 		// Default case: Return all attributes as an assoc array.
 		if (is_null($name)) {
-			if ($this->matches->count() === 0) {
+			if (0 === $this->matches->count()) {
 				return null;
 			}
 			$ele = $this->getFirstMatch();
@@ -1019,12 +1019,12 @@ trait QueryMutators
 		}
 
 		//getter
-		if ($this->matches->count() === 0) {
+		if (0 === $this->matches->count()) {
 			return null;
 		}
 
 		// Special node type handler:
-		if ($name === 'nodeType') {
+		if ('nodeType' === $name) {
 			return $this->getFirstMatch()->nodeType;
 		}
 
@@ -1091,7 +1091,7 @@ trait QueryMutators
 					$item = trim($item);
 
 					// Skip empty attributes.
-					if ($item === '') {
+					if ('' === $item) {
 						continue;
 					}
 
