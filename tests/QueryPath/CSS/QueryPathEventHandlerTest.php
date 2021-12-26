@@ -582,7 +582,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$handler->find('#one');
 		$matches = $handler->getMatches();
 		$peers = $handler->listPeerElements($this->firstMatch($matches));
-		$this->assertSame(6, count($peers));
+		$this->assertCount(6, $peers);
 	}
 
 	/*

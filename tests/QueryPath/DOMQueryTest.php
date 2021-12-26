@@ -39,54 +39,54 @@ class DOMQueryTest extends TestCase
 		// From XML file
 		$file = DATA_FILE;
 		$qp = qp($file);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// From XML file with context
 		$cxt = stream_context_create();
 		$qp = qp($file, null, ['context' => $cxt]);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// From XML string
 		$str = '<?xml version="1.0" ?><root><inner/></root>';
 		$qp = qp($str);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// From SimpleXML
 		$str = '<?xml version="1.0" ?><root><inner/></root>';
 		$qp = qp(simplexml_load_string($str));
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// Test from DOMDocument
 		$doc = new \DOMDocument();
 		$doc->loadXML($str);
 		$qp = qp($doc);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// Now with a selector:
 		$qp = qp($file, '#head');
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertSame($qp->get(0)->tagName, 'head');
 
 		// Test HTML:
 		$htmlFile = DATA_HTML_FILE;
 		$qp = qp($htmlFile);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// Test with another DOMQuery.
 		$qp = qp($qp);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// Test from array of DOMNodes
 		$array = $qp->get();
 		$qp = qp($array);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 	}
 
@@ -98,24 +98,24 @@ class DOMQueryTest extends TestCase
 	public function testDOMQueryHtmlConstructors()
 	{
 		$qp = htmlqp(QueryPath::HTML_STUB);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// Bad BR tag.
 		$borken = '<html><head></head><body><br></body></html>';
 		$qp = htmlqp($borken);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// XHTML Faker
 		$borken = '<?xml version="1.0"?><html><head></head><body><br></body></html>';
 		$qp = htmlqp($borken);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// HTML in a file that looks like XML.
 		$qp = htmlqp(HTML_IN_XML_FILE);
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
 		// HTML5
@@ -336,19 +336,19 @@ class DOMQueryTest extends TestCase
 	{
 		$file = DATA_FILE;
 		$qp = qp($file)->find('#head');
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertSame($qp->get(0)->tagName, 'head');
 
 		$this->assertSame('inner', qp($file)->find('.innerClass')->tag());
 
 		$string = '<?xml version="1.0"?><root><a/>Test</root>';
 		$qp = qp($string)->find('root');
-		$this->assertSame(1, count($qp->get()), 'Check tag.');
+		$this->assertCount(1, $qp->get(), 'Check tag.');
 		$this->assertSame($qp->get(0)->tagName, 'root');
 
 		$string = '<?xml version="1.0"?><root class="findme">Test</root>';
 		$qp = qp($string)->find('.findme');
-		$this->assertSame(1, count($qp->get()), 'Check class.');
+		$this->assertCount(1, $qp->get(), 'Check class.');
 		$this->assertSame($qp->get(0)->tagName, 'root');
 	}
 
@@ -356,19 +356,19 @@ class DOMQueryTest extends TestCase
 	{
 		$file = DATA_FILE;
 		$qp = qp($file)->find('#head');
-		$this->assertSame(1, count($qp->get()));
+		$this->assertCount(1, $qp->get());
 		$this->assertSame($qp->get(0)->tagName, 'head');
 
 		$this->assertSame('inner', qp($file)->find('.innerClass')->tag());
 
 		$string = '<?xml version="1.0"?><root><a/>Test</root>';
 		$qp = qp($string)->find('root');
-		$this->assertSame(1, count($qp->get()), 'Check tag.');
+		$this->assertCount(1, $qp->get(), 'Check tag.');
 		$this->assertSame($qp->get(0)->tagName, 'root');
 
 		$string = '<?xml version="1.0"?><root class="findme">Test</root>';
 		$qp = qp($string)->find('.findme');
-		$this->assertSame(1, count($qp->get()), 'Check class.');
+		$this->assertCount(1, $qp->get(), 'Check class.');
 		$this->assertSame($qp->get(0)->tagName, 'root');
 	}
 
@@ -413,7 +413,7 @@ class DOMQueryTest extends TestCase
 		$xml = '<?xml version="1.0"?><root><one a1="1" a2="2" a3="3"/></root>';
 		$qp = qp($xml, 'one');
 		$attrs = $qp->attr();
-		$this->assertSame(3, count($attrs), 'Three attributes');
+		$this->assertCount(3, $attrs, 'Three attributes');
 		$this->assertSame('1', $attrs['a1'], 'Attribute a1 has value 1.');
 	}
 
@@ -508,7 +508,7 @@ class DOMQueryTest extends TestCase
 		$list = new \SplDoublyLinkedList();
 		$list->push($ele);
 		$list->push($ele2);
-		$this->assertSame(2, count($list));
+		$this->assertCount(2, $list);
 		//$this->assertEquals(2, )
 		$this->assertTrue($qp->top('#one,#two')->is($list));
 	}
@@ -995,7 +995,7 @@ class DOMQueryTest extends TestCase
 		// Test for Issue #63
 		$qp = qp($data);
 		$rem = $qp->remove('noSuchElement');
-		$this->assertSame(0, count($rem));
+		$this->assertCount(0, $rem);
 	}
 
 	public function testHasClass()
@@ -1075,7 +1075,7 @@ class DOMQueryTest extends TestCase
       </div>
     </body></html>';
 		$cr = $this->contentsRecurse(qp($xml));
-		$this->assertSame(14, count($cr), implode("\n", $cr));
+		$this->assertCount(14, $cr, implode("\n", $cr));
 	}
 
 	public function testNS()
@@ -1306,7 +1306,7 @@ class DOMQueryTest extends TestCase
 		// Test writing to a file:
 		$name = './' . __FUNCTION__ . '.xml';
 		qp($xml)->writeXML($name);
-		$this->assertTrue(file_exists($name));
+		$this->assertFileExists($name);
 		$this->assertTrue(qp($name) instanceof DOMQuery);
 		unlink($name);
 	}
@@ -1346,7 +1346,7 @@ class DOMQueryTest extends TestCase
 		// Test writing to a file:
 		$name = './' . __FUNCTION__ . '.xml';
 		qp($xml)->writeXHTML($name);
-		$this->assertTrue(file_exists($name));
+		$this->assertFileExists($name);
 		$this->assertTrue(qp($name) instanceof DOMQuery);
 		unlink($name);
 
@@ -1448,7 +1448,7 @@ class DOMQueryTest extends TestCase
 		// Test writing to a file:
 		$name = './' . __FUNCTION__ . '.html';
 		qp($xml)->writeXML($name);
-		$this->assertTrue(file_exists($name));
+		$this->assertFileExists($name);
 		$this->assertTrue(qp($name) instanceof DOMQuery);
 		unlink($name);
 	}
@@ -1502,7 +1502,7 @@ class DOMQueryTest extends TestCase
 		// Test writing to a file:
 		$name = './' . __FUNCTION__ . '.html';
 		qp($xml)->writeXML($name);
-		$this->assertTrue(file_exists($name));
+		$this->assertFileExists($name);
 		$this->assertTrue(qp($name) instanceof DOMQuery);
 		unlink($name);
 	}
@@ -1581,7 +1581,7 @@ class DOMQueryTest extends TestCase
 		$i = 0;
 		while ($qp->next('p')->html() != null) {
 			$qp = $qp->next('p');
-			$this->assertSame(1, count($qp));
+			$this->assertCount(1, $qp);
 			$this->assertSame($testarray[$i], $qp->text(), $i . " didn't match " . $qp->top()->xml());
 			$i++;
 		}
@@ -1744,7 +1744,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(5, $qp->count());
 
 		// Test that this is exposed to PHP's Countable logic.
-		$this->assertSame(5, count(qp($file, 'li')));
+		$this->assertCount(5, qp($file, 'li'));
 	}
 
 	public function testLength()
@@ -2023,7 +2023,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('data:text/plain;base64,SGkh', $qp->attr('secret'), 'Attr value should be data URL.');
 
 		$result = $qp->dataURL('secret');
-		$this->assertSame(2, count($result), 'Should return two-array.');
+		$this->assertCount(2, $result, 'Should return two-array.');
 		$this->assertSame($text, $result['data'], 'Should return original data, decoded.');
 		$this->assertSame('text/plain', $result['mime'], 'Should return the original MIME');
 	}

@@ -23,7 +23,7 @@ class SelectorTest extends TestCase
 	{
 		$selector = $this->parse('test')->toArray();
 
-		$this->assertSame(1, count($selector));
+		$this->assertCount(1, $selector);
 		$this->assertSame('test', $selector[0]['0']->element);
 	}
 
@@ -31,7 +31,7 @@ class SelectorTest extends TestCase
 	{
 		$selector = $this->parse('foo|test')->toArray();
 
-		$this->assertSame(1, count($selector));
+		$this->assertCount(1, $selector);
 		$this->assertSame('test', $selector[0]['0']->element);
 		$this->assertSame('foo', $selector[0]['0']->ns);
 	}
@@ -40,7 +40,7 @@ class SelectorTest extends TestCase
 	{
 		$selector = $this->parse('#test')->toArray();
 
-		$this->assertSame(1, count($selector));
+		$this->assertCount(1, $selector);
 		$this->assertSame('test', $selector[0][0]->id);
 	}
 
@@ -48,7 +48,7 @@ class SelectorTest extends TestCase
 	{
 		$selector = $this->parse('.test')->toArray();
 
-		$this->assertSame(1, count($selector));
+		$this->assertCount(1, $selector);
 		$this->assertSame('test', $selector[0][0]->classes[0]);
 
 		$selector = $this->parse('.test.foo.bar')->toArray();
@@ -60,10 +60,10 @@ class SelectorTest extends TestCase
 	public function testAttributes()
 	{
 		$selector = $this->parse('foo[bar=baz]')->toArray();
-		$this->assertSame(1, count($selector));
+		$this->assertCount(1, $selector);
 		$attrs = $selector[0][0]->attributes;
 
-		$this->assertSame(1, count($attrs));
+		$this->assertCount(1, $attrs);
 
 		$attr = $attrs[0];
 		$this->assertSame('bar', $attr['name']);
@@ -91,7 +91,7 @@ class SelectorTest extends TestCase
 		$selector = $this->parse('foo:first')->toArray();
 		$pseudo = $selector[0][0]->pseudoClasses;
 
-		$this->assertSame(1, count($pseudo));
+		$this->assertCount(1, $pseudo);
 
 		$this->assertSame('first', $pseudo[0]['name']);
 	}
@@ -101,7 +101,7 @@ class SelectorTest extends TestCase
 		$selector = $this->parse('foo::bar')->toArray();
 		$pseudo = $selector[0][0]->pseudoElements;
 
-		$this->assertSame(1, count($pseudo));
+		$this->assertCount(1, $pseudo);
 
 		$this->assertSame('bar', $pseudo[0]);
 	}
