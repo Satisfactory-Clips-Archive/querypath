@@ -71,8 +71,7 @@ class QPXML implements Extension
 				$element->appendChild($cdata);
 			}
 
-			return $this->qp;
-			;
+			return $this->qp;;
 		}
 
 		// Look for CDATA sections.
