@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS;
 
+use function chr;
+use function ord;
+
 /**
  * Scanner for CSS selector parsing.
  *
@@ -39,7 +42,7 @@ final class Scanner
 	/**
 	 * Return the position of the reader in the string.
 	 */
-	public function position(): int
+	public function position() : int
 	{
 		return $this->is->position;
 	}
@@ -50,7 +53,7 @@ final class Scanner
 	 * @return string
 	 * Returns the next character on the stack
 	 */
-	public function peek(): string
+	public function peek() : string
 	{
 		return $this->is->peek();
 	}
@@ -61,15 +64,15 @@ final class Scanner
 	 * This sets the current token to the value of the next token in
 	 * the stream.
 	 *
-	 * @throws ParseException
 	 * @throws \QueryPath\Exception
+	 * @throws ParseException
 	 *
 	 * @return false|int
 	 *  Returns an int value corresponding to one of the Token constants,
 	 *  or FALSE if the end of the string is reached. (Remember to use
 	 *  strong equality checking on FALSE, since 0 is a valid token id.)
 	 */
-	public function nextToken(): int|false
+	public function nextToken() : int|false
 	{
 		$tok = -1;
 		++$this->it;
@@ -232,7 +235,7 @@ final class Scanner
 			// The second conjunct is probably not necessary.
 			while (false !== $this->token && $this->token > -1) {
 				//print "Char: $this->value \n";
-				if (Token::BSLASH == $this->token && !$escape) {
+				if (Token::BSLASH == $this->token && ! $escape) {
 					// XXX: The backslash (\) is removed here.
 					// Turn on escaping.
 					//$buf .= $this->value;
@@ -269,7 +272,7 @@ final class Scanner
 			// The second conjunct is probably not necessary.
 			while (false !== $this->token && $this->token > -1) {
 				//print "Char: $this->value \n";
-				if (Token::BSLASH === $this->token && !$escape) {
+				if (Token::BSLASH === $this->token && ! $escape) {
 					// XXX: The backslash (\) is removed here.
 					// Turn on escaping.
 					//$buf .= $this->value;
@@ -305,7 +308,7 @@ final class Scanner
 	 * the Token::white and Token::char definitions.
 	 *
 	 * @deprecated this is not used anywhere in QueryPath
-	 *//*
+	 */ /*
   public function getStringPlusWhitespace() {
 	$buf = '';
 	if($this->token === FALSE) {return '';}

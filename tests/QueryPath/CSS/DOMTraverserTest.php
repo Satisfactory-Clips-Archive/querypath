@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace QueryPathTests\CSS;
 
+use function count;
+use function define;
+use DOMDocument;
+use const PHP_EOL;
 use QueryPath\CSS\DOMTraverser;
 use QueryPathTests\TestCase;
+use SPLObjectStorage;
+use const STDOUT;
 
 define('TRAVERSER_XML', __DIR__ . '/../../DOMTraverserTest.xml');
 
@@ -24,34 +30,16 @@ class DOMTraverserTest extends TestCase
 
 	public function testConstructor()
 	{
-		$dom = new \DOMDocument('1.0');
+		$dom = new DOMDocument('1.0');
 		$dom->load($this->xml_file);
 
-		$splos = new \SPLObjectStorage();
+		$splos = new SPLObjectStorage();
 		$splos->attach($dom);
 
 		$traverser = new DOMTraverser($splos);
 
 		$this->assertInstanceOf('\QueryPath\CSS\Traverser', $traverser);
 		$this->assertInstanceOf('\QueryPath\CSS\DOMTraverser', $traverser);
-	}
-
-	protected function traverser()
-	{
-		$dom = new \DOMDocument('1.0');
-		$dom->load($this->xml_file);
-
-		$splos = new \SPLObjectStorage();
-		$splos->attach($dom->documentElement);
-
-		$traverser = new DOMTraverser($splos);
-
-		return $traverser;
-	}
-
-	protected function find($selector)
-	{
-		return $this->traverser()->find($selector)->matches();
 	}
 
 	public function testFind()
@@ -364,5 +352,22 @@ class DOMTraverserTest extends TestCase
 		$matches = $this->find('one, two');
 		$this->assertCount(2, $matches);
 	}
-}
 
+	protected function traverser()
+	{
+		$dom = new DOMDocument('1.0');
+		$dom->load($this->xml_file);
+
+		$splos = new SPLObjectStorage();
+		$splos->attach($dom->documentElement);
+
+		$traverser = new DOMTraverser($splos);
+
+		return $traverser;
+	}
+
+	protected function find($selector)
+	{
+		return $this->traverser()->find($selector)->matches();
+	}
+}

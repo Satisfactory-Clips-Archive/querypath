@@ -4,25 +4,32 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use Countable;
+use DOMDocument;
 use DOMNode;
+use const FILTER_FLAG_ENCODE_LOW;
+use const FILTER_UNSAFE_RAW;
+use function function_exists;
+use function get_class;
+use function gettype;
+use function is_array;
+use function is_object;
+use function is_string;
+use IteratorAggregate;
 use QueryPath\CSS\DOMTraverser;
-use QueryPath\Entities;
+use SimpleXMLElement;
+use SplObjectStorage;
+use function strlen;
+use Traversable;
+use const XML_ELEMENT_NODE;
 
 /**
  * Class DOM.
  *
- * @package QueryPath
- *
- * @property array|\SplObjectStorage|\Traversable matches
+ * @property array|SplObjectStorage|Traversable matches
  */
-abstract class DOM implements Query, \IteratorAggregate, \Countable
+abstract class DOM implements Query, IteratorAggregate, Countable
 {
-
-	/**
-	 * The array of matches.
-	 */
-	protected $matches = [];
-
 	/**
 	 * Default parser flags.
 	 *
@@ -36,6 +43,11 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	public const JS_CSS_ESCAPE_CDATA_CCOMMENT = '/* \\1 */';
 	public const JS_CSS_ESCAPE_CDATA_DOUBLESLASH = '// \\1';
 	public const JS_CSS_ESCAPE_NONE = '';
+
+	/**
+	 * The array of matches.
+	 */
+	protected $matches = [];
 
 	protected $errTypes = 771; //E_ERROR; | E_USER_ERROR;
 
@@ -75,7 +87,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		$this->options = $options + Options::get() + $this->options;
 
 		$parser_flags = $options['parser_flags'] ?? self::DEFAULT_PARSER_FLAGS;
-		if ( !empty($this->options['ignore_parser_warnings'])) {
+		if ( ! empty($this->options['ignore_parser_warnings'])) {
 			// Don't convert parser warnings into exceptions.
 			$this->errTypes = 257; //E_ERROR | E_USER_ERROR;
 		} elseif (isset($this->options['exception_level'])) {
@@ -87,18 +99,17 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 
 		// Empty: Just create an empty QP.
 		if (empty($document)) {
-			$this->document = isset($this->options['encoding']) ? new \DOMDocument('1.0',
-				$this->options['encoding']) : new \DOMDocument();
-			$this->setMatches(new \SplObjectStorage());
+			$this->document = isset($this->options['encoding']) ? new DOMDocument('1.0',
+				$this->options['encoding']) : new DOMDocument();
+			$this->setMatches(new SplObjectStorage());
 		} // Figure out if document is DOM, HTML/XML, or a filename
 		elseif (is_object($document)) {
-
 			// This is the most frequent object type.
-			if ($document instanceof \SplObjectStorage) {
+			if ($document instanceof SplObjectStorage) {
 				$this->matches = $document;
 				if (0 !== $document->count()) {
 					$first = $this->getFirstMatch();
-					if ( !empty($first->ownerDocument)) {
+					if ( ! empty($first->ownerDocument)) {
 						$this->document = $first->ownerDocument;
 					}
 				}
@@ -108,18 +119,18 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 				if ($this->matches->count() > 0) {
 					$this->document = $this->getFirstMatch()->ownerDocument;
 				}
-			} elseif ($document instanceof \DOMDocument) {
+			} elseif ($document instanceof DOMDocument) {
 				$this->document = $document;
 				//$this->matches = $this->matches($document->documentElement);
 				$this->setMatches($document->documentElement);
-			} elseif ($document instanceof \DOMNode) {
+			} elseif ($document instanceof DOMNode) {
 				$this->document = $document->ownerDocument;
 				//$this->matches = array($document);
 				$this->setMatches($document);
 			} elseif ($document instanceof \Masterminds\HTML5) {
 				$this->document = $document;
 				$this->setMatches($document->documentElement);
-			} elseif ($document instanceof \SimpleXMLElement) {
+			} elseif ($document instanceof SimpleXMLElement) {
 				$import = dom_import_simplexml($document);
 				$this->document = $import->ownerDocument;
 				//$this->matches = array($import);
@@ -129,8 +140,8 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			}
 		} elseif (is_array($document)) {
 			//trigger_error('Detected deprecated array support', E_USER_NOTICE);
-			if ( !empty($document) && $document[0] instanceof \DOMNode) {
-				$found = new \SplObjectStorage();
+			if ( ! empty($document) && $document[0] instanceof DOMNode) {
+				$found = new SplObjectStorage();
 				foreach ($document as $item) {
 					$found->attach($item);
 				}
@@ -143,7 +154,6 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			$this->document = $this->parseXMLString($document);
 			$this->setMatches($this->document->documentElement);
 		} else {
-
 			// $document is a filename
 			$context = empty($options['context']) ? null : $options['context'];
 			$this->document = $this->parseXMLFile($document, $parser_flags, $context);
@@ -167,63 +177,6 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		}
 	}
 
-	private function parseXMLString($string, $flags = null)
-	{
-		$document = new \DOMDocument('1.0');
-		$lead = strtolower(substr($string, 0, 5)); // <?xml
-		try {
-			set_error_handler([ParseException::class, 'initializeFromError'], $this->errTypes);
-
-			if (isset($this->options['convert_to_encoding'])) {
-				// Is there another way to do this?
-
-				$from_enc = $this->options['convert_from_encoding'] ?? 'auto';
-				$to_enc = $this->options['convert_to_encoding'];
-
-				if (function_exists('mb_convert_encoding')) {
-					$string = mb_convert_encoding($string, $to_enc, $from_enc);
-				}
-			}
-
-			// This is to avoid cases where low ascii digits have slipped into HTML.
-			// AFAIK, it should not adversly effect UTF-8 documents.
-			if ( !empty($this->options['strip_low_ascii'])) {
-				$string = filter_var($string, FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW);
-			}
-
-			// Allow users to override parser settings.
-			$useParser = '';
-			if ( !empty($this->options['use_parser'])) {
-				$useParser = strtolower($this->options['use_parser']);
-			}
-
-			// If HTML parser is requested, we use it.
-			if ('html' === $useParser) {
-				$document->loadHTML($string);
-			} // Parse as XML if it looks like XML, or if XML parser is requested.
-			elseif ('<?xml' === $lead || 'xml' === $useParser) {
-				if ($this->options['replace_entities']) {
-					$string = Entities::replaceAllEntities($string);
-				}
-				$document->loadXML($string, $flags ?? 0);
-			} // In all other cases, we try the HTML parser.
-			else {
-				$document->loadHTML($string);
-			}
-		} // Emulate 'finally' behavior.
-		catch (Exception $e) {
-			restore_error_handler();
-			throw $e;
-		}
-		restore_error_handler();
-
-		if (empty($document)) {
-			throw new \QueryPath\ParseException('Unknown parser exception.');
-		}
-
-		return $document;
-	}
-
 	/**
 	 * EXPERT: Be very, very careful using this.
 	 * A utility function for setting the current set of matches.
@@ -240,12 +193,12 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		$this->last = $this->matches;
 
 		// Just set current matches.
-		if ($matches instanceof \SplObjectStorage) {
+		if ($matches instanceof SplObjectStorage) {
 			$this->matches = $matches;
 		} // This is likely legacy code that needs conversion.
 		elseif (is_array($matches)) {
 			trigger_error('Legacy array detected.');
-			$tmp = new \SplObjectStorage();
+			$tmp = new SplObjectStorage();
 			foreach ($matches as $m) {
 				$tmp->attach($m);
 			}
@@ -254,7 +207,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		// For non-arrays, try to create a new match set and
 		// add this object.
 		else {
-			$found = new \SplObjectStorage();
+			$found = new SplObjectStorage();
 			if (isset($matches)) {
 				$found->attach($matches);
 			}
@@ -283,13 +236,13 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * @return array
 	 *  Returns an array of DOM nodes
 	 */
-	protected function deepestNode(\DOMNode $ele, $depth = 0, $current = null, &$deepest = null)
+	protected function deepestNode(DOMNode $ele, $depth = 0, $current = null, &$deepest = null)
 	{
 		// FIXME: Should this use SplObjectStorage?
-		if ( !isset($current)) {
+		if ( ! isset($current)) {
 			$current = [$ele];
 		}
-		if ( !isset($deepest)) {
+		if ( ! isset($deepest)) {
 			$deepest = $depth;
 		}
 		if ($ele->hasChildNodes()) {
@@ -323,9 +276,9 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * @param mixed $item
 	 *  Item to prepare for insert
 	 *
+	 * @throws Exception
 	 * @throws queryPath::Exception
 	 *  Thrown if the object passed in is not of a supprted object type
-	 * @throws Exception
 	 *
 	 * @return mixed
 	 *  Returns the prepared item
@@ -333,7 +286,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	protected function prepareInsert($item)
 	{
 		if (empty($item)) {
-			return null;
+			return;
 		}
 
 		if (is_string($item)) {
@@ -358,7 +311,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 
 		if ($item instanceof self) {
 			if (0 === $item->count()) {
-				return null;
+				return;
 			}
 
 			$frag = $this->document->createDocumentFragment();
@@ -369,7 +322,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			return $frag;
 		}
 
-		if ($item instanceof \DOMNode) {
+		if ($item instanceof DOMNode) {
 			if ($item->ownerDocument !== $this->document) {
 				// Deep clone this and attach it to this document
 				$item = $this->document->importNode($item, true);
@@ -378,7 +331,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			return $item;
 		}
 
-		if ($item instanceof \SimpleXMLElement) {
+		if ($item instanceof SimpleXMLElement) {
 			$element = dom_import_simplexml($item);
 
 			return $this->document->importNode($element, true);
@@ -396,92 +349,6 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		$this->matches->rewind();
 
 		return $this->matches->current();
-	}
-
-	/**
-	 * Parse an XML or HTML file.
-	 *
-	 * This attempts to autodetect the type of file, and then parse it.
-	 *
-	 * @param string $filename
-	 *  The file name to parse
-	 * @param int $flags
-	 *  The OR-combined flags accepted by the DOM parser. See the PHP documentation
-	 *  for DOM or for libxml.
-	 * @param resource $context
-	 *  The stream context for the file IO. If this is set, then an alternate
-	 *  parsing path is followed: The file is loaded by PHP's stream-aware IO
-	 *  facilities, read entirely into memory, and then handed off to
-	 *  {@link parseXMLString()}. On large files, this can have a performance impact.
-	 *
-	 * @throws \QueryPath\ParseException
-	 *  Thrown when a file cannot be loaded or parsed
-	 */
-	private function parseXMLFile($filename, $flags = null, $context = null)
-	{
-
-		// If a context is specified, we basically have to do the reading in
-		// two steps:
-		if ( !empty($context)) {
-			try {
-				set_error_handler(['\QueryPath\ParseException', 'initializeFromError'], $this->errTypes);
-				$contents = file_get_contents($filename, false, $context);
-			}
-			// Apparently there is no 'finally' in PHP, so we have to restore the error
-			// handler this way:
-			catch (Exception $e) {
-				restore_error_handler();
-				throw $e;
-			}
-			restore_error_handler();
-
-			if (false == $contents) {
-				throw new \QueryPath\ParseException(sprintf('Contents of the file %s could not be retrieved.',
-					$filename));
-			}
-
-			return $this->parseXMLString($contents, $flags);
-		}
-
-		$document = new \DOMDocument();
-		$lastDot = strrpos($filename, '.');
-
-		$htmlExtensions = [
-			'.html' => 1,
-			'.htm' => 1,
-		];
-
-		// Allow users to override parser settings.
-		if (empty($this->options['use_parser'])) {
-			$useParser = '';
-		} else {
-			$useParser = strtolower($this->options['use_parser']);
-		}
-
-		$ext = false !== $lastDot ? strtolower(substr($filename, $lastDot)) : '';
-
-		try {
-			set_error_handler([ParseException::class, 'initializeFromError'], $this->errTypes);
-
-			// If the parser is explicitly set to XML, use that parser.
-			if ('xml' === $useParser) {
-				$document->load($filename, $flags);
-			} // Otherwise, see if it looks like HTML.
-			elseif ('html' === $useParser || isset($htmlExtensions[$ext])) {
-				// Try parsing it as HTML.
-				$document->loadHTMLFile($filename);
-			} // Default to XML.
-			else {
-				$document->load($filename, $flags ?? 0);
-			}
-		} // Emulate 'finally' behavior.
-		catch (Exception $e) {
-			restore_error_handler();
-			throw $e;
-		}
-		restore_error_handler();
-
-		return $document;
 	}
 
 	/**
@@ -531,5 +398,147 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 				return $m;
 			}
 		}
+	}
+
+	private function parseXMLString($string, $flags = null)
+	{
+		$document = new DOMDocument('1.0');
+		$lead = strtolower(substr($string, 0, 5)); // <?xml
+		try {
+			set_error_handler([ParseException::class, 'initializeFromError'], $this->errTypes);
+
+			if (isset($this->options['convert_to_encoding'])) {
+				// Is there another way to do this?
+
+				$from_enc = $this->options['convert_from_encoding'] ?? 'auto';
+				$to_enc = $this->options['convert_to_encoding'];
+
+				if (function_exists('mb_convert_encoding')) {
+					$string = mb_convert_encoding($string, $to_enc, $from_enc);
+				}
+			}
+
+			// This is to avoid cases where low ascii digits have slipped into HTML.
+			// AFAIK, it should not adversly effect UTF-8 documents.
+			if ( ! empty($this->options['strip_low_ascii'])) {
+				$string = filter_var($string, FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW);
+			}
+
+			// Allow users to override parser settings.
+			$useParser = '';
+			if ( ! empty($this->options['use_parser'])) {
+				$useParser = strtolower($this->options['use_parser']);
+			}
+
+			// If HTML parser is requested, we use it.
+			if ('html' === $useParser) {
+				$document->loadHTML($string);
+			} // Parse as XML if it looks like XML, or if XML parser is requested.
+			elseif ('<?xml' === $lead || 'xml' === $useParser) {
+				if ($this->options['replace_entities']) {
+					$string = Entities::replaceAllEntities($string);
+				}
+				$document->loadXML($string, $flags ?? 0);
+			} // In all other cases, we try the HTML parser.
+			else {
+				$document->loadHTML($string);
+			}
+		} // Emulate 'finally' behavior.
+		catch (Exception $e) {
+			restore_error_handler();
+			throw $e;
+		}
+		restore_error_handler();
+
+		if (empty($document)) {
+			throw new \QueryPath\ParseException('Unknown parser exception.');
+		}
+
+		return $document;
+	}
+
+	/**
+	 * Parse an XML or HTML file.
+	 *
+	 * This attempts to autodetect the type of file, and then parse it.
+	 *
+	 * @param string $filename
+	 *  The file name to parse
+	 * @param int $flags
+	 *  The OR-combined flags accepted by the DOM parser. See the PHP documentation
+	 *  for DOM or for libxml.
+	 * @param resource $context
+	 *  The stream context for the file IO. If this is set, then an alternate
+	 *  parsing path is followed: The file is loaded by PHP's stream-aware IO
+	 *  facilities, read entirely into memory, and then handed off to
+	 *  {@link parseXMLString()}. On large files, this can have a performance impact.
+	 *
+	 * @throws \QueryPath\ParseException
+	 *  Thrown when a file cannot be loaded or parsed
+	 */
+	private function parseXMLFile($filename, $flags = null, $context = null)
+	{
+		// If a context is specified, we basically have to do the reading in
+		// two steps:
+		if ( ! empty($context)) {
+			try {
+				set_error_handler(['\QueryPath\ParseException', 'initializeFromError'], $this->errTypes);
+				$contents = file_get_contents($filename, false, $context);
+			}
+			// Apparently there is no 'finally' in PHP, so we have to restore the error
+			// handler this way:
+			catch (Exception $e) {
+				restore_error_handler();
+				throw $e;
+			}
+			restore_error_handler();
+
+			if (false == $contents) {
+				throw new \QueryPath\ParseException(sprintf('Contents of the file %s could not be retrieved.',
+					$filename));
+			}
+
+			return $this->parseXMLString($contents, $flags);
+		}
+
+		$document = new DOMDocument();
+		$lastDot = strrpos($filename, '.');
+
+		$htmlExtensions = [
+			'.html' => 1,
+			'.htm' => 1,
+		];
+
+		// Allow users to override parser settings.
+		if (empty($this->options['use_parser'])) {
+			$useParser = '';
+		} else {
+			$useParser = strtolower($this->options['use_parser']);
+		}
+
+		$ext = false !== $lastDot ? strtolower(substr($filename, $lastDot)) : '';
+
+		try {
+			set_error_handler([ParseException::class, 'initializeFromError'], $this->errTypes);
+
+			// If the parser is explicitly set to XML, use that parser.
+			if ('xml' === $useParser) {
+				$document->load($filename, $flags);
+			} // Otherwise, see if it looks like HTML.
+			elseif ('html' === $useParser || isset($htmlExtensions[$ext])) {
+				// Try parsing it as HTML.
+				$document->loadHTMLFile($filename);
+			} // Default to XML.
+			else {
+				$document->load($filename, $flags ?? 0);
+			}
+		} // Emulate 'finally' behavior.
+		catch (Exception $e) {
+			restore_error_handler();
+			throw $e;
+		}
+		restore_error_handler();
+
+		return $document;
 	}
 }

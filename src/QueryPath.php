@@ -88,17 +88,17 @@ declare(strict_types=1);
  *
  * @version   -UNSTABLE% (3.x.x)
  */
+
 namespace QueryPath;
 
+use const FILTER_VALIDATE_URL;
+use function is_array;
+use function is_resource;
+use function is_string;
 use Masterminds\HTML5;
-use QueryPath\ExtensionRegistry;
 
-/**
- *
- */
 class QueryPath
 {
-
 	/**
 	 * The version string for this version of QueryPath.
 	 *
@@ -301,7 +301,7 @@ class QueryPath
 	 *   QueryPath assumes that these are extension class names,
 	 *   and attempts to register these as QueryPath extensions.
 	 */
-	public static function enable($extensionNames): void
+	public static function enable($extensionNames) : void
 	{
 		if (is_array($extensionNames)) {
 			foreach ($extensionNames as $extension) {

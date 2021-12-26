@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS;
 
+use function in_array;
+use const PHP_EOL;
 use QueryPath\Exception;
 
 /**
@@ -30,9 +32,9 @@ class Parser
 	protected $scanner;
 	protected $buffer = '';
 	protected $handler;
-	private $strict = false;
 
 	protected $DEBUG = false;
+	private $strict = false;
 
 	/**
 	 * Construct a new CSS parser object. This will attempt to
@@ -54,10 +56,10 @@ class Parser
 	 * fire events as the selector is handled. A EventHandler
 	 * implementation will be responsible for handling the events.
 	 *
-	 * @throws ParseException
 	 * @throws Exception
+	 * @throws ParseException
 	 */
-	public function parse(): void
+	public function parse() : void
 	{
 		$this->scanner->nextToken();
 
@@ -81,6 +83,11 @@ class Parser
 		}
 	}
 
+	public function getScanner() : Scanner
+	{
+		return $this->scanner;
+	}
+
 	/**
 	 * A restricted parser that can only parse simple selectors.
 	 * The pseudoClass handler for this parser will throw an
@@ -89,7 +96,7 @@ class Parser
 	 *
 	 * @deprecated this is not used anywhere in QueryPath and
 	 *  may be removed
-	 *//*
+	 */ /*
   public function parseSimpleSelector() {
 	while ($this->scanner->token !== FALSE) {
 	  if ($this->DEBUG) print "SIMPLE SELECTOR\n";
@@ -107,10 +114,10 @@ class Parser
 	/**
 	 * Handle an entire CSS selector.
 	 *
-	 * @throws ParseException
 	 * @throws Exception
+	 * @throws ParseException
 	 */
-	private function selector(): void
+	private function selector() : void
 	{
 		if ($this->DEBUG) {
 			echo 'SELECTOR' . $this->scanner->position() . PHP_EOL;
@@ -127,7 +134,7 @@ class Parser
 	 * @throws \QueryPath\CSS\ParseException
 	 * @throws Exception
 	 */
-	private function consumeWhitespace(): int
+	private function consumeWhitespace() : int
 	{
 		if ($this->DEBUG) {
 			echo 'CONSUME WHITESPACE' . PHP_EOL;
@@ -151,10 +158,10 @@ class Parser
 	 * @see EventHandler::anyDescendant(),
 	 * @see EventHandler::anotherSelector().
 	 *
-	 * @throws ParseException
 	 * @throws \QueryPath\Exception
+	 * @throws ParseException
 	 */
-	private function combinator(): void
+	private function combinator() : void
 	{
 		if ($this->DEBUG) {
 			echo 'COMBINATOR' . PHP_EOL;
@@ -217,7 +224,7 @@ class Parser
 	/**
 	 * Check if the token is a combinator.
 	 */
-	private function isCombinator(int $tok): bool
+	private function isCombinator(int $tok) : bool
 	{
 		return in_array($tok, [Token::PLUS, Token::RANGLE, Token::COMMA, Token::TILDE], true);
 	}
@@ -227,7 +234,7 @@ class Parser
 	 *
 	 * @throws ParseException
 	 */
-	private function simpleSelectors(): void
+	private function simpleSelectors() : void
 	{
 		if ($this->DEBUG) {
 			echo 'SIMPLE SELECTOR' . PHP_EOL;
@@ -247,7 +254,7 @@ class Parser
 	 * @throws \QueryPath\CSS\ParseException
 	 * @throws Exception
 	 */
-	private function elementID(): void
+	private function elementID() : void
 	{
 		if ($this->DEBUG) {
 			echo 'ELEMENT ID' . PHP_EOL;
@@ -267,7 +274,7 @@ class Parser
 	 * Handles CSS class selectors.
 	 * This will call the EventHandler::elementClass() method.
 	 */
-	private function elementClass(): void
+	private function elementClass() : void
 	{
 		if ($this->DEBUG) {
 			echo 'ELEMENT CLASS' . PHP_EOL;
@@ -292,10 +299,10 @@ class Parser
 	 *
 	 * @param mixed $restricted
 	 *
-	 * @throws ParseException
 	 * @throws Exception
+	 * @throws ParseException
 	 */
-	private function pseudoClass($restricted = false): void
+	private function pseudoClass($restricted = false) : void
 	{
 		if ($this->DEBUG) {
 			echo 'PSEUDO-CLASS' . PHP_EOL;
@@ -554,7 +561,7 @@ class Parser
 					}
 					$op = EventHandler::CONTAINS_IN_STRING;
 					break;
-				case Token::DOLLAR;
+				case Token::DOLLAR:
 					if (Token::EQ !== $this->scanner->nextToken()) {
 						$this->throwError(Token::EQ, $this->scanner->token);
 					}
@@ -621,12 +628,4 @@ class Parser
 		$filter = sprintf('Expected %s, got %s', Token::name($expected), Token::name($got));
 		throw new ParseException($filter);
 	}
-
-	/**
-	 */
-	public function getScanner(): Scanner
-	{
-		return $this->scanner;
-	}
 }
-

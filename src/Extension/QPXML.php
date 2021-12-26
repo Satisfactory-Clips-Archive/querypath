@@ -10,6 +10,9 @@ namespace QueryPath\Extension;
 use QueryPath\DOMQuery;
 use QueryPath\Extension;
 use QueryPath\QueryPath;
+use const XML_CDATA_SECTION_NODE;
+use const XML_COMMENT_NODE;
+use const XML_PI_NODE;
 
 /**
  * Provide QueryPath with additional XML tools.
@@ -36,7 +39,7 @@ class QPXML implements Extension
 	{
 		$doc = $this->qp->branch()->top()->get(0)->ownerDocument;
 
-		if ( !$doc->schemaValidate($file)) {
+		if ( ! $doc->schemaValidate($file)) {
 			throw new \QueryPath\Exception('Document did not validate against the schema.');
 		}
 	}
@@ -71,7 +74,7 @@ class QPXML implements Extension
 				$element->appendChild($cdata);
 			}
 
-			return $this->qp;;
+			return $this->qp;
 		}
 
 		// Look for CDATA sections.
@@ -84,7 +87,6 @@ class QPXML implements Extension
 			}
 		}
 
-		return null;
 		// Nothing found
 	}
 
@@ -132,8 +134,8 @@ class QPXML implements Extension
 	/**
 	 * Get or set a processor instruction.
 	 *
-	 * @param null|mixed $prefix
-	 * @param null|mixed $text
+	 * @param mixed|null $prefix
+	 * @param mixed|null $text
 	 */
 	public function pi($prefix = null, $text = null)
 	{
@@ -193,7 +195,7 @@ class QPXML implements Extension
 	 */
 	public function createElement($text, $nsUri = null)
 	{
-		if (isset ($text)) {
+		if (isset($text)) {
 			foreach ($this->qp->get() as $element) {
 				if (null === $nsUri && false !== strpos($text, ':')) {
 					$ns = array_shift(explode(':', $text));
@@ -230,7 +232,7 @@ class QPXML implements Extension
 	 */
 	public function appendElement($text)
 	{
-		if (isset ($text)) {
+		if (isset($text)) {
 			foreach ($this->qp->get() as $element) {
 				$node = $this->qp->createElement($text);
 				QueryPath::with($element)->append($node);

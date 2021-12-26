@@ -14,16 +14,21 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS\DOMTraverser;
 
+use function count;
+use function is_int;
+use const PHP_URL_SCHEME;
 use QueryPath\CSS\EventHandler;
 use QueryPath\CSS\NotImplementedException;
 use QueryPath\CSS\ParseException;
+use SPLObjectStorage;
+use const XML_ELEMENT_NODE;
+use const XML_TEXT_NODE;
 
 /**
  *  The PseudoClass handler.
  */
 class PseudoClass
 {
-
 	/**
 	 * Tests whether the given element matches the given pseudoclass.
 	 *
@@ -37,8 +42,8 @@ class PseudoClass
 	 *   The optional value string provided with this class. This is
 	 *   used, for example, in an+b psuedoclasses.
 	 *
-	 * @throws NotImplementedException
 	 * @throws \QueryPath\CSS\ParseException
+	 * @throws NotImplementedException
 	 *
 	 * @return bool
 	 * @retval boolean
@@ -82,7 +87,7 @@ class PseudoClass
 				return (bool) mt_rand(0, 1);
 			case 'lang':
 				// No value = exception.
-				if ( !isset($value)) {
+				if ( ! isset($value)) {
 					throw new NotImplementedException(':lang() requires a value.');
 				}
 
@@ -153,7 +158,7 @@ class PseudoClass
 			case 'empty':
 				return $this->isEmpty($node);
 			case 'parent':
-				return !$this->isEmpty($node);
+				return ! $this->isEmpty($node);
 
 			case 'enabled':
 			case 'disabled':
@@ -233,7 +238,7 @@ class PseudoClass
 	 *
 	 * @param $node
 	 */
-	protected function header($node): bool
+	protected function header($node) : bool
 	{
 		return 1 === preg_match('/^h[1-9]$/i', $node->tagName);
 	}
@@ -243,7 +248,7 @@ class PseudoClass
 	 *
 	 * @param mixed $node
 	 */
-	protected function isEmpty($node): bool
+	protected function isEmpty($node) : bool
 	{
 		foreach ($node->childNodes as $kid) {
 			// We don't want to count PIs and comments. From the spec, it
@@ -265,7 +270,7 @@ class PseudoClass
 	 *
 	 * @param mixed $node
 	 */
-	protected function isFirst($node): bool
+	protected function isFirst($node) : bool
 	{
 		while (isset($node->previousSibling)) {
 			$node = $node->previousSibling;
@@ -338,7 +343,7 @@ class PseudoClass
 	 * @param mixed $node
 	 * @param mixed $value
 	 */
-	protected function contains($node, $value): bool
+	protected function contains($node, $value) : bool
 	{
 		$text = $node->textContent;
 		$value = Util::removeQuotes($value);
@@ -354,7 +359,7 @@ class PseudoClass
 	 * @param mixed $node
 	 * @param mixed $value
 	 */
-	protected function containsExactly($node, $value): bool
+	protected function containsExactly($node, $value) : bool
 	{
 		$text = $node->textContent;
 		$value = Util::removeQuotes($value);
@@ -370,9 +375,9 @@ class PseudoClass
 	 *
 	 * @throws ParseException
 	 */
-	protected function has($node, $selector): bool
+	protected function has($node, $selector) : bool
 	{
-		$splos = new \SPLObjectStorage();
+		$splos = new SPLObjectStorage();
 		$splos->attach($node);
 		$traverser = new \QueryPath\CSS\DOMTraverser($splos, true);
 		$results = $traverser->find($selector)->matches();
@@ -388,9 +393,9 @@ class PseudoClass
 	 *
 	 * @throws ParseException
 	 */
-	protected function isNot($node, $selector): bool
+	protected function isNot($node, $selector) : bool
 	{
-		return !$this->has($node, $selector);
+		return ! $this->has($node, $selector);
 	}
 
 	/**
@@ -399,13 +404,13 @@ class PseudoClass
 	 * @param mixed $node
 	 * @param mixed $byType
 	 */
-	protected function nodePositionFromStart($node, $byType = false): int
+	protected function nodePositionFromStart($node, $byType = false) : int
 	{
 		$i = 1;
 		$tag = $node->tagName;
 		while (isset($node->previousSibling)) {
 			$node = $node->previousSibling;
-			if (XML_ELEMENT_NODE === $node->nodeType && ( !$byType || $node->tagName === $tag)) {
+			if (XML_ELEMENT_NODE === $node->nodeType && ( ! $byType || $node->tagName === $tag)) {
 				++$i;
 			}
 		}
@@ -419,13 +424,13 @@ class PseudoClass
 	 * @param $node
 	 * @param bool $byType
 	 */
-	protected function nodePositionFromEnd($node, $byType = false): int
+	protected function nodePositionFromEnd($node, $byType = false) : int
 	{
 		$i = 1;
 		$tag = $node->tagName;
 		while (isset($node->nextSibling)) {
 			$node = $node->nextSibling;
-			if (XML_ELEMENT_NODE === $node->nodeType && ( !$byType || $node->tagName === $tag)) {
+			if (XML_ELEMENT_NODE === $node->nodeType && ( ! $byType || $node->tagName === $tag)) {
 				++$i;
 			}
 		}
@@ -456,7 +461,7 @@ class PseudoClass
 	 * @param bool $reverse
 	 * @param bool $byType
 	 */
-	protected function isNthChild($node, $value, $reverse = false, $byType = false): bool
+	protected function isNthChild($node, $value, $reverse = false, $byType = false) : bool
 	{
 		[$groupSize, $elementInGroup] = Util::parseAnB($value);
 		$parent = $node->parentNode;
@@ -489,9 +494,9 @@ class PseudoClass
 		return is_int($prod) && $prod >= 0;
 	}
 
-	protected function isLocalLink($node): bool
+	protected function isLocalLink($node) : bool
 	{
-		if ( !$node->hasAttribute('href')) {
+		if ( ! $node->hasAttribute('href')) {
 			return false;
 		}
 		$url = $node->getAttribute('href');

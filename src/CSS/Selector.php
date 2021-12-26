@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS;
 
+use ArrayIterator;
+use function count;
+use Countable;
+use IteratorAggregate;
+
 /**
  * A CSS Selector.
  *
@@ -47,7 +52,7 @@ namespace QueryPath\CSS;
  *
  * @since QueryPath 3.0.0
  */
-class Selector implements EventHandler, \IteratorAggregate, \Countable
+class Selector implements EventHandler, IteratorAggregate, Countable
 {
 	protected $selectors = [];
 	protected $currSelector;
@@ -61,9 +66,9 @@ class Selector implements EventHandler, \IteratorAggregate, \Countable
 		$this->selectors[$this->groupIndex][] = $this->currSelector;
 	}
 
-	public function getIterator() : \ArrayIterator
+	public function getIterator() : ArrayIterator
 	{
-		return new \ArrayIterator($this->selectors);
+		return new ArrayIterator($this->selectors);
 	}
 
 	/**

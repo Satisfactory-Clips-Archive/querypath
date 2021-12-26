@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS;
 
+use Exception;
+
 /**
  * Models a simple selector.
  *
@@ -45,10 +47,64 @@ class SimpleSelector
 	public $pseudoElements = [];
 	public $combinator;
 
+	public function __construct()
+	{
+	}
+
+	public function __toString()
+	{
+		$buffer = [];
+		try {
+			if ( ! empty($this->ns)) {
+				$buffer[] = $this->ns;
+				$buffer[] = '|';
+			}
+			if ( ! empty($this->element)) {
+				$buffer[] = $this->element;
+			}
+			if ( ! empty($this->id)) {
+				$buffer[] = '#' . $this->id;
+			}
+			if ( ! empty($this->attributes)) {
+				foreach ($this->attributes as $attr) {
+					$buffer[] = '[';
+					if ( ! empty($attr['ns'])) {
+						$buffer[] = $attr['ns'] . '|';
+					}
+					$buffer[] = $attr['name'];
+					if ( ! empty($attr['value'])) {
+						$buffer[] = self::attributeOperator($attr['op']);
+						$buffer[] = $attr['value'];
+					}
+					$buffer[] = ']';
+				}
+			}
+			if ( ! empty($this->pseudoClasses)) {
+				foreach ($this->pseudoClasses as $ps) {
+					$buffer[] = ':' . $ps['name'];
+					if (isset($ps['value'])) {
+						$buffer[] = '(' . $ps['value'] . ')';
+					}
+				}
+			}
+			foreach ($this->pseudoElements as $pe) {
+				$buffer[] = '::' . $pe;
+			}
+
+			if ( ! empty($this->combinator)) {
+				$buffer[] = self::combinatorOperator($this->combinator);
+			}
+		} catch (Exception $e) {
+			return $e->getMessage();
+		}
+
+		return implode('', $buffer);
+	}
+
 	/**
 	 * @param $code
 	 */
-	public static function attributeOperator($code): string
+	public static function attributeOperator($code) : string
 	{
 		switch ($code) {
 			case EventHandler::CONTAINS_WITH_SPACE:
@@ -69,7 +125,7 @@ class SimpleSelector
 	/**
 	 * @param $code
 	 */
-	public static function combinatorOperator($code): string
+	public static function combinatorOperator($code) : string
 	{
 		switch ($code) {
 			case self::ADJACENT:
@@ -88,70 +144,14 @@ class SimpleSelector
 		}
 	}
 
-	public function __construct()
+	public function notEmpty() : bool
 	{
-	}
-
-	/**
-	 */
-	public function notEmpty(): bool
-	{
-		return !empty($this->element)
-			&& !empty($this->id)
-			&& !empty($this->classes)
-			&& !empty($this->combinator)
-			&& !empty($this->attributes)
-			&& !empty($this->pseudoClasses)
-			&& !empty($this->pseudoElements);
-	}
-
-	public function __toString()
-	{
-		$buffer = [];
-		try {
-			if ( !empty($this->ns)) {
-				$buffer[] = $this->ns;
-				$buffer[] = '|';
-			}
-			if ( !empty($this->element)) {
-				$buffer[] = $this->element;
-			}
-			if ( !empty($this->id)) {
-				$buffer[] = '#' . $this->id;
-			}
-			if ( !empty($this->attributes)) {
-				foreach ($this->attributes as $attr) {
-					$buffer[] = '[';
-					if ( !empty($attr['ns'])) {
-						$buffer[] = $attr['ns'] . '|';
-					}
-					$buffer[] = $attr['name'];
-					if ( !empty($attr['value'])) {
-						$buffer[] = self::attributeOperator($attr['op']);
-						$buffer[] = $attr['value'];
-					}
-					$buffer[] = ']';
-				}
-			}
-			if ( !empty($this->pseudoClasses)) {
-				foreach ($this->pseudoClasses as $ps) {
-					$buffer[] = ':' . $ps['name'];
-					if (isset($ps['value'])) {
-						$buffer[] = '(' . $ps['value'] . ')';
-					}
-				}
-			}
-			foreach ($this->pseudoElements as $pe) {
-				$buffer[] = '::' . $pe;
-			}
-
-			if ( !empty($this->combinator)) {
-				$buffer[] = self::combinatorOperator($this->combinator);
-			}
-		} catch (\Exception $e) {
-			return $e->getMessage();
-		}
-
-		return implode('', $buffer);
+		return ! empty($this->element)
+			&& ! empty($this->id)
+			&& ! empty($this->classes)
+			&& ! empty($this->combinator)
+			&& ! empty($this->attributes)
+			&& ! empty($this->pseudoClasses)
+			&& ! empty($this->pseudoElements);
 	}
 }

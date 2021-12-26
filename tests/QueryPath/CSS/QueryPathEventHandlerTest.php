@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace QueryPathTests\CSS;
 
+use DomDocument;
+use const LIBXML_NOBLANKS;
 use QueryPath\CSS\QueryPathEventHandler;
 use QueryPathTests\TestCase;
 
@@ -46,27 +48,11 @@ class QueryPathEventHandlerTest extends TestCase
   </html>
   ';
 
-	private function firstMatch($matches)
-	{
-		$matches->rewind();
-
-		return $matches->current();
-	}
-
-	private function nthMatch($matches, $n = 0)
-	{
-		foreach ($matches as $m) {
-			if ($matches->key() === $n) {
-				return $m;
-			}
-		}
-	}
-
 	public function testGetMatches()
 	{
 		// Test root element:
 		$xml = '<?xml version="1.0" ?><test><inside/>Text<inside/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test handing it a DOM Document
@@ -108,7 +94,7 @@ class QueryPathEventHandlerTest extends TestCase
 	public function testEmptySelector()
 	{
 		$xml = '<?xml version="1.0" ?><t:test xmlns:t="urn:foo/bar"><t:inside id="first"/>Text<t:inside/><inside/></t:test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$this->expectException(\QueryPath\CSS\ParseException::class);
@@ -123,7 +109,7 @@ class QueryPathEventHandlerTest extends TestCase
 	public function testElementNS()
 	{
 		$xml = '<?xml version="1.0" ?><t:test xmlns:t="urn:foo/bar"><t:inside id="first"/>Text<t:inside/><inside/></t:test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Basic test
@@ -146,7 +132,7 @@ class QueryPathEventHandlerTest extends TestCase
 	public function testFailedElementNS()
 	{
 		$xml = '<?xml version="1.0" ?><t:test xmlns:t="urn:foo/bar"><t:inside id="first"/>Text<t:inside/><inside/></t:test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -157,7 +143,7 @@ class QueryPathEventHandlerTest extends TestCase
 	public function testElement()
 	{
 		$xml = '<?xml version="1.0" ?><test><inside id="first"/>Text<inside/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Basic test
@@ -168,7 +154,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$match = $this->firstMatch($matches);
 		$this->assertSame('inside', $match->tagName);
 
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($this->xml);
 
 		// Test getting nested
@@ -202,7 +188,7 @@ class QueryPathEventHandlerTest extends TestCase
 	{
 		// Test root element:
 		$xml = '<?xml version="1.0" ?><test><inside id="first"/>Text<inside/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -225,7 +211,7 @@ class QueryPathEventHandlerTest extends TestCase
 	public function testAnyElementInNS()
 	{
 		$xml = '<?xml version="1.0" ?><ns1:test xmlns:ns1="urn:foo/bar"><ns1:inside/>Text<ns1:inside/></ns1:test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test handing it a DOM Document
@@ -244,7 +230,7 @@ class QueryPathEventHandlerTest extends TestCase
         <ns1:insideInside>Test</ns1:insideInside>
       </ns1:inside>
     </ns1:test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -259,7 +245,7 @@ class QueryPathEventHandlerTest extends TestCase
 	public function testAnyElement()
 	{
 		$xml = '<?xml version="1.0" ?><test><inside/>Text<inside/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test handing it a DOM Document
@@ -271,7 +257,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$match = $this->firstMatch($matches);
 		$this->assertSame('test', $match->tagName);
 
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($this->xml);
 
 		// Test handing it a DOM Document
@@ -295,7 +281,7 @@ class QueryPathEventHandlerTest extends TestCase
 	public function testElementClass()
 	{
 		$xml = '<?xml version="1.0" ?><test><inside class="foo" id="one"/>Text<inside/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test basic class
@@ -307,7 +293,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('one', $match->getAttribute('id'));
 
 		// Test class in element
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($this->xml);
 		$handler = new QueryPathEventHandler($doc);
 		$handler->find('li.Odd');
@@ -335,7 +321,7 @@ class QueryPathEventHandlerTest extends TestCase
         <inside id="inner-one"/>
       </inside>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test direct descendent
@@ -350,7 +336,7 @@ class QueryPathEventHandlerTest extends TestCase
 	public function testAttribute()
 	{
 		$xml = '<?xml version="1.0" ?><test><inside id="one" name="antidisestablishmentarianism"/>Text<inside/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test match on attr name
@@ -403,7 +389,7 @@ class QueryPathEventHandlerTest extends TestCase
 
 		// Test containsWithSpace
 		$xml = '<?xml version="1.0" ?><test><inside id="one" name="anti dis establishment arian ism"/>Text<inside/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -415,7 +401,7 @@ class QueryPathEventHandlerTest extends TestCase
 
 		// Test containsWithHyphen
 		$xml = '<?xml version="1.0" ?><test><inside id="one" name="en-us"/>Text<inside/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -429,7 +415,7 @@ class QueryPathEventHandlerTest extends TestCase
 	public function testPseudoClassLang()
 	{
 		$xml = '<?xml version="1.0" ?><test><inside lang="en-us" id="one"/>Text<inside/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -454,7 +440,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('one', $match->getAttribute('id'));
 
 		$xml = '<?xml version="1.0" ?><test><inside lang="en-us" id="one"/>Text<inside lang="us" id="two"/></test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -469,7 +455,7 @@ class QueryPathEventHandlerTest extends TestCase
      <inside lang="en-us" id="one"/>Text
      <inside xml:lang="en-us" id="two"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -488,7 +474,7 @@ class QueryPathEventHandlerTest extends TestCase
      <inside disabled="disabled" id="two"/>
      <inside checked="FOOOOO" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -528,7 +514,7 @@ class QueryPathEventHandlerTest extends TestCase
      <inside disabled="disabled" id="two"/>
      <inside checked="FOOOOO" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -549,7 +535,7 @@ class QueryPathEventHandlerTest extends TestCase
      <inside disabled="disabled" id="two"/>
      <inside checked="FOOOOO" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 		$start = $doc->getElementsByTagName('inside');
 
@@ -574,7 +560,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="odd" id="five"/>
       <e class="even" id="six"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test full list
@@ -618,7 +604,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="odd" id="five"/>
       <e class="even" id="six"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test full list
@@ -724,7 +710,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="odd" id="five"/>
       <e class="even" id="six"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test nested items.
@@ -747,7 +733,7 @@ class QueryPathEventHandlerTest extends TestCase
     <test>
       <i class="odd" id="one"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test single last child.
@@ -762,7 +748,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="odd" id="one"/>
       <i class="odd" id="two"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test single last child.
@@ -782,7 +768,7 @@ class QueryPathEventHandlerTest extends TestCase
     <test>
       <i class="odd" id="one"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test single last child.
@@ -797,7 +783,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="odd" id="one"/>
       <i class="odd" id="two"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test single last child.
@@ -823,7 +809,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="odd" id="five"/>
       <e class="even" id="six"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test single last child.
@@ -858,7 +844,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="odd" id="five"/>
       <e class="even" id="six"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test single last child.
@@ -893,7 +879,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="odd" id="five"/>
       <e class="even" id="six"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test alternate rows from the end.
@@ -922,7 +908,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test alternate rows from the end.
@@ -941,7 +927,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test alternate rows from the end.
@@ -960,7 +946,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test alternate rows from the end.
@@ -979,7 +965,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test alternate rows from the end.
@@ -1000,7 +986,7 @@ class QueryPathEventHandlerTest extends TestCase
     <div id="six">I am the sixth div.</div>
     <div id="seven">I am the seventh div.</div>
     </root>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1018,7 +1004,7 @@ class QueryPathEventHandlerTest extends TestCase
       <n class="odd" id="one"/>
       <i class="even" id="two"></i>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1042,7 +1028,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test alternate rows from the end.
@@ -1061,7 +1047,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test alternate rows from the end.
@@ -1080,7 +1066,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test alternate rows from the end.
@@ -1099,7 +1085,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		// Test alternate rows from the end.
@@ -1119,7 +1105,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1143,7 +1129,7 @@ class QueryPathEventHandlerTest extends TestCase
       <i class="even" id="two"/>
       <i class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1162,7 +1148,7 @@ class QueryPathEventHandlerTest extends TestCase
     </test>';
 
 		foreach ($form as $item) {
-			$doc = new \DomDocument();
+			$doc = new DomDocument();
 			$doc->loadXML(sprintf($xml, $item));
 
 			$handler = new QueryPathEventHandler($doc);
@@ -1181,7 +1167,7 @@ class QueryPathEventHandlerTest extends TestCase
       <h2 class="even" id="two"/>
       <h6 class="odd" id="three"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1198,7 +1184,7 @@ class QueryPathEventHandlerTest extends TestCase
       <p id="one">This is text.</p>
       <p id="two"><i>More text</i></p>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1240,7 +1226,7 @@ class QueryPathEventHandlerTest extends TestCase
       <p id="one">This is text.</p>
       <p id="two"><i>More text</i></p>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1277,7 +1263,7 @@ class QueryPathEventHandlerTest extends TestCase
       </outer>
       <outer id="two"/>
     </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1296,7 +1282,7 @@ class QueryPathEventHandlerTest extends TestCase
         </outer>
         <outer id="two" class="notMe"/>
       </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1327,7 +1313,7 @@ class QueryPathEventHandlerTest extends TestCase
         More text</outer>
         <outer id="two" class="notMe"/>
       </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1357,7 +1343,7 @@ class QueryPathEventHandlerTest extends TestCase
         <li id="four"/>
         <li id="five"/>
       </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1391,7 +1377,7 @@ class QueryPathEventHandlerTest extends TestCase
         <li id="four"/>
         <li id="five"/>
       </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1417,7 +1403,7 @@ class QueryPathEventHandlerTest extends TestCase
         <li id="four"/>
         <li id="five"/>
       </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1457,7 +1443,7 @@ class QueryPathEventHandlerTest extends TestCase
         <li id="four"/>
         <li id="five"/>
       </test>';
-		$doc = new \DomDocument();
+		$doc = new DomDocument();
 		$doc->loadXML($xml);
 
 		$handler = new QueryPathEventHandler($doc);
@@ -1476,5 +1462,21 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(2, $matches->count());
 		$this->assertSame('inner-inner-one', $this->nthMatch($matches, 1)->getAttribute('id'));
+	}
+
+	private function firstMatch($matches)
+	{
+		$matches->rewind();
+
+		return $matches->current();
+	}
+
+	private function nthMatch($matches, $n = 0)
+	{
+		foreach ($matches as $m) {
+			if ($matches->key() === $n) {
+				return $m;
+			}
+		}
 	}
 }

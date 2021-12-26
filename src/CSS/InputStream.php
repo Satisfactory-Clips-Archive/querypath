@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS;
 
+use function count;
+
 /**
  * Simple wrapper to turn a string into an input stream.
  * This provides a standard interface on top of an array of
@@ -16,8 +18,8 @@ namespace QueryPath\CSS;
  */
 class InputStream
 {
-	protected $stream;
 	public $position = 0;
+	protected $stream;
 
 	/**
 	 * Build a new CSS input stream from a string.
@@ -51,7 +53,7 @@ class InputStream
 	public function consume()
 	{
 		$ret = array_shift($this->stream);
-		if ( !empty($ret)) {
+		if ( ! empty($ret)) {
 			++$this->position;
 		}
 

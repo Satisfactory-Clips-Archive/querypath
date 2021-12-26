@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use function in_array;
+use ReflectionClass;
+
 /**
  * A registry for QueryPath extensions.
  *
@@ -27,7 +30,6 @@ namespace QueryPath;
  */
 class ExtensionRegistry
 {
-
 	/**
 	 * Internal flag indicating whether or not the registry should
 	 * be used for automatic extension loading. If this is false, then
@@ -49,7 +51,7 @@ class ExtensionRegistry
 	public static function extend($classname)
 	{
 		self::$extensionRegistry[] = $classname;
-		$class = new \ReflectionClass($classname);
+		$class = new ReflectionClass($classname);
 		$methods = $class->getMethods();
 		foreach ($methods as $method) {
 			self::$extensionMethodRegistry[$method->getName()] = $classname;

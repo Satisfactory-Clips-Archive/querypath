@@ -28,8 +28,8 @@ use QueryPath\QueryPath;
  * are likely to use. The qp() and htmlqp() functions are the best place to start,
  * while most of the frequently used methods are part of the QueryPath object.
  *
- * @param null|mixed $document
- * @param null|mixed $string
+ * @param mixed|null $document
+ * @param mixed|null $string
  */
 
 /** @addtogroup querypath_util Utilities

@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use function array_key_exists;
+
 /**
  * Manage default options.
  *
@@ -32,14 +34,13 @@ namespace QueryPath;
  */
 class Options
 {
-
 	/**
 	 * This is the static options array.
 	 *
 	 * Use the {@link set()}, {@link get()}, and {@link merge()} to
 	 * modify this array.
 	 */
-	static $options = [];
+	public static $options = [];
 
 	/**
 	 * Set the default options.
@@ -49,7 +50,7 @@ class Options
 	 * @param array $array
 	 *  An associative array of options
 	 */
-	static function set($array)
+	public static function set($array)
 	{
 		self::$options = $array;
 	}
@@ -64,7 +65,7 @@ class Options
 	 *  returned. {@link QueryPath} defines default options which are not
 	 *  stored in this object.
 	 */
-	static function get()
+	public static function get()
 	{
 		return self::$options;
 	}
@@ -78,7 +79,7 @@ class Options
 	 * @param array $array
 	 *  Associative array of options to merge into the existing options
 	 */
-	static function merge($array)
+	public static function merge($array)
 	{
 		self::$options = $array + self::$options;
 	}
@@ -89,7 +90,7 @@ class Options
 	 * @param string $key
 	 *  The key to search for
 	 */
-	static function has($key)
+	public static function has($key)
 	{
 		return array_key_exists($key, self::$options);
 	}

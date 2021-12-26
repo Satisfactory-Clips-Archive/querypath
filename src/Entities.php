@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use function count;
+
 /**
  * Perform various tasks on HTML/XML entities.
  *
@@ -15,7 +17,6 @@ namespace QueryPath;
  */
 class Entities implements EntitiesContract
 {
-
 	/**
 	 * This is three regexes wrapped into 1. The | divides them.
 	 * 1: Match any char-based entity. This will go in $matches[1]
@@ -42,9 +43,26 @@ class Entities implements EntitiesContract
 	 *  Returns a string that is similar to the original one, but with
 	 *  all entity replacements made
 	 */
-	public static function replaceAllEntities(string $string): string
+	public static function replaceAllEntities(string $string) : string
 	{
 		return preg_replace_callback(self::$regex, '\QueryPath\Entities::doReplacement', $string);
+	}
+
+	/**
+	 * Lookup an entity string's numeric equivalent.
+	 *
+	 * @param string $entity
+	 *  The entity whose numeric value is needed
+	 *
+	 * @return int
+	 *  The integer value corresponding to the entity
+	 *
+	 * @author Matt Butcher
+	 * @author Ryan Mahoney
+	 */
+	public static function replaceEntity(string $entity) : int
+	{
+		return self::ENTITIES[$entity];
 	}
 
 	/**
@@ -53,7 +71,7 @@ class Entities implements EntitiesContract
 	 * @param array $matches
 	 *  The regular expression replacement array
 	 */
-	protected static function doReplacement($matches): string
+	protected static function doReplacement($matches) : string
 	{
 		// See how the regex above works out.
 
@@ -75,22 +93,4 @@ class Entities implements EntitiesContract
 
 		return '';
 	}
-
-	/**
-	 * Lookup an entity string's numeric equivalent.
-	 *
-	 * @param string $entity
-	 *  The entity whose numeric value is needed
-	 *
-	 * @return int
-	 *  The integer value corresponding to the entity
-	 *
-	 * @author Matt Butcher
-	 * @author Ryan Mahoney
-	 */
-	public static function replaceEntity(string $entity): int
-	{
-		return self::ENTITIES[$entity];
-	}
 }
-

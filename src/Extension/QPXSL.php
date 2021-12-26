@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace QueryPath\Extension;
 
 use QueryPath\QueryPath;
+use XSLTProcessor;
 
 /**
  * Provide tools for running XSL Transformation (XSLT) on a document.
@@ -72,12 +73,12 @@ class QPXSL implements \QueryPath\Extension
 	 */
 	public function xslt($style)
 	{
-		if ( !($style instanceof QueryPath)) {
+		if ( ! ($style instanceof QueryPath)) {
 			$style = QueryPath::with($style);
 		}
 		$sourceDoc = $this->src->top()->get(0)->ownerDocument;
 		$styleDoc = $style->get(0)->ownerDocument;
-		$processor = new \XSLTProcessor();
+		$processor = new XSLTProcessor();
 		$processor->importStylesheet($styleDoc);
 
 		return QueryPath::with($processor->transformToDoc($sourceDoc));

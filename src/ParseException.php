@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use const LIBXML_ERR_WARNING;
+
 /**
  * Exception indicating that a parser has failed to parse a file.
  *

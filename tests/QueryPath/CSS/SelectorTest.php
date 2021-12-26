@@ -10,15 +10,6 @@ use QueryPathTests\TestCase;
 
 class SelectorTest extends TestCase
 {
-	protected function parse($selector)
-	{
-		$handler = new \QueryPath\CSS\Selector();
-		$parser = new \QueryPath\CSS\Parser($selector, $handler);
-		$parser->parse();
-
-		return $handler;
-	}
-
 	public function testElement()
 	{
 		$selector = $this->parse('test')->toArray();
@@ -129,5 +120,14 @@ class SelectorTest extends TestCase
 
 		$iterator = $selector->getIterator();
 		$this->assertInstanceOf('\Iterator', $iterator);
+	}
+
+	protected function parse($selector)
+	{
+		$handler = new \QueryPath\CSS\Selector();
+		$parser = new \QueryPath\CSS\Parser($selector, $handler);
+		$parser->parse();
+
+		return $handler;
 	}
 }

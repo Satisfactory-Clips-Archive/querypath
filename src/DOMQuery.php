@@ -15,14 +15,23 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use function count;
+use DOMNode;
+use DOMXPath;
+use function is_array;
+use function is_null;
+use const LIBXML_NOEMPTYTAG;
 use Masterminds\HTML5;
 use QueryPath\CSS\DOMTraverser;
 use QueryPath\CSS\QueryPathEventHandler;
-use QueryPath\Entities;
-use QueryPath\Exception;
 use QueryPath\Helpers\QueryChecks;
 use QueryPath\Helpers\QueryFilters;
 use QueryPath\Helpers\QueryMutators;
+use ReflectionException;
+use ReflectionMethod;
+use SplObjectStorage;
+use function strlen;
+use const XML_TEXT_NODE;
 
 /**
  * The DOMQuery object is the primary tool in this library.
@@ -43,7 +52,16 @@ use QueryPath\Helpers\QueryMutators;
  */
 class DOMQuery extends DOM
 {
-	use QueryFilters, QueryMutators, QueryChecks;
+	use QueryFilters;
+	use QueryMutators;
+	use QueryChecks;
+
+	/**
+	 * The number of current matches.
+	 *
+	 * @see count()
+	 */
+	public $length = 0;
 
 	/**
 	 * The last array of matches.
@@ -52,11 +70,66 @@ class DOMQuery extends DOM
 	private $ext = []; // Extensions array.
 
 	/**
-	 * The number of current matches.
+	 * Clone the DOMQuery.
 	 *
-	 * @see count()
+	 * This makes a deep clone of the elements inside of the DOMQuery.
+	 *
+	 * This clones only the QueryPathImpl, not all of the decorators. The
+	 * clone operator in PHP should handle the cloning of the decorators.
 	 */
-	public $length = 0;
+	public function __clone()
+	{
+		//XXX: Should we clone the document?
+
+		// Make sure we clone the kids.
+		$this->cloneAll();
+	}
+
+	/**
+	 * Call extension methods.
+	 *
+	 * This function is used to invoke extension methods. It searches the
+	 * registered extenstensions for a matching function name. If one is found,
+	 * it is executed with the arguments in the $arguments array.
+	 *
+	 * @param mixed $name
+	 * @param mixed $arguments
+	 *
+	 * @throws Exception
+	 * @throws queryPath::Exception
+	 *  An exception is thrown if a non-existent method is called
+	 * @throws ReflectionException
+	 */
+	public function __call($name, $arguments)
+	{
+		if ( ! ExtensionRegistry::$useRegistry) {
+			throw new Exception("No method named $name found (Extensions disabled).");
+		}
+
+		// Loading of extensions is deferred until the first time a
+		// non-core method is called. This makes constructing faster, but it
+		// may make the first invocation of __call() slower (if there are
+		// enough extensions.)
+		//
+		// The main reason for moving this out of the constructor is that most
+		// new DOMQuery instances do not use extensions. Charging qp() calls
+		// with the additional hit is not a good idea.
+		//
+		// Also, this will at least limit the number of circular references.
+		if (empty($this->ext)) {
+			// Load the registry
+			$this->ext = ExtensionRegistry::getExtensions($this);
+		}
+
+		// Note that an empty ext registry indicates that extensions are disabled.
+		if ( ! empty($this->ext) && ExtensionRegistry::hasMethod($name)) {
+			$owner = ExtensionRegistry::getMethodClass($name);
+			$method = new ReflectionMethod($owner, $name);
+
+			return $method->invokeArgs($this->ext[$owner], $arguments);
+		}
+		throw new Exception("No method named $name found. Possibly missing an extension.");
+	}
 
 	/**
 	 * Get the effective options for the current DOMQuery object.
@@ -85,7 +158,7 @@ class DOMQuery extends DOM
 	 * @see   QueryPath::Options::merge()
 	 * @since 2.0
 	 */
-	public function getOptions(): array
+	public function getOptions() : array
 	{
 		return $this->options;
 	}
@@ -114,7 +187,7 @@ class DOMQuery extends DOM
 	 *  The DOMQuery object, wrapping the root element (document element)
 	 *  for the current document
 	 */
-	public function top($selector = null): Query
+	public function top($selector = null) : Query
 	{
 		return $this->inst($this->document->documentElement, $selector);
 	}
@@ -139,10 +212,11 @@ class DOMQuery extends DOM
 	 *   from which to determine what the root is. The workaround is to use
 	 *   {@link top()} to select the root element again.
 	 */
-	public function find($selector): Query
+	public function find($selector) : Query
 	{
 		$query = new DOMTraverser($this->matches);
 		$query->find($selector);
+
 		return $this->inst($query->matches(), null);
 	}
 
@@ -195,14 +269,14 @@ class DOMQuery extends DOM
 	 */
 	public function xpath($query, $options = [])
 	{
-		$xpath = new \DOMXPath($this->document);
+		$xpath = new DOMXPath($this->document);
 
 		// Register a default namespace.
-		if ( !empty($options['namespace_prefix']) && !empty($options['namespace_uri'])) {
+		if ( ! empty($options['namespace_prefix']) && ! empty($options['namespace_uri'])) {
 			$xpath->registerNamespace($options['namespace_prefix'], $options['namespace_uri']);
 		}
 
-		$found = new \SplObjectStorage();
+		$found = new SplObjectStorage();
 		foreach ($this->matches as $item) {
 			$nl = $xpath->query($query, $item);
 			if ($nl->length > 0) {
@@ -245,7 +319,7 @@ class DOMQuery extends DOM
 	 * @return int
 	 *  The number of matches in the DOMQuery
 	 */
-	public function count(): int
+	public function count() : int
 	{
 		return $this->matches->count();
 	}
@@ -290,7 +364,7 @@ class DOMQuery extends DOM
 			return ($this->count() > $index) ? $this->getNthMatch($index) : null;
 		}
 		// Retain support for legacy.
-		if ( !$asObject) {
+		if ( ! $asObject) {
 			$matches = [];
 			foreach ($this->matches as $m) {
 				$matches[] = $m;
@@ -404,7 +478,7 @@ class DOMQuery extends DOM
 			$matches = [];
 			preg_match($regex, $data, $matches);
 
-			if ( !empty($matches)) {
+			if ( ! empty($matches)) {
 				$result = [
 					'mime' => $matches[1] . '/' . $matches[2],
 					'data' => base64_decode($matches[3], true),
@@ -480,7 +554,7 @@ class DOMQuery extends DOM
 	 * @return \QueryPath\DOMQuery
 	 *   This object
 	 */
-	public function sort($comparator, $modifyDOM = false): Query
+	public function sort($comparator, $modifyDOM = false) : Query
 	{
 		// Sort as an array.
 		$list = iterator_to_array($this->matches);
@@ -494,7 +568,7 @@ class DOMQuery extends DOM
 		usort($list, $comparator);
 
 		// Copy back into SplObjectStorage.
-		$found = new \SplObjectStorage();
+		$found = new SplObjectStorage();
 		foreach ($list as $node) {
 			$found->attach($node);
 		}
@@ -604,7 +678,7 @@ class DOMQuery extends DOM
 		// Note that this does not use setMatches because it must set the previous
 		// set of matches to empty array.
 		$this->matches = $this->last;
-		$this->last = new \SplObjectStorage();
+		$this->last = new SplObjectStorage();
 
 		return $this;
 	}
@@ -692,19 +766,19 @@ class DOMQuery extends DOM
 		}
 		$length = $this->matches->count();
 		if (0 === $length) {
-			return null;
+			return;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( !($first instanceof \DOMNode)) {
-			return null;
+		if ( ! ($first instanceof DOMNode)) {
+			return;
 		}
 
 		// Added by eabrand.
-		if ( !$first->ownerDocument->documentElement) {
-			return null;
+		if ( ! $first->ownerDocument->documentElement) {
+			return;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
@@ -722,10 +796,10 @@ class DOMQuery extends DOM
 	 *
 	 * @param null $markup
 	 *
-	 * @throws QueryPath
 	 * @throws \QueryPath\Exception
+	 * @throws QueryPath
 	 *
-	 * @return null|DOMQuery|string
+	 * @return DOMQuery|string|null
 	 */
 	public function html5($markup = null)
 	{
@@ -733,7 +807,6 @@ class DOMQuery extends DOM
 
 		// append HTML to existing
 		if (null === $markup) {
-
 			// Parse the HTML and insert it into the DOM
 			$doc = $html5->loadHTMLFragment($markup);
 			$this->removeChildren();
@@ -744,19 +817,19 @@ class DOMQuery extends DOM
 
 		$length = $this->count();
 		if (0 === $length) {
-			return null;
+			return;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( !($first instanceof \DOMNode)) {
-			return null;
+		if ( ! ($first instanceof DOMNode)) {
+			return;
 		}
 
 		// Added by eabrand.
-		if ( !$first->ownerDocument->documentElement) {
-			return null;
+		if ( ! $first->ownerDocument->documentElement) {
+			return;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
@@ -823,17 +896,17 @@ class DOMQuery extends DOM
 	{
 		$length = $this->matches->count();
 		if (0 === $length) {
-			return null;
+			return;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( !($first instanceof \DOMNode)) {
-			return null;
+		if ( ! ($first instanceof DOMNode)) {
+			return;
 		}
 
-		if ( !$first->hasChildNodes()) {
+		if ( ! $first->hasChildNodes()) {
 			return '';
 		}
 
@@ -864,17 +937,17 @@ class DOMQuery extends DOM
 	{
 		$length = $this->matches->count();
 		if (0 === $length) {
-			return null;
+			return;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( !($first instanceof \DOMNode)) {
-			return null;
+		if ( ! ($first instanceof DOMNode)) {
+			return;
 		}
 
-		if ( !$first->hasChildNodes()) {
+		if ( ! $first->hasChildNodes()) {
 			return '';
 		}
 
@@ -896,17 +969,17 @@ class DOMQuery extends DOM
 	{
 		$length = $this->matches->count();
 		if (0 === $length) {
-			return null;
+			return;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( !($first instanceof \DOMNode)) {
-			return null;
+		if ( ! ($first instanceof DOMNode)) {
+			return;
 		}
 
-		if ( !$first->hasChildNodes()) {
+		if ( ! $first->hasChildNodes()) {
 			return '';
 		}
 
@@ -939,7 +1012,7 @@ class DOMQuery extends DOM
 	 * @see   text()
 	 * @since 2.0
 	 */
-	public function textImplode($sep = ', ', $filterEmpties = true): string
+	public function textImplode($sep = ', ', $filterEmpties = true) : string
 	{
 		$tmp = [];
 		foreach ($this->matches as $m) {
@@ -973,7 +1046,7 @@ class DOMQuery extends DOM
 	 * @return string
 	 *  The concatenated values of all children
 	 */
-	public function childrenText($separator = ' '): string
+	public function childrenText($separator = ' ') : string
 	{
 		// Branch makes it non-destructive.
 		return $this->branch()->xpath('descendant::text()')->textImplode($separator);
@@ -1137,7 +1210,6 @@ class DOMQuery extends DOM
 	 */
 	public function xhtml($markup = null)
 	{
-
 		// XXX: This is a minor reworking of the original xml() method.
 		// This should be refactored, probably.
 		// See http://github.com/technosophos/querypath/issues#issue/10
@@ -1153,18 +1225,17 @@ class DOMQuery extends DOM
 
 		$length = $this->matches->count();
 		if (0 === $length) {
-			return null;
+			return;
 		}
 
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 		// Catch cases where first item is not a legit DOM object.
-		if ( !($first instanceof \DOMNode)) {
-			return null;
+		if ( ! ($first instanceof DOMNode)) {
+			return;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
-
 			// Has the unfortunate side-effect of stripping doctype.
 			//$text = ($omit_xml_decl ? $this->document->saveXML($first->ownerDocument->documentElement, LIBXML_NOEMPTYTAG) : $this->document->saveXML(NULL, LIBXML_NOEMPTYTAG));
 			$text = $this->document->saveXML(null, LIBXML_NOEMPTYTAG);
@@ -1238,14 +1309,14 @@ class DOMQuery extends DOM
 		}
 		$length = $this->matches->count();
 		if (0 === $length) {
-			return null;
+			return;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( !($first instanceof \DOMNode)) {
-			return null;
+		if ( ! ($first instanceof DOMNode)) {
+			return;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
@@ -1347,7 +1418,7 @@ class DOMQuery extends DOM
 	 * @see html5()
 	 * @see innerHTML5()
 	 *
-	 * @param null|mixed $path
+	 * @param mixed|null $path
 	 *
 	 * @throws exception
 	 *  In the event that a file cannot be written, an Exception will be thrown
@@ -1481,26 +1552,6 @@ class DOMQuery extends DOM
 	}
 
 	/**
-	 * @param $matches
-	 * @param $selector
-	 *
-	 * @throws CSS\ParseException
-	 *
-	 * @return DOMQuery
-	 */
-	protected function inst($matches, $selector): Query
-	{
-		$dolly = clone $this;
-		$dolly->setMatches($matches);
-
-		if (isset($selector)) {
-			$dolly->findInPlace($selector);
-		}
-
-		return $dolly;
-	}
-
-	/**
 	 * Perform a deep clone of each node in the DOMQuery.
 	 *
 	 * @attention
@@ -1519,77 +1570,15 @@ class DOMQuery extends DOM
 	 *
 	 * @return \QueryPath\DOMQuery
 	 */
-	public function cloneAll(): Query
+	public function cloneAll() : Query
 	{
-		$found = new \SplObjectStorage();
+		$found = new SplObjectStorage();
 		foreach ($this->matches as $m) {
 			$found->attach($m->cloneNode(true));
 		}
 		$this->setMatches($found);
 
 		return $this;
-	}
-
-	/**
-	 * Clone the DOMQuery.
-	 *
-	 * This makes a deep clone of the elements inside of the DOMQuery.
-	 *
-	 * This clones only the QueryPathImpl, not all of the decorators. The
-	 * clone operator in PHP should handle the cloning of the decorators.
-	 */
-	public function __clone()
-	{
-		//XXX: Should we clone the document?
-
-		// Make sure we clone the kids.
-		$this->cloneAll();
-	}
-
-	/**
-	 * Call extension methods.
-	 *
-	 * This function is used to invoke extension methods. It searches the
-	 * registered extenstensions for a matching function name. If one is found,
-	 * it is executed with the arguments in the $arguments array.
-	 *
-	 * @param mixed $name
-	 * @param mixed $arguments
-	 *
-	 * @throws \ReflectionException
-	 * @throws queryPath::Exception
-	 *  An exception is thrown if a non-existent method is called
-	 * @throws Exception
-	 */
-	public function __call($name, $arguments)
-	{
-		if ( !ExtensionRegistry::$useRegistry) {
-			throw new Exception("No method named $name found (Extensions disabled).");
-		}
-
-		// Loading of extensions is deferred until the first time a
-		// non-core method is called. This makes constructing faster, but it
-		// may make the first invocation of __call() slower (if there are
-		// enough extensions.)
-		//
-		// The main reason for moving this out of the constructor is that most
-		// new DOMQuery instances do not use extensions. Charging qp() calls
-		// with the additional hit is not a good idea.
-		//
-		// Also, this will at least limit the number of circular references.
-		if (empty($this->ext)) {
-			// Load the registry
-			$this->ext = ExtensionRegistry::getExtensions($this);
-		}
-
-		// Note that an empty ext registry indicates that extensions are disabled.
-		if ( !empty($this->ext) && ExtensionRegistry::hasMethod($name)) {
-			$owner = ExtensionRegistry::getMethodClass($name);
-			$method = new \ReflectionMethod($owner, $name);
-
-			return $method->invokeArgs($this->ext[$owner], $arguments);
-		}
-		throw new Exception("No method named $name found. Possibly missing an extension.");
 	}
 
 	/**
@@ -1604,5 +1593,25 @@ class DOMQuery extends DOM
 		$i->options = $this->options;
 
 		return $i;
+	}
+
+	/**
+	 * @param $matches
+	 * @param $selector
+	 *
+	 * @throws CSS\ParseException
+	 *
+	 * @return DOMQuery
+	 */
+	protected function inst($matches, $selector) : Query
+	{
+		$dolly = clone $this;
+		$dolly->setMatches($matches);
+
+		if (isset($selector)) {
+			$dolly->findInPlace($selector);
+		}
+
+		return $dolly;
 	}
 }

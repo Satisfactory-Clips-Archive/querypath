@@ -9,7 +9,10 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS\DOMTraverser;
 
+use function in_array;
+use function is_null;
 use QueryPath\CSS\EventHandler;
+use function strlen;
 
 /**
  * Utilities for DOM Traversal.
@@ -24,9 +27,9 @@ class Util
 	 * @param null $value
 	 * @param int $operation
 	 */
-	public static function matchesAttribute($node, $name, $value = null, $operation = EventHandler::IS_EXACTLY): bool
+	public static function matchesAttribute($node, $name, $value = null, $operation = EventHandler::IS_EXACTLY) : bool
 	{
-		if ( !$node->hasAttribute($name)) {
+		if ( ! $node->hasAttribute($name)) {
 			return false;
 		}
 
@@ -40,7 +43,7 @@ class Util
 	/**
 	 * Check whether the given DOMElement has the given namespaced attribute.
 	 *
-	 * @param null|mixed $value
+	 * @param mixed|null $value
 	 * @param mixed $node
 	 * @param mixed $name
 	 * @param mixed $nsuri
@@ -48,7 +51,7 @@ class Util
 	 */
 	public static function matchesAttributeNS($node, $name, $nsuri, $value = null, $operation = EventHandler::IS_EXACTLY)
 	{
-		if ( !$node->hasAttributeNS($nsuri, $name)) {
+		if ( ! $node->hasAttributeNS($nsuri, $name)) {
 			return false;
 		}
 
@@ -66,7 +69,7 @@ class Util
 	 * @param mixed $haystack
 	 * @param mixed $operation
 	 */
-	public static function matchesAttributeValue($needle, $haystack, $operation): bool
+	public static function matchesAttributeValue($needle, $haystack, $operation) : bool
 	{
 		if (strlen($haystack) < strlen($needle)) {
 			return false;
@@ -121,7 +124,7 @@ class Util
 	 * @retval array
 	 *  `array($aVal, $bVal)` of the two values.
 	 */
-	public static function parseAnB($rule): array
+	public static function parseAnB($rule) : array
 	{
 		if ('even' === $rule) {
 			return [2, 0];
@@ -144,7 +147,7 @@ class Util
 		$res = preg_match($regex, $rule, $matches);
 
 		// If it doesn't parse, return 0, 0.
-		if ( !$res) {
+		if ( ! $res) {
 			return [0, 0];
 		}
 

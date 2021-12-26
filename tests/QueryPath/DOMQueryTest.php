@@ -8,8 +8,18 @@ namespace QueryPathTests;
  * Unit tests and regression tests for DOMQuery.
  */
 
+use function chr;
+use function count;
+use function define;
+use DOMDocument;
+use DOMElement;
+use DOMNode;
+use function in_array;
 use QueryPath\DOMQuery;
 use QueryPath\QueryPath;
+use SplDoublyLinkedList;
+use stdClass;
+use const XML_ELEMENT_NODE;
 
 define('DATA_FILE', __DIR__ . '/../data.xml');
 define('DATA_HTML_FILE', __DIR__ . '/../data.html');
@@ -26,7 +36,7 @@ define('HTML_IN_XML_FILE', __DIR__ . '/../html.xml');
  */
 class DOMQueryTest extends TestCase
 {
-	const test_tests_allowed_failures = [
+	public const test_tests_allowed_failures = [
 		'testxinclude',
 	];
 
@@ -35,37 +45,36 @@ class DOMQueryTest extends TestCase
 	 */
 	public function testDOMQueryConstructors()
 	{
-
 		// From XML file
 		$file = DATA_FILE;
 		$qp = qp($file);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// From XML file with context
 		$cxt = stream_context_create();
 		$qp = qp($file, null, ['context' => $cxt]);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// From XML string
 		$str = '<?xml version="1.0" ?><root><inner/></root>';
 		$qp = qp($str);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// From SimpleXML
 		$str = '<?xml version="1.0" ?><root><inner/></root>';
 		$qp = qp(simplexml_load_string($str));
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// Test from DOMDocument
-		$doc = new \DOMDocument();
+		$doc = new DOMDocument();
 		$doc->loadXML($str);
 		$qp = qp($doc);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// Now with a selector:
 		$qp = qp($file, '#head');
@@ -76,18 +85,18 @@ class DOMQueryTest extends TestCase
 		$htmlFile = DATA_HTML_FILE;
 		$qp = qp($htmlFile);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// Test with another DOMQuery.
 		$qp = qp($qp);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// Test from array of DOMNodes
 		$array = $qp->get();
 		$qp = qp($array);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 	}
 
 	/**
@@ -99,24 +108,24 @@ class DOMQueryTest extends TestCase
 	{
 		$qp = htmlqp(QueryPath::HTML_STUB);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// Bad BR tag.
 		$borken = '<html><head></head><body><br></body></html>';
 		$qp = htmlqp($borken);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// XHTML Faker
 		$borken = '<?xml version="1.0"?><html><head></head><body><br></body></html>';
 		$qp = htmlqp($borken);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// HTML in a file that looks like XML.
 		$qp = htmlqp(HTML_IN_XML_FILE);
 		$this->assertCount(1, $qp->get());
-		$this->assertTrue($qp->get(0) instanceof \DOMNode);
+		$this->assertTrue($qp->get(0) instanceof DOMNode);
 
 		// HTML5
 		$html5 = new \Masterminds\HTML5();
@@ -229,7 +238,7 @@ class DOMQueryTest extends TestCase
 	public function testFailedObjectConstruction()
 	{
 		$this->expectException(\QueryPath\Exception::class);
-		qp(new \stdClass());
+		qp(new stdClass());
 	}
 
 	public function testFailedHTTPLoad()
@@ -505,7 +514,7 @@ class DOMQueryTest extends TestCase
 		$ele = $qp->get(0);
 		$ele2 = $qp->top('#two')->get(0);
 
-		$list = new \SplDoublyLinkedList();
+		$list = new SplDoublyLinkedList();
 		$list->push($ele);
 		$list->push($ele2);
 		$this->assertCount(2, $list);
@@ -591,7 +600,7 @@ class DOMQueryTest extends TestCase
 		// Test with DOM Element
 		$qp = qp($file, 'li');
 		$el = $qp->branch()->filter('#one')->get(0);
-		$this->assertTrue($el instanceof \DOMElement, 'Is DOM element.');
+		$this->assertTrue($el instanceof DOMElement, 'Is DOM element.');
 		$this->assertSame(4, $qp->not($el)->count());
 
 		// Test with array of DOM Elements
@@ -769,7 +778,7 @@ class DOMQueryTest extends TestCase
 		$this->expectException(\QueryPath\Exception::class);
 		$file = DATA_FILE;
 		try {
-			qp($file, 'root')->append(new \stdClass);
+			qp($file, 'root')->append(new stdClass());
 		} catch (Exception $e) {
 			//print $e->getMessage();
 			throw $e;
@@ -874,7 +883,6 @@ class DOMQueryTest extends TestCase
 
 	public function testUnwrap()
 	{
-
 		// Unwrap center, and make sure junk goes away.
 		$xml = '<?xml version="1.0"?><root><wrapper><center/><junk/></wrapper></root>';
 		$qp = qp($xml, 'center')->unwrap();
@@ -1086,28 +1094,6 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('foo:bar', $q->ns());
 	}
 
-	/**
-	 * Helper function for testContents().
-	 * Based on problem reported in issue 51.
-	 *
-	 * @param mixed $source
-	 * @param mixed $pack
-	 */
-	private function contentsRecurse($source, &$pack = [])
-	{
-		//static $i = 0;
-		//static $filter = "%d. Node type: %d, Content: '%s'\n";
-		$children = $source->contents();
-		//$node = $source->get(0);
-		$pack[] = 1; //sprintf($filter, ++$i, $node->nodeType, $source->html());
-
-		foreach ($children as $child) {
-			$pack += $this->contentsRecurse($child, $pack);
-		}
-
-		return $pack;
-	}
-
 	public function testSiblings()
 	{
 		$file = DATA_FILE;
@@ -1272,8 +1258,8 @@ class DOMQueryTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><html><head><title>foo</title></head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeXML();
 		$out = ob_get_contents();
@@ -1290,8 +1276,8 @@ class DOMQueryTest extends TestCase
     <![CDATA[This is CDATA]]>
     <title>foo</title></head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeXML();
 		$out = ob_get_contents();
@@ -1312,8 +1298,8 @@ class DOMQueryTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><html><head><title>foo</title></head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeXHTML();
 		$out = ob_get_contents();
@@ -1330,8 +1316,8 @@ class DOMQueryTest extends TestCase
     <![CDATA[This is CDATA]]>
     <title>foo</title></head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'html')->writeXHTML();
 		$out = ob_get_contents();
@@ -1349,8 +1335,8 @@ class DOMQueryTest extends TestCase
 
 		// Regression for issue #10 (keep closing tags in XHTML)
 		$xhtml = '<?xml version="1.0"?><html><head><title>foo</title><script></script><br/></head><body>bar</body></html>';
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xhtml, 'html')->writeXHTML();
 		$out = ob_get_contents();
@@ -1400,8 +1386,8 @@ class DOMQueryTest extends TestCase
 	{
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML();
 		$out = ob_get_contents();
@@ -1416,8 +1402,8 @@ class DOMQueryTest extends TestCase
     --></script>
     </head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML();
 		$out = ob_get_contents();
@@ -1432,8 +1418,8 @@ class DOMQueryTest extends TestCase
     ]]></script>
     </head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML();
 		$out = ob_get_contents();
@@ -1454,8 +1440,8 @@ class DOMQueryTest extends TestCase
 	{
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML5();
 		$out = ob_get_contents();
@@ -1470,8 +1456,8 @@ class DOMQueryTest extends TestCase
     --></script>
     </head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML5();
 		$out = ob_get_contents();
@@ -1486,8 +1472,8 @@ class DOMQueryTest extends TestCase
     ]]></script>
     </head><body>bar</body></html>';
 
-		if ( !ob_start()) {
-			exit ('Could not start OB.');
+		if ( ! ob_start()) {
+			exit('Could not start OB.');
 		}
 		qp($xml, 'tml')->writeHTML5();
 		$out = ob_get_contents();
@@ -1567,7 +1553,8 @@ class DOMQueryTest extends TestCase
 
 		$qp = qp(QueryPath::HTML_STUB, 'body')->append('<div></div><p>Hello</p><p>Goodbye</p>')
 			->children('p')
-			->after('<p>new paragraph</p>');
+			->after('<p>new paragraph</p>')
+		;
 
 		$testarray = ['new paragraph', 'Goodbye', 'new paragraph'];
 
@@ -1655,9 +1642,9 @@ class DOMQueryTest extends TestCase
 		// Deep test: make sure children are also cloned.
 		$qp = qp($file, 'inner');
 		$one = $qp->find('li')->get(0);
-		/** @var \DOMElement $two */
+		/** @var DOMElement $two */
 		$two = $qp->top('inner')->cloneAll()->findInPlace('li')->get(0);
-		$this->assertInstanceOf(\DOMElement::class, $two);
+		$this->assertInstanceOf(DOMElement::class, $two);
 		$this->assertNotSame($one, $two);
 	}
 
@@ -1746,7 +1733,6 @@ class DOMQueryTest extends TestCase
 
 	public function testLength()
 	{
-
 		// Test that the length attribute works exactly the same as size.
 		$file = DATA_FILE;
 		$qp = qp($file, 'li');
@@ -1756,7 +1742,7 @@ class DOMQueryTest extends TestCase
 	public function testDocument()
 	{
 		$file = DATA_FILE;
-		$doc1 = new \DOMDocument('1.0');
+		$doc1 = new DOMDocument('1.0');
 		$doc1->load($file);
 		$qp = qp($doc1);
 
@@ -1934,7 +1920,7 @@ class DOMQueryTest extends TestCase
 		}
 
 		// Test simple ordering.
-		$comp = static function (\DOMNode $a, \DOMNode $b) {
+		$comp = static function (DOMNode $a, DOMNode $b) {
 			if ($a->textContent === $b->textContent) {
 				return 0;
 			}
@@ -1947,7 +1933,7 @@ class DOMQueryTest extends TestCase
 			$this->assertSame(array_shift($expect), $item->text());
 		}
 
-		$comp = static function (\DOMNode $a, \DOMNode $b) {
+		$comp = static function (DOMNode $a, DOMNode $b) {
 			$qpa = qp($a);
 			$qpb = qp($b);
 
@@ -1964,7 +1950,7 @@ class DOMQueryTest extends TestCase
 		}
 
 		// Test DOM re-ordering
-		$comp = static function (\DOMNode $a, \DOMNode $b) {
+		$comp = static function (DOMNode $a, DOMNode $b) {
 			if ($a->textContent === $b->textContent) {
 				return 0;
 			}
@@ -2029,6 +2015,28 @@ class DOMQueryTest extends TestCase
 	{
 		$data = QueryPath::encodeDataURL('Hi!', 'text/plain');
 		$this->assertSame('data:text/plain;base64,SGkh', $data);
+	}
+
+	/**
+	 * Helper function for testContents().
+	 * Based on problem reported in issue 51.
+	 *
+	 * @param mixed $source
+	 * @param mixed $pack
+	 */
+	private function contentsRecurse($source, &$pack = [])
+	{
+		//static $i = 0;
+		//static $filter = "%d. Node type: %d, Content: '%s'\n";
+		$children = $source->contents();
+		//$node = $source->get(0);
+		$pack[] = 1; //sprintf($filter, ++$i, $node->nodeType, $source->html());
+
+		foreach ($children as $child) {
+			$pack += $this->contentsRecurse($child, $pack);
+		}
+
+		return $pack;
 	}
 }
 

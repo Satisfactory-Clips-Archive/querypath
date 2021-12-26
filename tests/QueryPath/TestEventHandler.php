@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPathTests;
 
+use function count;
 use QueryPath\CSS\EventHandler;
 
 /**

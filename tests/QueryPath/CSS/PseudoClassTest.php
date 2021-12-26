@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPathTests\CSS;
 
+use DOMDocument;
 use QueryPath\CSS\DOMTraverser\PseudoClass;
 use QueryPathTests\TestCase;
 
@@ -13,15 +14,6 @@ use QueryPathTests\TestCase;
  */
 class PseudoClassTest extends TestCase
 {
-	protected function doc($string, $tagname)
-	{
-		$doc = new \DOMDocument('1.0');
-		$doc->loadXML($string);
-		$found = $doc->getElementsByTagName($tagname)->item(0);
-
-		return [$found, $doc->documentElement];
-	}
-
 	public function testUnknownPseudoClass()
 	{
 		$xml = '<?xml version="1.0"?><root><foo>test</foo></root>';
@@ -864,5 +856,14 @@ class PseudoClassTest extends TestCase
 		$node = $ele->childNodes->item(0);
 		$ret = $ps->elementMatches('scope', $node, $ele);
 		$this->assertFalse($ret);
+	}
+
+	protected function doc($string, $tagname)
+	{
+		$doc = new DOMDocument('1.0');
+		$doc->loadXML($string);
+		$found = $doc->getElementsByTagName($tagname)->item(0);
+
+		return [$found, $doc->documentElement];
 	}
 }

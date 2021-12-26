@@ -10,7 +10,6 @@ use QueryPathTests\TestCase;
 
 class FormatTest extends TestCase
 {
-
 	/**
 	 * @test
 	 *
@@ -42,7 +41,8 @@ class FormatTest extends TestCase
 
 		$qp->find('item')
 			->formatAttr('label', 'trim', '_')
-			->formatAttr('total', 'str_replace[2]', ',', '');
+			->formatAttr('total', 'str_replace[2]', ',', '')
+		;
 
 		$this->assertSame('apple', $qp->find('item')->attr('label'));
 		$this->assertSame('12345678', $qp->find('item')->attr('total'));

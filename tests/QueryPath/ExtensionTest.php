@@ -21,6 +21,11 @@ class QueryPathExtensionTest extends TestCase
 		ExtensionRegistry::extend(StubExtensionTwo::class);
 	}
 
+	public function tearDown() : void
+	{
+		ExtensionRegistry::$useRegistry = true;
+	}
+
 	public function testExtensions()
 	{
 		$this->assertNotNull(qp());
@@ -58,11 +63,6 @@ class QueryPathExtensionTest extends TestCase
 		$this->assertFalse(ExtensionRegistry::hasExtension(StubExtensionThree::class));
 		ExtensionRegistry::extend(StubExtensionThree::class);
 		$this->assertTrue(ExtensionRegistry::hasExtension(StubExtensionThree::class));
-	}
-
-	public function tearDown() : void
-	{
-		ExtensionRegistry::$useRegistry = true;
 	}
 
 	public function testAutoloadExtensions()

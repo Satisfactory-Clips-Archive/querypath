@@ -19,6 +19,7 @@ declare(strict_types=1);
  * @see Extension
  * @see ExtensionRegistry::extend()
  */
+
 namespace QueryPath;
 
 /** @addtogroup querypath_extensions Extensions
@@ -95,5 +96,5 @@ namespace QueryPath;
  */
 interface Extension
 {
-	public function __construct(\QueryPath\Query $qp);
+	public function __construct(Query $qp);
 }

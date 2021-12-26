@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace QueryPath\Helpers;
 
+use function count;
+use DOMDocument;
+use DOMDocumentFragment;
+use function in_array;
+use function is_array;
+use function is_null;
 use QueryPath\CSS\ParseException;
 use QueryPath\CSS\QueryPathEventHandler;
 use QueryPath\DOMQuery;
 use QueryPath\Exception;
 use QueryPath\Query;
 use QueryPath\QueryPath;
+use SplObjectStorage;
 
 trait QueryMutators
 {
-
 	/**
 	 * Empty everything within the specified element.
 	 *
@@ -31,7 +37,7 @@ trait QueryMutators
 	 *
 	 * @deprecated the removeChildren() function is the preferred method
 	 */
-	public function emptyElement(): Query
+	public function emptyElement() : Query
 	{
 		$this->removeChildren();
 
@@ -65,14 +71,14 @@ trait QueryMutators
 	 * @see appendTo()
 	 * @see prepend()
 	 */
-	public function append($data): Query
+	public function append($data) : Query
 	{
 		$data = $this->prepareInsert($data);
 		if (isset($data)) {
 			if (empty($this->document->documentElement) && 0 === $this->matches->count()) {
 				// Then we assume we are writing to the doc root
 				$this->document->appendChild($data);
-				$found = new \SplObjectStorage();
+				$found = new SplObjectStorage();
 				$found->attach($this->document->documentElement);
 				$this->setMatches($found);
 			} else {
@@ -81,7 +87,7 @@ trait QueryMutators
 				foreach ($this->matches as $m) {
 					// DOMDocumentFragments are even more troublesome, as they don't
 					// always clone correctly. So we have to clone their children.
-					if ($data instanceof \DOMDocumentFragment) {
+					if ($data instanceof DOMDocumentFragment) {
 						foreach ($data->childNodes as $n) {
 							$m->appendChild($n->cloneNode(true));
 						}
@@ -115,7 +121,7 @@ trait QueryMutators
 	 * @see after()
 	 * @see prependTo()
 	 */
-	public function prepend($data): Query
+	public function prepend($data) : Query
 	{
 		$data = $this->prepareInsert($data);
 		if (isset($data)) {
@@ -186,7 +192,7 @@ trait QueryMutators
 	 * @see append()
 	 * @see prepend()
 	 */
-	public function before($data): Query
+	public function before($data) : Query
 	{
 		$data = $this->prepareInsert($data);
 		foreach ($this->matches as $m) {
@@ -216,7 +222,7 @@ trait QueryMutators
 	 * @see insertAfter()
 	 * @see appendTo()
 	 */
-	public function insertBefore(Query $dest): Query
+	public function insertBefore(Query $dest) : Query
 	{
 		foreach ($this->matches as $m) {
 			$dest->before($m);
@@ -242,7 +248,7 @@ trait QueryMutators
 	 * @see insertBefore()
 	 * @see append()
 	 */
-	public function insertAfter(Query $dest): Query
+	public function insertAfter(Query $dest) : Query
 	{
 		foreach ($this->matches as $m) {
 			$dest->after($m);
@@ -271,7 +277,7 @@ trait QueryMutators
 	 * @see before()
 	 * @see append()
 	 */
-	public function after($data): Query
+	public function after($data) : Query
 	{
 		if (empty($data)) {
 			return $this;
@@ -311,10 +317,10 @@ trait QueryMutators
 	 * @see remove()
 	 * @see replaceAll()
 	 */
-	public function replaceWith($new): Query
+	public function replaceWith($new) : Query
 	{
 		$data = $this->prepareInsert($new);
-		$found = new \SplObjectStorage();
+		$found = new SplObjectStorage();
 		foreach ($this->matches as $m) {
 			$parent = $m->parentNode;
 			$parent->insertBefore($data->cloneNode(true), $m);
@@ -365,15 +371,14 @@ trait QueryMutators
 	 *
 	 * @author mbutcher
 	 */
-	public function unwrap(): Query
+	public function unwrap() : Query
 	{
 		// We do this in two loops in order to
 		// capture the case where two matches are
 		// under the same parent. Othwerwise we might
 		// remove a match before we can move it.
-		$parents = new \SplObjectStorage();
+		$parents = new SplObjectStorage();
 		foreach ($this->matches as $m) {
-
 			// Cannot unwrap the root element.
 			if ($m->isSameNode($m->ownerDocument->documentElement)) {
 				throw new \QueryPath\Exception('Cannot unwrap the root element.');
@@ -414,7 +419,7 @@ trait QueryMutators
 	 * @see wrapAll()
 	 * @see wrapInner()
 	 */
-	public function wrap($markup): Query
+	public function wrap($markup) : Query
 	{
 		$data = $this->prepareInsert($markup);
 
@@ -424,7 +429,7 @@ trait QueryMutators
 		}
 
 		foreach ($this->matches as $m) {
-			if ($data instanceof \DOMDocumentFragment) {
+			if ($data instanceof DOMDocumentFragment) {
 				$copy = $data->firstChild->cloneNode(true);
 			} else {
 				$copy = $data->cloneNode(true);
@@ -485,7 +490,7 @@ trait QueryMutators
 			return $this;
 		}
 
-		if ($data instanceof \DOMDocumentFragment) {
+		if ($data instanceof DOMDocumentFragment) {
 			$data = $data->firstChild->cloneNode(true);
 		} else {
 			$data = $data->cloneNode(true);
@@ -538,7 +543,7 @@ trait QueryMutators
 		}
 
 		foreach ($this->matches as $m) {
-			if ($data instanceof \DOMDocumentFragment) {
+			if ($data instanceof DOMDocumentFragment) {
 				$wrapper = $data->firstChild->cloneNode(true);
 			} else {
 				$wrapper = $data->cloneNode(true);
@@ -582,17 +587,17 @@ trait QueryMutators
 	 * @return \QueryPath\DOMQuery
 	 *  The DOMQuery wrapping the single deepest node
 	 */
-	public function deepest(): Query
+	public function deepest() : Query
 	{
 		$deepest = 0;
-		$winner = new \SplObjectStorage();
+		$winner = new SplObjectStorage();
 		foreach ($this->matches as $m) {
 			$local_deepest = 0;
 			$local_ele = $this->deepestNode($m, 0, null, $local_deepest);
 
 			// Replace with the new deepest.
 			if ($local_deepest > $deepest) {
-				$winner = new \SplObjectStorage();
+				$winner = new SplObjectStorage();
 				foreach ($local_ele as $lele) {
 					$winner->attach($lele);
 				}
@@ -676,7 +681,7 @@ trait QueryMutators
 	 * @see addClass()
 	 * @see hasClass()
 	 */
-	public function removeClass($class = false): Query
+	public function removeClass($class = false) : Query
 	{
 		if (empty($class)) {
 			foreach ($this->matches as $m) {
@@ -689,7 +694,7 @@ trait QueryMutators
 					$vals = array_filter(explode(' ', $m->getAttribute('class')));
 					$buf = [];
 					foreach ($vals as $v) {
-						if ( !in_array($v, $to_remove, true)) {
+						if ( ! in_array($v, $to_remove, true)) {
 							$buf[] = $v;
 						}
 					}
@@ -730,13 +735,13 @@ trait QueryMutators
 	 *
 	 * @author eabrand
 	 */
-	public function detach($selector = null): Query
+	public function detach($selector = null) : Query
 	{
 		if (null !== $selector) {
 			$this->find($selector);
 		}
 
-		$found = new \SplObjectStorage();
+		$found = new SplObjectStorage();
 		$this->last = $this->matches;
 		foreach ($this->matches as $item) {
 			// The item returned is (according to docs) different from
@@ -769,7 +774,7 @@ trait QueryMutators
 	 *
 	 * @author eabrand
 	 */
-	public function attach(DOMQuery $dest): Query
+	public function attach(DOMQuery $dest) : Query
 	{
 		foreach ($this->last as $m) {
 			$dest->append($m);
@@ -800,7 +805,7 @@ trait QueryMutators
 	 * @see append()
 	 * @see prependTo()
 	 */
-	public function appendTo(DOMQuery $dest): Query
+	public function appendTo(DOMQuery $dest) : Query
 	{
 		foreach ($this->matches as $m) {
 			$dest->append($m);
@@ -831,9 +836,9 @@ trait QueryMutators
 	 * @see replaceWith()
 	 * @see removeChildren()
 	 */
-	public function remove($selector = null): Query
+	public function remove($selector = null) : Query
 	{
-		if ( !empty($selector)) {
+		if ( ! empty($selector)) {
 			// Do a non-destructive find.
 			$query = new QueryPathEventHandler($this->matches);
 			$query->find($selector);
@@ -842,7 +847,7 @@ trait QueryMutators
 			$matches = $this->matches;
 		}
 
-		$found = new \SplObjectStorage();
+		$found = new SplObjectStorage();
 		foreach ($matches as $item) {
 			// The item returned is (according to docs) different from
 			// the one passed in, so we have to re-store it.
@@ -868,7 +873,7 @@ trait QueryMutators
 	 *
 	 * @param string $selector
 	 *  The selector
-	 * @param \DOMDocument $document
+	 * @param DOMDocument $document
 	 *  The destination document
 	 *
 	 * @throws ParseException
@@ -882,7 +887,7 @@ trait QueryMutators
 	 * @see        remove()
 	 * @see        replaceWith()
 	 */
-	public function replaceAll($selector, \DOMDocument $document): Query
+	public function replaceAll($selector, DOMDocument $document) : Query
 	{
 		$replacement = $this->matches->count() > 0 ? $this->getFirstMatch() : $this->document->createTextNode('');
 
@@ -916,9 +921,8 @@ trait QueryMutators
 	 * @see andSelf()
 	 * @see end()
 	 */
-	public function add($selector): Query
+	public function add($selector) : Query
 	{
-
 		// This is destructive, so we need to set $last:
 		$this->last = $this->matches;
 
@@ -942,7 +946,7 @@ trait QueryMutators
 	 * @see replaceAll()
 	 * @see remove()
 	 */
-	public function removeChildren(): Query
+	public function removeChildren() : Query
 	{
 		foreach ($this->matches as $m) {
 			while ($kid = $m->firstChild) {
@@ -985,7 +989,7 @@ trait QueryMutators
 		// Default case: Return all attributes as an assoc array.
 		if (is_null($name)) {
 			if (0 === $this->matches->count()) {
-				return null;
+				return;
 			}
 			$ele = $this->getFirstMatch();
 			$buffer = [];
@@ -1020,7 +1024,7 @@ trait QueryMutators
 
 		//getter
 		if (0 === $this->matches->count()) {
-			return null;
+			return;
 		}
 
 		// Special node type handler:
@@ -1084,7 +1088,7 @@ trait QueryMutators
 		$css = [];
 		foreach ($this->matches as $match) {
 			$style = $match->getAttribute('style');
-			if ( !empty($style)) {
+			if ( ! empty($style)) {
 				// XXX: Is this sufficient?
 				$style_array = explode(';', $style);
 				foreach ($style_array as $item) {

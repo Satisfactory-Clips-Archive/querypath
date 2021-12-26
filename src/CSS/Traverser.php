@@ -27,6 +27,7 @@ interface Traverser
 	 *  The Traverser that can return matches
 	 */
 	public function find($selector);
+
 	/**
 	 * Get the results of a find() operation.
 	 *

@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace QueryPath\Extension;
 
+use function array_slice;
+use function call_user_func_array;
+use function func_get_args;
+use function is_array;
+use function is_callable;
+use function is_string;
 use QueryPath\DOMQuery;
 use QueryPath\Exception;
 use QueryPath\Extension;
@@ -88,7 +94,7 @@ class Format implements Extension
 	 *
 	 * @return DOMQuery the DOMQuery object with the same element(s) selected
 	 */
-	public function format($callback, $args = null, $additional = null): Query
+	public function format($callback, $args = null, $additional = null) : Query
 	{
 		if (isset($additional)) {
 			$args = func_get_args();
@@ -143,7 +149,7 @@ class Format implements Extension
 	 *
 	 * @return DOMQuery the DOMQuery object with the same element(s) selected
 	 */
-	public function formatAttr($attrName, $callback, $args = null, $additional = null): Query
+	public function formatAttr($attrName, $callback, $args = null, $additional = null) : Query
 	{
 		if (isset($additional)) {
 			$args = array_slice(func_get_args(), 2);
@@ -168,10 +174,10 @@ class Format implements Extension
 	 *
 	 * @throws Exception
 	 */
-	protected function forAll($callback, $args, $getter, $setter): Query
+	protected function forAll($callback, $args, $getter, $setter) : Query
 	{
 		[$callback, $pos] = $this->prepareCallback($callback);
-		if ( !is_callable($callback)) {
+		if ( ! is_callable($callback)) {
 			throw new Exception('Callback is not callable.');
 		}
 
@@ -196,11 +202,12 @@ class Format implements Extension
 			$pos = (int) $trail;
 		} elseif (is_array($callback) && isset($callback[2])) {
 			$pos = $callback[2];
-			$callback = array($callback[0], $callback[1]);
+			$callback = [$callback[0], $callback[1]];
 		} else {
 			$pos = 0;
 		}
-		return array($callback, $pos);
+
+		return [$callback, $pos];
 	}
 
 	/**
@@ -216,10 +223,11 @@ class Format implements Extension
 	 * @param $args
 	 * @param $pos
 	 */
-	protected function prepareArgs($args, $pos): array
+	protected function prepareArgs($args, $pos) : array
 	{
 		$padded = array_pad((array) $args, (0 < $pos) ? $pos - 1 : 0, null);
-		array_splice($padded, $pos, 0, array(null)); // insert null as a place holder
+		array_splice($padded, $pos, 0, [null]); // insert null as a place holder
+
 		return $padded;
 	}
 }
