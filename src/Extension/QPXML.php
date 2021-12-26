@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace QueryPath\Extension;
 
 use QueryPath\DOMQuery;
-use QueryPath\QueryPath;
 use QueryPath\Extension;
+use QueryPath\QueryPath;
 
 /**
  * Provide QueryPath with additional XML tools.

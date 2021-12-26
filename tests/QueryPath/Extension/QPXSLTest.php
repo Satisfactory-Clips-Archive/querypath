@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace QueryPathTests\Extension;
 
+use QueryPath\Extension\QPXSL;
 use QueryPath\QueryPath;
 use QueryPathTests\TestCase;
-use QueryPath\Extension\QPXSL;
 
 class QPXSLTest extends TestCase
 {

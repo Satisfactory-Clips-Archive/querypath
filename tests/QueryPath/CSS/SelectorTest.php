@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace QueryPathTests\CSS;
 
-use QueryPath\CSS\SimpleSelector;
 use QueryPath\CSS\EventHandler;
+use QueryPath\CSS\SimpleSelector;
 use QueryPathTests\TestCase;
 
 class SelectorTest extends TestCase

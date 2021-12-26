@@ -8,8 +8,8 @@ namespace QueryPathTests;
  * Unit tests and regression tests for DOMQuery.
  */
 
-use QueryPath\QueryPath;
 use QueryPath\DOMQuery;
+use QueryPath\QueryPath;
 
 define('DATA_FILE', __DIR__ . '/../data.xml');
 define('DATA_HTML_FILE', __DIR__ . '/../data.html');

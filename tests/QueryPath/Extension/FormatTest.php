@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace QueryPathTests\Extension;
 
+use QueryPath\Extension\Format;
 use QueryPath\QueryPath;
 use QueryPathTests\TestCase;
-use QueryPath\Extension\Format;
 
 class FormatTest extends TestCase
 {

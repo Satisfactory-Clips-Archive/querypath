@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS\DOMTraverser;
 
-use QueryPath\CSS\NotImplementedException;
 use QueryPath\CSS\EventHandler;
+use QueryPath\CSS\NotImplementedException;
 use QueryPath\CSS\ParseException;
 
 /**

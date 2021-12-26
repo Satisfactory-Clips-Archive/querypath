@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace QueryPathTests\CSS;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use QueryPath\CSS\Parser;
 use QueryPath\CSS\EventHandler;
+use QueryPath\CSS\Parser;
 use QueryPathTests\TestCase;
 use QueryPathTests\TestEvent;
 use QueryPathTests\TestEventHandler;

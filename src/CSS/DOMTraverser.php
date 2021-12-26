@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS;
 
-use QueryPath\CSS\DOMTraverser\Util;
 use QueryPath\CSS\DOMTraverser\PseudoClass;
 use QueryPath\CSS\DOMTraverser\PseudoElement;
+use QueryPath\CSS\DOMTraverser\Util;
 use QueryPath\CSS\SimpleSelector;
 use SplObjectStorage;
 

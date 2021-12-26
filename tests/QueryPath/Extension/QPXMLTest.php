@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace QueryPathTests\Extension;
 
-use QueryPath\QueryPath;
 use QueryPath\Extension\QPXML;
+use QueryPath\QueryPath;
 use QueryPathTests\TestCase;
 
 /**

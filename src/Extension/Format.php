@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace QueryPath\Extension;
 
 use QueryPath\DOMQuery;
+use QueryPath\Exception;
 use QueryPath\Extension;
 use QueryPath\Query;
-use QueryPath\Exception;
 
 /**
  * A QueryPath extension that adds extra methods for formatting node values.
