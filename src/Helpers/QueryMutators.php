@@ -689,7 +689,7 @@ trait QueryMutators
 					$vals = array_filter(explode(' ', $m->getAttribute('class')));
 					$buf = [];
 					foreach ($vals as $v) {
-						if ( ! in_array($v, $to_remove)) {
+						if ( !in_array($v, $to_remove)) {
 							$buf[] = $v;
 						}
 					}
@@ -833,7 +833,7 @@ trait QueryMutators
 	 */
 	public function remove($selector = null): Query
 	{
-		if ( ! empty($selector)) {
+		if ( !empty($selector)) {
 			// Do a non-destructive find.
 			$query = new QueryPathEventHandler($this->matches);
 			$query->find($selector);
@@ -1084,7 +1084,7 @@ trait QueryMutators
 		$css = [];
 		foreach ($this->matches as $match) {
 			$style = $match->getAttribute('style');
-			if ( ! empty($style)) {
+			if ( !empty($style)) {
 				// XXX: Is this sufficient?
 				$style_array = explode(';', $style);
 				foreach ($style_array as $item) {

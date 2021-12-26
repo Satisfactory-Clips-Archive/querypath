@@ -198,7 +198,7 @@ class DOMQuery extends DOM
 		$xpath = new \DOMXPath($this->document);
 
 		// Register a default namespace.
-		if ( ! empty($options['namespace_prefix']) && ! empty($options['namespace_uri'])) {
+		if ( !empty($options['namespace_prefix']) && !empty($options['namespace_uri'])) {
 			$xpath->registerNamespace($options['namespace_prefix'], $options['namespace_uri']);
 		}
 
@@ -290,7 +290,7 @@ class DOMQuery extends DOM
 			return ($this->count() > $index) ? $this->getNthMatch($index) : null;
 		}
 		// Retain support for legacy.
-		if ( ! $asObject) {
+		if ( !$asObject) {
 			$matches = [];
 			foreach ($this->matches as $m) {
 				$matches[] = $m;
@@ -404,7 +404,7 @@ class DOMQuery extends DOM
 			$matches = [];
 			preg_match($regex, $data, $matches);
 
-			if ( ! empty($matches)) {
+			if ( !empty($matches)) {
 				$result = [
 					'mime' => $matches[1] . '/' . $matches[2],
 					'data' => base64_decode($matches[3]),
@@ -698,12 +698,12 @@ class DOMQuery extends DOM
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( ! ($first instanceof \DOMNode)) {
+		if ( !($first instanceof \DOMNode)) {
 			return null;
 		}
 
 		// Added by eabrand.
-		if ( ! $first->ownerDocument->documentElement) {
+		if ( !$first->ownerDocument->documentElement) {
 			return null;
 		}
 
@@ -750,12 +750,12 @@ class DOMQuery extends DOM
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( ! ($first instanceof \DOMNode)) {
+		if ( !($first instanceof \DOMNode)) {
 			return null;
 		}
 
 		// Added by eabrand.
-		if ( ! $first->ownerDocument->documentElement) {
+		if ( !$first->ownerDocument->documentElement) {
 			return null;
 		}
 
@@ -829,11 +829,11 @@ class DOMQuery extends DOM
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( ! ($first instanceof \DOMNode)) {
+		if ( !($first instanceof \DOMNode)) {
 			return null;
 		}
 
-		if ( ! $first->hasChildNodes()) {
+		if ( !$first->hasChildNodes()) {
 			return '';
 		}
 
@@ -870,11 +870,11 @@ class DOMQuery extends DOM
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( ! ($first instanceof \DOMNode)) {
+		if ( !($first instanceof \DOMNode)) {
 			return null;
 		}
 
-		if ( ! $first->hasChildNodes()) {
+		if ( !$first->hasChildNodes()) {
 			return '';
 		}
 
@@ -902,11 +902,11 @@ class DOMQuery extends DOM
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( ! ($first instanceof \DOMNode)) {
+		if ( !($first instanceof \DOMNode)) {
 			return null;
 		}
 
-		if ( ! $first->hasChildNodes()) {
+		if ( !$first->hasChildNodes()) {
 			return '';
 		}
 
@@ -1159,7 +1159,7 @@ class DOMQuery extends DOM
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 		// Catch cases where first item is not a legit DOM object.
-		if ( ! ($first instanceof \DOMNode)) {
+		if ( !($first instanceof \DOMNode)) {
 			return null;
 		}
 
@@ -1244,7 +1244,7 @@ class DOMQuery extends DOM
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
-		if ( ! ($first instanceof \DOMNode)) {
+		if ( !($first instanceof \DOMNode)) {
 			return null;
 		}
 
@@ -1563,7 +1563,7 @@ class DOMQuery extends DOM
 	 */
 	public function __call($name, $arguments)
 	{
-		if ( ! ExtensionRegistry::$useRegistry) {
+		if ( !ExtensionRegistry::$useRegistry) {
 			throw new Exception("No method named $name found (Extensions disabled).");
 		}
 
@@ -1583,7 +1583,7 @@ class DOMQuery extends DOM
 		}
 
 		// Note that an empty ext registry indicates that extensions are disabled.
-		if ( ! empty($this->ext) && ExtensionRegistry::hasMethod($name)) {
+		if ( !empty($this->ext) && ExtensionRegistry::hasMethod($name)) {
 			$owner = ExtensionRegistry::getMethodClass($name);
 			$method = new \ReflectionMethod($owner, $name);
 

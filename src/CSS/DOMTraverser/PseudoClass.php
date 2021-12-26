@@ -82,7 +82,7 @@ class PseudoClass
 				return (boolean)mt_rand(0, 1);
 			case 'lang':
 				// No value = exception.
-				if ( ! isset($value)) {
+				if ( !isset($value)) {
 					throw new NotImplementedException(':lang() requires a value.');
 				}
 
@@ -153,7 +153,7 @@ class PseudoClass
 			case 'empty':
 				return $this->isEmpty($node);
 			case 'parent':
-				return ! $this->isEmpty($node);
+				return !$this->isEmpty($node);
 
 			case 'enabled':
 			case 'disabled':
@@ -392,7 +392,7 @@ class PseudoClass
 	 */
 	protected function isNot($node, $selector): bool
 	{
-		return ! $this->has($node, $selector);
+		return !$this->has($node, $selector);
 	}
 
 	/**
@@ -407,7 +407,7 @@ class PseudoClass
 		$tag = $node->tagName;
 		while (isset($node->previousSibling)) {
 			$node = $node->previousSibling;
-			if ($node->nodeType === XML_ELEMENT_NODE && ( ! $byType || $node->tagName === $tag)) {
+			if ($node->nodeType === XML_ELEMENT_NODE && ( !$byType || $node->tagName === $tag)) {
 				++$i;
 			}
 		}
@@ -429,7 +429,7 @@ class PseudoClass
 		$tag = $node->tagName;
 		while (isset($node->nextSibling)) {
 			$node = $node->nextSibling;
-			if ($node->nodeType === XML_ELEMENT_NODE && ( ! $byType || $node->tagName === $tag)) {
+			if ($node->nodeType === XML_ELEMENT_NODE && ( !$byType || $node->tagName === $tag)) {
 				++$i;
 			}
 		}
@@ -497,7 +497,7 @@ class PseudoClass
 
 	protected function isLocalLink($node): bool
 	{
-		if ( ! $node->hasAttribute('href')) {
+		if ( !$node->hasAttribute('href')) {
 			return false;
 		}
 		$url = $node->getAttribute('href');

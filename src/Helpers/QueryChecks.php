@@ -53,7 +53,7 @@ trait QueryChecks
 				// pass an is() on [a, b, c, d]. We use the $seen SPLOS to prevent this.
 				$seen = new \SplObjectStorage();
 				foreach ($selector as $item) {
-					if ( ! $this->matches->contains($item) || $seen->contains($item)) {
+					if ( !$this->matches->contains($item) || $seen->contains($item)) {
 						return false;
 					}
 					$seen->attach($item);
@@ -118,7 +118,7 @@ trait QueryChecks
 		// ones we add to our new matches.
 		foreach ($nodes as $original_node) {
 			$node = $original_node;
-			while ( ! empty($node)/* && $node != $node->ownerDocument*/) {
+			while ( !empty($node)/* && $node != $node->ownerDocument*/) {
 				if ($this->matches->contains($node)) {
 					$found->attach($node);
 				}
@@ -174,7 +174,7 @@ trait QueryChecks
 	public function hasAttr($attrName): bool
 	{
 		foreach ($this->matches as $match) {
-			if ( ! $match->hasAttribute($attrName)) {
+			if ( !$match->hasAttribute($attrName)) {
 				return false;
 			}
 		}

@@ -28,7 +28,7 @@ class Util
 	 */
 	public static function matchesAttribute($node, $name, $value = null, $operation = EventHandler::IS_EXACTLY): bool
 	{
-		if ( ! $node->hasAttribute($name)) {
+		if ( !$node->hasAttribute($name)) {
 			return false;
 		}
 
@@ -50,7 +50,7 @@ class Util
 	 */
 	public static function matchesAttributeNS($node, $name, $nsuri, $value = null, $operation = EventHandler::IS_EXACTLY)
 	{
-		if ( ! $node->hasAttributeNS($nsuri, $name)) {
+		if ( !$node->hasAttributeNS($nsuri, $name)) {
 			return false;
 		}
 
@@ -148,7 +148,7 @@ class Util
 		$res = preg_match($regex, $rule, $matches);
 
 		// If it doesn't parse, return 0, 0.
-		if ( ! $res) {
+		if ( !$res) {
 			return [0, 0];
 		}
 

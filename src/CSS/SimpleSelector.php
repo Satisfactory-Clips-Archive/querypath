@@ -101,44 +101,44 @@ class SimpleSelector
 	 */
 	public function notEmpty(): bool
 	{
-		return ! empty($this->element)
-			&& ! empty($this->id)
-			&& ! empty($this->classes)
-			&& ! empty($this->combinator)
-			&& ! empty($this->attributes)
-			&& ! empty($this->pseudoClasses)
-			&& ! empty($this->pseudoElements);
+		return !empty($this->element)
+			&& !empty($this->id)
+			&& !empty($this->classes)
+			&& !empty($this->combinator)
+			&& !empty($this->attributes)
+			&& !empty($this->pseudoClasses)
+			&& !empty($this->pseudoElements);
 	}
 
 	public function __toString()
 	{
 		$buffer = [];
 		try {
-			if ( ! empty($this->ns)) {
+			if ( !empty($this->ns)) {
 				$buffer[] = $this->ns;
 				$buffer[] = '|';
 			}
-			if ( ! empty($this->element)) {
+			if ( !empty($this->element)) {
 				$buffer[] = $this->element;
 			}
-			if ( ! empty($this->id)) {
+			if ( !empty($this->id)) {
 				$buffer[] = '#' . $this->id;
 			}
-			if ( ! empty($this->attributes)) {
+			if ( !empty($this->attributes)) {
 				foreach ($this->attributes as $attr) {
 					$buffer[] = '[';
-					if ( ! empty($attr['ns'])) {
+					if ( !empty($attr['ns'])) {
 						$buffer[] = $attr['ns'] . '|';
 					}
 					$buffer[] = $attr['name'];
-					if ( ! empty($attr['value'])) {
+					if ( !empty($attr['value'])) {
 						$buffer[] = self::attributeOperator($attr['op']);
 						$buffer[] = $attr['value'];
 					}
 					$buffer[] = ']';
 				}
 			}
-			if ( ! empty($this->pseudoClasses)) {
+			if ( !empty($this->pseudoClasses)) {
 				foreach ($this->pseudoClasses as $ps) {
 					$buffer[] = ':' . $ps['name'];
 					if (isset($ps['value'])) {
@@ -150,7 +150,7 @@ class SimpleSelector
 				$buffer[] = '::' . $pe;
 			}
 
-			if ( ! empty($this->combinator)) {
+			if ( !empty($this->combinator)) {
 				$buffer[] = self::combinatorOperator($this->combinator);
 			}
 		} catch (\Exception $e) {

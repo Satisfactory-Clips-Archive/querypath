@@ -249,11 +249,11 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				$found->attach($item);
 			}
 
-			if ( ! empty($nsuri)) {
+			if ( !empty($nsuri)) {
 				$nl = $item->getElementsByTagNameNS($nsuri, $lname);
 				// If something is found, merge them:
 				//if (!empty($nl)) $found = array_merge($found, $this->nodeListToArray($nl));
-				if ( ! empty($nl)) {
+				if ( !empty($nl)) {
 					$this->attachNodeList($nl, $found);
 				}
 			} else {
@@ -296,7 +296,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		//$this->findAnyElement = TRUE;
 		$nsuri = $this->dom->lookupNamespaceURI($ns);
 		$found = new \SplObjectStorage();
-		if ( ! empty($nsuri)) {
+		if ( !empty($nsuri)) {
 			$matches = $this->candidateList();
 			foreach ($matches as $item) {
 				if ($item instanceOf \DOMNode && $nsuri == $item->namespaceURI) {
@@ -439,7 +439,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				break;
 			case 'lang':
 				// No value = exception.
-				if ( ! isset($value)) {
+				if ( !isset($value)) {
 					throw new NotImplementedException('No handler for lang pseudoclass without value.');
 				}
 				$this->lang($value);
@@ -543,7 +543,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				$matches = $this->candidateList();
 				$found = new \SplObjectStorage();
 				foreach ($matches as $match) {
-					if ( ! empty($match->firstChild)) {
+					if ( !empty($match->firstChild)) {
 						$found->attach($match);
 					}
 				}
@@ -745,7 +745,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$aVal = trim($rule[0]);
 		$aVal = ($aVal == '-') ? -1 : (int)$aVal;
 
-		$bVal = ! empty($rule[1]) ? (int)trim($rule[1]) : 0;
+		$bVal = !empty($rule[1]) ? (int)trim($rule[1]) : 0;
 
 		return [$aVal, $bVal];
 	}
@@ -776,7 +776,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			// Build up an array of all of children of this parent, and store the
 			// index of each element for reference later. We only need to do this
 			// once per parent, though.
-			if ( ! $parents->contains($parent)) {
+			if ( !$parents->contains($parent)) {
 				$c = 0;
 				foreach ($parent->childNodes as $child) {
 					// We only want nodes, and if this call is preceded by an element
@@ -975,7 +975,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			// Build up an array of all of children of this parent, and store the
 			// index of each element for reference later. We only need to do this
 			// once per parent, though.
-			if ( ! $parents->contains($parent)) {
+			if ( !$parents->contains($parent)) {
 				$c = 0;
 				foreach ($parent->childNodes as $child) {
 					// This doesn't totally make sense, since the CSS 3 spec does not require that
@@ -1130,7 +1130,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			$parent = $item->parentNode;
 			foreach ($parent->childNodes as $kid) {
 				if ($kid->nodeType == XML_ELEMENT_NODE && $kid->tagName == $type) {
-					if ( ! $found->contains($kid)) {
+					if ( !$found->contains($kid)) {
 						$found->attach($kid);
 					}
 					break;
@@ -1153,7 +1153,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			for ($i = $parent->childNodes->length - 1; $i >= 0; --$i) {
 				$kid = $parent->childNodes->item($i);
 				if ($kid->nodeType == XML_ELEMENT_NODE && $kid->tagName == $type) {
-					if ( ! $found->contains($kid)) {
+					if ( !$found->contains($kid)) {
 						$found->attach($kid);
 					}
 					break;
@@ -1219,7 +1219,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$matches = $this->candidateList();
 		$found = new \SplObjectStorage();
 		foreach ($matches as $item) {
-			if ( ! $item->parentNode) {
+			if ( !$item->parentNode) {
 				$this->matches = new \SplObjectStorage();
 			}
 			$parent = $item->parentNode;
@@ -1300,9 +1300,9 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				foreach ($matches as $item) {
 					$str = $item->textContent;
 					$lines = explode("\n", $str);
-					if ( ! empty($lines)) {
+					if ( !empty($lines)) {
 						$line = trim($lines[0]);
-						if ( ! empty($line)) {
+						if ( !empty($line)) {
 							$o->textContent = $line;
 							$found->attach($o);//trim($lines[0]);
 						}
@@ -1318,7 +1318,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				$o = new \stdClass();
 				foreach ($matches as $item) {
 					$str = $item->textContent;
-					if ( ! empty($str)) {
+					if ( !empty($str)) {
 						$str = substr($str, 0, 1);
 						$o->textContent = $str;
 						$found->attach($o);

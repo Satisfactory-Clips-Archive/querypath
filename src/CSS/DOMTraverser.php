@@ -297,7 +297,7 @@ class DOMTraverser implements Traverser
 	 */
 	public function combineAdjacent($node, $selectors, $index)
 	{
-		while ( ! empty($node->previousSibling)) {
+		while ( !empty($node->previousSibling)) {
 			$node = $node->previousSibling;
 			if ($node->nodeType == XML_ELEMENT_NODE) {
 				//$this->debug(sprintf('Testing %s against "%s"', $node->tagName, $selectors[$index]));
@@ -327,7 +327,7 @@ class DOMTraverser implements Traverser
 	 */
 	public function combineSibling($node, $selectors, $index)
 	{
-		while ( ! empty($node->previousSibling)) {
+		while ( !empty($node->previousSibling)) {
 			$node = $node->previousSibling;
 			if ($node->nodeType == XML_ELEMENT_NODE && $this->matchesSimpleSelector($node, $selectors, $index)) {
 				return true;
@@ -383,7 +383,7 @@ class DOMTraverser implements Traverser
 	 */
 	public function combineAnyDescendant($node, $selectors, $index)
 	{
-		while ( ! empty($node->parentNode)) {
+		while ( !empty($node->parentNode)) {
 			$node = $node->parentNode;
 
 			// Catch case where element is child of something
@@ -429,16 +429,16 @@ class DOMTraverser implements Traverser
 		// this should give us only a single matched element
 		// to work with.
 		if (/*$element == '*' &&*/
-		! empty($selector->id)) {
+		!empty($selector->id)) {
 			$initialMatches = $this->initialMatchOnID($selector, $matches);
 		} // If a namespace is set, find the namespace matches.
-		elseif ( ! empty($selector->ns)) {
+		elseif ( !empty($selector->ns)) {
 			$initialMatches = $this->initialMatchOnElementNS($selector, $matches);
 		}
 		// If the element is a wildcard, using class can
 		// substantially reduce the number of elements that
 		// we start with.
-		elseif ($element === '*' && ! empty($selector->classes)) {
+		elseif ($element === '*' && !empty($selector->classes)) {
 			$initialMatches = $this->initialMatchOnClasses($selector, $matches);
 		} else {
 			$initialMatches = $this->initialMatchOnElement($selector, $matches);
@@ -467,7 +467,7 @@ class DOMTraverser implements Traverser
 
 		// Issue #145: DOMXPath will through an exception if the DOM is
 		// not set.
-		if ( ! ($this->dom instanceof \DOMDocument)) {
+		if ( !($this->dom instanceof \DOMDocument)) {
 			return $found;
 		}
 		$baseQuery = ".//*[@id='{$id}']";
@@ -481,7 +481,7 @@ class DOMTraverser implements Traverser
 			}
 
 			$nl = $this->initialXpathQuery($xpath, $node, $baseQuery);
-			if ( ! empty($nl) && $nl instanceof \DOMNodeList) {
+			if ( !empty($nl) && $nl instanceof \DOMNodeList) {
 				$this->attachNodeList($nl, $found);
 			}
 		}
@@ -511,7 +511,7 @@ class DOMTraverser implements Traverser
 
 		// Issue #145: DOMXPath will through an exception if the DOM is
 		// not set.
-		if ( ! ($this->dom instanceof \DOMDocument)) {
+		if ( !($this->dom instanceof \DOMDocument)) {
 			return $found;
 		}
 		$baseQuery = './/*[@class]';
@@ -593,7 +593,7 @@ class DOMTraverser implements Traverser
 				$found->attach($node);
 			}
 			$nl = $node->getElementsByTagName($element);
-			if ( ! empty($nl) && $nl instanceof \DOMNodeList) {
+			if ( !empty($nl) && $nl instanceof \DOMNodeList) {
 				$this->attachNodeList($nl, $found);
 			}
 		}
@@ -664,7 +664,7 @@ class DOMTraverser implements Traverser
 		}
 
 		// Handle namespace.
-		if ( ! empty($ns) && $ns !== '*') {
+		if ( !empty($ns) && $ns !== '*') {
 			// Check whether we have a matching NS URI.
 			$nsuri = $node->lookupNamespaceURI($ns);
 			if (empty($nsuri) || $node->namespaceURI !== $nsuri) {
@@ -728,7 +728,7 @@ class DOMTraverser implements Traverser
 			// Namespaced attributes.
 			if (isset($attr['ns']) && $attr['ns'] !== '*') {
 				$nsuri = $node->lookupNamespaceURI($attr['ns']);
-				if (empty($nsuri) || ! $node->hasAttributeNS($nsuri, $attr['name'])) {
+				if (empty($nsuri) || !$node->hasAttributeNS($nsuri, $attr['name'])) {
 					return false;
 				}
 				$matches = Util::matchesAttributeNS($node, $attr['name'], $nsuri, $val, $attr['op']);
@@ -748,7 +748,7 @@ class DOMTraverser implements Traverser
 				$matches = Util::matchesAttribute($node, $attr['name'], $val, $attr['op']);
 			}
 
-			if ( ! $matches) {
+			if ( !$matches) {
 				return false;
 			}
 		}
@@ -787,7 +787,7 @@ class DOMTraverser implements Traverser
 			return true;
 		}
 
-		if ( ! $node->hasAttribute('class')) {
+		if ( !$node->hasAttribute('class')) {
 			return false;
 		}
 

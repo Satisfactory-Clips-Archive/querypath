@@ -173,7 +173,7 @@ class Format implements Extension
 	protected function forAll($callback, $args, $getter, $setter): Query
 	{
 		[$callback, $pos] = $this->prepareCallback($callback);
-		if ( ! is_callable($callback)) {
+		if ( !is_callable($callback)) {
 			throw new Exception('Callback is not callable.');
 		}
 
