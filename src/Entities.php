@@ -36,10 +36,11 @@ class Entities implements EntitiesContract
 	 * with specialized entities.
 	 *
 	 * @param string $string
-	 *  The string to perform replacements on.
+	 *  The string to perform replacements on
+	 *
 	 * @return string
 	 *  Returns a string that is similar to the original one, but with
-	 *  all entity replacements made.
+	 *  all entity replacements made
 	 */
 	public static function replaceAllEntities(string $string): string
 	{
@@ -50,7 +51,8 @@ class Entities implements EntitiesContract
 	 * Callback for processing replacements.
 	 *
 	 * @param array $matches
-	 *  The regular expression replacement array.
+	 *  The regular expression replacement array
+	 *
 	 * @return string
 	 */
 	protected static function doReplacement($matches): string
@@ -80,9 +82,11 @@ class Entities implements EntitiesContract
 	 * Lookup an entity string's numeric equivalent.
 	 *
 	 * @param string $entity
-	 *  The entity whose numeric value is needed.
+	 *  The entity whose numeric value is needed
+	 *
 	 * @return int
-	 *  The integer value corresponding to the entity.
+	 *  The integer value corresponding to the entity
+	 *
 	 * @author Matt Butcher
 	 * @author Ryan Mahoney
 	 */

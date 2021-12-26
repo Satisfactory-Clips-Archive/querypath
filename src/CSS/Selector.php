@@ -45,7 +45,6 @@ namespace QueryPath\CSS;
  * ?>
  * @endode
  *
- *
  * @since QueryPath 3.0.0
  */
 class Selector implements EventHandler, \IteratorAggregate, \Countable

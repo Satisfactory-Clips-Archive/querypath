@@ -48,7 +48,7 @@ class Options
 	 * The passed-in array will be used as the default options list.
 	 *
 	 * @param array $array
-	 *  An associative array of options.
+	 *  An associative array of options
 	 */
 	static function set($array)
 	{
@@ -77,7 +77,7 @@ class Options
 	 * value stored in the options.
 	 *
 	 * @param array $array
-	 *  Associative array of options to merge into the existing options.
+	 *  Associative array of options to merge into the existing options
 	 */
 	static function merge($array)
 	{
@@ -88,7 +88,7 @@ class Options
 	 * Returns true of the specified key is already overridden in this object.
 	 *
 	 * @param string $key
-	 *  The key to search for.
+	 *  The key to search for
 	 */
 	static function has($key)
 	{

@@ -4,7 +4,6 @@ declare(strict_types=1);
 /** @file
  *
  * A simple selector.
- *
  */
 
 namespace QueryPath\CSS;
@@ -26,8 +25,8 @@ namespace QueryPath\CSS;
  * possible.
  *
  * @since  QueryPath 3.x
- * @author M Butcher
  *
+ * @author M Butcher
  */
 class SimpleSelector
 {
@@ -48,6 +47,7 @@ class SimpleSelector
 
 	/**
 	 * @param $code
+	 *
 	 * @return string
 	 */
 	public static function attributeOperator($code): string
@@ -70,6 +70,7 @@ class SimpleSelector
 
 	/**
 	 * @param $code
+	 *
 	 * @return string
 	 */
 	public static function combinatorOperator($code): string

@@ -77,14 +77,16 @@ declare(strict_types=1);
  *
  * @author    M Butcher <matt @aleph-null.tv>
  * @license   MIT
+ *
  * @see       QueryPath
  * @see       qp()
  * @see       http://querypath.org The QueryPath home page.
  * @see       http://api.querypath.org An online version of the API docs.
  * @see       http://technosophos.com For how-tos and examples.
- * @copyright Copyright (c) 2009-2012, Matt Butcher.
- * @version   -UNSTABLE% (3.x.x)
  *
+ * @copyright Copyright (c) 2009-2012, Matt Butcher.
+ *
+ * @version   -UNSTABLE% (3.x.x)
  */
 namespace QueryPath;
 
@@ -167,6 +169,7 @@ class QueryPath
 	 * $qp = qp(QueryPath::XHTML_STUB); // Creates a new XHTML document
 	 * $qp->writeXML(); // Writes the document as well-formed XHTML.
 	 * @endcode
+	 *
 	 * @since 2.0
 	 */
 	public const XHTML_STUB = '<?xml version="1.0"?>
@@ -184,6 +187,7 @@ class QueryPath
 	 * @param null $document
 	 * @param null $selector
 	 * @param array $options
+	 *
 	 * @return mixed|\QueryPath\DOMQuery
 	 */
 	public static function with($document = null, $selector = null, array $options = [])
@@ -239,10 +243,8 @@ class QueryPath
 	 *   existing functions, a DOMDocument, SimpleXMLElement, DOMNode or array
 	 *   of DOMNodes will be passed through as well. However, these types are not
 	 *   validated in any way.
-	 *
 	 * @param string $selector
-	 *   A CSS3 selector.
-	 *
+	 *   A CSS3 selector
 	 * @param array $options
 	 *   An associative array of options, which is passed on into HTML5-PHP. Note
 	 *   that the standard QueryPath options may be ignored for this function,
@@ -326,7 +328,7 @@ class QueryPath
 	 * @endcode
 	 *
 	 * @return array
-	 *   An array of extension names.
+	 *   An array of extension names
 	 *
 	 * @see QueryPath::ExtensionRegistry
 	 */
@@ -353,11 +355,12 @@ class QueryPath
 	 *    (Note that we make the assumption here that you would never want to set data to be
 	 *    a URL. If this is an incorrect assumption, file a bug.)
 	 * @param string $mime
-	 *    The MIME type of the document.
+	 *    The MIME type of the document
 	 * @param resource $context
 	 *    A valid context. Use this only if you need to pass a stream context. This is only necessary
 	 *    if $data is a URL. (See {@link stream_context_create()}).
-	 * @return string An encoded data URL.
+	 *
+	 * @return string an encoded data URL
 	 */
 	public static function encodeDataURL($data, $mime = 'application/octet-stream', $context = null) : string
 	{

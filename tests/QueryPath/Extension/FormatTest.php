@@ -14,6 +14,7 @@ class FormatTest extends TestCase
 
 	/**
 	 * @test
+	 *
 	 * @throws \QueryPath\CSS\ParseException
 	 */
 	public function it_formats_tag_text_node()
@@ -29,6 +30,7 @@ class FormatTest extends TestCase
 
 	/**
 	 * @test
+	 *
 	 * @throws \QueryPath\CSS\ParseException
 	 */
 	public function it_formats_attribute()

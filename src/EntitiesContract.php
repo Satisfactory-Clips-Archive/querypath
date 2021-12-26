@@ -5,7 +5,7 @@ declare(strict_types=1);
  * Created by PhpStorm.
  * User: arthur
  * Date: 03/08/2018
- * Time: 08:18
+ * Time: 08:18.
  */
 
 namespace QueryPath;
@@ -22,6 +22,7 @@ interface EntitiesContract
 	 * This code comes from Rhizome ({@link http://code.google.com/p/sinciput})
 	 *
 	 * @todo See if we can do this as a const.
+	 *
 	 * @see  get_html_translation_table()
 	 */
 	public const ENTITIES = [

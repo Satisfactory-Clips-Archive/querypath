@@ -23,7 +23,8 @@ class InputStream
 	 * Build a new CSS input stream from a string.
 	 *
 	 * @param string
-	 *  String to turn into an input stream.
+	 *  String to turn into an input stream
+	 * @param mixed $string
 	 */
 	public function __construct($string)
 	{
@@ -35,7 +36,7 @@ class InputStream
 	 *
 	 * @return char
 	 *  Returns the next character, but does not remove it from
-	 *  the stream.
+	 *  the stream
 	 */
 	public function peek()
 	{
@@ -60,8 +61,8 @@ class InputStream
 	/**
 	 * Check if the stream is empty.
 	 *
-	 * @return boolean
-	 *   Returns TRUE when the stream is empty, FALSE otherwise.
+	 * @return bool
+	 *   Returns TRUE when the stream is empty, FALSE otherwise
 	 */
 	public function isEmpty()
 	{

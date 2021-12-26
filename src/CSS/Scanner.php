@@ -27,8 +27,9 @@ final class Scanner
 	 * Given a new input stream, tokenize the CSS selector string.
 	 *
 	 * @see InputStream
-	 * @param InputStream $in
-	 *  An input stream to be scanned.
+	 *
+	 * @param inputStream $in
+	 *  An input stream to be scanned
 	 */
 	public function __construct(InputStream $in)
 	{
@@ -47,7 +48,7 @@ final class Scanner
 	 * See the next char without removing it from the stack.
 	 *
 	 * @return string
-	 * Returns the next character on the stack.
+	 * Returns the next character on the stack
 	 */
 	public function peek(): string
 	{
@@ -60,12 +61,13 @@ final class Scanner
 	 * This sets the current token to the value of the next token in
 	 * the stream.
 	 *
-	 * @return int|false
+	 * @throws ParseException
+	 * @throws \QueryPath\Exception
+	 *
+	 * @return false|int
 	 *  Returns an int value corresponding to one of the Token constants,
 	 *  or FALSE if the end of the string is reached. (Remember to use
 	 *  strong equality checking on FALSE, since 0 is a valid token id.)
-	 * @throws ParseException
-	 * @throws \QueryPath\Exception
 	 */
 	public function nextToken(): int|false
 	{
@@ -190,7 +192,7 @@ final class Scanner
 	/**
 	 * Get a name string from the input stream.
 	 * A name string must be composed of
-	 * only characters defined in Token:char: -_a-zA-Z0-9
+	 * only characters defined in Token:char: -_a-zA-Z0-9.
 	 */
 	public function getNameString()
 	{
@@ -303,7 +305,7 @@ final class Scanner
 	 * characters that are either alphanumber or whitespace. See
 	 * the Token::white and Token::char definitions.
 	 *
-	 * @deprecated This is not used anywhere in QueryPath.
+	 * @deprecated this is not used anywhere in QueryPath
 	 *//*
   public function getStringPlusWhitespace() {
 	$buf = '';

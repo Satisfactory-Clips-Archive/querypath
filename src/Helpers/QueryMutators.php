@@ -23,11 +23,14 @@ trait QueryMutators
 	 * function name.
 	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object with the newly emptied elements.
+	 *  The DOMQuery object with the newly emptied elements
+	 *
 	 * @see        removeChildren()
 	 * @since      2.1
+	 *
 	 * @author     eabrand
-	 * @deprecated The removeChildren() function is the preferred method.
+	 *
+	 * @deprecated the removeChildren() function is the preferred method
 	 */
 	public function emptyElement(): Query
 	{
@@ -51,14 +54,17 @@ trait QueryMutators
 	 * will need to retrieve the appended object and operate on that.
 	 *
 	 * @param mixed $data
-	 *  This can be either a string (the usual case), or a DOM Element.
+	 *  This can be either a string (the usual case), or a DOM Element
+	 *
+	 * @throws queryPath::Exception
+	 *  Thrown if $data is an unsupported object type
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object.
+	 *  The DOMQuery object
+	 *
 	 * @see appendTo()
 	 * @see prepend()
-	 * @throws QueryPath::Exception
-	 *  Thrown if $data is an unsupported object type.
-	 * @throws Exception
 	 */
 	public function append($data): Query
 	{
@@ -97,15 +103,18 @@ trait QueryMutators
 	 * The markup will be inserted into each match in the set.
 	 *
 	 * @param mixed $data
-	 *  This can be either a string (the usual case), or a DOM Element.
+	 *  This can be either a string (the usual case), or a DOM Element
+	 *
+	 * @throws queryPath::Exception
+	 *  Thrown if $data is an unsupported object type
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
+	 *
 	 * @see append()
 	 * @see before()
 	 * @see after()
 	 * @see prependTo()
-	 * @throws QueryPath::Exception
-	 *  Thrown if $data is an unsupported object type.
-	 * @throws Exception
 	 */
 	public function prepend($data): Query
 	{
@@ -136,12 +145,15 @@ trait QueryMutators
 	 * @see insertAfter()
 	 * @see prepend()
 	 * @see appendTo()
+	 *
 	 * @param DOMQuery $dest
-	 *  The destination DOMQuery object.
+	 *  The destination DOMQuery object
+	 *
+	 * @throws queryPath::Exception
+	 *  Thrown if $data is an unsupported object type
+	 *
 	 * @return \QueryPath\DOMQuery
 	 *  The original DOMQuery, unmodified. NOT the destination DOMQuery.
-	 * @throws QueryPath::Exception
-	 *  Thrown if $data is an unsupported object type.
 	 */
 	public function prependTo(Query $dest)
 	{
@@ -161,16 +173,19 @@ trait QueryMutators
 	 * @param mixed $data
 	 *  The data to be inserted. This can be XML in a string, a DomFragment, a DOMElement,
 	 *  or the other usual suspects. (See {@link qp()}).
+	 *
+	 * @throws queryPath::Exception
+	 *  Thrown if $data is an unsupported object type
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
 	 *  Returns the DOMQuery with the new modifications. The list of elements currently
 	 *  selected will remain the same.
+	 *
 	 * @see insertBefore()
 	 * @see after()
 	 * @see append()
 	 * @see prepend()
-	 * @throws QueryPath::Exception
-	 *  Thrown if $data is an unsupported object type.
-	 * @throws Exception
 	 */
 	public function before($data): Query
 	{
@@ -188,16 +203,19 @@ trait QueryMutators
 	 * The items are inserted before each element in the given DOMQuery document.
 	 * That is, they will be siblings with the current elements.
 	 *
-	 * @param Query $dest
-	 *  Destination DOMQuery document.
+	 * @param query $dest
+	 *  Destination DOMQuery document
+	 *
+	 * @throws queryPath::Exception
+	 *  Thrown if $data is an unsupported object type
+	 *
 	 * @return \QueryPath\DOMQuery
 	 *  The current DOMQuery object, unaltered. Only the destination DOMQuery
 	 *  object is altered.
+	 *
 	 * @see before()
 	 * @see insertAfter()
 	 * @see appendTo()
-	 * @throws QueryPath::Exception
-	 *  Thrown if $data is an unsupported object type.
 	 */
 	public function insertBefore(Query $dest): Query
 	{
@@ -212,15 +230,18 @@ trait QueryMutators
 	 * Insert the contents of the current DOMQuery after the nodes in the
 	 * destination DOMQuery object.
 	 *
-	 * @param Query $dest
-	 *  Destination object where the current elements will be deposited.
+	 * @param query $dest
+	 *  Destination object where the current elements will be deposited
+	 *
+	 * @throws queryPath::Exception
+	 *  Thrown if $data is an unsupported object type
+	 *
 	 * @return \QueryPath\DOMQuery
 	 *  The present DOMQuery, unaltered. Only the destination object is altered.
+	 *
 	 * @see after()
 	 * @see insertBefore()
 	 * @see append()
-	 * @throws QueryPath::Exception
-	 *  Thrown if $data is an unsupported object type.
 	 */
 	public function insertAfter(Query $dest): Query
 	{
@@ -239,14 +260,17 @@ trait QueryMutators
 	 * of matched elements.
 	 *
 	 * @param mixed $data
-	 *  The data to be appended.
+	 *  The data to be appended
+	 *
+	 * @throws queryPath::Exception
+	 *  Thrown if $data is an unsupported object type
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object (with the items inserted).
+	 *  The DOMQuery object (with the items inserted)
+	 *
 	 * @see before()
 	 * @see append()
-	 * @throws QueryPath::Exception
-	 *  Thrown if $data is an unsupported object type.
-	 * @throws Exception
 	 */
 	public function after($data): Query
 	{
@@ -272,12 +296,15 @@ trait QueryMutators
 	 * @param mixed $new
 	 *  A DOMElement or XML in a string. This will replace all elements
 	 *  currently wrapped in the DOMQuery object.
-	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object wrapping <b>the items that were removed</b>.
-	 *  This remains consistent with the jQuery API.
+	 *
 	 * @throws Exception
 	 * @throws ParseException
 	 * @throws QueryPath
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The DOMQuery object wrapping <b>the items that were removed</b>.
+	 *  This remains consistent with the jQuery API.
+	 *
 	 * @see append()
 	 * @see prepend()
 	 * @see before()
@@ -329,11 +356,14 @@ trait QueryMutators
 	 * element, and replace the child as the root element. Be careful, though.
 	 * You cannot set more than one child as a root element.)
 	 *
-	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object, with the same element(s) selected.
 	 * @throws Exception
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The DOMQuery object, with the same element(s) selected
+	 *
 	 * @see    wrap()
 	 * @since  2.1
+	 *
 	 * @author mbutcher
 	 */
 	public function unwrap(): Query
@@ -374,11 +404,14 @@ trait QueryMutators
 	 * the first item in the list will be used.)
 	 *
 	 * @param mixed $markup
-	 *  Markup that will wrap each element in the current list.
-	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object with the wrapping changes made.
+	 *  Markup that will wrap each element in the current list
+	 *
 	 * @throws Exception
 	 * @throws QueryPath
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The DOMQuery object with the wrapping changes made
+	 *
 	 * @see wrapAll()
 	 * @see wrapInner()
 	 */
@@ -430,11 +463,14 @@ trait QueryMutators
 	 * the first item in the list will be used.)
 	 *
 	 * @param string $markup
-	 *  Markup that will wrap all elements in the current list.
-	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object with the wrapping changes made.
+	 *  Markup that will wrap all elements in the current list
+	 *
 	 * @throws Exception
 	 * @throws QueryPath
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The DOMQuery object with the wrapping changes made
+	 *
 	 * @see wrap()
 	 * @see wrapInner()
 	 */
@@ -482,13 +518,16 @@ trait QueryMutators
 	 * the first item in the list will be used.)
 	 *
 	 * @param string $markup
-	 *  Markup that will wrap children of each element in the current list.
-	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object with the wrapping changes made.
-	 * @see wrap()
-	 * @see wrapAll()
+	 *  Markup that will wrap children of each element in the current list
+	 *
 	 * @throws \QueryPath\Exception
 	 * @throws QueryPath
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The DOMQuery object with the wrapping changes made
+	 *
+	 * @see wrap()
+	 * @see wrapAll()
 	 */
 	public function wrapInner($markup)
 	{
@@ -539,9 +578,10 @@ trait QueryMutators
 	 * In the case where there are multiple nodes at the same depth, all of the
 	 * nodes at that depth will be included.
 	 *
-	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery wrapping the single deepest node.
 	 * @throws ParseException
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The DOMQuery wrapping the single deepest node
 	 */
 	public function deepest(): Query
 	{
@@ -578,9 +618,11 @@ trait QueryMutators
 	 * on to the end.
 	 *
 	 * @param string $class
-	 *  The name of the class.
+	 *  The name of the class
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  Returns the DOMQuery object.
+	 *  Returns the DOMQuery object
+	 *
 	 * @see css()
 	 * @see attr()
 	 * @see removeClass()
@@ -626,9 +668,11 @@ trait QueryMutators
 	 * To remove the entire 'class' attribute, you should use {@see removeAttr()}.
 	 *
 	 * @param string $class
-	 *  The class name to remove.
+	 *  The class name to remove
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The modified DOMNode object.
+	 *  The modified DOMNode object
+	 *
 	 * @see attr()
 	 * @see addClass()
 	 * @see hasClass()
@@ -673,15 +717,19 @@ trait QueryMutators
 	 * the document.
 	 *
 	 * @param string $selector
-	 *  A CSS Selector.
+	 *  A CSS Selector
+	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The Query path wrapping a list of removed items.
+	 *  The Query path wrapping a list of removed items
+	 *
 	 * @see    replaceAll()
 	 * @see    replaceWith()
 	 * @see    removeChildren()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws ParseException
 	 */
 	public function detach($selector = null): Query
 	{
@@ -707,16 +755,20 @@ trait QueryMutators
 	 * the document.
 	 *
 	 * @param DOMQuery $dest
-	 *  A DOMQuery Selector.
+	 *  A DOMQuery Selector
+	 *
+	 * @throws QueryPath
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The Query path wrapping a list of removed items.
+	 *  The Query path wrapping a list of removed items
+	 *
 	 * @see    replaceAll()
 	 * @see    replaceWith()
 	 * @see    removeChildren()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws QueryPath
-	 * @throws Exception
 	 */
 	public function attach(DOMQuery $dest): Query
 	{
@@ -736,15 +788,18 @@ trait QueryMutators
 	 * appended. The data is then appended to the found items.
 	 *
 	 * @param DOMQuery $dest
-	 *  A DOMQuery object that will be appended to.
+	 *  A DOMQuery object that will be appended to
+	 *
+	 * @throws queryPath::Exception
+	 *  Thrown if $data is an unsupported object type
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
 	 *  The original DOMQuery, unaltered. Only the destination DOMQuery will
 	 *  be modified.
+	 *
 	 * @see append()
 	 * @see prependTo()
-	 * @throws QueryPath::Exception
-	 *  Thrown if $data is an unsupported object type.
-	 * @throws Exception
 	 */
 	public function appendTo(DOMQuery $dest): Query
 	{
@@ -766,13 +821,16 @@ trait QueryMutators
 	 * the document.
 	 *
 	 * @param string $selector
-	 *  A CSS Selector.
+	 *  A CSS Selector
+	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The Query path wrapping a list of removed items.
+	 *  The Query path wrapping a list of removed items
+	 *
 	 * @see replaceAll()
 	 * @see replaceWith()
 	 * @see removeChildren()
-	 * @throws ParseException
 	 */
 	public function remove($selector = null): Query
 	{
@@ -810,17 +868,20 @@ trait QueryMutators
 	 * distinct.
 	 *
 	 * @param string $selector
-	 *  The selector.
+	 *  The selector
 	 * @param \DOMDocument $document
-	 *  The destination document.
+	 *  The destination document
+	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery wrapping the modified document.
-	 * @deprecated Due to the fact that this is not a particularly friendly method,
+	 *  The DOMQuery wrapping the modified document
+	 *
+	 * @deprecated due to the fact that this is not a particularly friendly method,
 	 *  and that it can be easily replicated using {@see replaceWith()}, it is to be
-	 *  considered deprecated.
+	 *  considered deprecated
 	 * @see        remove()
 	 * @see        replaceWith()
-	 * @throws ParseException
 	 */
 	public function replaceAll($selector, \DOMDocument $document): Query
 	{
@@ -846,9 +907,11 @@ trait QueryMutators
 	 * this way, you can add additional elements to the existing set.
 	 *
 	 * @param string $selector
-	 *  A valid selector.
+	 *  A valid selector
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object with the newly added elements.
+	 *  The DOMQuery object with the newly added elements
+	 *
 	 * @see append()
 	 * @see after()
 	 * @see andSelf()
@@ -874,7 +937,8 @@ trait QueryMutators
 	 * PHP built-in, and cannot be used as a method name.)
 	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object with the child nodes removed.
+	 *  The DOMQuery object with the child nodes removed
+	 *
 	 * @see replaceWith()
 	 * @see replaceAll()
 	 * @see remove()
@@ -904,12 +968,14 @@ trait QueryMutators
 	 * match is returned.
 	 *
 	 * @param mixed $name
-	 *   The name of the attribute or an associative array of name/value pairs.
+	 *   The name of the attribute or an associative array of name/value pairs
 	 * @param string $value
-	 *   A value (used only when setting an individual property).
+	 *   A value (used only when setting an individual property)
+	 *
 	 * @return mixed
 	 *   If this was a setter request, return the DOMQuery object. If this was
 	 *   an access request (getter), return the string value.
+	 *
 	 * @see removeAttr()
 	 * @see tag()
 	 * @see hasAttr()
@@ -1006,6 +1072,7 @@ trait QueryMutators
 	 *  apply all rules to all elements in the set.
 	 * @param string $value
 	 *  The value to set. This is only set if $name is a string.
+	 *
 	 * @return \QueryPath\DOMQuery
 	 */
 	public function css($name = null, $value = '')

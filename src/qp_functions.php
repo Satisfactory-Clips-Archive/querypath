@@ -27,6 +27,9 @@ use QueryPath\QueryPath;
  * These are the classes, objects, and functions that developers who use QueryPath
  * are likely to use. The qp() and htmlqp() functions are the best place to start,
  * while most of the frequently used methods are part of the QueryPath object.
+ *
+ * @param null|mixed $document
+ * @param null|mixed $string
  */
 
 /** @addtogroup querypath_util Utilities
@@ -145,14 +148,16 @@ use QueryPath\QueryPath;
  *    cases for an example.
  *
  * @ingroup querypath_core
+ *
  * @param mixed $document
- *  A document in one of the forms listed above.
+ *  A document in one of the forms listed above
  * @param string $string
- *  A CSS 3 selector.
+ *  A CSS 3 selector
  * @param array $options
  *  An associative array of options. Currently supported options are listed above.
+ *
  * @return \QueryPath\DOMQuery
- *  Or possibly another QueryPath-like object if you overrode QueryPath_class.
+ *  Or possibly another QueryPath-like object if you overrode QueryPath_class
  */
 function qp($document = null, $string = null, array $options = [])
 {
@@ -181,10 +186,13 @@ function qp($document = null, $string = null, array $options = [])
  * is installed and enabled. This is usually enabled, but not always.
  *
  * @ingroup querypath_core
+ *
  * @see     qp()
+ *
  * @param null $document
  * @param null $selector
  * @param array $options
+ *
  * @return mixed|\QueryPath\DOMQuery
  */
 function htmlqp($document = null, $selector = null, $options = [])
@@ -207,8 +215,7 @@ function htmlqp($document = null, $selector = null, $options = [])
  *
  * @param null $document
  * @param string $selector
- *   A CSS3 selector.
- *
+ *   A CSS3 selector
  * @param array $options
  *   An associative array of options, which is passed on into HTML5-PHP. Note
  *   that the standard QueryPath options may be ignored for this function,

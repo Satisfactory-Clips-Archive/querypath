@@ -43,6 +43,8 @@ class ExtensionRegistry
 
 	/**
 	 * Extend a Query with the given extension class.
+	 *
+	 * @param mixed $classname
 	 */
 	public static function extend($classname)
 	{
@@ -60,9 +62,10 @@ class ExtensionRegistry
 	 * registered extensions. If it does, then this will return TRUE.
 	 *
 	 * @param string $name
-	 *  The name of the method to search for.
-	 * @return boolean
-	 *  TRUE if the method exists, false otherwise.
+	 *  The name of the method to search for
+	 *
+	 * @return bool
+	 *  TRUE if the method exists, false otherwise
 	 */
 	public static function hasMethod($name)
 	{
@@ -76,9 +79,10 @@ class ExtensionRegistry
 	 * TRUE.
 	 *
 	 * @param string $name
-	 *  The name of the class.
-	 * @return boolean
-	 *  TRUE if the class is registered, FALSE otherwise.
+	 *  The name of the class
+	 *
+	 * @return bool
+	 *  TRUE if the class is registered, FALSE otherwise
 	 */
 	public static function hasExtension($name)
 	{
@@ -95,9 +99,10 @@ class ExtensionRegistry
 	 * method name, the last one registred will be the only one recognized.
 	 *
 	 * @param string $name
-	 *  The name of the method.
+	 *  The name of the method
+	 *
 	 * @return string
-	 *  The name of the class.
+	 *  The name of the class
 	 */
 	public static function getMethodClass($name)
 	{
@@ -111,10 +116,11 @@ class ExtensionRegistry
 	 * an associative array of extension names to (new) instances.
 	 * Generally, this is intended to be used internally.
 	 *
-	 * @param Query $qp
-	 *  The Query into which the extensions should be registered.
+	 * @param query $qp
+	 *  The Query into which the extensions should be registered
+	 *
 	 * @return array
-	 *  An associative array of classnames to instances.
+	 *  An associative array of classnames to instances
 	 */
 	public static function getExtensions(Query $qp)
 	{
@@ -137,6 +143,7 @@ class ExtensionRegistry
 	 * If extension autoloading is disabled, then QueryPath will not
 	 * automatically load all registred extensions when a new Query
 	 * object is created using qp().
+	 *
 	 * @param bool $boolean
 	 */
 	public static function autoloadExtensions($boolean = true) : void

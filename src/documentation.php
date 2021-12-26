@@ -91,7 +91,6 @@ declare(strict_types=1);
  * a more complex extension.
  *
  * QueryPathExtension is the master interface for all extensions.
- *
  */
 
 

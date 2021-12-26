@@ -10,11 +10,11 @@ use QueryPath\CSS\DOMTraverser;
 use QueryPath\Entities;
 
 /**
- * Class DOM
+ * Class DOM.
  *
  * @package QueryPath
  *
- * @property \Traversable|array|\SplObjectStorage matches
+ * @property array|\SplObjectStorage|\Traversable matches
  */
 abstract class DOM implements Query, \IteratorAggregate, \Countable
 {
@@ -60,12 +60,14 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * qp(), or htmlqp().
 	 *
 	 * @param mixed $document
-	 *   A document-like object.
+	 *   A document-like object
 	 * @param string $string
 	 *   A CSS 3 Selector
 	 * @param array $options
-	 *   An associative array of options.
+	 *   An associative array of options
+	 *
 	 * @see qp()
+	 *
 	 * @throws Exception
 	 */
 	public function __construct($document = null, $string = null, $options = [])
@@ -229,6 +231,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * It makes sure the last matches buffer is set (for end() and andSelf()).
 	 *
 	 * @since 2.0
+	 *
 	 * @param $matches
 	 */
 	public function setMatches($matches)
@@ -268,16 +271,18 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * invoked with the first parameter. The rest are used for recursion.
 	 *
 	 * @see deepest();
+	 *
 	 * @param DOMNode $ele
-	 *  The element.
+	 *  The element
 	 * @param int $depth
 	 *  The depth guage
 	 * @param mixed $current
-	 *  The current set.
+	 *  The current set
 	 * @param DOMNode $deepest
-	 *  A reference to the current deepest node.
+	 *  A reference to the current deepest node
+	 *
 	 * @return array
-	 *  Returns an array of DOM nodes.
+	 *  Returns an array of DOM nodes
 	 */
 	protected function deepestNode(\DOMNode $ele, $depth = 0, $current = null, &$deepest = null)
 	{
@@ -317,12 +322,14 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 *   imported.
 	 *
 	 * @param mixed $item
-	 *  Item to prepare for insert.
-	 * @return mixed
-	 *  Returns the prepared item.
-	 * @throws QueryPath::Exception
-	 *  Thrown if the object passed in is not of a supprted object type.
+	 *  Item to prepare for insert
+	 *
+	 * @throws queryPath::Exception
+	 *  Thrown if the object passed in is not of a supprted object type
 	 * @throws Exception
+	 *
+	 * @return mixed
+	 *  Returns the prepared item
 	 */
 	protected function prepareInsert($item)
 	{
@@ -398,7 +405,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * This attempts to autodetect the type of file, and then parse it.
 	 *
 	 * @param string $filename
-	 *  The file name to parse.
+	 *  The file name to parse
 	 * @param int $flags
 	 *  The OR-combined flags accepted by the DOM parser. See the PHP documentation
 	 *  for DOM or for libxml.
@@ -407,8 +414,9 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 *  parsing path is followed: The file is loaded by PHP's stream-aware IO
 	 *  facilities, read entirely into memory, and then handed off to
 	 *  {@link parseXMLString()}. On large files, this can have a performance impact.
+	 *
 	 * @throws \QueryPath\ParseException
-	 *  Thrown when a file cannot be loaded or parsed.
+	 *  Thrown when a file cannot be loaded or parsed
 	 */
 	private function parseXMLFile($filename, $flags = null, $context = null)
 	{
@@ -494,6 +502,8 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * core assumptions about how things work. Instead, classes should
 	 * override the constructor and pass in only one of the parsed types
 	 * that this class expects.
+	 *
+	 * @param mixed $string
 	 */
 	protected function isXMLish($string)
 	{
@@ -507,6 +517,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * strong random access support, so we suppliment it with this method.
 	 *
 	 * @param $index
+	 *
 	 * @return object|void
 	 */
 	protected function getNthMatch(int $index)

@@ -10,7 +10,7 @@ use QueryPath\Exception;
 use QueryPath\Query;
 
 /**
- * Trait QueryChecks
+ * Trait QueryChecks.
  *
  * @package QueryPath\Helpers
  *
@@ -24,15 +24,18 @@ trait QueryChecks
 	 *
 	 * Unlike jQuery's version, this supports full selectors (not just simple ones).
 	 *
-	 * @param string|\DOMNode $selector
+	 * @param \DOMNode|string $selector
 	 *   The selector to search for. As of QueryPath 2.1.1, this also supports passing a
 	 *   DOMNode object.
-	 * @return boolean
+	 *
+	 * @throws Exception
+	 * @throws Exception
+	 *
+	 * @return bool
 	 *   TRUE if one or more elements match. FALSE if no match is found.
+	 *
 	 * @see get()
 	 * @see eq()
-	 * @throws Exception
-	 * @throws Exception
 	 */
 	public function is($selector): bool
 	{
@@ -80,11 +83,16 @@ trait QueryChecks
 	 *     - If $contained is a DOMNode, then this will test to see if THE EXACT DOMNode
 	 *     exists in the currently matched elements. (Note that you cannot match across DOM trees, even if it is the
 	 *     same document.)
+	 *
 	 * @since  2.1
+	 *
 	 * @author eabrand
+	 *
 	 * @todo   It would be trivially easy to add support for iterating over an array or Iterable of DOMNodes.
-	 * @return DOMQuery
+	 *
 	 * @throws ParseException
+	 *
+	 * @return DOMQuery
 	 */
 	public function has($contained): Query
 	{
@@ -125,9 +133,11 @@ trait QueryChecks
 	 * Returns TRUE if any of the elements in the DOMQuery have the specified class.
 	 *
 	 * @param string $class
-	 *  The name of the class.
-	 * @return boolean
-	 *  TRUE if the class exists in one or more of the elements, FALSE otherwise.
+	 *  The name of the class
+	 *
+	 * @return bool
+	 *  TRUE if the class exists in one or more of the elements, FALSE otherwise
+	 *
 	 * @see addClass()
 	 * @see removeClass()
 	 */
@@ -152,9 +162,11 @@ trait QueryChecks
 	 * FALSE if at least one item does not have the attribute.
 	 *
 	 * @param string $attrName
-	 *  The attribute name.
-	 * @return boolean
-	 *  TRUE if all matches have the attribute, FALSE otherwise.
+	 *  The attribute name
+	 *
+	 * @return bool
+	 *  TRUE if all matches have the attribute, FALSE otherwise
+	 *
 	 * @since 2.0
 	 * @see   attr()
 	 * @see   hasClass()
@@ -179,9 +191,11 @@ trait QueryChecks
 	 * As is the case in jQuery, this operation is not considered destructive.
 	 *
 	 * @param string $name
-	 *  Name of the parameter to remove.
+	 *  Name of the parameter to remove
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object with the same elements.
+	 *  The DOMQuery object with the same elements
+	 *
 	 * @see attr()
 	 */
 	public function removeAttr($name): Query

@@ -78,7 +78,8 @@ class DOMQuery extends DOM
 	 *
 	 * @return array
 	 *  An associative array of options, calculated from defaults and overridden
-	 *  options.
+	 *  options
+	 *
 	 * @see   qp()
 	 * @see   QueryPath::Options::set()
 	 * @see   QueryPath::Options::merge()
@@ -106,10 +107,12 @@ class DOMQuery extends DOM
 	 * @param string $selector
 	 *  A selector. If this is supplied, QueryPath will navigate to the
 	 *  document root and then run the query. (Added in QueryPath 2.0 Beta 2)
+	 *
+	 * @throws CSS\ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
 	 *  The DOMQuery object, wrapping the root element (document element)
-	 *  for the current document.
-	 * @throws CSS\ParseException
+	 *  for the current document
 	 */
 	public function top($selector = null): Query
 	{
@@ -121,16 +124,20 @@ class DOMQuery extends DOM
 	 *
 	 * @param string $selector
 	 *   CSS 3 Selector
+	 *
+	 * @throws CSS\ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
+	 *
 	 * @see  filter()
 	 * @see  is()
+	 *
 	 * @todo If a find() returns zero matches, then a subsequent find() will
 	 *   also return zero matches, even if that find has a selector like :root.
 	 *   The reason for this is that the {@link QueryPathEventHandler} does
 	 *   not set the root of the document tree if it cannot find any elements
 	 *   from which to determine what the root is. The workaround is to use
 	 *   {@link top()} to select the root element again.
-	 * @throws CSS\ParseException
 	 */
 	public function find($selector): Query
 	{
@@ -141,8 +148,10 @@ class DOMQuery extends DOM
 
 	/**
 	 * @param $selector
-	 * @return $this
+	 *
 	 * @throws CSS\ParseException
+	 *
+	 * @return $this
 	 */
 	public function findInPlace($selector)
 	{
@@ -166,19 +175,23 @@ class DOMQuery extends DOM
 	 * values with {@link get()}).
 	 *
 	 * @param string $query
-	 *      An XPath query.
+	 *      An XPath query
 	 * @param array $options
 	 *      Currently supported options are:
 	 *      - 'namespace_prefix': And XML namespace prefix to be used as the default. Used
 	 *      in conjunction with 'namespace_uri'
 	 *      - 'namespace_uri': The URI to be used as the default namespace URI. Used
 	 *      with 'namespace_prefix'
+	 *
+	 * @throws CSS\ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *      A DOMQuery object wrapping the results of the query.
+	 *      A DOMQuery object wrapping the results of the query
+	 *
 	 * @see    find()
+	 *
 	 * @author M Butcher
 	 * @author Xavier Prud'homme
-	 * @throws CSS\ParseException
 	 */
 	public function xpath($query, $options = [])
 	{
@@ -208,8 +221,9 @@ class DOMQuery extends DOM
 	 * Note that there is no length property on this object.
 	 *
 	 * @return int
-	 *  Number of items in the object.
-	 * @deprecated QueryPath now implements Countable, so use count().
+	 *  Number of items in the object
+	 *
+	 * @deprecated queryPath now implements Countable, so use count()
 	 */
 	public function size()
 	{
@@ -229,7 +243,7 @@ class DOMQuery extends DOM
 	 * @endcode
 	 *
 	 * @return int
-	 *  The number of matches in the DOMQuery.
+	 *  The number of matches in the DOMQuery
 	 */
 	public function count(): int
 	{
@@ -259,12 +273,14 @@ class DOMQuery extends DOM
 	 * @param int $index
 	 *   If specified, then only this index value will be returned. If this
 	 *   index is out of bounds, a NULL will be returned.
-	 * @param boolean $asObject
+	 * @param bool $asObject
 	 *   If this is TRUE, an SplObjectStorage object will be returned
 	 *   instead of an array. This is the preferred method for extensions to use.
+	 *
 	 * @return mixed
 	 *   If an index is passed, one element will be returned. If no index is
 	 *   present, an array of all matches will be returned.
+	 *
 	 * @see eq()
 	 * @see SplObjectStorage
 	 */
@@ -328,7 +344,7 @@ class DOMQuery extends DOM
 	 * with no parameters.
 	 *
 	 * @return array
-	 *  An array of DOMNodes (typically DOMElements).
+	 *  An array of DOMNodes (typically DOMElements)
 	 */
 	public function toArray()
 	{
@@ -350,7 +366,7 @@ class DOMQuery extends DOM
 	 * Note that this is known *not* to work on IE 6, but should render fine in other browsers.
 	 *
 	 * @param string $attr
-	 *    The name of the attribute.
+	 *    The name of the attribute
 	 * @param mixed $data
 	 *    The contents to inject as the data. The value can be any one of the following:
 	 *    - A URL: If this is given, then the subsystem will read the content from that URL. THIS
@@ -361,13 +377,15 @@ class DOMQuery extends DOM
 	 *    (Note that we make the assumption here that you would never want to set data to be
 	 *    a URL. If this is an incorrect assumption, file a bug.)
 	 * @param string $mime
-	 *    The MIME type of the document.
+	 *    The MIME type of the document
 	 * @param resource $context
 	 *    A valid context. Use this only if you need to pass a stream context. This is only necessary
 	 *    if $data is a URL. (See {@link stream_context_create()}).
+	 *
 	 * @return \QueryPath\DOMQuery|string
 	 *    If this is called as a setter, this will return a DOMQuery object. Otherwise, it
 	 *    will attempt to fetch data out of the attribute and return that.
+	 *
 	 * @see   http://en.wikipedia.org/wiki/Data:_URL
 	 * @see   attr()
 	 * @since 2.1
@@ -450,15 +468,17 @@ class DOMQuery extends DOM
 	 * ?>
 	 * @endcode
 	 *
-	 * @param callback $comparator
+	 * @param callable $comparator
 	 *   A callback. This will be called during sorting to compare two DOMNode
 	 *   objects.
-	 * @param boolean $modifyDOM
+	 * @param bool $modifyDOM
 	 *   If this is TRUE, the sorted results will be inserted back into
-	 *   the DOM at the position of the original first element.
-	 * @return \QueryPath\DOMQuery
-	 *   This object.
+	 *   the DOM at the position of the original first element
+	 *
 	 * @throws CSS\ParseException
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *   This object
 	 */
 	public function sort($comparator, $modifyDOM = false): Query
 	{
@@ -504,11 +524,12 @@ class DOMQuery extends DOM
 	 * converse of {@link get()}.
 	 *
 	 * @param DOMElement $subject
-	 *  The item to match.
+	 *  The item to match
 	 *
 	 * @return mixed
 	 *  The index as an integer (if found), or boolean FALSE. Since 0 is a
 	 *  valid index, you should use strong equality (===) to test..
+	 *
 	 * @see get()
 	 * @see is()
 	 */
@@ -533,8 +554,9 @@ class DOMQuery extends DOM
 	 *
 	 * @see replaceAll()
 	 * @see replaceWith()
+	 *
 	 * @return string
-	 *  The tag name of the first element in the list.
+	 *  The tag name of the first element in the list
 	 */
 	public function tag()
 	{
@@ -572,10 +594,11 @@ class DOMQuery extends DOM
 	 *
 	 * @return \QueryPath\DOMQuery
 	 *  A DOMNode object reflecting the list of matches prior to the last destructive
-	 *  operation.
+	 *  operation
+	 *
 	 * @see        andSelf()
 	 * @see        add()
-	 * @deprecated This function will be removed.
+	 * @deprecated this function will be removed
 	 */
 	public function end()
 	{
@@ -600,8 +623,10 @@ class DOMQuery extends DOM
 	 * are beneath p elements.
 	 *
 	 * @see end();
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMNode object with the results of the last two "destructive" operations.
+	 *  A DOMNode object with the results of the last two "destructive" operations
+	 *
 	 * @see add()
 	 * @see end()
 	 */
@@ -632,16 +657,20 @@ class DOMQuery extends DOM
 	 * <b>Important:</b> This differs from jQuery's html() function. This function
 	 * returns <i>the current node</i> and all of its children. jQuery returns only
 	 * the children. This means you do not need to do things like this:
+	 *
 	 * @code$qp->parent()->html()@endcode.
 	 *
 	 * By default, this is HTML 4.01, not XHTML. Use {@link xml()} for XHTML.
 	 *
 	 * @param string $markup
-	 *  The text to insert.
-	 * @return mixed
-	 *  A string if no markup was passed, or a DOMQuery if markup was passed.
+	 *  The text to insert
+	 *
 	 * @throws Exception
 	 * @throws QueryPath
+	 *
+	 * @return mixed
+	 *  A string if no markup was passed, or a DOMQuery if markup was passed
+	 *
 	 * @see xml()
 	 * @see text()
 	 * @see contents()
@@ -693,9 +722,11 @@ class DOMQuery extends DOM
 	 * See html()
 	 *
 	 * @param null $markup
-	 * @return null|DOMQuery|string
+	 *
 	 * @throws QueryPath
 	 * @throws \QueryPath\Exception
+	 *
+	 * @return null|DOMQuery|string
 	 */
 	public function html5($markup = null)
 	{
@@ -762,7 +793,8 @@ class DOMQuery extends DOM
 	 *
 	 * @return string
 	 *  Returns a string representation of the child nodes of the first
-	 *  matched element.
+	 *  matched element
+	 *
 	 * @see   html()
 	 * @see   innerXML()
 	 * @see   innerXHTML()
@@ -781,9 +813,11 @@ class DOMQuery extends DOM
 	 *
 	 * @see   innerHTML()
 	 * @see   innerXML()
+	 *
 	 * @return string
 	 *  Returns a string of XHTML that represents the children of the present
-	 *  node.
+	 *  node
+	 *
 	 * @since 2.0
 	 */
 	public function innerXHTML()
@@ -820,9 +854,11 @@ class DOMQuery extends DOM
 	 *
 	 * @see   innerHTML()
 	 * @see   innerXHTML()
+	 *
 	 * @return string
 	 *  Returns a string of XHTML that represents the children of the present
-	 *  node.
+	 *  node
+	 *
 	 * @since 2.0
 	 */
 	public function innerXML()
@@ -893,11 +929,13 @@ class DOMQuery extends DOM
 	 * @param string $sep
 	 *  The string used to separate text items. The default is a comma followed by a
 	 *  space.
-	 * @param boolean $filterEmpties
-	 *  If this is true, empty items will be ignored.
+	 * @param bool $filterEmpties
+	 *  If this is true, empty items will be ignored
+	 *
 	 * @return string
 	 *  The text contents, concatenated together with the given separator between
-	 *  every pair of items.
+	 *  every pair of items
+	 *
 	 * @see   implode()
 	 * @see   text()
 	 * @since 2.0
@@ -929,10 +967,12 @@ class DOMQuery extends DOM
 	 * child elements of the current element.
 	 *
 	 * @param string $separator
-	 *  The separator that will be inserted between found text content.
-	 * @return string
-	 *  The concatenated values of all children.
+	 *  The separator that will be inserted between found text content
+	 *
 	 * @throws CSS\ParseException
+	 *
+	 * @return string
+	 *  The concatenated values of all children
 	 */
 	public function childrenText($separator = ' '): string
 	{
@@ -946,9 +986,11 @@ class DOMQuery extends DOM
 	 * @param string $text
 	 *  If this is not NULL, this value will be set as the text of the node. It
 	 *  will replace any existing content.
+	 *
 	 * @return mixed
 	 *  A DOMQuery if $text is set, or the text content if no text
-	 *  is passed in as a pram.
+	 *  is passed in as a pram
+	 *
 	 * @see html()
 	 * @see xml()
 	 * @see contents()
@@ -993,12 +1035,14 @@ class DOMQuery extends DOM
 	 *
 	 * @param string $text
 	 *  If this is set, it will be inserted before each node in the current set of
-	 *  selected items.
-	 * @return mixed
-	 *  Returns the DOMQuery object if $text was set, and returns a string (possibly empty)
-	 *  if no param is passed.
+	 *  selected items
+	 *
 	 * @throws Exception
 	 * @throws QueryPath
+	 *
+	 * @return mixed
+	 *  Returns the DOMQuery object if $text was set, and returns a string (possibly empty)
+	 *  if no param is passed
 	 */
 	public function textBefore($text = null)
 	{
@@ -1052,7 +1096,9 @@ class DOMQuery extends DOM
 	 *
 	 * @deprecated Just use attr(). There's no reason to use this on the server.
 	 * @see        attr()
+	 *
 	 * @param string $value
+	 *
 	 * @return mixed
 	 *  Returns a DOMQuery if a string was passed in, and a string if no string
 	 *  was passed in. In the later case, an error will produce NULL.
@@ -1081,10 +1127,12 @@ class DOMQuery extends DOM
 	 * It does no processing of the markup (such as schema validation).
 	 *
 	 * @param string $markup
-	 *  A string containing XML data.
+	 *  A string containing XML data
+	 *
 	 * @return mixed
 	 *  If markup is passed in, a DOMQuery is returned. If no markup is passed
 	 *  in, XML representing the first matched element is returned.
+	 *
 	 * @see html()
 	 * @see innerXHTML()
 	 */
@@ -1159,10 +1207,12 @@ class DOMQuery extends DOM
 	 * converted to an XML string and returned.
 	 *
 	 * @param string $markup
-	 *  A string containing XML data.
+	 *  A string containing XML data
+	 *
 	 * @return mixed
 	 *  If markup is passed in, a DOMQuery is returned. If no markup is passed
 	 *  in, XML representing the first matched element is returned.
+	 *
 	 * @see xhtml()
 	 * @see html()
 	 * @see text()
@@ -1220,13 +1270,16 @@ class DOMQuery extends DOM
 	 *  sent to the remote browser.
 	 * @param int $options
 	 *  (As of QueryPath 2.1) Pass libxml options to the saving mechanism.
+	 *
+	 * @throws exception
+	 *  In the event that a file cannot be written, an Exception will be thrown
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object, unmodified.
+	 *  The DOMQuery object, unmodified
+	 *
 	 * @see xml()
 	 * @see innerXML()
 	 * @see writeXHTML()
-	 * @throws Exception
-	 *  In the event that a file cannot be written, an Exception will be thrown.
 	 */
 	public function writeXML($path = null, $options = null)
 	{
@@ -1258,12 +1311,15 @@ class DOMQuery extends DOM
 	 *  The path to the file into which the XML should be written. if
 	 *  this is NULL, data will be written to STDOUT, which is usually
 	 *  sent to the remote browser.
+	 *
+	 * @throws exception
+	 *  In the event that a file cannot be written, an Exception will be thrown
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object, unmodified.
+	 *  The DOMQuery object, unmodified
+	 *
 	 * @see html()
 	 * @see innerHTML()
-	 * @throws Exception
-	 *  In the event that a file cannot be written, an Exception will be thrown.
 	 */
 	public function writeHTML($path = null)
 	{
@@ -1291,8 +1347,11 @@ class DOMQuery extends DOM
 	 *
 	 * @see html5()
 	 * @see innerHTML5()
-	 * @throws Exception
-	 *  In the event that a file cannot be written, an Exception will be thrown.
+	 *
+	 * @param null|mixed $path
+	 *
+	 * @throws exception
+	 *  In the event that a file cannot be written, an Exception will be thrown
 	 */
 	public function writeHTML5($path = null)
 	{
@@ -1322,13 +1381,17 @@ class DOMQuery extends DOM
 	 * @see   writeHTML()
 	 * @see   innerXHTML()
 	 * @see   xhtml()
+	 *
 	 * @param string $path
-	 *  The filename of the file to write to.
-	 * @return \QueryPath\DOMQuery
-	 *  Returns the DOMQuery, unmodified.
-	 * @throws Exception
+	 *  The filename of the file to write to
+	 *
+	 * @throws exception
 	 *  In the event that the output file cannot be written, an exception is
-	 *  thrown.
+	 *  thrown
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  Returns the DOMQuery, unmodified
+	 *
 	 * @since 2.0
 	 */
 	public function writeXHTML($path = null)
@@ -1395,13 +1458,16 @@ class DOMQuery extends DOM
 	 * @param string $selector
 	 *  If a selector is passed in, an additional {@link find()} will be executed
 	 *  on the branch before it is returned. (Added in QueryPath 2.0.)
+	 *
+	 * @throws CSS\ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
 	 *  A copy of the DOMQuery object that points to the same set of elements that
-	 *  the original DOMQuery was pointing to.
+	 *  the original DOMQuery was pointing to
+	 *
 	 * @since 1.1
 	 * @see   cloneAll()
 	 * @see   find()
-	 * @throws CSS\ParseException
 	 */
 	public function branch($selector = null)
 	{
@@ -1418,8 +1484,10 @@ class DOMQuery extends DOM
 	/**
 	 * @param $matches
 	 * @param $selector
-	 * @return DOMQuery
+	 *
 	 * @throws CSS\ParseException
+	 *
+	 * @return DOMQuery
 	 */
 	protected function inst($matches, $selector): Query
 	{
@@ -1447,7 +1515,9 @@ class DOMQuery extends DOM
 	 *
 	 * This is a destructive operation, which means that end() will revert
 	 * the list back to the clone's original.
+	 *
 	 * @see qp()
+	 *
 	 * @return \QueryPath\DOMQuery
 	 */
 	public function cloneAll(): Query
@@ -1484,9 +1554,12 @@ class DOMQuery extends DOM
 	 * registered extenstensions for a matching function name. If one is found,
 	 * it is executed with the arguments in the $arguments array.
 	 *
+	 * @param mixed $name
+	 * @param mixed $arguments
+	 *
 	 * @throws \ReflectionException
-	 * @throws QueryPath::Exception
-	 *  An exception is thrown if a non-existent method is called.
+	 * @throws queryPath::Exception
+	 *  An exception is thrown if a non-existent method is called
 	 * @throws Exception
 	 */
 	public function __call($name, $arguments)
@@ -1523,8 +1596,8 @@ class DOMQuery extends DOM
 	/**
 	 * Get an iterator for the matches in this object.
 	 *
-	 * @return Iterable
-	 *  Returns an iterator.
+	 * @return iterable
+	 *  Returns an iterator
 	 */
 	public function getIterator() : QueryPathIterator
 	{

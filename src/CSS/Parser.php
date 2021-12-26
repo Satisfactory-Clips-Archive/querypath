@@ -90,8 +90,8 @@ class Parser
 	 * exception if it encounters a pseudo-element or the
 	 * negation pseudo-class.
 	 *
-	 * @deprecated This is not used anywhere in QueryPath and
-	 *  may be removed.
+	 * @deprecated this is not used anywhere in QueryPath and
+	 *  may be removed
 	 *//*
   public function parseSimpleSelector() {
 	while ($this->scanner->token !== FALSE) {
@@ -153,6 +153,7 @@ class Parser
 	 * @see EventHandler::adjacent(),
 	 * @see EventHandler::anyDescendant(),
 	 * @see EventHandler::anotherSelector().
+	 *
 	 * @throws ParseException
 	 * @throws \QueryPath\Exception
 	 */
@@ -220,6 +221,7 @@ class Parser
 	 * Check if the token is a combinator.
 	 *
 	 * @param int $tok
+	 *
 	 * @return bool
 	 */
 	private function isCombinator(int $tok): bool
@@ -295,6 +297,8 @@ class Parser
 	 * This will call EventHandler::pseudoClass() when a
 	 * pseudo-class is parsed.
 	 *
+	 * @param mixed $restricted
+	 *
 	 * @throws ParseException
 	 * @throws Exception
 	 */
@@ -348,7 +352,7 @@ class Parser
 	 * Get the value of a pseudo-classes.
 	 *
 	 * @return string
-	 *  Returns the value found from a pseudo-class.
+	 *  Returns the value found from a pseudo-class
 	 *
 	 * @todo Pseudoclasses can be passed pseudo-elements and
 	 *  other pseudo-classes as values, which means :pseudo(::pseudo)
@@ -481,7 +485,7 @@ class Parser
 	 * An attribute can be in one of two forms:
 	 * <code>[attrName]</code>
 	 * or
-	 * <code>[attrName="AttrValue"]</code>
+	 * <code>[attrName="AttrValue"]</code>.
 	 *
 	 * This may call the following event handlers: EventHandler::attribute().
 	 *
@@ -615,6 +619,9 @@ class Parser
 
 	/**
 	 * Utility for throwing a consistantly-formatted parse error.
+	 *
+	 * @param mixed $expected
+	 * @param mixed $got
 	 */
 	private function throwError($expected, $got)
 	{

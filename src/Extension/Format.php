@@ -80,11 +80,13 @@ class Format implements Extension
 	 * </root>
 	 * </code>
 	 *
-	 * @param callable $callback The callable to be called on every element.
-	 * @param mixed $args        [optional] Zero or more parameters to be passed to the callback.
+	 * @param callable $callback the callable to be called on every element
+	 * @param mixed $args        [optional] Zero or more parameters to be passed to the callback
 	 * @param null $additional
-	 * @return DOMQuery The DOMQuery object with the same element(s) selected.
+	 *
 	 * @throws Exception
+	 *
+	 * @return DOMQuery the DOMQuery object with the same element(s) selected
 	 */
 	public function format($callback, $args = null, $additional = null): Query
 	{
@@ -132,12 +134,14 @@ class Format implements Extension
 	 * </root>
 	 * </code>
 	 *
-	 * @param string $attrName   The attribute name.
-	 * @param callable $callback The callable to be called on every element.
-	 * @param mixed $args        [optional] Zero or more parameters to be passed to the callback.
+	 * @param string $attrName   the attribute name
+	 * @param callable $callback the callable to be called on every element
+	 * @param mixed $args        [optional] Zero or more parameters to be passed to the callback
 	 * @param null $additional
-	 * @return DOMQuery The DOMQuery object with the same element(s) selected.
+	 *
 	 * @throws Exception
+	 *
+	 * @return DOMQuery the DOMQuery object with the same element(s) selected
 	 */
 	public function formatAttr($attrName, $callback, $args = null, $additional = null): Query
 	{
@@ -161,8 +165,10 @@ class Format implements Extension
 	 * @param $args
 	 * @param $getter
 	 * @param $setter
-	 * @return Query
+	 *
 	 * @throws Exception
+	 *
+	 * @return Query
 	 */
 	protected function forAll($callback, $args, $getter, $setter): Query
 	{
@@ -182,6 +188,7 @@ class Format implements Extension
 
 	/**
 	 * @param $callback
+	 *
 	 * @return array
 	 */
 	protected function prepareCallback($callback)
@@ -200,6 +207,7 @@ class Format implements Extension
 
 	/**
 	 * @param string $string
+	 *
 	 * @return array[]|false|string[]
 	 */
 	protected function splitFunctionName(string $string)
@@ -211,6 +219,7 @@ class Format implements Extension
 	/**
 	 * @param $args
 	 * @param $pos
+	 *
 	 * @return array
 	 */
 	protected function prepareArgs($args, $pos): array

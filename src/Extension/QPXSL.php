@@ -11,6 +11,7 @@ declare(strict_types=1);
  *
  * @author  M Butcher <matt@aleph-null.tv>
  * @license MIT
+ *
  * @see     QueryPath::Extension
  * @see     QueryPath::ExtensionRegistry::extend()
  * @see     QPXSL
@@ -61,7 +62,8 @@ class QPXSL implements \QueryPath\Extension
 	 *
 	 * @param mixed $style
 	 *  This takes a QueryPath object or <em>any</em> of the types that the
-	 *  {@link qp()} function can take.
+	 *  {@link qp()} function can take
+	 *
 	 * @return QueryPath
 	 *  A QueryPath object wrapping the transformed document. Note that this is a
 	 *  <i>different</em> document than the original. As such, it has no history.

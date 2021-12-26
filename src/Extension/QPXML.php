@@ -17,6 +17,7 @@ use QueryPath\Extension;
  * @author  M Butcher <matt@aleph-null.tv>
  * @author  Xander Guzman <theshadow@shadowpedia.info>
  * @license MIT
+ *
  * @see     QueryPath::Extension
  * @see     QueryPath::ExtensionRegistry::extend()
  * @see     QPXML
@@ -56,6 +57,7 @@ class QPXML implements Extension
 	 * @return mixed
 	 *  If $text is not NULL, this will return a {@link QueryPath}. Otherwise, it will
 	 *  return a string. If no CDATA is found, this will return NULL.
+	 *
 	 * @see comment()
 	 * @see QueryPath::text()
 	 * @see QueryPath::html()
@@ -100,10 +102,12 @@ class QPXML implements Extension
 	 * @param string $text
 	 *  The text of the comment. If set, a new comment will be created in every item
 	 *  wrapped by the current {@link QueryPath}.
+	 *
 	 * @return mixed
 	 *  If $text is set, this will return a {@link QueryPath}. If no text is set, this
 	 *  will search for a comment and attempt to return the string value of the first
 	 *  comment it finds. If no comment is found, NULL will be returned.
+	 *
 	 * @see cdata()
 	 */
 	public function comment($text = null)
@@ -128,6 +132,9 @@ class QPXML implements Extension
 
 	/**
 	 * Get or set a processor instruction.
+	 *
+	 * @param null|mixed $prefix
+	 * @param null|mixed $text
 	 */
 	public function pi($prefix = null, $text = null)
 	{
@@ -181,7 +188,8 @@ class QPXML implements Extension
 	 *
 	 * @param string $text
 	 * @param string $nsUri
-	 *   The namespace URI for the given element.
+	 *   The namespace URI for the given element
+	 *
 	 * @return \QueryPath\DOMQuery
 	 */
 	public function createElement($text, $nsUri = null)
@@ -218,6 +226,7 @@ class QPXML implements Extension
 	 * Append an element.
 	 *
 	 * @param string $text
+	 *
 	 * @return \QueryPath\DOMQuery
 	 */
 	public function appendElement($text)

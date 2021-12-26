@@ -65,25 +65,25 @@ interface EventHandler
 	 * An ID begins with an octothorp: #name.
 	 *
 	 * @param string $id
-	 *  The ID passed in.
+	 *  The ID passed in
 	 */
 	public function elementID($id); // #name
 
 	/**
 	 * Handle an element name.
-	 * Example: name
+	 * Example: name.
 	 *
 	 * @param string $name
-	 *  The name of the element.
+	 *  The name of the element
 	 */
 	public function element($name); // name
 
 	/**
 	 * Handle a namespaced element name.
-	 * example: namespace|name
+	 * example: namespace|name.
 	 *
 	 * @param string $name
-	 *  The tag name.
+	 *  The tag name
 	 * @param string $namespace
 	 *  The namespace identifier (Not the URI)
 	 */
@@ -91,37 +91,37 @@ interface EventHandler
 
 	/**
 	 * Handle an any-element (*) operator.
-	 * Example: *
+	 * Example: *.
 	 */
 	public function anyElement(); // *
 
 	/**
 	 * Handle an any-element operator that is constrained to a namespace.
-	 * Example: ns|*
+	 * Example: ns|*.
 	 *
 	 * @param string $ns
-	 *  The namespace identifier (not the URI).
+	 *  The namespace identifier (not the URI)
 	 */
 	public function anyElementInNS($ns); // ns|*
 
 	/**
 	 * Handle a CSS class selector.
-	 * Example: .name
+	 * Example: .name.
 	 *
 	 * @param string $name
-	 *  The name of the class.
+	 *  The name of the class
 	 */
 	public function elementClass($name); // .name
 
 	/**
 	 * Handle an attribute selector.
 	 * Example: [name=attr]
-	 * Example: [name~=attr]
+	 * Example: [name~=attr].
 	 *
 	 * @param string $name
-	 *  The attribute name.
+	 *  The attribute name
 	 * @param string $value
-	 *  The value of the attribute, if given.
+	 *  The value of the attribute, if given
 	 * @param int $operation
 	 *  The operation to be used for matching. See {@link EventHandler}
 	 *  constants for a list of supported operations.
@@ -131,14 +131,14 @@ interface EventHandler
 	/**
 	 * Handle an attribute selector bound to a specific namespace.
 	 * Example: [ns|name=attr]
-	 * Example: [ns|name~=attr]
+	 * Example: [ns|name~=attr].
 	 *
 	 * @param string $name
-	 *  The attribute name.
+	 *  The attribute name
 	 * @param string $ns
-	 *  The namespace identifier (not the URI).
+	 *  The namespace identifier (not the URI)
 	 * @param string $value
-	 *  The value of the attribute, if given.
+	 *  The value of the attribute, if given
 	 * @param int $operation
 	 *  The operation to be used for matching. See {@link EventHandler}
 	 *  constants for a list of supported operations.
@@ -147,51 +147,51 @@ interface EventHandler
 
 	/**
 	 * Handle a pseudo-class.
-	 * Example: :name(value)
+	 * Example: :name(value).
 	 *
 	 * @param string $name
-	 *  The pseudo-class name.
+	 *  The pseudo-class name
 	 * @param string $value
-	 *  The value, if one is found.
+	 *  The value, if one is found
 	 */
 	public function pseudoClass($name, $value = null); //:name(value)
 
 	/**
 	 * Handle a pseudo-element.
-	 * Example: ::name
+	 * Example: ::name.
 	 *
 	 * @param string $name
-	 *  The pseudo-element name.
+	 *  The pseudo-element name
 	 */
 	public function pseudoElement($name); // ::name
 
 	/**
 	 * Handle a direct descendant combinator.
-	 * Example: >
+	 * Example: >.
 	 */
 	public function directDescendant(); // >
 
 	/**
 	 * Handle a adjacent combinator.
-	 * Example: +
+	 * Example: +.
 	 */
 	public function adjacent(); // +
 
 	/**
 	 * Handle an another-selector combinator.
-	 * Example: ,
+	 * Example: ,.
 	 */
 	public function anotherSelector(); // ,
 
 	/**
 	 * Handle a sibling combinator.
-	 * Example: ~
+	 * Example: ~.
 	 */
 	public function sibling(); // ~ combinator
 
 	/**
 	 * Handle an any-descendant combinator.
-	 * Example: ' '
+	 * Example: ' '.
 	 */
 	public function anyDescendant(); // ' ' (space) operator.
 }

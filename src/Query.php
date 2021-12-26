@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace QueryPath;
 
 /**
- * Interface Query
+ * Interface Query.
  *
  * @package QueryPath
  *

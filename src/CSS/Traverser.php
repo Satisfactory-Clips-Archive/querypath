@@ -22,8 +22,9 @@ interface Traverser
 	 *
 	 * @param string $selector
 	 *   A selector. Typically this is a CSS 3 Selector.
+	 *
 	 * @return \Traverser
-	 *  The Traverser that can return matches.
+	 *  The Traverser that can return matches
 	 */
 	public function find($selector);
 	/**

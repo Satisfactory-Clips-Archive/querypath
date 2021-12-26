@@ -75,6 +75,8 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Create a new event handler.
+	 *
+	 * @param mixed $dom
 	 */
 	public function __construct($dom)
 	{
@@ -132,10 +134,12 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * This is the primary searching method used throughout QueryPath.
 	 *
 	 * @param string $filter
-	 *  A valid CSS 3 filter.
-	 * @return QueryPathEventHandler
-	 *  Returns itself.
+	 *  A valid CSS 3 filter
+	 *
 	 * @throws ParseException
+	 *
+	 * @return queryPathEventHandler
+	 *  Returns itself
 	 */
 	public function find($filter): QueryPathEventHandler
 	{
@@ -181,7 +185,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * enforce ID uniqueness, but it assumes it.
 	 *
 	 * @param $id
-	 *  String ID for an element.
+	 *  String ID for an element
 	 */
 	public function elementID($id)
 	{
@@ -346,7 +350,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Helper function to find all elements with exact matches.
 	 *
-	 * @deprecated All use cases seem to be covered by attribute().
+	 * @deprecated all use cases seem to be covered by attribute()
+	 *
+	 * @param mixed $name
+	 * @param null|mixed $value
 	 */
 	protected function searchForAttr($name, $value = null)
 	{
@@ -404,7 +411,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * This also supports the following nonstandard pseudo classes:
 	 *  - :x-reset/:x-root (reset to the main item passed into the constructor. Less drastic than :root)
-	 *  - :odd/:even (shorthand for :nth-child(odd)/:nth-child(even))
+	 *  - :odd/:even (shorthand for :nth-child(odd)/:nth-child(even)).
+	 *
+	 * @param mixed $name
+	 * @param null|mixed $value
 	 */
 	public function pseudoClass($name, $value = null)
 	{
@@ -609,6 +619,8 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Remove leading and trailing quotes.
+	 *
+	 * @param mixed $str
 	 */
 	private function removeQuotes($str)
 	{
@@ -624,6 +636,9 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for a variety of jQuery pseudo-classes.
 	 * Handles lt, gt, eq, nth, first, last pseudo-classes.
+	 *
+	 * @param mixed $operator
+	 * @param mixed $pos
 	 */
 	private function getByPosition($operator, $pos)
 	{
@@ -702,11 +717,13 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * Parse an an+b rule for CSS pseudo-classes.
 	 *
 	 * @param $rule
-	 *  Some rule in the an+b format.
+	 *  Some rule in the an+b format
+	 *
+	 * @throws parseException
+	 *  If the rule does not follow conventions
+	 *
 	 * @return
-	 *  Array (list($aVal, $bVal)) of the two values.
-	 * @throws ParseException
-	 *  If the rule does not follow conventions.
+	 *  Array (list($aVal, $bVal)) of the two values
 	 */
 	protected function parseAnB($rule)
 	{
@@ -738,10 +755,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * Pseudo-class handler for nth-child and all related pseudo-classes.
 	 *
 	 * @param int $groupSize
-	 *  The size of the group (in an+b, this is a).
+	 *  The size of the group (in an+b, this is a)
 	 * @param int $elementInGroup
 	 *  The offset in a group. (in an+b this is b).
-	 * @param boolean $lastChild
+	 * @param bool $lastChild
 	 *  Whether counting should begin with the last child. By default, this is false.
 	 *  Pseudo-classes that start with the last-child can set this to true.
 	 */
@@ -815,6 +832,9 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * as arrays.
 	 *
 	 * @since QueryPath 2.0
+	 *
+	 * @param mixed $groupSize
+	 * @param mixed $elementInGroup
 	 *//*
   private function reverseMatches() {
 	// Reverse the candidate list. There must be a better way of doing
@@ -841,12 +861,16 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * tagname as the given element will be returned.
 	 *
 	 * @param $element
-	 *  A DomElement.
+	 *  A DomElement
 	 * @param $requireSameTag
 	 *  Boolean flag indicating whether all matches should have the same
-	 *  element name (tagName) as $element.
+	 *  element name (tagName) as $element
+	 * @param mixed $groupSize
+	 * @param mixed $elementInGroup
+	 * @param mixed $lastChild
+	 *
 	 * @return
-	 *  Array of peer elements.
+	 *  Array of peer elements
 	 *//*
   protected function listPeerElements($element, $requireSameTag = FALSE) {
 	$peers = array();
@@ -1000,6 +1024,9 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for nth-last-of-type-child.
 	 * Not implemented.
+	 *
+	 * @param mixed $groupSize
+	 * @param mixed $elementInGroup
 	 */
 	protected function nthLastOfTypeChild($groupSize, $elementInGroup)
 	{
@@ -1007,7 +1034,9 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	}
 
 	/**
-	 * Pseudo-class handler for :lang
+	 * Pseudo-class handler for :lang.
+	 *
+	 * @param mixed $value
 	 */
 	protected function lang($value)
 	{
@@ -1049,7 +1078,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * function allows complex selectors.
 	 *
 	 * @param string $filter
-	 *  A CSS selector.
+	 *  A CSS selector
 	 */
 	protected function not($filter)
 	{
@@ -1071,6 +1100,8 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for :has(filter).
 	 * This can also be used as a general filtering routine.
+	 *
+	 * @param mixed $filter
 	 */
 	public function has($filter)
 	{
@@ -1217,6 +1248,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Check for attr value matches based on an operation.
+	 *
+	 * @param mixed $needle
+	 * @param mixed $haystack
+	 * @param mixed $operation
 	 */
 	protected function attrValMatches($needle, $haystack, $operation)
 	{
@@ -1251,6 +1286,8 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * As the spec mentions, these must be at the end of a selector or
 	 * else they will cause errors. Most selectors return elements. Pseudo-elements
 	 * do not.
+	 *
+	 * @param mixed $name
 	 */
 	public function pseudoElement($name)
 	{
@@ -1444,10 +1481,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * This is used when $this->findAnyElement is TRUE.
 	 *
 	 * @param $elements
-	 *  A list of current elements (usually $this->matches).
+	 *  A list of current elements (usually $this->matches)
 	 *
 	 * @return
-	 *  A list of all candidate elements.
+	 *  A list of all candidate elements
 	 */
 	private function getAllCandidates($elements)
 	{

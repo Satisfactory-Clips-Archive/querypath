@@ -96,7 +96,7 @@ class QueryPathExtensionTest extends TestCase
 // Create a stub extension:
 
 /**
- * Create a stub extension
+ * Create a stub extension.
  *
  * @ingroup querypath_tests
  */
@@ -118,7 +118,7 @@ class StubExtensionOne implements Extension
 }
 
 /**
- * Create a stub extension
+ * Create a stub extension.
  *
  * @ingroup querypath_tests
  */
@@ -138,7 +138,7 @@ class StubExtensionTwo implements Extension
 }
 
 /**
- * Create a stub extension
+ * Create a stub extension.
  *
  * @ingroup querypath_tests
  */

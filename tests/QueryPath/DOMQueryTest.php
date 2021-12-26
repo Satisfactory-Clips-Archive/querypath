@@ -1092,6 +1092,9 @@ class DOMQueryTest extends TestCase
 	/**
 	 * Helper function for testContents().
 	 * Based on problem reported in issue 51.
+	 *
+	 * @param mixed $source
+	 * @param mixed $pack
 	 */
 	private function contentsRecurse($source, &$pack = [])
 	{

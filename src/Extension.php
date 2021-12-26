@@ -15,6 +15,7 @@ declare(strict_types=1);
  *
  * @author M Butcher <matt@aleph-null.tv>
  * @license MIT
+ *
  * @see Extension
  * @see ExtensionRegistry::extend()
  */
@@ -36,6 +37,7 @@ namespace QueryPath;
  * Query object as a parameter.
  *
  * Here is an example QueryPath extension:
+ *
  * @code
  * <?php
  * class StubExtensionOne implements \QueryPath\Extension {

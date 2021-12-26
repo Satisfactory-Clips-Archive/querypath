@@ -20,6 +20,7 @@ class ParserTest extends TestCase
 
 	/**
 	 * @param $method
+	 *
 	 * @return EventHandler|MockObject
 	 */
 	private function getMockHandler($method)

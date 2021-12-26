@@ -12,7 +12,7 @@ use QueryPath\Query;
 use QueryPath\QueryPath;
 
 /**
- * Trait QueryFilters
+ * Trait QueryFilters.
  *
  * @package QueryPath\Helpers
  *
@@ -27,15 +27,18 @@ trait QueryFilters
 	 * certain children.
 	 *
 	 * @param string $selector
-	 *   The selector to use as a filter.
+	 *   The selector to use as a filter
+	 *
+	 * @throws ParseException
+	 *
 	 * @return Query The DOMQuery with non-matching items filtered out.*   The DOMQuery with non-matching items
 	 *               filtered out.
+	 *
 	 * @see filterLambda()
 	 * @see filterCallback()
 	 * @see map()
 	 * @see find()
 	 * @see is()
-	 * @throws ParseException
 	 */
 	public function filter($selector): Query
 	{
@@ -78,13 +81,16 @@ trait QueryFilters
 	 * 'text'.
 	 *
 	 * @param string $fn
-	 *  Inline lambda function in a string.
+	 *  Inline lambda function in a string
+	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
+	 *
 	 * @see filter()
 	 * @see map()
 	 * @see mapLambda()
 	 * @see filterCallback()
-	 * @throws ParseException
 	 */
 	public function filterLambda($fn): Query
 	{
@@ -129,12 +135,15 @@ trait QueryFilters
 	 * Compare this to the behavior of the <em>:contains()</em> CSS3 pseudo-class.
 	 *
 	 * @param string $regex
-	 *  A regular expression.
+	 *  A regular expression
+	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
+	 *
 	 * @see       filter()
 	 * @see       filterCallback()
 	 * @see       preg_match()
-	 * @throws ParseException
 	 */
 	public function filterPreg($regex): Query
 	{
@@ -165,18 +174,21 @@ trait QueryFilters
 	 * If the callback function returns FALSE, the item will be removed from the
 	 * set of matches. Otherwise the item will be considered a match and left alone.
 	 *
-	 * @param callback $callback .
+	 * @param callable $callback .
 	 *                           A callback either as a string (function) or an array (object, method OR
 	 *                           classname, method).
+	 *
+	 * @throws ParseException
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *                           Query path object augmented according to the function.
+	 *                           Query path object augmented according to the function
+	 *
 	 * @see filter()
 	 * @see filterLambda()
 	 * @see map()
 	 * @see is()
 	 * @see find()
-	 * @throws ParseException
-	 * @throws Exception
 	 */
 	public function filterCallback($callback): Query
 	{
@@ -210,20 +222,21 @@ trait QueryFilters
 	 * - If the callback returns anything else, it will be appended to the array
 	 *   of matches.
 	 *
-	 * @param callback $callback
+	 * @param callable $callback
 	 *  The function or callback to use. The callback will be passed two params:
 	 *  - $index: The index position in the list of items wrapped by this object.
 	 *  - $item: The current item.
 	 *
+	 * @throws Exception
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
 	 *  The DOMQuery object wrapping a list of whatever values were returned
-	 *  by each run of the callback.
+	 *  by each run of the callback
 	 *
 	 * @see DOMQuery::get()
 	 * @see filter()
 	 * @see find()
-	 * @throws Exception
-	 * @throws ParseException
 	 */
 	public function map($callback): Query
 	{
@@ -264,15 +277,18 @@ trait QueryFilters
 	/**
 	 * Narrow the items in this object down to only a slice of the starting items.
 	 *
-	 * @param integer $start
-	 *  Where in the list of matches to begin the slice.
-	 * @param integer $length
+	 * @param int $start
+	 *  Where in the list of matches to begin the slice
+	 * @param int $length
 	 *  The number of items to include in the slice. If nothing is specified, the
 	 *  all remaining matches (from $start onward) will be included in the sliced
 	 *  list.
-	 * @return \QueryPath\DOMQuery
-	 * @see array_slice()
+	 *
 	 * @throws ParseException
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *
+	 * @see array_slice()
 	 */
 	public function slice($start, $length = 0): Query
 	{
@@ -310,13 +326,16 @@ trait QueryFilters
 	 * - A TRUE return value from the callback is analogous to a continue statement.
 	 * - All other return values are ignored.
 	 *
-	 * @param callback $callback
-	 *  The callback to run.
+	 * @param callable $callback
+	 *  The callback to run
+	 *
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery.
+	 *  The DOMQuery
+	 *
 	 * @see filter()
 	 * @see map()
-	 * @throws Exception
 	 */
 	public function each($callback): Query
 	{
@@ -338,16 +357,19 @@ trait QueryFilters
 	/**
 	 * Get the even elements, so counter-intuitively 1, 3, 5, etc.
 	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMQuery wrapping all of the children.
+	 *  A DOMQuery wrapping all of the children
+	 *
 	 * @see    removeChildren()
 	 * @see    parent()
 	 * @see    parents()
 	 * @see    next()
 	 * @see    prev()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws ParseException
 	 */
 	public function even(): Query
 	{
@@ -366,16 +388,19 @@ trait QueryFilters
 	/**
 	 * Get the odd elements, so counter-intuitively 0, 2, 4, etc.
 	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMQuery wrapping all of the children.
+	 *  A DOMQuery wrapping all of the children
+	 *
 	 * @see    removeChildren()
 	 * @see    parent()
 	 * @see    parents()
 	 * @see    next()
 	 * @see    prev()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws ParseException
 	 */
 	public function odd(): Query
 	{
@@ -395,13 +420,16 @@ trait QueryFilters
 	 * Get the first matching element.
 	 *
 	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMQuery wrapping all of the children.
+	 *  A DOMQuery wrapping all of the children
+	 *
 	 * @see    next()
 	 * @see    prev()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws ParseException
 	 */
 	public function first(): Query
 	{
@@ -420,13 +448,16 @@ trait QueryFilters
 	 * Get the first child of the matching element.
 	 *
 	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMQuery wrapping all of the children.
+	 *  A DOMQuery wrapping all of the children
+	 *
 	 * @see    next()
 	 * @see    prev()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws ParseException
 	 */
 	public function firstChild(): Query
 	{
@@ -453,13 +484,16 @@ trait QueryFilters
 	 * Get the last matching element.
 	 *
 	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMQuery wrapping all of the children.
+	 *  A DOMQuery wrapping all of the children
+	 *
 	 * @see    next()
 	 * @see    prev()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws ParseException
 	 */
 	public function last(): Query
 	{
@@ -481,13 +515,16 @@ trait QueryFilters
 	 * Get the last child of the matching element.
 	 *
 	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMQuery wrapping all of the children.
+	 *  A DOMQuery wrapping all of the children
+	 *
 	 * @see    next()
 	 * @see    prev()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws ParseException
 	 */
 	public function lastChild(): Query
 	{
@@ -516,16 +553,20 @@ trait QueryFilters
 	 * selector will be included.
 	 *
 	 * @param string $selector
-	 *  A valid CSS 3 selector.
+	 *  A valid CSS 3 selector
+	 *
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object, now containing the matching siblings.
+	 *  The DOMQuery object, now containing the matching siblings
+	 *
 	 * @see    next()
 	 * @see    prevAll()
 	 * @see    children()
 	 * @see    siblings()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws Exception
 	 */
 	public function nextUntil($selector = null): Query
 	{
@@ -553,17 +594,21 @@ trait QueryFilters
 	 * selector is provided, only matching siblings will be retrieved.
 	 *
 	 * @param string $selector
-	 *  A valid CSS 3 selector.
+	 *  A valid CSS 3 selector
+	 *
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object, now wrapping previous sibling elements.
+	 *  The DOMQuery object, now wrapping previous sibling elements
+	 *
 	 * @see    prev()
 	 * @see    nextAll()
 	 * @see    siblings()
 	 * @see    contents()
 	 * @see    children()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws Exception
 	 */
 	public function prevUntil($selector = null): Query
 	{
@@ -590,15 +635,20 @@ trait QueryFilters
 	 * If a selector is present, only matching ancestors will be retrieved.
 	 *
 	 * @see    parent()
+	 *
 	 * @param string $selector
-	 *  A valid CSS 3 Selector.
+	 *  A valid CSS 3 Selector
+	 *
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMNode object containing the matching ancestors.
+	 *  A DOMNode object containing the matching ancestors
+	 *
 	 * @see    siblings()
 	 * @see    children()
 	 * @since  2.1
+	 *
 	 * @author eabrand
-	 * @throws Exception
 	 */
 	public function parentsUntil($selector = null): Query
 	{
@@ -633,11 +683,14 @@ trait QueryFilters
 	 * @param $index
 	 *  The index of the element to keep. The rest will be
 	 *  discarded.
+	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
+	 *
 	 * @see get()
 	 * @see is()
 	 * @see end()
-	 * @throws ParseException
 	 */
 	public function eq($index): Query
 	{
@@ -650,11 +703,14 @@ trait QueryFilters
 	 * @param string $selector
 	 *  A selector to use as a negation filter. If the filter is matched, the
 	 *  element will be removed from the list.
-	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object with matching items filtered out.
-	 * @see find()
+	 *
 	 * @throws ParseException
 	 * @throws Exception
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The DOMQuery object with matching items filtered out
+	 *
+	 * @see find()
 	 */
 	public function not($selector): Query
 	{
@@ -698,11 +754,14 @@ trait QueryFilters
 	 * It is provided for jQuery 1.3 compatibility.
 	 *
 	 * @param string $selector
-	 *  A CSS Selector to match.
-	 * @return \QueryPath\DOMQuery
-	 *  The set of matches.
-	 * @since 2.0
+	 *  A CSS Selector to match
+	 *
 	 * @throws Exception
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The set of matches
+	 *
+	 * @since 2.0
 	 */
 	public function closest($selector): Query
 	{
@@ -734,13 +793,16 @@ trait QueryFilters
 	 * each element in the DOMQuery.
 	 *
 	 * @param string $selector
-	 *  A valid CSS3 selector.
+	 *  A valid CSS3 selector
+	 *
+	 * @throws Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMNode object wrapping the matching parents.
+	 *  A DOMNode object wrapping the matching parents
+	 *
 	 * @see children()
 	 * @see siblings()
 	 * @see parents()
-	 * @throws Exception
 	 */
 	public function parent($selector = null): Query
 	{
@@ -772,14 +834,18 @@ trait QueryFilters
 	 * If a selector is present, only matching ancestors will be retrieved.
 	 *
 	 * @see parent()
+	 *
 	 * @param string $selector
-	 *  A valid CSS 3 Selector.
-	 * @return \QueryPath\DOMQuery
-	 *  A DOMNode object containing the matching ancestors.
-	 * @see siblings()
-	 * @see children()
+	 *  A valid CSS 3 Selector
+	 *
 	 * @throws ParseException
 	 * @throws Exception
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  A DOMNode object containing the matching ancestors
+	 *
+	 * @see siblings()
+	 * @see children()
 	 */
 	public function parents($selector = null): Query
 	{
@@ -809,11 +875,14 @@ trait QueryFilters
 	 * If a selector is provided, the next matching sibling will be returned.
 	 *
 	 * @param string $selector
-	 *  A CSS3 selector.
-	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object.
+	 *  A CSS3 selector
+	 *
 	 * @throws Exception
 	 * @throws ParseException
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The DOMQuery object
+	 *
 	 * @see nextAll()
 	 * @see prev()
 	 * @see children()
@@ -852,11 +921,14 @@ trait QueryFilters
 	 * selector will be included.
 	 *
 	 * @param string $selector
-	 *  A valid CSS 3 selector.
-	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object, now containing the matching siblings.
+	 *  A valid CSS 3 selector
+	 *
 	 * @throws Exception
 	 * @throws ParseException
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  The DOMQuery object, now containing the matching siblings
+	 *
 	 * @see next()
 	 * @see prevAll()
 	 * @see children()
@@ -891,12 +963,15 @@ trait QueryFilters
 	 * sibling (if any is found).
 	 *
 	 * @param string $selector
-	 *  A valid CSS 3 selector.
-	 * @return \QueryPath\DOMQuery
-	 *  A DOMNode object, now containing any previous siblings that have been
-	 *  found.
+	 *  A valid CSS 3 selector
+	 *
 	 * @throws Exception
 	 * @throws ParseException
+	 *
+	 * @return \QueryPath\DOMQuery
+	 *  A DOMNode object, now containing any previous siblings that have been
+	 *  found
+	 *
 	 * @see prevAll()
 	 * @see next()
 	 * @see siblings()
@@ -932,16 +1007,19 @@ trait QueryFilters
 	 * selector is provided, only matching siblings will be retrieved.
 	 *
 	 * @param string $selector
-	 *  A valid CSS 3 selector.
+	 *  A valid CSS 3 selector
+	 *
+	 * @throws ParseException
+	 * @throws \QueryPath\Exception
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery object, now wrapping previous sibling elements.
+	 *  The DOMQuery object, now wrapping previous sibling elements
+	 *
 	 * @see prev()
 	 * @see nextAll()
 	 * @see siblings()
 	 * @see contents()
 	 * @see children()
-	 * @throws ParseException
-	 * @throws \QueryPath\Exception
 	 */
 	public function prevAll($selector = null): Query
 	{
@@ -971,15 +1049,18 @@ trait QueryFilters
 	 * the selector.
 	 *
 	 * @param string $selector
-	 *  A valid selector.
+	 *  A valid selector
+	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  A DOMQuery wrapping all of the children.
+	 *  A DOMQuery wrapping all of the children
+	 *
 	 * @see removeChildren()
 	 * @see parent()
 	 * @see parents()
 	 * @see next()
 	 * @see prev()
-	 * @throws ParseException
 	 */
 	public function children($selector = null): Query
 	{
@@ -1020,16 +1101,18 @@ trait QueryFilters
 	 * This does not process iframes. Xinclude processing is dependent on the
 	 * DOM implementation and configuration.
 	 *
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
 	 *  A DOMNode object wrapping all child nodes for all elements in the
-	 *  DOMNode object.
+	 *  DOMNode object
+	 *
 	 * @see find()
 	 * @see text()
 	 * @see html()
 	 * @see innerHTML()
 	 * @see xml()
 	 * @see innerXML()
-	 * @throws ParseException
 	 */
 	public function contents(): Query
 	{
@@ -1060,15 +1143,18 @@ trait QueryFilters
 	 *
 	 * @param string $selector
 	 *  If the optional selector is provided, siblings will be filtered through
-	 *  this expression.
+	 *  this expression
+	 *
+	 * @throws ParseException
+	 * @throws ParseException
+	 *
 	 * @return \QueryPath\DOMQuery
-	 *  The DOMQuery containing the matched siblings.
+	 *  The DOMQuery containing the matched siblings
+	 *
 	 * @see contents()
 	 * @see children()
 	 * @see parent()
 	 * @see parents()
-	 * @throws ParseException
-	 * @throws ParseException
 	 */
 	public function siblings($selector = null): Query
 	{

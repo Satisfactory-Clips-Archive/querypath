@@ -20,7 +20,6 @@ use QueryPath\CSS\ParseException;
 
 /**
  *  The PseudoClass handler.
- *
  */
 class PseudoClass
 {
@@ -31,15 +30,17 @@ class PseudoClass
 	 * @param string $pseudoclass
 	 *   The string name of the pseudoclass
 	 * @param resource $node
-	 *   The DOMNode to be tested.
+	 *   The DOMNode to be tested
 	 * @param resource $scope
-	 *   The DOMElement that is the active root for this node.
+	 *   The DOMElement that is the active root for this node
 	 * @param mixed $value
 	 *   The optional value string provided with this class. This is
 	 *   used, for example, in an+b psuedoclasses.
-	 * @return bool
+	 *
 	 * @throws NotImplementedException
 	 * @throws \QueryPath\CSS\ParseException
+	 *
+	 * @return bool
 	 * @retval boolean
 	 *   TRUE if the node matches, FALSE otherwise.
 	 */
@@ -194,11 +195,14 @@ class PseudoClass
 	}
 
 	/**
-	 * Pseudo-class handler for :lang
+	 * Pseudo-class handler for :lang.
 	 *
 	 * Note that this does not implement the spec in its entirety because we do
 	 * not presume to "know the language" of the document. If anyone is interested
 	 * in making this more intelligent, please do so.
+	 *
+	 * @param mixed $node
+	 * @param mixed $value
 	 */
 	protected function lang($node, $value)
 	{
@@ -228,6 +232,7 @@ class PseudoClass
 	 * Provides jQuery pseudoclass ':header'.
 	 *
 	 * @param $node
+	 *
 	 * @return bool
 	 */
 	protected function header($node): bool
@@ -237,6 +242,8 @@ class PseudoClass
 
 	/**
 	 * Provides pseudoclass :empty.
+	 *
+	 * @param mixed $node
 	 */
 	protected function isEmpty($node): bool
 	{
@@ -257,6 +264,8 @@ class PseudoClass
 	 *
 	 * @todo
 	 *   This can be replaced by isNthChild().
+	 *
+	 * @param mixed $node
 	 */
 	protected function isFirst($node): bool
 	{
@@ -272,6 +281,8 @@ class PseudoClass
 
 	/**
 	 * Fast version of first-of-type.
+	 *
+	 * @param mixed $node
 	 */
 	protected function isFirstOfType($node)
 	{
@@ -288,6 +299,8 @@ class PseudoClass
 
 	/**
 	 * Fast version of jQuery :last.
+	 *
+	 * @param mixed $node
 	 */
 	protected function isLast($node)
 	{
@@ -303,6 +316,8 @@ class PseudoClass
 
 	/**
 	 * Provides last-of-type.
+	 *
+	 * @param mixed $node
 	 */
 	protected function isLastOfType($node)
 	{
@@ -321,6 +336,9 @@ class PseudoClass
 	 * Provides :contains() as the original spec called for.
 	 *
 	 * This is an INEXACT match.
+	 *
+	 * @param mixed $node
+	 * @param mixed $value
 	 */
 	protected function contains($node, $value): bool
 	{
@@ -334,6 +352,9 @@ class PseudoClass
 	 * Provides :contains-exactly QueryPath pseudoclass.
 	 *
 	 * This is an EXACT match.
+	 *
+	 * @param mixed $node
+	 * @param mixed $value
 	 */
 	protected function containsExactly($node, $value): bool
 	{
@@ -345,6 +366,9 @@ class PseudoClass
 
 	/**
 	 * Provides :has pseudoclass.
+	 *
+	 * @param mixed $node
+	 * @param mixed $selector
 	 *
 	 * @throws ParseException
 	 */
@@ -361,6 +385,9 @@ class PseudoClass
 	/**
 	 * Provides :not pseudoclass.
 	 *
+	 * @param mixed $node
+	 * @param mixed $selector
+	 *
 	 * @throws ParseException
 	 */
 	protected function isNot($node, $selector): bool
@@ -370,6 +397,9 @@ class PseudoClass
 
 	/**
 	 * Get the relative position of a node in its sibling set.
+	 *
+	 * @param mixed $node
+	 * @param mixed $byType
 	 */
 	protected function nodePositionFromStart($node, $byType = false): int
 	{
@@ -390,6 +420,7 @@ class PseudoClass
 	 *
 	 * @param $node
 	 * @param bool $byType
+	 *
 	 * @return int
 	 */
 	protected function nodePositionFromEnd($node, $byType = false): int
@@ -408,7 +439,7 @@ class PseudoClass
 
 	/**
 	 * Provides functionality for all "An+B" rules.
-	 * Provides nth-child and also the functionality required for:
+	 * Provides nth-child and also the functionality required for:.
 	 *
 	 *- nth-last-child
 	 *- even
@@ -428,6 +459,7 @@ class PseudoClass
 	 * @param $value
 	 * @param bool $reverse
 	 * @param bool $byType
+	 *
 	 * @return bool
 	 */
 	protected function isNthChild($node, $value, $reverse = false, $byType = false): bool
