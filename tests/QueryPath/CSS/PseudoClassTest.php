@@ -197,7 +197,7 @@ class PseudoClassTest extends TestCase
 				++$i;
 			}
 		}
-		$this->assertEquals(1, $i);
+		$this->assertSame(1, $i);
 	}
 
 	public function testParent()
@@ -283,7 +283,7 @@ class PseudoClassTest extends TestCase
 				++$i;
 			}
 		}
-		$this->assertEquals(3, $i);
+		$this->assertSame(3, $i);
 	}
 
 	public function testEmpty()
@@ -402,7 +402,7 @@ class PseudoClassTest extends TestCase
 				$this->assertContains($name, $expects, sprintf('Expected b or d, got %s in slot %s', $name, ++$j));
 			}
 		}
-		$this->assertEquals(10, $i, '2n+1 is ten items.');
+		$this->assertSame(10, $i, '2n+1 is ten items.');
 
 		// 3 (0n+3) -- third from the end (b).
 		$i = 0;
@@ -410,10 +410,10 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-last-child', $n, $root, '3');
 			if ($res) {
 				++$i;
-				$this->assertEquals('b', $n->tagName);
+				$this->assertSame('b', $n->tagName);
 			}
 		}
-		$this->assertEquals(1, $i);
+		$this->assertSame(1, $i);
 
 		// -n+3: Last three elements.
 		$i = 0;
@@ -423,7 +423,7 @@ class PseudoClassTest extends TestCase
 				++$i;
 			}
 		}
-		$this->assertEquals(3, $i);
+		$this->assertSame(3, $i);
 	}
 
 	public function testNthChild()
@@ -448,7 +448,7 @@ class PseudoClassTest extends TestCase
 				$this->assertContains($name, $expects, sprintf('Expected b or d, got %s in slot %s', $name, ++$j));
 			}
 		}
-		$this->assertEquals(10, $i, '2n+1 is ten items.');
+		$this->assertSame(10, $i, '2n+1 is ten items.');
 
 		// Odd
 		$i = 0;
@@ -462,7 +462,7 @@ class PseudoClassTest extends TestCase
 				$this->assertContains($name, $expects, sprintf('Expected b or d, got %s in slot %s', $name, ++$j));
 			}
 		}
-		$this->assertEquals(10, $i, '2n+1 is ten items.');
+		$this->assertSame(10, $i, '2n+1 is ten items.');
 
 		// 2n + 0 -- every even row
 		$i = 0;
@@ -475,7 +475,7 @@ class PseudoClassTest extends TestCase
 				$this->assertContains($name, $expects, 'Expected a or c, got ' . $name);
 			}
 		}
-		$this->assertEquals(10, $i, '2n+0 is ten items.');
+		$this->assertSame(10, $i, '2n+0 is ten items.');
 
 		// Even (2n)
 		$i = 0;
@@ -488,7 +488,7 @@ class PseudoClassTest extends TestCase
 				$this->assertContains($name, $expects, 'Expected a or c, got ' . $name);
 			}
 		}
-		$this->assertEquals(10, $i, ' even is ten items.');
+		$this->assertSame(10, $i, ' even is ten items.');
 
 		// 4n - 1 == 4n + 3
 		$i = 0;
@@ -497,10 +497,10 @@ class PseudoClassTest extends TestCase
 			if ($res) {
 				++$i;
 				$name = $n->tagName;
-				$this->assertEquals('c', $name, 'Expected c, got ' . $name);
+				$this->assertSame('c', $name, 'Expected c, got ' . $name);
 			}
 		}
-		$this->assertEquals(5, $i);
+		$this->assertSame(5, $i);
 
 		// 6n - 1
 		$i = 0;
@@ -510,7 +510,7 @@ class PseudoClassTest extends TestCase
 				++$i;
 			}
 		}
-		$this->assertEquals(3, $i);
+		$this->assertSame(3, $i);
 
 		// 6n + 1
 		$i = 0;
@@ -520,7 +520,7 @@ class PseudoClassTest extends TestCase
 				++$i;
 			}
 		}
-		$this->assertEquals(4, $i);
+		$this->assertSame(4, $i);
 
 		// 26n - 1
 		$i = 0;
@@ -530,7 +530,7 @@ class PseudoClassTest extends TestCase
 				++$i;
 			}
 		}
-		$this->assertEquals(0, $i);
+		$this->assertSame(0, $i);
 
 		// 0n + 0 -- spec says this is always FALSE.
 		$i = 0;
@@ -540,7 +540,7 @@ class PseudoClassTest extends TestCase
 				++$i;
 			}
 		}
-		$this->assertEquals(0, $i);
+		$this->assertSame(0, $i);
 
 		// 3 (0n+3)
 		$i = 0;
@@ -548,10 +548,10 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-child', $n, $root, '3');
 			if ($res) {
 				++$i;
-				$this->assertEquals('c', $n->tagName);
+				$this->assertSame('c', $n->tagName);
 			}
 		}
-		$this->assertEquals(1, $i);
+		$this->assertSame(1, $i);
 
 		// -n+3: First three elements.
 		$i = 0;
@@ -562,7 +562,7 @@ class PseudoClassTest extends TestCase
 				//$this->assertEquals('c', $n->tagName);
 			}
 		}
-		$this->assertEquals(3, $i);
+		$this->assertSame(3, $i);
 
 		// BROKEN RULES -- these should always fail to match.
 
@@ -574,7 +574,7 @@ class PseudoClassTest extends TestCase
 				++$i;
 			}
 		}
-		$this->assertEquals(0, $i);
+		$this->assertSame(0, $i);
 	}
 
 	public function testEven()
@@ -597,7 +597,7 @@ class PseudoClassTest extends TestCase
 				$this->assertContains($name, $expects, 'Expected a or c, got ' . $name);
 			}
 		}
-		$this->assertEquals(10, $i, ' even is ten items.');
+		$this->assertSame(10, $i, ' even is ten items.');
 	}
 
 	public function testOdd()
@@ -622,7 +622,7 @@ class PseudoClassTest extends TestCase
 				$this->assertContains($name, $expects, sprintf('Expected b or d, got %s in slot %s', $name, ++$j));
 			}
 		}
-		$this->assertEquals(10, $i, 'Ten odds.');
+		$this->assertSame(10, $i, 'Ten odds.');
 	}
 
 	public function testNthOfTypeChild()
@@ -642,10 +642,10 @@ class PseudoClassTest extends TestCase
 			if ($res) {
 				++$i;
 				$name = $n->tagName;
-				$this->assertEquals('a', $name);
+				$this->assertSame('a', $name);
 			}
 		}
-		$this->assertEquals(10, $i, 'Ten odds.');
+		$this->assertSame(10, $i, 'Ten odds.');
 
 		// Fun with ambiguous pseudoclasses:
 		// This emulates the selector 'root > :nth-of-type(2n+1)'
@@ -666,7 +666,7 @@ class PseudoClassTest extends TestCase
 			}
 		}
 		// THis should be: 2 x a + 1 x b + 1 x c = 4
-		$this->assertEquals(4, $i, 'Four odds.');
+		$this->assertSame(4, $i, 'Four odds.');
 	}
 
 	public function testNthLastOfTypeChild()
@@ -755,7 +755,7 @@ class PseudoClassTest extends TestCase
 				$name = $n->tagName;
 			}
 		}
-		$this->assertEquals(15, $i, 'Less than or equal to 15.');
+		$this->assertSame(15, $i, 'Less than or equal to 15.');
 	}
 
 	public function testGt()
@@ -777,7 +777,7 @@ class PseudoClassTest extends TestCase
 				$name = $n->tagName;
 			}
 		}
-		$this->assertEquals(5, $i, 'Greater than the 15th element.');
+		$this->assertSame(5, $i, 'Greater than the 15th element.');
 	}
 
 	public function testEq()
@@ -796,10 +796,10 @@ class PseudoClassTest extends TestCase
 			if ($res) {
 				++$i;
 				$name = $n->tagName;
-				$this->assertEquals('c', $name);
+				$this->assertSame('c', $name);
 			}
 		}
-		$this->assertEquals(1, $i, 'The 15th element.');
+		$this->assertSame(1, $i, 'The 15th element.');
 
 		$i = 0;
 		foreach ($nl as $n) {
@@ -807,10 +807,10 @@ class PseudoClassTest extends TestCase
 			if ($res) {
 				++$i;
 				$name = $n->tagName;
-				$this->assertEquals('c', $name);
+				$this->assertSame('c', $name);
 			}
 		}
-		$this->assertEquals(1, $i, 'The 15th element.');
+		$this->assertSame(1, $i, 'The 15th element.');
 	}
 
 	public function testAnyLink()

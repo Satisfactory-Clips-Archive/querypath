@@ -25,7 +25,7 @@ class FormatTest extends TestCase
 			return '*' . $text . '*';
 		});
 
-		$this->assertEquals('*APPLE**ORANGE*', $qp->get(0)->textContent);
+		$this->assertSame('*APPLE**ORANGE*', $qp->get(0)->textContent);
 	}
 
 	/**
@@ -45,7 +45,7 @@ class FormatTest extends TestCase
 			->formatAttr('label', 'trim', '_')
 			->formatAttr('total', 'str_replace[2]', ',', '');
 
-		$this->assertEquals('apple', $qp->find('item')->attr('label'));
-		$this->assertEquals('12345678', $qp->find('item')->attr('total'));
+		$this->assertSame('apple', $qp->find('item')->attr('label'));
+		$this->assertSame('12345678', $qp->find('item')->attr('total'));
 	}
 }

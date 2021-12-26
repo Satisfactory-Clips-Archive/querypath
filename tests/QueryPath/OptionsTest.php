@@ -19,9 +19,9 @@ class OptionsTest extends TestCase
 		Options::set($options);
 
 		$results = Options::get();
-		$this->assertEquals($expect, $results);
+		$this->assertSame($expect, $results);
 
-		$this->assertEquals('val1', $results['test1']);
+		$this->assertSame('val1', $results['test1']);
 	}
 
 	public function testQPOverrideOrder()
@@ -32,10 +32,10 @@ class OptionsTest extends TestCase
 		Options::set($options);
 		$qpOpts = qp(null, null, ['test1' => 'val3', 'replace_entities' => true])->getOptions();
 
-		$this->assertEquals($expect['test1'], $qpOpts['test1']);
-		$this->assertEquals(true, $qpOpts['replace_entities']);
+		$this->assertSame($expect['test1'], $qpOpts['test1']);
+		$this->assertSame(true, $qpOpts['replace_entities']);
 		$this->assertNull($qpOpts['parser_flags']);
-		$this->assertEquals($expect['test2'], $qpOpts['test2']);
+		$this->assertSame($expect['test2'], $qpOpts['test2']);
 	}
 
 	public function testQPHas()
@@ -57,6 +57,6 @@ class OptionsTest extends TestCase
 
 		$results = Options::get();
 		$this->assertTrue(Options::has('test4'));
-		$this->assertEquals('val3', $results['test1']);
+		$this->assertSame('val3', $results['test1']);
 	}
 }

@@ -24,23 +24,23 @@ class QPXMLTest extends TestCase
 
 	public function testCDATA()
 	{
-		$this->assertEquals('This is a CDATA section.', qp($this->file, 'first')->cdata());
+		$this->assertSame('This is a CDATA section.', qp($this->file, 'first')->cdata());
 
 		$msg = 'Another CDATA Section';
-		$this->assertEquals($msg, qp($this->file, 'second')->cdata($msg)->top()->find('second')->cdata());
+		$this->assertSame($msg, qp($this->file, 'second')->cdata($msg)->top()->find('second')->cdata());
 	}
 
 	public function testComment()
 	{
-		$this->assertEquals('This is a comment.', trim(qp($this->file, 'root')->comment()));
+		$this->assertSame('This is a comment.', trim(qp($this->file, 'root')->comment()));
 		$msg = 'Message';
-		$this->assertEquals($msg, qp($this->file, 'second')->comment($msg)->top()->find('second')->comment());
+		$this->assertSame($msg, qp($this->file, 'second')->comment($msg)->top()->find('second')->comment());
 	}
 
 	public function testProcessingInstruction()
 	{
-		$this->assertEquals('This is a processing instruction.', trim(qp($this->file, 'third')->pi()));
+		$this->assertSame('This is a processing instruction.', trim(qp($this->file, 'third')->pi()));
 		$msg = 'Message';
-		$this->assertEquals($msg, qp($this->file, 'second')->pi('qp', $msg)->top()->find('second')->pi());
+		$this->assertSame($msg, qp($this->file, 'second')->pi('qp', $msg)->top()->find('second')->pi());
 	}
 }

@@ -35,7 +35,7 @@ class ParserTest extends TestCase
 		$mock = $this->getMockHandler('elementID');
 		$parser = new Parser('#mytest', $mock);
 		$parser->parse();
-		$this->assertEquals(7, $parser->getScanner()->position());
+		$this->assertSame(7, $parser->getScanner()->position());
 	}
 
 	public function testElement()
@@ -44,13 +44,13 @@ class ParserTest extends TestCase
 		$mock = $this->getMockHandler('element');
 		$parser = new Parser('mytest', $mock);
 		$parser->parse();
-		$this->assertEquals(6, $parser->getScanner()->position());
+		$this->assertSame(6, $parser->getScanner()->position());
 
 		// With empty namespace
 		$mock = $this->getMockHandler('element');
 		$parser = new Parser('|mytest', $mock);
 		$parser->parse();
-		$this->assertEquals(7, $parser->getScanner()->position());
+		$this->assertSame(7, $parser->getScanner()->position());
 	}
 
 	public function testElementNS()

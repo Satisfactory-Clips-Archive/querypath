@@ -52,6 +52,6 @@ class QPXSLTest extends TestCase
     ';
 
 		$qp = qp($orig)->xslt($template);
-		$this->assertEquals(2, $qp->top('h1')->size(), 'Make sure that data was formatted');
+		$this->assertSame(2, $qp->top('h1')->size(), 'Make sure that data was formatted');
 	}
 }

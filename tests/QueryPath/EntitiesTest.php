@@ -12,32 +12,32 @@ class EntitiesTest extends TestCase
 	public function testReplaceEntity()
 	{
 		$entity = 'amp';
-		$this->assertEquals('38', \QueryPath\Entities::replaceEntity($entity));
+		$this->assertSame(38, \QueryPath\Entities::replaceEntity($entity));
 
 		$entity = 'lceil';
-		$this->assertEquals('8968', \QueryPath\Entities::replaceEntity($entity));
+		$this->assertSame(8968, \QueryPath\Entities::replaceEntity($entity));
 	}
 
 	public function testReplaceAllEntities()
 	{
 		$test = '<?xml version="1.0"?><root>&amp;&copy;&#38;& nothing.</root>';
 		$expect = '<?xml version="1.0"?><root>&#38;&#169;&#38;&#38; nothing.</root>';
-		$this->assertEquals($expect, \QueryPath\Entities::replaceAllEntities($test));
+		$this->assertSame($expect, \QueryPath\Entities::replaceAllEntities($test));
 
 		$test = '&&& ';
 		$expect = '&#38;&#38;&#38; ';
-		$this->assertEquals($expect, \QueryPath\Entities::replaceAllEntities($test));
+		$this->assertSame($expect, \QueryPath\Entities::replaceAllEntities($test));
 
 		$test = "&eacute;\n";
 		$expect = "&#233;\n";
-		$this->assertEquals($expect, \QueryPath\Entities::replaceAllEntities($test));
+		$this->assertSame($expect, \QueryPath\Entities::replaceAllEntities($test));
 	}
 
 	public function testReplaceHexEntities()
 	{
 		$test = '&#xA9;';
 		$expect = '&#xA9;';
-		$this->assertEquals($expect, \QueryPath\Entities::replaceAllEntities($test));
+		$this->assertSame($expect, \QueryPath\Entities::replaceAllEntities($test));
 	}
 
 	public function testQPEntityReplacement()
@@ -51,6 +51,6 @@ class EntitiesTest extends TestCase
 		$qp = qp($test, null, ['replace_entities' => true]);
 		// Interestingly, the XML serializer converts decimal to hex and ampersands
 		// to &amp;.
-		$this->assertEquals($expect, trim($qp->xml()));
+		$this->assertSame($expect, trim($qp->xml()));
 	}
 }
