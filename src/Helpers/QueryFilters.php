@@ -708,7 +708,6 @@ trait QueryFilters
 	{
 		$found = new \SplObjectStorage();
 		foreach ($this->matches as $m) {
-
 			if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 				$found->attach($m);
 			} else {
@@ -722,7 +721,6 @@ trait QueryFilters
 					}
 				}
 			}
-
 		}
 
 		// XXX: Should this be an in-place modification?
@@ -1003,7 +1001,6 @@ trait QueryFilters
 							$found->attach($c);
 						}
 						$tmp->detach($c);
-
 					} // No filter. Just attach it.
 					else {
 						$found->attach($c);

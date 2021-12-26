@@ -22,7 +22,6 @@ use QueryPath\QueryPath;
  */
 class QueryPathIterator extends \IteratorIterator
 {
-
 	public $options = [];
 	private $qp;
 

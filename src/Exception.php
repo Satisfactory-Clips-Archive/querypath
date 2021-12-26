@@ -12,4 +12,6 @@ namespace QueryPath;
  *
  * @ingroup querypath_core
  */
-class Exception extends \Exception {}
+class Exception extends \Exception
+{
+}

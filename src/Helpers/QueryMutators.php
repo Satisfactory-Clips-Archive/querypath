@@ -84,10 +84,8 @@ trait QueryMutators
 						// Otherwise a standard clone will do.
 						$m->appendChild($data->cloneNode(true));
 					}
-
 				}
 			}
-
 		}
 
 		return $this;

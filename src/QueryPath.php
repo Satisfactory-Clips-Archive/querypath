@@ -371,5 +371,4 @@ class QueryPath
 
 		return 'data:' . $mime . ';base64,' . $encoded;
 	}
-
 }

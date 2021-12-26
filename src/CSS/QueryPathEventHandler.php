@@ -67,7 +67,6 @@ namespace QueryPath\CSS;
  */
 class QueryPathEventHandler implements EventHandler, Traverser
 {
-
 	protected $dom; // Always points to the top level.
 	protected $matches; // The matches
 	protected $alreadyMatched; // Matches found before current selector.
@@ -308,7 +307,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	public function elementClass($name)
 	{
-
 		$found = new \SplObjectStorage();
 		$matches = $this->candidateList();
 		foreach ($matches as $item) {
@@ -763,7 +761,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			// index of each element for reference later. We only need to do this
 			// once per parent, though.
 			if (!$parents->contains($parent)) {
-
 				$c = 0;
 				foreach ($parent->childNodes as $child) {
 					// We only want nodes, and if this call is preceded by an element
@@ -956,7 +953,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			// index of each element for reference later. We only need to do this
 			// once per parent, though.
 			if (!$parents->contains($parent)) {
-
 				$c = 0;
 				foreach ($parent->childNodes as $child) {
 					// This doesn't totally make sense, since the CSS 3 spec does not require that
@@ -1224,7 +1220,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 */
 	protected function attrValMatches($needle, $haystack, $operation)
 	{
-
 		if (strlen($haystack) < strlen($needle)) {
 			return false;
 		}
@@ -1490,5 +1485,4 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			$splos->attach($item);
 		}
 	}
-
 }

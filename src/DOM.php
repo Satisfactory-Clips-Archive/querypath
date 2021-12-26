@@ -182,7 +182,6 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 				if (function_exists('mb_convert_encoding')) {
 					$string = mb_convert_encoding($string, $to_enc, $from_enc);
 				}
-
 			}
 
 			// This is to avoid cases where low ascii digits have slipped into HTML.
@@ -421,8 +420,8 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 				set_error_handler(['\QueryPath\ParseException', 'initializeFromError'], $this->errTypes);
 				$contents = file_get_contents($filename, false, $context);
 			}
-				// Apparently there is no 'finally' in PHP, so we have to restore the error
-				// handler this way:
+			// Apparently there is no 'finally' in PHP, so we have to restore the error
+			// handler this way:
 			catch (Exception $e) {
 				restore_error_handler();
 				throw $e;
@@ -468,7 +467,6 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 			else {
 				$document->load($filename, $flags ?? 0);
 			}
-
 		} // Emulate 'finally' behavior.
 		catch (Exception $e) {
 			restore_error_handler();

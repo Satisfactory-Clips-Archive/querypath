@@ -14,7 +14,6 @@ namespace QueryPath;
  */
 interface Query
 {
-
 	public function __construct($document = null, $selector = null, $options = []);
 
 	public function find($selector);

@@ -31,7 +31,6 @@ namespace QueryPath\CSS;
  */
 class SimpleSelector
 {
-
 	public const ADJACENT          = 0x1;
 	public const DIRECT_DESCENDANT = 0x2;
 	public const ANOTHER_SELECTOR  = 0x4;
@@ -114,7 +113,6 @@ class SimpleSelector
 	{
 		$buffer = [];
 		try {
-
 			if (!empty($this->ns)) {
 				$buffer[] = $this->ns;
 				$buffer[] = '|';
@@ -154,12 +152,10 @@ class SimpleSelector
 			if (!empty($this->combinator)) {
 				$buffer[] = self::combinatorOperator($this->combinator);
 			}
-
 		} catch (\Exception $e) {
 			return $e->getMessage();
 		}
 
 		return implode('', $buffer);
 	}
-
 }

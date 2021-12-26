@@ -210,7 +210,6 @@ class PseudoClass
 		$match = true;
 		foreach ($node->attributes as $attrNode) {
 			if ($attrNode->localName === 'lang') {
-
 				if ($attrNode->nodeName === $attrNode->localName) {
 					// fprintf(STDOUT, "%s in NS %s\n", $attrNode->name, $attrNode->nodeName);
 					return Util::matchesAttribute($node, 'lang', $value, $operator);
@@ -474,5 +473,4 @@ class PseudoClass
 
 		return empty($scheme) || $scheme === 'file';
 	}
-
 }

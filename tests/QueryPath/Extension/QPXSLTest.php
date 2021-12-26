@@ -10,7 +10,6 @@ use QueryPath\Extension\QPXSL;
 
 class QPXSLTest extends TestCase
 {
-
 	protected $file = './test/advanced.xml';
 
 	public static function setUpBeforeClass() : void

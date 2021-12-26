@@ -10,7 +10,6 @@ use QueryPathTests\TestCase;
 
 class SelectorTest extends TestCase
 {
-
 	protected function parse($selector)
 	{
 		$handler = new \QueryPath\CSS\Selector();
@@ -56,7 +55,6 @@ class SelectorTest extends TestCase
 		$this->assertEquals('test', $selector[0][0]->classes[0]);
 		$this->assertEquals('foo', $selector[0][0]->classes[1]);
 		$this->assertEquals('bar', $selector[0][0]->classes[2]);
-
 	}
 
 	public function testAttributes()

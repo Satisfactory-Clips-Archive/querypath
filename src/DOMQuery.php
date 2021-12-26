@@ -43,7 +43,6 @@ use QueryPath\Helpers\QueryMutators;
  */
 class DOMQuery extends DOM
 {
-
 	use QueryFilters, QueryMutators, QueryChecks;
 
 	/**
@@ -650,7 +649,6 @@ class DOMQuery extends DOM
 	public function html($markup = null)
 	{
 		if (isset($markup)) {
-
 			if ($this->options['replace_entities']) {
 				$markup = Entities::replaceAllEntities($markup);
 			}
@@ -1202,7 +1200,6 @@ class DOMQuery extends DOM
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
-
 			return ($omit_xml_decl ? $this->document->saveXML($first->ownerDocument->documentElement) : $this->document->saveXML());
 		}
 
@@ -1494,7 +1491,6 @@ class DOMQuery extends DOM
 	 */
 	public function __call($name, $arguments)
 	{
-
 		if (!ExtensionRegistry::$useRegistry) {
 			throw new Exception("No method named $name found (Extensions disabled).");
 		}

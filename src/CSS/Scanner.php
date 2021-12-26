@@ -16,7 +16,6 @@ namespace QueryPath\CSS;
  */
 final class Scanner
 {
-
 	public $is;
 	public $value;
 	public $token;
@@ -315,5 +314,4 @@ final class Scanner
 	}
 	return $buf;
   }*/
-
 }

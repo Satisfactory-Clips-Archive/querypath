@@ -189,7 +189,6 @@ function qp($document = null, $string = null, array $options = [])
  */
 function htmlqp($document = null, $selector = null, $options = [])
 {
-
 	return QueryPath::withHTML($document, $selector, $options);
 }
 

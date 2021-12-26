@@ -14,7 +14,6 @@ namespace QueryPathTests;
  */
 class XMLishTest extends TestCase
 {
-
 	public function testXMLishMock()
 	{
 		$tests = [
@@ -39,7 +38,6 @@ class XMLishTest extends TestCase
 		$mock = new XMLishMock();
 		$this->assertEquals(true, $mock->exposedIsXMLish($html), 'Testing broken HTML');
 	}
-
 }
 
 /**
@@ -49,7 +47,6 @@ class XMLishTest extends TestCase
  */
 class XMLishMock extends \QueryPath\DOMQuery
 {
-
 	public function exposedIsXMLish($str)
 	{
 		return $this->isXMLish($str);

@@ -177,17 +177,17 @@ class Parser
 			$this->handler->directDescendant();
 			$this->scanner->nextToken();
 			$inCombinator = true;
-			//$this->simpleSelectors();
+		//$this->simpleSelectors();
 		} elseif ($t === Token::PLUS) {
 			$this->handler->adjacent();
 			$this->scanner->nextToken();
 			$inCombinator = true;
-			//$this->simpleSelectors();
+		//$this->simpleSelectors();
 		} elseif ($t === Token::COMMA) {
 			$this->handler->anotherSelector();
 			$this->scanner->nextToken();
 			$inCombinator = true;
-			//$this->scanner->selectors();
+		//$this->scanner->selectors();
 		} elseif ($t === Token::TILDE) {
 			$this->handler->sibling();
 			$this->scanner->nextToken();
@@ -439,7 +439,6 @@ class Parser
 					// We have ns|name
 					$this->handler->elementNS($elementName, $elementNS);
 				}
-
 			} else {
 				$this->handler->element($elementName);
 			}
@@ -630,6 +629,5 @@ class Parser
 	{
 		return $this->scanner;
 	}
-
 }
 

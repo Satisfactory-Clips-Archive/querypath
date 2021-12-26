@@ -9,7 +9,6 @@ namespace QueryPathTests;
  */
 class EntitiesTest extends TestCase
 {
-
 	public function testReplaceEntity()
 	{
 		$entity = 'amp';

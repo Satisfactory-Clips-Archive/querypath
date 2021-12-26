@@ -863,5 +863,4 @@ class DOMTraverser implements Traverser
 	{
 		return $this->dom;
 	}
-
 }

@@ -13,7 +13,6 @@ namespace QueryPathTests;
  */
 class TestEvent
 {
-
 	public const ELEMENT_ID        = 0;
 	public const ELEMENT           = 1;
 	public const ELEMENT_NS        = 2;

@@ -15,7 +15,6 @@ define('TRAVERSER_XML', __DIR__ . '/../../DOMTraverserTest.xml');
  */
 class DOMTraverserTest extends TestCase
 {
-
 	protected $xml_file = TRAVERSER_XML;
 
 	public function debug($msg)
@@ -135,7 +134,6 @@ class DOMTraverserTest extends TestCase
 
 	public function testMatchAttributes()
 	{
-
 		$matches = $this->find('crowded[attr1]');
 		$this->assertEquals(1, count($matches));
 
@@ -229,13 +227,11 @@ class DOMTraverserTest extends TestCase
 
 	public function testMatchPseudoClasses()
 	{
-
 		$matches = $this->find('ul>li:first');
 		$this->assertEquals(1, count($matches));
 
 		$matches = $this->find('ul>li:not(.first)');
 		$this->assertEquals(5, count($matches));
-
 	}
 
 	public function testMatchPseudoElements()
@@ -369,6 +365,5 @@ class DOMTraverserTest extends TestCase
 		$matches = $this->find('one, two');
 		$this->assertEquals(2, count($matches));
 	}
-
 }
 

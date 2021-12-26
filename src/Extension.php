@@ -91,6 +91,7 @@ namespace QueryPath;
  *
  * @ingroup querypath_extensions
  */
-interface Extension {
-  public function __construct(\QueryPath\Query $qp);
+interface Extension
+{
+	public function __construct(\QueryPath\Query $qp);
 }

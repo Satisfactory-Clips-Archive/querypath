@@ -11,7 +11,6 @@ use \QueryPath\Options;
  */
 class OptionsTest extends TestCase
 {
-
 	public function testOptions()
 	{
 		$expect = ['test1' => 'val1', 'test2' => 'val2'];
@@ -60,5 +59,4 @@ class OptionsTest extends TestCase
 		$this->assertTrue(Options::has('test4'));
 		$this->assertEquals('val3', $results['test1']);
 	}
-
 }

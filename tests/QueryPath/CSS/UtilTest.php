@@ -13,7 +13,6 @@ use QueryPathTests\TestCase;
  */
 class UtilTest extends TestCase
 {
-
 	public function testRemoveQuotes()
 	{
 		$this->assertEquals('foo', Util::removeQuotes('"foo"'));

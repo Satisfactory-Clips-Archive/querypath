@@ -59,7 +59,6 @@ class Util
 	 */
 	public static function matchesAttributeValue($needle, $haystack, $operation): bool
 	{
-
 		if (strlen($haystack) < strlen($needle)) {
 			return false;
 		}
@@ -158,5 +157,4 @@ class Util
 
 		return [$aVal, $bVal];
 	}
-
 }

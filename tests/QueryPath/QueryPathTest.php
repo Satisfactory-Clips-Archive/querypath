@@ -8,13 +8,11 @@ use QueryPath\QueryPath;
 
 class QueryPathTest extends TestCase
 {
-
 	public function testWith()
 	{
 		$qp = QueryPath::with(QueryPath::XHTML_STUB);
 
 		$this->assertInstanceOf('\QueryPath\DOMQuery', $qp);
-
 	}
 
 	public function testWithHTML()
@@ -45,14 +43,11 @@ class QueryPathTest extends TestCase
 		$qp = QueryPath::with(QueryPath::XHTML_STUB);
 
 		$this->assertTrue($qp->grrrrrrr());
-
 	}
-
 }
 
 class DummyExtension implements \QueryPath\Extension
 {
-
 	public function __construct(\QueryPath\Query $qp)
 	{
 		$this->qp = $qp;
@@ -62,5 +57,4 @@ class DummyExtension implements \QueryPath\Extension
 	{
 		return true;
 	}
-
 }

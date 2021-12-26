@@ -13,7 +13,6 @@ use QueryPathTests\TestCase;
  */
 class PseudoClassTest extends TestCase
 {
-
 	protected function doc($string, $tagname)
 	{
 		$doc = new \DOMDocument('1.0');
@@ -54,7 +53,6 @@ class PseudoClassTest extends TestCase
 		// Check on ele that doesn't have lang.
 		$ret = $ps->elementMatches('lang', $root, $root, 'fr');
 		$this->assertFalse($ret);
-
 	}
 
 	public function testLangNS()
@@ -91,7 +89,6 @@ class PseudoClassTest extends TestCase
 
 		$ret = $ps->elementMatches('reset', $ele, $root);
 		$this->assertFalse($ret);
-
 	}
 
 	public function testHasAttribute()
@@ -153,7 +150,6 @@ class PseudoClassTest extends TestCase
 
 		$ret = $ps->elementMatches('contains', $ele, $root, "'Agent P, here is your mission.'");
 		$this->assertFalse($ret);
-
 	}
 
 	public function testContainsExactly()
@@ -227,7 +223,6 @@ class PseudoClassTest extends TestCase
 		list($ele, $root) = $this->doc($xml, 'p');
 		$ret = $ps->elementMatches('parent', $ele, $root);
 		$this->assertTrue($ret);
-
 	}
 
 	public function testFirst()
@@ -246,7 +241,6 @@ class PseudoClassTest extends TestCase
 		list($ele, $root) = $this->doc($xml, 'b');
 		$ret = $ps->elementMatches('first', $ele, $root);
 		$this->assertFalse($ret);
-
 	}
 
 	public function testLast()
@@ -290,7 +284,6 @@ class PseudoClassTest extends TestCase
 			}
 		}
 		$this->assertEquals(3, $i);
-
 	}
 
 	public function testEmpty()
@@ -582,7 +575,6 @@ class PseudoClassTest extends TestCase
 			}
 		}
 		$this->assertEquals(0, $i);
-
 	}
 
 	public function testEven()
@@ -704,7 +696,6 @@ class PseudoClassTest extends TestCase
 		$second = $nl->item(1);
 		$res = $ps->elementMatches('nth-last-of-type', $second, $root, '3');
 		$this->assertTrue($res);
-
 	}
 
 	public function testLink()

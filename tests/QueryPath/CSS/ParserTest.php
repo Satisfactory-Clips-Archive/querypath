@@ -140,7 +140,6 @@ class ParserTest extends TestCase
 
 		$parser = new Parser('myele:mypclass(:anotherPseudo)', $mock);
 		$parser->parse();
-
 	}
 
 	public function testPseudoElement()
@@ -164,7 +163,6 @@ class ParserTest extends TestCase
 
 		$parser = new Parser('ele1 > ele2', $mock);
 		$parser->parse();
-
 	}
 
 	public function testAnyDescendant()
@@ -176,7 +174,6 @@ class ParserTest extends TestCase
 
 		$parser = new Parser('ele1  .class', $mock);
 		$parser->parse();
-
 	}
 
 	public function testAdjacent()
@@ -336,7 +333,6 @@ class ParserTest extends TestCase
 
 	public function testElementNSClassAndAttribute()
 	{
-
 		$expect = [
 			new TestEvent(TestEvent::ELEMENT_NS, 'element', 'ns'),
 			new TestEvent(TestEvent::ELEMENT_CLASS, 'class'),
@@ -364,7 +360,6 @@ class ParserTest extends TestCase
 
 	public function testAllCombo()
 	{
-
 		$selector = '*|ele1 > ele2.class1 + ns1|ele3.class2[attr=simple] ~
      .class2[attr2~="longer string of text."]:pseudoClass(value)
      .class3::pseudoElement';

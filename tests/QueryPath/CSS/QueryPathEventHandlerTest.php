@@ -15,8 +15,6 @@ use QueryPathTests\TestCase;
  */
 class QueryPathEventHandlerTest extends TestCase
 {
-
-
 	public $xml = '<?xml version="1.0" ?>
   <html>
   <head>
@@ -222,7 +220,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertEquals(1, $matches->count());
 		$match = $this->firstMatch($matches);
 		$this->assertEquals('inside', $match->tagName);
-
 	}
 
 	public function testAnyElementInNS()
@@ -326,7 +323,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertEquals(1, $matches->count());
 		$match = $this->firstMatch($matches);
 		$this->assertEquals('li-nine', $match->getAttribute('id'));
-
 	}
 
 	public function testDirectDescendant()
@@ -349,7 +345,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertEquals(2, $matches->count());
 		$match = $this->nthMatch($matches, 1);
 		$this->assertEquals('two', $match->getAttribute('id'));
-
 	}
 
 	public function testAttribute()
@@ -429,12 +424,10 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertEquals(1, $matches->count());
 		$match = $this->firstMatch($matches);
 		$this->assertEquals('one', $match->getAttribute('id'));
-
 	}
 
 	public function testPseudoClassLang()
 	{
-
 		$xml = '<?xml version="1.0" ?><test><inside lang="en-us" id="one"/>Text<inside/></test>';
 		$doc = new \DomDocument();
 		$doc->loadXML($xml);
@@ -746,7 +739,6 @@ class QueryPathEventHandlerTest extends TestCase
 		//    $matchIDs = sort($matchIDs);
 		$this->assertEquals(['one', 'three', 'inner-one', 'five'], $matchIDs);
 		//$this->assertEquals('inner-one', $matches[3]->getAttribute('id'));
-
 	}
 
 	public function testPseudoClassOnlyChild()
@@ -1019,7 +1011,6 @@ class QueryPathEventHandlerTest extends TestCase
 
 		$this->assertEquals(3, $matches->count());
 		$this->assertEquals('five', $this->firstMatch($matches)->getAttribute('id'));
-
 	}
 
 	public function testPseudoClassEmpty()
@@ -1242,7 +1233,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertEquals(2, $matches->count(), 'Two matches for fragment of string.');
 		$this->assertEquals('one', $this->firstMatch($matches)->getAttribute('id'));
-
 	}
 
 	public function testPseudoClassContainsExactly()
@@ -1412,7 +1402,6 @@ class QueryPathEventHandlerTest extends TestCase
 		//print $this->firstMatch($matches)->getAttribute('id') . PHP_EOL;
 		$this->assertEquals(2, $matches->count());
 		$this->assertEquals('two', $this->nthMatch($matches, 1)->getAttribute('id'));
-
 	}
 
 	public function testSibling()

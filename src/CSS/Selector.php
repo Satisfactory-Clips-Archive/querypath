@@ -50,7 +50,6 @@ namespace QueryPath\CSS;
  */
 class Selector implements EventHandler, \IteratorAggregate, \Countable
 {
-
 	protected $selectors = [];
 	protected $currSelector;
 	protected $selectorGroups = [];

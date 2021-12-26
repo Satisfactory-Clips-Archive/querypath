@@ -14,4 +14,6 @@ namespace QueryPath\CSS;
  *
  * @ingroup querypath_css
  */
-class NotImplementedException extends \Exception {}
+class NotImplementedException extends \Exception
+{
+}

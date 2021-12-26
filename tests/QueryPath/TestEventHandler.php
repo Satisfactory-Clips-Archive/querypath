@@ -15,7 +15,6 @@ use QueryPath\CSS\EventHandler;
  */
 class TestEventHandler implements EventHandler
 {
-
 	public $stack;
 	public $expect = [];
 

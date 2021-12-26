@@ -88,7 +88,6 @@ class DOMQueryTest extends TestCase
 		$qp = qp($array);
 		$this->assertEquals(1, count($qp->get()));
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
-
 	}
 
 	/**
@@ -201,7 +200,6 @@ class DOMQueryTest extends TestCase
 
 		$iso_found = preg_match('/iso-8859-1/', $xml) == 1;
 		$this->assertFalse($iso_found, 'Encoding should not be utf-8 in ' . $xml);
-
 	}
 
 	public function testQPAbstractFactory()
@@ -219,7 +217,6 @@ class DOMQueryTest extends TestCase
 		foreach (qp($xml, 'i', $options) as $item) {
 			$this->assertTrue($item instanceof QueryPathExtended, 'Is instance of extending class.');
 		}
-
 	}
 
 	public function testFailedCall()
@@ -480,7 +477,6 @@ class DOMQueryTest extends TestCase
 		$qp = qp($file, 'inner')->removeAttr('class');
 		$this->assertEquals(2, $qp->count());
 		$this->assertFalse($qp->get(0)->hasAttribute('class'));
-
 	}
 
 	public function testEq()
@@ -515,7 +511,6 @@ class DOMQueryTest extends TestCase
 		$this->assertEquals(2, count($list));
 		//$this->assertEquals(2, )
 		$this->assertTrue($qp->top('#one,#two')->is($list));
-
 	}
 
 	public function testIndex()
@@ -905,7 +900,6 @@ class DOMQueryTest extends TestCase
 		$xml = '<?xml version="1.0"?><root><center/></root>';
 		$qp = qp($xml, 'center')->unwrap();
 		$this->assertEquals('center', $qp->top()->tag());
-
 	}
 
 	public function testFailedUnwrap()
@@ -957,7 +951,6 @@ class DOMQueryTest extends TestCase
 		$xml = qp($file,
 			'li')->wrapAll('<test class="testWrap"><inside><center/></inside></test>')->get(0)->ownerDocument->saveXML();
 		$this->assertEquals(5, qp($xml, '.testWrap > inside > center > li')->count());
-
 	}
 
 	public function testWrapInner()
@@ -1273,7 +1266,6 @@ class DOMQueryTest extends TestCase
 		$xhtml = qp('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body><br /></body></html>')->xhtml();
 
 		qp($xhtml);
-
 	}
 
 	public function testWriteXML()
@@ -1380,7 +1372,6 @@ class DOMQueryTest extends TestCase
 			//print $e->getMessage();
 			throw $e;
 		}
-
 	}
 
 	public function testFailWriteXHTML()
@@ -1392,7 +1383,6 @@ class DOMQueryTest extends TestCase
 			//print $e->getMessage();
 			throw $e;
 		}
-
 	}
 
 	public function testFailWriteHTML()
@@ -1404,7 +1394,6 @@ class DOMQueryTest extends TestCase
 			// print $e->getMessage();
 			throw $e;
 		}
-
 	}
 
 	public function testWriteHTML()
@@ -1535,7 +1524,6 @@ class DOMQueryTest extends TestCase
 		$xml = '<?xml version="1.0"?><root>Before<br/><foo/>Before2<br/>Before3<div/></root>';
 		$this->assertEquals('BeforeBefore2', qp($xml, 'br')->textBefore());
 		$this->assertEquals('Blarg', qp($xml, 'foo')->textBefore('Blarg')->top('foo')->textBefore());
-
 	}
 
 	public function testTextImplode()
@@ -1716,7 +1704,6 @@ class DOMQueryTest extends TestCase
 
 	public function testIterator()
 	{
-
 		$qp = qp(QueryPath::HTML_STUB, 'body')->append('<li/><li/><li/><li/>');
 
 		$this->assertEquals(4, $qp->find('li')->count());
@@ -1731,7 +1718,6 @@ class DOMQueryTest extends TestCase
 
 	public function testModeratelySizedDocument()
 	{
-
 		$this->assertEquals(1, qp(MEDIUM_FILE)->count());
 
 		$contents = file_get_contents(MEDIUM_FILE);
@@ -1756,7 +1742,6 @@ class DOMQueryTest extends TestCase
 
 		// Test that this is exposed to PHP's Countable logic.
 		$this->assertEquals(5, count(qp($file, 'li')));
-
 	}
 
 	public function testLength()
@@ -1766,8 +1751,6 @@ class DOMQueryTest extends TestCase
 		$file = DATA_FILE;
 		$qp = qp($file, 'li');
 		$this->assertEquals(5, $qp->length);
-
-
 	}
 
 	public function testDocument()
@@ -2027,7 +2010,6 @@ class DOMQueryTest extends TestCase
 
 	public function testDataURL()
 	{
-
 		$text = 'Hi!'; // Base-64 encoded value would be SGkh
 		$xml = '<?xml version="1.0"?><root><item/></root>';
 
@@ -2057,7 +2039,6 @@ class DOMQueryTest extends TestCase
  */
 class QueryPathExtended extends DOMQuery
 {
-
 	public $foo = 'bar';
 
 	public function foonator()

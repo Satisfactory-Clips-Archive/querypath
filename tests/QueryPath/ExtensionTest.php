@@ -15,7 +15,6 @@ use \QueryPath\ExtensionRegistry;
  */
 class QueryPathExtensionTest extends TestCase
 {
-
 	public static function setUpBeforeClass() : void
 	{
 		ExtensionRegistry::extend(StubExtensionOne::class);
@@ -52,7 +51,6 @@ class QueryPathExtensionTest extends TestCase
 			ExtensionRegistry::$useRegistry = true;
 			throw $e;
 		}
-
 	}
 
 	public function testExtend()
@@ -93,7 +91,6 @@ class QueryPathExtensionTest extends TestCase
 	//  public function testExtendNoSuchClass() {
 	//    ExtensionRegistry::extend('StubExtensionFour');
 	//  }
-
 }
 
 // Create a stub extension:
@@ -105,7 +102,6 @@ class QueryPathExtensionTest extends TestCase
  */
 class StubExtensionOne implements Extension
 {
-
 	private $qp = null;
 
 	public function __construct(\QueryPath\Query $qp)
@@ -128,7 +124,6 @@ class StubExtensionOne implements Extension
  */
 class StubExtensionTwo implements Extension
 {
-
 	private $qp = null;
 
 	public function __construct(\QueryPath\Query $qp)
@@ -149,7 +144,6 @@ class StubExtensionTwo implements Extension
  */
 class StubExtensionThree implements Extension
 {
-
 	private $qp;
 
 	public function __construct(\QueryPath\Query $qp)

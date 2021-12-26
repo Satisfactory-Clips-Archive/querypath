@@ -13,10 +13,8 @@ use QueryPathTests\TestCase;
  */
 class TokenTest extends TestCase
 {
-
 	public function testName()
 	{
-
 		$this->assertEquals('character', (Token::name(0)));
 		$this->assertEquals('a legal non-alphanumeric character', (Token::name(99)));
 		$this->assertEquals('end of file', (Token::name(false)));

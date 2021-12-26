@@ -46,7 +46,6 @@ use QueryPath\QueryPath;
  */
 class QPXSL implements \QueryPath\Extension
 {
-
 	protected $src;
 
 	public function __construct(\QueryPath\Query $qp)

@@ -24,7 +24,6 @@ use QueryPath\Extension;
  */
 class QPXML implements Extension
 {
-
 	protected $qp;
 
 	public function __construct(\QueryPath\Query $qp)
@@ -70,7 +69,8 @@ class QPXML implements Extension
 				$element->appendChild($cdata);
 			}
 
-			return $this->qp;;
+			return $this->qp;
+			;
 		}
 
 		// Look for CDATA sections.
@@ -142,7 +142,6 @@ class QPXML implements Extension
 		foreach ($this->qp->get() as $ele) {
 			foreach ($ele->childNodes as $node) {
 				if ($node->nodeType == XML_PI_NODE) {
-
 					if (isset($prefix)) {
 						if ($node->tagName == $prefix) {
 							return $node->textContent;
