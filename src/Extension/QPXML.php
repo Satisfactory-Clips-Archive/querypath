@@ -61,7 +61,7 @@ class QPXML implements Extension
 	 * @see QueryPath::text()
 	 * @see QueryPath::html()
 	 */
-	public function cdata($text = NULL)
+	public function cdata($text = null)
 	{
 		if (isset($text)) {
 			// Add this text as CDATA in the current elements.
@@ -83,7 +83,7 @@ class QPXML implements Extension
 			}
 		}
 
-		return NULL;
+		return null;
 		// Nothing found
 	}
 
@@ -106,7 +106,7 @@ class QPXML implements Extension
 	 *  comment it finds. If no comment is found, NULL will be returned.
 	 * @see cdata()
 	 */
-	public function comment($text = NULL)
+	public function comment($text = null)
 	{
 		if (isset($text)) {
 			foreach ($this->qp->get() as $element) {
@@ -129,7 +129,7 @@ class QPXML implements Extension
 	/**
 	 * Get or set a processor instruction.
 	 */
-	public function pi($prefix = NULL, $text = NULL)
+	public function pi($prefix = null, $text = null)
 	{
 		if (isset($text)) {
 			foreach ($this->qp->get() as $element) {
@@ -185,21 +185,21 @@ class QPXML implements Extension
 	 *   The namespace URI for the given element.
 	 * @return \QueryPath\DOMQuery
 	 */
-	public function createElement($text, $nsUri = NULL)
+	public function createElement($text, $nsUri = null)
 	{
 		if (isset ($text)) {
 			foreach ($this->qp->get() as $element) {
-				if ($nsUri === NULL && strpos($text, ':') !== false) {
+				if ($nsUri === null && strpos($text, ':') !== false) {
 					$ns = array_shift(explode(':', $text));
 					$nsUri = $element->ownerDocument->lookupNamespaceURI($ns);
 
-					if ($nsUri === NULL) {
+					if ($nsUri === null) {
 						throw new \QueryPath\Exception('Undefined namespace for: ' . $text);
 					}
 				}
 
-				$node = NULL;
-				if ($nsUri !== NULL) {
+				$node = null;
+				if ($nsUri !== null) {
 					$node = $element->ownerDocument->createElementNS(
 						$nsUri,
 						$text

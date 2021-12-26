@@ -74,7 +74,7 @@ class DOMTraverser implements Traverser
 	 * @param bool $initialized
 	 * @param null $scopeNode
 	 */
-	public function __construct(\SPLObjectStorage $splos, bool $initialized = false, $scopeNode = NULL)
+	public function __construct(\SPLObjectStorage $splos, bool $initialized = false, $scopeNode = null)
 	{
 		$this->psHandler   = new PseudoClass();
 		$this->initialized = $initialized;
@@ -404,7 +404,7 @@ class DOMTraverser implements Traverser
 
 		// If no element is specified, we have to start with the
 		// entire document.
-		if ($element === NULL) {
+		if ($element === null) {
 			$element = '*';
 		}
 
@@ -472,7 +472,7 @@ class DOMTraverser implements Traverser
 			}
 		}
 		// Unset the ID selector.
-		$selector->id = NULL;
+		$selector->id = null;
 
 		return $found;
 	}
@@ -562,7 +562,7 @@ class DOMTraverser implements Traverser
 	protected function initialMatchOnElement(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
 		$element = $selector->element;
-		if (NULL === $element) {
+		if (null === $element) {
 			$element = '*';
 		}
 		$found = $this->newMatches();
@@ -579,7 +579,7 @@ class DOMTraverser implements Traverser
 			}
 		}
 
-		$selector->element = NULL;
+		$selector->element = null;
 
 		return $found;
 	}
@@ -615,7 +615,7 @@ class DOMTraverser implements Traverser
 		foreach ($detach as $rem) {
 			$elements->detach($rem);
 		}
-		$selector->ns = NULL;
+		$selector->ns = null;
 
 		return $elements;
 	}
@@ -634,7 +634,7 @@ class DOMTraverser implements Traverser
 	 * @param null $ns
 	 * @return bool
 	 */
-	protected function matchElement(\DOMElement $node, $element, $ns = NULL) : bool
+	protected function matchElement(\DOMElement $node, $element, $ns = null) : bool
 	{
 		if (empty($element)) {
 			return true;
@@ -673,7 +673,7 @@ class DOMTraverser implements Traverser
 	{
 		$buffer = [];
 		$parent = $node;
-		while (($parent = $parent->parentNode) !== NULL) {
+		while (($parent = $parent->parentNode) !== null) {
 			$buffer[] = $parent;
 		}
 
@@ -696,7 +696,7 @@ class DOMTraverser implements Traverser
 		}
 
 		foreach ($attributes as $attr) {
-			$val = isset($attr['value']) ? $attr['value'] : NULL;
+			$val = isset($attr['value']) ? $attr['value'] : null;
 
 			// Namespaced attributes.
 			if (isset($attr['ns']) && $attr['ns'] !== '*') {
@@ -784,7 +784,7 @@ class DOMTraverser implements Traverser
 		foreach ($pseudoClasses as $pseudoClass) {
 			$name = $pseudoClass['name'];
 			// Avoid E_STRICT violation.
-			$value = $pseudoClass['value'] ?? NULL;
+			$value = $pseudoClass['value'] ?? null;
 			$ret   &= $this->psHandler->elementMatches($name, $node, $this->scopeNode, $value);
 		}
 

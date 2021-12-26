@@ -106,7 +106,7 @@ class QueryPathExtensionTest extends TestCase
 class StubExtensionOne implements Extension
 {
 
-	private $qp = NULL;
+	private $qp = null;
 
 	public function __construct(\QueryPath\Query $qp)
 	{
@@ -129,7 +129,7 @@ class StubExtensionOne implements Extension
 class StubExtensionTwo implements Extension
 {
 
-	private $qp = NULL;
+	private $qp = null;
 
 	public function __construct(\QueryPath\Query $qp)
 	{

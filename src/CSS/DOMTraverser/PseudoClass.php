@@ -43,7 +43,7 @@ class PseudoClass
 	 * @retval boolean
 	 *   TRUE if the node matches, FALSE otherwise.
 	 */
-	public function elementMatches($pseudoclass, $node, $scope, $value = NULL)
+	public function elementMatches($pseudoclass, $node, $scope, $value = null)
 	{
 		$name = strtolower($pseudoclass);
 		// Need to handle known pseudoclasses.

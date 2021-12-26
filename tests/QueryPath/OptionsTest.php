@@ -31,7 +31,7 @@ class OptionsTest extends TestCase
 		$options = ['test1' => 'val1', 'test2' => 'val2'];
 
 		Options::set($options);
-		$qpOpts = qp(NULL, NULL, ['test1' => 'val3', 'replace_entities' => true])->getOptions();
+		$qpOpts = qp(null, null, ['test1' => 'val3', 'replace_entities' => true])->getOptions();
 
 		$this->assertEquals($expect['test1'], $qpOpts['test1']);
 		$this->assertEquals(true, $qpOpts['replace_entities']);

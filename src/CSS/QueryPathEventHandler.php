@@ -97,7 +97,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				$this->dom = $matches->current();
 			} else {
 				//throw new Exception("Setting DOM to Null");
-				$this->dom = NULL;
+				$this->dom = null;
 			}
 			$this->matches = $matches;
 		} // DOM Document -- we get the root element.
@@ -221,7 +221,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	}
 
 	// Inherited
-	public function elementNS($lname, $namespace = NULL)
+	public function elementNS($lname, $namespace = null)
 	{
 		$this->findAnyElement = false;
 		$found = new \SplObjectStorage();
@@ -324,7 +324,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function attribute($name, $value = NULL, $operation = EventHandler::IS_EXACTLY)
+	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY)
 	{
 		$found = new \SplObjectStorage();
 		$matches = $this->candidateList();
@@ -350,7 +350,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *
 	 * @deprecated All use cases seem to be covered by attribute().
 	 */
-	protected function searchForAttr($name, $value = NULL)
+	protected function searchForAttr($name, $value = null)
 	{
 		$found = new \SplObjectStorage();
 		$matches = $this->candidateList();
@@ -369,7 +369,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->matches = $found;
 	}
 
-	public function attributeNS($lname, $ns, $value = NULL, $operation = EventHandler::IS_EXACTLY)
+	public function attributeNS($lname, $ns, $value = null, $operation = EventHandler::IS_EXACTLY)
 	{
 		$matches = $this->candidateList();
 		$found = new \SplObjectStorage();
@@ -408,7 +408,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *  - :x-reset/:x-root (reset to the main item passed into the constructor. Less drastic than :root)
 	 *  - :odd/:even (shorthand for :nth-child(odd)/:nth-child(even))
 	 */
-	public function pseudoClass($name, $value = NULL)
+	public function pseudoClass($name, $value = null)
 	{
 		$name = strtolower($name);
 		// Need to handle known pseudoclasses.
@@ -1396,7 +1396,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				  }
 				}
 				*/
-				while ($item->nextSibling != NULL) {
+				while ($item->nextSibling != null) {
 					$item = $item->nextSibling;
 					if ($item->nodeType === XML_ELEMENT_NODE) {
 						$sibs->attach($item);

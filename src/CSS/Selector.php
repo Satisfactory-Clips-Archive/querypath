@@ -95,7 +95,7 @@ class Selector implements EventHandler, \IteratorAggregate, \Countable
 		$this->currSelector->element = $name;
 	}
 
-	public function elementNS($name, $namespace = NULL)
+	public function elementNS($name, $namespace = null)
 	{
 		$this->currSelector->ns = $namespace;
 		$this->currSelector->element = $name;
@@ -117,7 +117,7 @@ class Selector implements EventHandler, \IteratorAggregate, \Countable
 		$this->currSelector->classes[] = $name;
 	}
 
-	public function attribute($name, $value = NULL, $operation = EventHandler::IS_EXACTLY)
+	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY)
 	{
 		$this->currSelector->attributes[] = [
 			'name'  => $name,
@@ -126,7 +126,7 @@ class Selector implements EventHandler, \IteratorAggregate, \Countable
 		];
 	}
 
-	public function attributeNS($name, $ns, $value = NULL, $operation = EventHandler::IS_EXACTLY)
+	public function attributeNS($name, $ns, $value = null, $operation = EventHandler::IS_EXACTLY)
 	{
 		$this->currSelector->attributes[] = [
 			'name'  => $name,
@@ -136,7 +136,7 @@ class Selector implements EventHandler, \IteratorAggregate, \Countable
 		];
 	}
 
-	public function pseudoClass($name, $value = NULL)
+	public function pseudoClass($name, $value = null)
 	{
 		$this->currSelector->pseudoClasses[] = ['name' => $name, 'value' => $value];
 	}

@@ -25,13 +25,13 @@ class Util
 	 * @param int $operation
 	 * @return bool
 	 */
-	public static function matchesAttribute($node, $name, $value = NULL, $operation = EventHandler::IS_EXACTLY): bool
+	public static function matchesAttribute($node, $name, $value = null, $operation = EventHandler::IS_EXACTLY): bool
 	{
 		if (!$node->hasAttribute($name)) {
 			return false;
 		}
 
-		if (NULL === $value) {
+		if (null === $value) {
 			return true;
 		}
 
@@ -41,7 +41,7 @@ class Util
 	/**
 	 * Check whether the given DOMElement has the given namespaced attribute.
 	 */
-	public static function matchesAttributeNS($node, $name, $nsuri, $value = NULL, $operation = EventHandler::IS_EXACTLY)
+	public static function matchesAttributeNS($node, $name, $nsuri, $value = null, $operation = EventHandler::IS_EXACTLY)
 	{
 		if (!$node->hasAttributeNS($nsuri, $name)) {
 			return false;

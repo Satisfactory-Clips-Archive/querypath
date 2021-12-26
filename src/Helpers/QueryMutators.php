@@ -297,7 +297,7 @@ trait QueryMutators
 			$found->attach($parent->removeChild($m));
 		}
 
-		return $this->inst($found, NULL);
+		return $this->inst($found, null);
 	}
 
 	/**
@@ -551,7 +551,7 @@ trait QueryMutators
 		$winner = new \SplObjectStorage();
 		foreach ($this->matches as $m) {
 			$local_deepest = 0;
-			$local_ele = $this->deepestNode($m, 0, NULL, $local_deepest);
+			$local_ele = $this->deepestNode($m, 0, null, $local_deepest);
 
 			// Replace with the new deepest.
 			if ($local_deepest > $deepest) {
@@ -568,7 +568,7 @@ trait QueryMutators
 			}
 		}
 
-		return $this->inst($winner, NULL);
+		return $this->inst($winner, null);
 	}
 
 	/**
@@ -685,9 +685,9 @@ trait QueryMutators
 	 * @author eabrand
 	 * @throws ParseException
 	 */
-	public function detach($selector = NULL): Query
+	public function detach($selector = null): Query
 	{
-		if (NULL !== $selector) {
+		if (null !== $selector) {
 			$this->find($selector);
 		}
 
@@ -699,7 +699,7 @@ trait QueryMutators
 			$found->attach($item->parentNode->removeChild($item));
 		}
 
-		return $this->inst($found, NULL);
+		return $this->inst($found, null);
 	}
 
 	/**
@@ -776,7 +776,7 @@ trait QueryMutators
 	 * @see removeChildren()
 	 * @throws ParseException
 	 */
-	public function remove($selector = NULL): Query
+	public function remove($selector = null): Query
 	{
 		if (!empty($selector)) {
 			// Do a non-destructive find.
@@ -837,7 +837,7 @@ trait QueryMutators
 			$item->parentNode->replaceChild($node, $item);
 		}
 
-		return QueryPath::with($document, NULL, $this->options);
+		return QueryPath::with($document, null, $this->options);
 	}
 
 	/**
@@ -917,12 +917,12 @@ trait QueryMutators
 	 * @see hasAttr()
 	 * @see hasClass()
 	 */
-	public function attr($name = NULL, $value = NULL)
+	public function attr($name = null, $value = null)
 	{
 		// Default case: Return all attributes as an assoc array.
 		if (is_null($name)) {
 			if ($this->matches->count() === 0) {
-				return NULL;
+				return null;
 			}
 			$ele = $this->getFirstMatch();
 			$buffer = [];
@@ -957,7 +957,7 @@ trait QueryMutators
 
 		//getter
 		if ($this->matches->count() === 0) {
-			return NULL;
+			return null;
 		}
 
 		// Special node type handler:
@@ -1010,7 +1010,7 @@ trait QueryMutators
 	 *  The value to set. This is only set if $name is a string.
 	 * @return \QueryPath\DOMQuery
 	 */
-	public function css($name = NULL, $value = '')
+	public function css($name = null, $value = '')
 	{
 		if (empty($name)) {
 			return $this->attr('style');

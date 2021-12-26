@@ -118,7 +118,7 @@ trait QueryChecks
 			}
 		}
 
-		return $this->inst($found, NULL);
+		return $this->inst($found, null);
 	}
 
 	/**

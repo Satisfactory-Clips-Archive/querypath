@@ -23,7 +23,7 @@ class ParseException extends \QueryPath\Exception
 	public const WARN_MSG_FORMAT = 'Parser warning in %s on line %d column %d: %s (%d)';
 
 	// trigger_error
-	public function __construct($msg = '', $code = 0, $file = NULL, $line = NULL)
+	public function __construct($msg = '', $code = 0, $file = null, $line = null)
 	{
 
 		$msgs = [];

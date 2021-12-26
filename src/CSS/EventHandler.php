@@ -87,7 +87,7 @@ interface EventHandler
 	 * @param string $namespace
 	 *  The namespace identifier (Not the URI)
 	 */
-	public function elementNS($name, $namespace = NULL);
+	public function elementNS($name, $namespace = null);
 
 	/**
 	 * Handle an any-element (*) operator.
@@ -126,7 +126,7 @@ interface EventHandler
 	 *  The operation to be used for matching. See {@link EventHandler}
 	 *  constants for a list of supported operations.
 	 */
-	public function attribute($name, $value = NULL, $operation = EventHandler::IS_EXACTLY); // [name=attr]
+	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY); // [name=attr]
 
 	/**
 	 * Handle an attribute selector bound to a specific namespace.
@@ -143,7 +143,7 @@ interface EventHandler
 	 *  The operation to be used for matching. See {@link EventHandler}
 	 *  constants for a list of supported operations.
 	 */
-	public function attributeNS($name, $ns, $value = NULL, $operation = EventHandler::IS_EXACTLY);
+	public function attributeNS($name, $ns, $value = null, $operation = EventHandler::IS_EXACTLY);
 
 	/**
 	 * Handle a pseudo-class.
@@ -154,7 +154,7 @@ interface EventHandler
 	 * @param string $value
 	 *  The value, if one is found.
 	 */
-	public function pseudoClass($name, $value = NULL); //:name(value)
+	public function pseudoClass($name, $value = null); //:name(value)
 
 	/**
 	 * Handle a pseudo-element.

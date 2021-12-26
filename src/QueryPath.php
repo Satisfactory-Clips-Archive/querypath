@@ -186,14 +186,14 @@ class QueryPath
 	 * @param array $options
 	 * @return mixed|\QueryPath\DOMQuery
 	 */
-	public static function with($document = NULL, $selector = NULL, array $options = [])
+	public static function with($document = null, $selector = null, array $options = [])
 	{
 		$qpClass = $options['QueryPath_class'] ?? '\QueryPath\DOMQuery';
 
 		return new $qpClass($document, $selector, $options);
 	}
 
-	public static function withXML($source = NULL, $selector = NULL, array $options = [])
+	public static function withXML($source = null, $selector = null, array $options = [])
 	{
 		$options += [
 			'use_parser' => 'xml',
@@ -202,7 +202,7 @@ class QueryPath
 		return self::with($source, $selector, $options);
 	}
 
-	public static function withHTML($source = NULL, $selector = NULL, array $options = [])
+	public static function withHTML($source = null, $selector = null, array $options = [])
 	{
 		// Need a way to force an HTML parse instead of an XML parse when the
 		// doctype is XHTML, since many XHTML documents are not valid XML
@@ -250,7 +250,7 @@ class QueryPath
 	 *
 	 * @return QueryPath
 	 */
-	public static function withHTML5($source = NULL, $selector = NULL, $options = [])
+	public static function withHTML5($source = null, $selector = null, $options = [])
 	{
 		$qpClass = $options['QueryPath_class'] ?? '\QueryPath\DOMQuery';
 
@@ -359,7 +359,7 @@ class QueryPath
 	 *    if $data is a URL. (See {@link stream_context_create()}).
 	 * @return string An encoded data URL.
 	 */
-	public static function encodeDataURL($data, $mime = 'application/octet-stream', $context = NULL) : string
+	public static function encodeDataURL($data, $mime = 'application/octet-stream', $context = null) : string
 	{
 		if (is_resource($data)) {
 			$data = stream_get_contents($data);

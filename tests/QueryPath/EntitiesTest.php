@@ -49,7 +49,7 @@ class EntitiesTest extends TestCase
 		$expect = '<?xml version="1.0"?>
 <root>&amp;&#xA9;&amp;&amp; nothing.</root>';
 
-		$qp = qp($test, NULL, ['replace_entities' => true]);
+		$qp = qp($test, null, ['replace_entities' => true]);
 		// Interestingly, the XML serializer converts decimal to hex and ampersands
 		// to &amp;.
 		$this->assertEquals($expect, trim($qp->xml()));

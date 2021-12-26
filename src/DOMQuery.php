@@ -112,7 +112,7 @@ class DOMQuery extends DOM
 	 *  for the current document.
 	 * @throws CSS\ParseException
 	 */
-	public function top($selector = NULL): Query
+	public function top($selector = null): Query
 	{
 		return $this->inst($this->document->documentElement, $selector);
 	}
@@ -137,7 +137,7 @@ class DOMQuery extends DOM
 	{
 		$query = new DOMTraverser($this->matches);
 		$query->find($selector);
-		return $this->inst($query->matches(), NULL);
+		return $this->inst($query->matches(), null);
 	}
 
 	/**
@@ -200,7 +200,7 @@ class DOMQuery extends DOM
 			}
 		}
 
-		return $this->inst($found, NULL);
+		return $this->inst($found, null);
 	}
 
 	/**
@@ -269,10 +269,10 @@ class DOMQuery extends DOM
 	 * @see eq()
 	 * @see SplObjectStorage
 	 */
-	public function get($index = NULL, $asObject = false)
+	public function get($index = null, $asObject = false)
 	{
-		if ($index !== NULL) {
-			return ($this->count() > $index) ? $this->getNthMatch($index) : NULL;
+		if ($index !== null) {
+			return ($this->count() > $index) ? $this->getNthMatch($index) : null;
 		}
 		// Retain support for legacy.
 		if (!$asObject) {
@@ -373,7 +373,7 @@ class DOMQuery extends DOM
 	 * @see   attr()
 	 * @since 2.1
 	 */
-	public function dataURL($attr, $data = NULL, $mime = 'application/octet-stream', $context = NULL)
+	public function dataURL($attr, $data = null, $mime = 'application/octet-stream', $context = null)
 	{
 		if (is_null($data)) {
 			// Attempt to fetch the data
@@ -495,7 +495,7 @@ class DOMQuery extends DOM
 			$placeholder->parentNode->removeChild($placeholder);
 		}
 
-		return $this->inst($found, NULL);
+		return $this->inst($found, null);
 	}
 
 	/**
@@ -647,7 +647,7 @@ class DOMQuery extends DOM
 	 * @see text()
 	 * @see contents()
 	 */
-	public function html($markup = NULL)
+	public function html($markup = null)
 	{
 		if (isset($markup)) {
 
@@ -666,19 +666,19 @@ class DOMQuery extends DOM
 		}
 		$length = $this->matches->count();
 		if ($length === 0) {
-			return NULL;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if (!($first instanceof \DOMNode)) {
-			return NULL;
+			return null;
 		}
 
 		// Added by eabrand.
 		if (!$first->ownerDocument->documentElement) {
-			return NULL;
+			return null;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
@@ -699,12 +699,12 @@ class DOMQuery extends DOM
 	 * @throws QueryPath
 	 * @throws \QueryPath\Exception
 	 */
-	public function html5($markup = NULL)
+	public function html5($markup = null)
 	{
 		$html5 = new HTML5($this->options);
 
 		// append HTML to existing
-		if ($markup === NULL) {
+		if ($markup === null) {
 
 			// Parse the HTML and insert it into the DOM
 			$doc = $html5->loadHTMLFragment($markup);
@@ -716,19 +716,19 @@ class DOMQuery extends DOM
 
 		$length = $this->count();
 		if ($length === 0) {
-			return NULL;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if (!($first instanceof \DOMNode)) {
-			return NULL;
+			return null;
 		}
 
 		// Added by eabrand.
 		if (!$first->ownerDocument->documentElement) {
-			return NULL;
+			return null;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
@@ -792,14 +792,14 @@ class DOMQuery extends DOM
 	{
 		$length = $this->matches->count();
 		if ($length === 0) {
-			return NULL;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if (!($first instanceof \DOMNode)) {
-			return NULL;
+			return null;
 		}
 
 		if (!$first->hasChildNodes()) {
@@ -831,14 +831,14 @@ class DOMQuery extends DOM
 	{
 		$length = $this->matches->count();
 		if ($length === 0) {
-			return NULL;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if (!($first instanceof \DOMNode)) {
-			return NULL;
+			return null;
 		}
 
 		if (!$first->hasChildNodes()) {
@@ -863,14 +863,14 @@ class DOMQuery extends DOM
 	{
 		$length = $this->matches->count();
 		if ($length === 0) {
-			return NULL;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if (!($first instanceof \DOMNode)) {
-			return NULL;
+			return null;
 		}
 
 		if (!$first->hasChildNodes()) {
@@ -955,7 +955,7 @@ class DOMQuery extends DOM
 	 * @see xml()
 	 * @see contents()
 	 */
-	public function text($text = NULL)
+	public function text($text = null)
 	{
 		if (isset($text)) {
 			$this->removeChildren();
@@ -1002,7 +1002,7 @@ class DOMQuery extends DOM
 	 * @throws Exception
 	 * @throws QueryPath
 	 */
-	public function textBefore($text = NULL)
+	public function textBefore($text = null)
 	{
 		if (isset($text)) {
 			$textNode = $this->document->createTextNode($text);
@@ -1021,7 +1021,7 @@ class DOMQuery extends DOM
 		return $buffer;
 	}
 
-	public function textAfter($text = NULL)
+	public function textAfter($text = null)
 	{
 		if (isset($text)) {
 			$textNode = $this->document->createTextNode($text);
@@ -1059,7 +1059,7 @@ class DOMQuery extends DOM
 	 *  Returns a DOMQuery if a string was passed in, and a string if no string
 	 *  was passed in. In the later case, an error will produce NULL.
 	 */
-	public function val($value = NULL)
+	public function val($value = null)
 	{
 		if (isset($value)) {
 			$this->attr('value', $value);
@@ -1090,7 +1090,7 @@ class DOMQuery extends DOM
 	 * @see html()
 	 * @see innerXHTML()
 	 */
-	public function xhtml($markup = NULL)
+	public function xhtml($markup = null)
 	{
 
 		// XXX: This is a minor reworking of the original xml() method.
@@ -1108,21 +1108,21 @@ class DOMQuery extends DOM
 
 		$length = $this->matches->count();
 		if ($length === 0) {
-			return NULL;
+			return null;
 		}
 
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 		// Catch cases where first item is not a legit DOM object.
 		if (!($first instanceof \DOMNode)) {
-			return NULL;
+			return null;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
 
 			// Has the unfortunate side-effect of stripping doctype.
 			//$text = ($omit_xml_decl ? $this->document->saveXML($first->ownerDocument->documentElement, LIBXML_NOEMPTYTAG) : $this->document->saveXML(NULL, LIBXML_NOEMPTYTAG));
-			$text = $this->document->saveXML(NULL, LIBXML_NOEMPTYTAG);
+			$text = $this->document->saveXML(null, LIBXML_NOEMPTYTAG);
 		} else {
 			$text = $this->document->saveXML($first, LIBXML_NOEMPTYTAG);
 		}
@@ -1171,7 +1171,7 @@ class DOMQuery extends DOM
 	 * @see content()
 	 * @see innerXML()
 	 */
-	public function xml($markup = NULL)
+	public function xml($markup = null)
 	{
 		$omit_xml_decl = $this->options['omit_xml_declaration'];
 		if ($markup === true) {
@@ -1191,14 +1191,14 @@ class DOMQuery extends DOM
 		}
 		$length = $this->matches->count();
 		if ($length === 0) {
-			return NULL;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if (!($first instanceof \DOMNode)) {
-			return NULL;
+			return null;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
@@ -1231,10 +1231,10 @@ class DOMQuery extends DOM
 	 * @throws Exception
 	 *  In the event that a file cannot be written, an Exception will be thrown.
 	 */
-	public function writeXML($path = NULL, $options = NULL)
+	public function writeXML($path = null, $options = null)
 	{
-		if ($path === NULL) {
-			print $this->document->saveXML(NULL, $options ?? 0);
+		if ($path === null) {
+			print $this->document->saveXML(null, $options ?? 0);
 		} else {
 			try {
 				set_error_handler([IOException::class, 'initializeFromError']);
@@ -1268,9 +1268,9 @@ class DOMQuery extends DOM
 	 * @throws Exception
 	 *  In the event that a file cannot be written, an Exception will be thrown.
 	 */
-	public function writeHTML($path = NULL)
+	public function writeHTML($path = null)
 	{
-		if ($path === NULL) {
+		if ($path === null) {
 			print $this->document->saveHTML();
 		} else {
 			try {
@@ -1297,10 +1297,10 @@ class DOMQuery extends DOM
 	 * @throws Exception
 	 *  In the event that a file cannot be written, an Exception will be thrown.
 	 */
-	public function writeHTML5($path = NULL)
+	public function writeHTML5($path = null)
 	{
 		$html5 = new HTML5();
-		if ($path === NULL) {
+		if ($path === null) {
 			// Print the document to stdout.
 			print $html5->saveHTML($this->document);
 
@@ -1334,7 +1334,7 @@ class DOMQuery extends DOM
 	 *  thrown.
 	 * @since 2.0
 	 */
-	public function writeXHTML($path = NULL)
+	public function writeXHTML($path = null)
 	{
 		return $this->writeXML($path, LIBXML_NOEMPTYTAG);
 	}
@@ -1406,9 +1406,9 @@ class DOMQuery extends DOM
 	 * @see   find()
 	 * @throws CSS\ParseException
 	 */
-	public function branch($selector = NULL)
+	public function branch($selector = null)
 	{
-		$temp = QueryPath::with($this->matches, NULL, $this->options);
+		$temp = QueryPath::with($this->matches, null, $this->options);
 		//if (isset($selector)) $temp->find($selector);
 		$temp->document = $this->document;
 		if (isset($selector)) {

@@ -31,7 +31,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 *
 	 * @since 2.0
 	 */
-	public const DEFAULT_PARSER_FLAGS = NULL;
+	public const DEFAULT_PARSER_FLAGS = null;
 
 	public const JS_CSS_ESCAPE_CDATA             = '\\1';
 	public const JS_CSS_ESCAPE_CDATA_CCOMMENT    = '/* \\1 */';
@@ -45,7 +45,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * The base DOMDocument.
 	 */
 	protected $options = [
-		'parser_flags'                 => NULL,
+		'parser_flags'                 => null,
 		'omit_xml_declaration'         => false,
 		'replace_entities'             => false,
 		'exception_level'              => 771, // E_ERROR | E_USER_ERROR | E_USER_WARNING | E_WARNING
@@ -68,7 +68,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * @see qp()
 	 * @throws Exception
 	 */
-	public function __construct($document = NULL, $string = NULL, $options = [])
+	public function __construct($document = null, $string = null, $options = [])
 	{
 		$string = trim($string ?? '');
 		$this->options = $options + Options::get() + $this->options;
@@ -103,7 +103,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 				}
 			} elseif ($document instanceof self) {
 				//$this->matches = $document->get(NULL, TRUE);
-				$this->setMatches($document->get(NULL, true));
+				$this->setMatches($document->get(null, true));
 				if ($this->matches->count() > 0) {
 					$this->document = $this->getFirstMatch()->ownerDocument;
 				}
@@ -144,7 +144,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		} else {
 
 			// $document is a filename
-			$context = empty($options['context']) ? NULL : $options['context'];
+			$context = empty($options['context']) ? null : $options['context'];
 			$this->document = $this->parseXMLFile($document, $parser_flags, $context);
 			$this->setMatches($this->document->documentElement);
 		}
@@ -166,7 +166,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 		}
 	}
 
-	private function parseXMLString($string, $flags = NULL)
+	private function parseXMLString($string, $flags = null)
 	{
 		$document = new \DOMDocument('1.0');
 		$lead = strtolower(substr($string, 0, 5)); // <?xml
@@ -280,7 +280,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * @return array
 	 *  Returns an array of DOM nodes.
 	 */
-	protected function deepestNode(\DOMNode $ele, $depth = 0, $current = NULL, &$deepest = NULL)
+	protected function deepestNode(\DOMNode $ele, $depth = 0, $current = null, &$deepest = null)
 	{
 		// FIXME: Should this use SplObjectStorage?
 		if (!isset($current)) {
@@ -328,7 +328,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	protected function prepareInsert($item)
 	{
 		if (empty($item)) {
-			return NULL;
+			return null;
 		}
 
 		if (is_string($item)) {
@@ -353,7 +353,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 
 		if ($item instanceof self) {
 			if ($item->count() === 0) {
-				return NULL;
+				return null;
 			}
 
 			$frag = $this->document->createDocumentFragment();
@@ -411,7 +411,7 @@ abstract class DOM implements Query, \IteratorAggregate, \Countable
 	 * @throws \QueryPath\ParseException
 	 *  Thrown when a file cannot be loaded or parsed.
 	 */
-	private function parseXMLFile($filename, $flags = NULL, $context = NULL)
+	private function parseXMLFile($filename, $flags = null, $context = null)
 	{
 
 		// If a context is specified, we basically have to do the reading in

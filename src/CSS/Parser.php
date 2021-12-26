@@ -316,7 +316,7 @@ class Parser
 				throw new ParseException("The 'not' pseudo-class is illegal in this context.");
 			}
 
-			$value = NULL;
+			$value = null;
 			if ($this->scanner->token === Token::LPAREN) {
 				if ($isPseudoElement) {
 					throw new ParseException('Illegal left paren. Pseudo-Element cannot have arguments.');
@@ -492,7 +492,7 @@ class Parser
 	private function attribute()
 	{
 		if ($this->scanner->token === Token::LSQUARE) {
-			$attrVal = $op = $ns = NULL;
+			$attrVal = $op = $ns = null;
 
 			$this->scanner->nextToken();
 			$this->consumeWhitespace();

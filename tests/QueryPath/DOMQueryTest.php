@@ -44,7 +44,7 @@ class DOMQueryTest extends TestCase
 
 		// From XML file with context
 		$cxt = stream_context_create();
-		$qp = qp($file, NULL, ['context' => $cxt]);
+		$qp = qp($file, null, ['context' => $cxt]);
 		$this->assertEquals(1, count($qp->get()));
 		$this->assertTrue($qp->get(0) instanceof \DOMNode);
 
@@ -187,7 +187,7 @@ class DOMQueryTest extends TestCase
 
 	public function testOptionXMLEncoding()
 	{
-		$xml = qp(NULL, NULL, ['encoding' => 'iso-8859-1'])->append('<test/>')->xml();
+		$xml = qp(null, null, ['encoding' => 'iso-8859-1'])->append('<test/>')->xml();
 		$iso_found = preg_match('/iso-8859-1/', $xml) == 1;
 
 		$this->assertTrue($iso_found, 'Encoding should be iso-8859-1 in ' . $xml . 'Found ' . $iso_found);
@@ -195,7 +195,7 @@ class DOMQueryTest extends TestCase
 		$iso_found = preg_match('/utf-8/', $xml) == 1;
 		$this->assertFalse($iso_found, 'Encoding should not be utf-8 in ' . $xml);
 
-		$xml = qp('<?xml version="1.0" encoding="utf-8"?><test/>', NULL, ['encoding' => 'iso-8859-1'])->xml();
+		$xml = qp('<?xml version="1.0" encoding="utf-8"?><test/>', null, ['encoding' => 'iso-8859-1'])->xml();
 		$iso_found = preg_match('/utf-8/', $xml) == 1;
 		$this->assertTrue($iso_found, 'Encoding should be utf-8 in ' . $xml);
 
@@ -207,7 +207,7 @@ class DOMQueryTest extends TestCase
 	public function testQPAbstractFactory()
 	{
 		$options = ['QueryPath_class' => QueryPathExtended::class];
-		$qp = qp(NULL, NULL, $options);
+		$qp = qp(null, null, $options);
 		$this->assertTrue($qp instanceof QueryPathExtended, 'Is instance of extending class.');
 		$this->assertTrue($qp->foonator(), 'Has special foonator() function.');
 	}
@@ -250,7 +250,7 @@ class DOMQueryTest extends TestCase
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
-			qp('http://localhost:8877/no_such_file.xml', NULL, ['foo' => 'bar']);
+			qp('http://localhost:8877/no_such_file.xml', null, ['foo' => 'bar']);
 		} catch (Exception $e) {
 			//print $e->getMessage();
 			throw $e;
@@ -261,7 +261,7 @@ class DOMQueryTest extends TestCase
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
-			qp('<foo>&foonator;</foo>', NULL);
+			qp('<foo>&foonator;</foo>', null);
 		} catch (Exception $e) {
 			//print $e->getMessage();
 			throw $e;
@@ -272,7 +272,7 @@ class DOMQueryTest extends TestCase
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
-			qp('<?xml version="1.0"?><foo><bar>foonator;</foo>', NULL);
+			qp('<?xml version="1.0"?><foo><bar>foonator;</foo>', null);
 		} catch (Exception $e) {
 			//print $e->getMessage();
 			throw $e;
@@ -281,7 +281,7 @@ class DOMQueryTest extends TestCase
 
 	public function testIgnoreParserWarnings()
 	{
-		$qp = @qp('<html><body><b><i>BAD!</b></i></body>', NULL, ['ignore_parser_warnings' => true]);
+		$qp = @qp('<html><body><b><i>BAD!</b></i></body>', null, ['ignore_parser_warnings' => true]);
 		$this->assertTrue(strpos($qp->html(), '<i>BAD!</i>') !== false);
 
 		\QueryPath\Options::merge(['ignore_parser_warnings' => true]);
@@ -297,7 +297,7 @@ class DOMQueryTest extends TestCase
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
-			qp('<23dfadf', NULL);
+			qp('<23dfadf', null);
 		} catch (Exception $e) {
 			//print $e->getMessage();
 			throw $e;
@@ -308,7 +308,7 @@ class DOMQueryTest extends TestCase
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		try {
-			qp('<?xml version="1.0"?><foo>&foonator;</foo>', NULL);
+			qp('<?xml version="1.0"?><foo>&foonator;</foo>', null);
 		} catch (Exception $e) {
 			//print $e->getMessage();
 			throw $e;
@@ -318,13 +318,13 @@ class DOMQueryTest extends TestCase
 	public function testReplaceEntitiesOption()
 	{
 		$path = '<?xml version="1.0"?><root/>';
-		$xml = qp($path, NULL, ['replace_entities' => true])->xml('<foo>&</foo>')->xml();
+		$xml = qp($path, null, ['replace_entities' => true])->xml('<foo>&</foo>')->xml();
 		$this->assertTrue(strpos($xml, '<foo>&amp;</foo>') !== false);
 
-		$xml = qp($path, NULL, ['replace_entities' => true])->html('<foo>&</foo>')->xml();
+		$xml = qp($path, null, ['replace_entities' => true])->html('<foo>&</foo>')->xml();
 		$this->assertTrue(strpos($xml, '<foo>&amp;</foo>') !== false);
 
-		$xml = qp($path, NULL, ['replace_entities' => true])->xhtml('<foo>&</foo>')->xml();
+		$xml = qp($path, null, ['replace_entities' => true])->xhtml('<foo>&</foo>')->xml();
 		$this->assertTrue(strpos($xml, '<foo>&amp;</foo>') !== false);
 
 		\QueryPath\Options::set(['replace_entities' => true]);
@@ -668,7 +668,7 @@ class DOMQueryTest extends TestCase
 		$fn = 'eachCallbackFunction';
 		$res = qp($file, 'li')->each([$this, $fn]);
 		$this->assertEquals(5, $res->count());
-		$this->assertFalse($res->get(4)->getAttribute('class') === NULL);
+		$this->assertFalse($res->get(4)->getAttribute('class') === null);
 		$this->assertEquals('test', $res->eq(1)->attr('class'));
 
 		// Test when each runs out of things to test before returning.
@@ -1588,7 +1588,7 @@ class DOMQueryTest extends TestCase
 		$qp = $qp->top('p:first-of-type');
 		$this->assertEquals('Hello', $qp->text(), 'Test First P ' . $qp->top()->html());
 		$i = 0;
-		while ($qp->next('p')->html() != NULL) {
+		while ($qp->next('p')->html() != null) {
 			$qp = $qp->next('p');
 			$this->assertEquals(1, count($qp));
 			$this->assertEquals($testarray[$i], $qp->text(), $i . " didn't match " . $qp->top()->xml());
