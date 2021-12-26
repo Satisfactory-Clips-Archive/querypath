@@ -31,13 +31,13 @@ class TestEventHandler implements EventHandler
 
 	public function dumpStack()
 	{
-		print "\nExpected:\n";
+		echo "\nExpected:\n";
 		$format = "Element %d: %s\n";
 		foreach ($this->expect as $item) {
 			printf($format, $item->eventType(), implode(',', $item->params()));
 		}
 
-		print "Got:\n";
+		echo "Got:\n";
 		foreach ($this->stack as $item) {
 			printf($format, $item->eventType(), implode(',', $item->params()));
 		}

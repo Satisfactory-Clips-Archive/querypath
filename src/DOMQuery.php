@@ -1283,7 +1283,7 @@ class DOMQuery extends DOM
 	public function writeXML($path = null, $options = null)
 	{
 		if (null === $path) {
-			print $this->document->saveXML(null, $options ?? 0);
+			echo $this->document->saveXML(null, $options ?? 0);
 		} else {
 			try {
 				set_error_handler([IOException::class, 'initializeFromError']);
@@ -1323,7 +1323,7 @@ class DOMQuery extends DOM
 	public function writeHTML($path = null)
 	{
 		if (null === $path) {
-			print $this->document->saveHTML();
+			echo $this->document->saveHTML();
 		} else {
 			try {
 				set_error_handler(['\QueryPath\ParseException', 'initializeFromError']);
@@ -1357,7 +1357,7 @@ class DOMQuery extends DOM
 		$html5 = new HTML5();
 		if (null === $path) {
 			// Print the document to stdout.
-			print $html5->saveHTML($this->document);
+			echo $html5->saveHTML($this->document);
 
 			return;
 		}

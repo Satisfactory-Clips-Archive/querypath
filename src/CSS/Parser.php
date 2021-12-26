@@ -116,7 +116,7 @@ class Parser
 	private function selector(): void
 	{
 		if ($this->DEBUG) {
-			print 'SELECTOR' . $this->scanner->position() . PHP_EOL;
+			echo 'SELECTOR' . $this->scanner->position() . PHP_EOL;
 		}
 
 		$this->consumeWhitespace(); // Remove leading whitespace
@@ -198,7 +198,7 @@ class Parser
 		// Check that we don't get two combinators in a row.
 		if ($inCombinator) {
 			if ($this->DEBUG) {
-				print 'COMBINATOR: ' . Token::name($t) . "\n";
+				echo 'COMBINATOR: ' . Token::name($t) . "\n";
 			}
 			$this->consumeWhitespace();
 			if ($this->isCombinator($this->scanner->token)) {
@@ -237,7 +237,7 @@ class Parser
 	private function simpleSelectors(): void
 	{
 		if ($this->DEBUG) {
-			print 'SIMPLE SELECTOR' . PHP_EOL;
+			echo 'SIMPLE SELECTOR' . PHP_EOL;
 		}
 		$this->allElements();
 		$this->elementName();
@@ -277,7 +277,7 @@ class Parser
 	private function elementClass(): void
 	{
 		if ($this->DEBUG) {
-			print 'ELEMENT CLASS' . PHP_EOL;
+			echo 'ELEMENT CLASS' . PHP_EOL;
 		}
 		if (Token::DOT == $this->scanner->token) {
 			$this->scanner->nextToken();
@@ -417,7 +417,7 @@ class Parser
 	private function elementName()
 	{
 		if ($this->DEBUG) {
-			print "ELEMENT NAME\n";
+			echo "ELEMENT NAME\n";
 		}
 		if (Token::PIPE === $this->scanner->token) {
 			// We have '|name', which is equiv to 'name'
@@ -596,7 +596,7 @@ class Parser
 				}
 
 				if ($this->DEBUG) {
-					print "ATTR: $attrVal AND OP: $op\n";
+					echo "ATTR: $attrVal AND OP: $op\n";
 				}
 			}
 
