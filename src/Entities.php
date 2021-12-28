@@ -45,33 +45,16 @@ class Entities implements EntitiesContract
 	 */
 	public static function replaceAllEntities(string $string) : string
 	{
-		return preg_replace_callback(self::regex, '\QueryPath\Entities::doReplacement', $string);
-	}
-
-	/**
-	 * Lookup an entity string's numeric equivalent.
-	 *
-	 * @param string $entity
-	 *  The entity whose numeric value is needed
-	 *
-	 * @return int
-	 *  The integer value corresponding to the entity
-	 *
-	 * @author Matt Butcher
-	 * @author Ryan Mahoney
-	 */
-	public static function replaceEntity(string $entity) : int
-	{
-		return self::ENTITIES[$entity];
-	}
+		return preg_replace_callback(
+			self::regex,
 
 	/**
 	 * Callback for processing replacements.
 	 *
-	 * @param array<int, string> $matches
+	 * @param string[] $matches
 	 *  The regular expression replacement array
 	 */
-	protected static function doReplacement(array $matches) : string
+			static function(array $matches) : string
 	{
 		// See how the regex above works out.
 
@@ -92,5 +75,25 @@ class Entities implements EntitiesContract
 		}
 
 		return '';
+	},
+			$string
+		);
+	}
+
+	/**
+	 * Lookup an entity string's numeric equivalent.
+	 *
+	 * @param string $entity
+	 *  The entity whose numeric value is needed
+	 *
+	 * @return int
+	 *  The integer value corresponding to the entity
+	 *
+	 * @author Matt Butcher
+	 * @author Ryan Mahoney
+	 */
+	public static function replaceEntity(string $entity) : int
+	{
+		return self::ENTITIES[$entity];
 	}
 }

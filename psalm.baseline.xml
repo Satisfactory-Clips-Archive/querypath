@@ -879,11 +879,6 @@
       <code>\QueryPath\DOMQuery</code>
     </PossiblyUnusedReturnValue>
   </file>
-  <file src="src/Entities.php">
-    <PossiblyUnusedMethod occurrences="1">
-      <code>doReplacement</code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="src/Extension.php">
     <PossiblyUnusedMethod occurrences="1">
       <code>__construct</code>
