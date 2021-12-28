@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace QueryPath\Helpers;
 
 use function count;
+use Countable;
+use DOMElement;
 use DOMNode;
 use function in_array;
 use function is_object;
@@ -13,6 +15,7 @@ use QueryPath\CSS\ParseException;
 use QueryPath\DOMQuery;
 use QueryPath\Exception;
 use QueryPath\Query;
+use QueryPath\TextContent;
 use SplObjectStorage;
 use Traversable;
 
@@ -24,11 +27,16 @@ use Traversable;
 trait QueryChecks
 {
 	/**
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
+	 */
+	abstract public function getMatches() : SplObjectStorage;
+
+	/**
 	 * Given a selector, this checks to see if the current set has one or more matches.
 	 *
 	 * Unlike jQuery's version, this supports full selectors (not just simple ones).
 	 *
-	 * @param DOMNode|string $selector
+	 * @param DOMNode|Traversable<mixed, DOMNode>&Countable|string $selector
 	 *   The selector to search for. As of QueryPath 2.1.1, this also supports passing a
 	 *   DOMNode object.
 	 *
@@ -41,31 +49,37 @@ trait QueryChecks
 	 * @see get()
 	 * @see eq()
 	 */
-	public function is($selector) : bool
+	public function is(DOMNode|Traversable|string $selector) : bool
 	{
 		if (is_object($selector)) {
+			$matches = $this->getMatches();
+
 			if ($selector instanceof DOMNode) {
-				return 1 === count($this->matches) && $selector->isSameNode($this->get(0));
+				$first = $this->get(0);
+
+				if ( ! ($first instanceof DOMNode)) {
+					return false;
+				}
+
+				return 1 === count($matches) && $selector->isSameNode($first);
 			}
 
-			if ($selector instanceof Traversable) {
-				if (count($selector) !== count($this->matches)) {
+				if (count($selector) !== count($matches)) {
 					return false;
 				}
 				// Without $seen, there is an edge case here if $selector contains the same object
 				// more than once, but the counts are equal. For example, [a, a, a, a] will
 				// pass an is() on [a, b, c, d]. We use the $seen SPLOS to prevent this.
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$seen = new SplObjectStorage();
 				foreach ($selector as $item) {
-					if ( ! $this->matches->contains($item) || $seen->contains($item)) {
+					if ( ! $matches->contains($item) || $seen->contains($item)) {
 						return false;
 					}
 					$seen->attach($item);
 				}
 
 				return true;
-			}
-			throw new Exception('Cannot compare an object to a DOMQuery.');
 		}
 
 		return $this->branch($selector)->count() > 0;
@@ -105,6 +119,7 @@ trait QueryChecks
 	  return false;
 	}
 	 */
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 
 		// If it's a selector, we just get all of the DOMNodes that match the selector.
@@ -123,7 +138,7 @@ trait QueryChecks
 		foreach ($nodes as $original_node) {
 			$node = $original_node;
 			while ( ! empty($node)/* && $node != $node->ownerDocument*/) {
-				if ($this->matches->contains($node)) {
+				if ($this->getMatches()->contains($node)) {
 					$found->attach($node);
 				}
 				$node = $node->parentNode;
@@ -147,8 +162,8 @@ trait QueryChecks
 	 */
 	public function hasClass($class) : bool
 	{
-		foreach ($this->matches as $m) {
-			if ($m->hasAttribute('class')) {
+		foreach ($this->getMatches() as $m) {
+			if ($m instanceof DOMElement && $m->hasAttribute('class')) {
 				$vals = explode(' ', $m->getAttribute('class'));
 				if (in_array($class, $vals, true)) {
 					return true;
@@ -177,8 +192,8 @@ trait QueryChecks
 	 */
 	public function hasAttr($attrName) : bool
 	{
-		foreach ($this->matches as $match) {
-			if ( ! $match->hasAttribute($attrName)) {
+		foreach ($this->getMatches() as $match) {
+			if ( ! ($match instanceof DOMElement) || ! $match->hasAttribute($attrName)) {
 				return false;
 			}
 		}
@@ -204,7 +219,10 @@ trait QueryChecks
 	 */
 	public function removeAttr($name) : Query
 	{
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMElement)) {
+				continue;
+			}
 			$m->removeAttribute($name);
 		}
 

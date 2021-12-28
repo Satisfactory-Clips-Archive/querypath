@@ -21,13 +21,8 @@ class Util
 {
 	/**
 	 * Check whether the given DOMElement has the given attribute.
-	 *
-	 * @param $node
-	 * @param $name
-	 * @param null $value
-	 * @param int $operation
 	 */
-	public static function matchesAttribute($node, $name, $value = null, $operation = EventHandler::IS_EXACTLY) : bool
+	public static function matchesAttribute($node, $name, mixed $value = null, ?int $operation = EventHandler::IS_EXACTLY) : bool
 	{
 		if ( ! $node->hasAttribute($name)) {
 			return false;
@@ -47,9 +42,8 @@ class Util
 	 * @param mixed $node
 	 * @param mixed $name
 	 * @param mixed $nsuri
-	 * @param mixed $operation
 	 */
-	public static function matchesAttributeNS($node, $name, $nsuri, $value = null, $operation = EventHandler::IS_EXACTLY)
+	public static function matchesAttributeNS($node, $name, $nsuri, mixed $value = null, ?int $operation = EventHandler::IS_EXACTLY)
 	{
 		if ( ! $node->hasAttributeNS($nsuri, $name)) {
 			return false;

@@ -7,8 +7,10 @@ namespace QueryPathTests\CSS;
 use function count;
 use function define;
 use DOMDocument;
+use DOMNode;
 use const PHP_EOL;
 use QueryPath\CSS\DOMTraverser;
+use QueryPath\TextContent;
 use QueryPathTests\TestCase;
 use SPLObjectStorage;
 use const STDOUT;
@@ -33,6 +35,7 @@ class DOMTraverserTest extends TestCase
 		$dom = new DOMDocument('1.0');
 		$dom->load($this->xml_file);
 
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$splos = new SPLObjectStorage();
 		$splos->attach($dom);
 
@@ -358,6 +361,7 @@ class DOMTraverserTest extends TestCase
 		$dom = new DOMDocument('1.0');
 		$dom->load($this->xml_file);
 
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$splos = new SPLObjectStorage();
 		$splos->attach($dom->documentElement);
 

@@ -51,21 +51,32 @@ use IteratorAggregate;
  * @endode
  *
  * @since QueryPath 3.0.0
+ *
+ * @template-implements IteratorAggregate<int, array<int, SimpleSelector>>
  */
 class Selector implements EventHandler, IteratorAggregate, Countable
 {
-	protected $selectors = [];
-	protected $currSelector;
+	/** @var array<int, array<int, SimpleSelector>> */
+	protected array $selectors = [];
+	protected SimpleSelector $currSelector;
 	protected $selectorGroups = [];
-	protected $groupIndex = 0;
+	protected int $groupIndex = 0;
 
 	public function __construct()
 	{
 		$this->currSelector = new SimpleSelector();
 
+		if ( ! isset($this->selectors[$this->groupIndex])) {
+			/** @var array<int, SimpleSelector> */
+			$this->selectors[$this->groupIndex] = [];
+		}
+
 		$this->selectors[$this->groupIndex][] = $this->currSelector;
 	}
 
+	/**
+	 * @return ArrayIterator<int, array<int, SimpleSelector>>
+	 */
 	public function getIterator() : ArrayIterator
 	{
 		return new ArrayIterator($this->selectors);
@@ -120,7 +131,7 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 		$this->currSelector->classes[] = $name;
 	}
 
-	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY) : void
+	public function attribute(string $name, string $value = null, ?int $operation = EventHandler::IS_EXACTLY) : void
 	{
 		$this->currSelector->attributes[] = [
 			'name' => $name,
@@ -129,7 +140,7 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 		];
 	}
 
-	public function attributeNS($name, $ns, $value = null, $operation = EventHandler::IS_EXACTLY) : void
+	public function attributeNS(string $name, string $ns, string $value = null, ?int $operation = EventHandler::IS_EXACTLY) : void
 	{
 		$this->currSelector->attributes[] = [
 			'name' => $name,
@@ -149,7 +160,7 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 		$this->currSelector->pseudoElements[] = $name;
 	}
 
-	public function combinator($combinatorName) : void
+	public function combinator(?int $combinatorName) : void
 	{
 		$this->currSelector->combinator = $combinatorName;
 		$this->currSelector = new SimpleSelector();

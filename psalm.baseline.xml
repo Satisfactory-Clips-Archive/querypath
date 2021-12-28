@@ -1,176 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.16.1@aa7e400908833b10c0333861f86cd48c510b60eb">
   <file src="src/CSS/DOMTraverser.php">
-    <DocblockTypeContradiction occurrences="1">
-      <code>! empty($ns)</code>
-    </DocblockTypeContradiction>
     <ImplementedReturnTypeMismatch occurrences="1">
       <code>DOMTraverser</code>
     </ImplementedReturnTypeMismatch>
-    <InvalidArgument occurrences="2">
-      <code>$node</code>
-      <code>$val</code>
-    </InvalidArgument>
-    <InvalidNullableReturnType occurrences="1">
-      <code>bool</code>
-    </InvalidNullableReturnType>
     <MismatchingDocblockParamType occurrences="1">
       <code>DOMNode</code>
     </MismatchingDocblockParamType>
-    <MissingParamType occurrences="11">
-      <code>$attributes</code>
+    <MissingParamType occurrences="5">
       <code>$classes</code>
-      <code>$element</code>
       <code>$id</code>
-      <code>$index</code>
       <code>$msg</code>
       <code>$node</code>
-      <code>$pseudoClasses</code>
       <code>$pseudoElements</code>
-      <code>$selector</code>
-      <code>$selectors</code>
     </MissingParamType>
-    <MissingPropertyType occurrences="15">
-      <code>$dom</code>
-      <code>$initialized</code>
-      <code>$matches</code>
-      <code>$psHandler</code>
-      <code>$scopeNode</code>
-      <code>$selector</code>
-      <code>$selector-&gt;classes</code>
-      <code>$selector-&gt;classes</code>
-      <code>$selector-&gt;classes</code>
-      <code>$selector-&gt;element</code>
-      <code>$selector-&gt;element</code>
-      <code>$selector-&gt;id</code>
-      <code>$selector-&gt;id</code>
-      <code>$selector-&gt;ns</code>
-      <code>$selector-&gt;ns</code>
-    </MissingPropertyType>
-    <MissingReturnType occurrences="4">
+    <MissingReturnType occurrences="2">
       <code>ancestors</code>
-      <code>getDocument</code>
       <code>getMatches</code>
-      <code>newMatches</code>
     </MissingReturnType>
-    <MixedArgument occurrences="16">
-      <code>$attr['name']</code>
-      <code>$attr['ns']</code>
-      <code>$attr['op']</code>
+    <MixedArgument occurrences="2">
       <code>$classes</code>
       <code>$classes</code>
-      <code>$found</code>
-      <code>$found</code>
-      <code>$index</code>
-      <code>$selector-&gt;classes</code>
-      <code>$selector-&gt;classes</code>
-      <code>$selector-&gt;ns</code>
-      <code>$selectorGroup[0]</code>
-      <code>$selectors</code>
-      <code>$this-&gt;dom-&gt;documentElement</code>
-      <code>$this-&gt;matches</code>
-      <code>$val</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="7">
-      <code>$attr['name']</code>
-      <code>$attr['op']</code>
-      <code>$attr['value']</code>
-      <code>$pseudoClass['name']</code>
-      <code>$pseudoClass['value']</code>
-      <code>$selectorGroup[0]</code>
-      <code>$selectors[$index]</code>
-    </MixedArrayAccess>
-    <MixedArrayOffset occurrences="2">
-      <code>$selectors[$index]</code>
-      <code>$selectors[++$index]</code>
-    </MixedArrayOffset>
-    <MixedAssignment occurrences="26">
-      <code>$attr</code>
+    <MixedAssignment occurrences="7">
       <code>$buffer[]</code>
-      <code>$candidates</code>
-      <code>$element</code>
-      <code>$element</code>
-      <code>$found</code>
-      <code>$found</code>
-      <code>$found</code>
-      <code>$found</code>
-      <code>$id</code>
-      <code>$index</code>
       <code>$matches</code>
       <code>$matches</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$ns</code>
       <code>$nsuri</code>
       <code>$parent</code>
       <code>$parent</code>
       <code>$pse</code>
-      <code>$pseudoClass</code>
-      <code>$ret</code>
-      <code>$selector</code>
-      <code>$selectorGroup</code>
-      <code>$val</code>
-      <code>$value</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="7">
-      <code>SplObjectStorage</code>
-      <code>SplObjectStorage</code>
-      <code>SplObjectStorage</code>
-      <code>bool</code>
-      <code>bool</code>
-      <code>bool</code>
-      <code>matches</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="8">
-      <code>$candidates</code>
-      <code>attach</code>
-      <code>attach</code>
-      <code>attach</code>
-      <code>attach</code>
-      <code>attach</code>
-      <code>elementMatches</code>
+    <MixedMethodCall occurrences="1">
       <code>lookupNamespaceURI</code>
     </MixedMethodCall>
-    <MixedOperand occurrences="3">
-      <code>$index</code>
+    <MixedOperand occurrences="1">
       <code>$msg</code>
-      <code>$ret</code>
     </MixedOperand>
-    <MixedPropertyFetch occurrences="10">
+    <MixedPropertyFetch occurrences="1">
       <code>$parent-&gt;parentNode</code>
-      <code>$selector-&gt;attributes</code>
-      <code>$selector-&gt;classes</code>
-      <code>$selector-&gt;element</code>
-      <code>$selector-&gt;id</code>
-      <code>$selector-&gt;ns</code>
-      <code>$selector-&gt;pseudoClasses</code>
-      <code>$selector-&gt;pseudoElements</code>
-      <code>$this-&gt;dom-&gt;documentElement</code>
-      <code>$this-&gt;dom-&gt;documentElement</code>
     </MixedPropertyFetch>
-    <MixedReturnStatement occurrences="6">
-      <code>$found</code>
-      <code>$found</code>
-      <code>$found</code>
-      <code>$found</code>
-      <code>$found</code>
-      <code>$this-&gt;matches</code>
-    </MixedReturnStatement>
-    <PossiblyUnusedMethod occurrences="8">
+    <PossiblyUnusedMethod occurrences="4">
       <code>ancestors</code>
-      <code>combineAdjacent</code>
-      <code>combineAnyDescendant</code>
-      <code>combineDirectDescendant</code>
-      <code>combineSibling</code>
       <code>debug</code>
       <code>getDocument</code>
       <code>getMatches</code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedParam occurrences="3">
-      <code>$index</code>
-      <code>$node</code>
-      <code>$selectors</code>
-    </PossiblyUnusedParam>
     <PossiblyUnusedProperty occurrences="1">
       <code>$selector</code>
     </PossiblyUnusedProperty>
@@ -178,36 +53,18 @@
       <code>! empty($nl)</code>
       <code>! empty($nl) &amp;&amp; $nl instanceof DOMNodeList</code>
     </RedundantCondition>
-    <RedundantConditionGivenDocblockType occurrences="3">
+    <RedundantConditionGivenDocblockType occurrences="2">
       <code>! empty($nl)</code>
       <code>! empty($nl) &amp;&amp; $nl instanceof DOMNodeList</code>
-      <code>empty($scopeNode)</code>
     </RedundantConditionGivenDocblockType>
     <TypeDoesNotContainType occurrences="1">
       <code>'*' === $element &amp;&amp; $node-&gt;parentNode instanceof DOMDocument</code>
     </TypeDoesNotContainType>
-    <UndefinedDocblockClass occurrences="5">
-      <code>DOMNode</code>
-      <code>DOMNode</code>
-      <code>DOMNode</code>
-      <code>DOMNode</code>
-      <code>DOMNode</code>
-    </UndefinedDocblockClass>
     <UndefinedPropertyFetch occurrences="1">
       <code>$node-&gt;tagName</code>
     </UndefinedPropertyFetch>
   </file>
   <file src="src/CSS/DOMTraverser/PseudoClass.php">
-    <InvalidArgument occurrences="1">
-      <code>$name</code>
-    </InvalidArgument>
-    <InvalidMethodCall occurrences="2">
-      <code>isSameNode</code>
-      <code>isSameNode</code>
-    </InvalidMethodCall>
-    <InvalidPropertyFetch occurrences="1">
-      <code>$node-&gt;ownerDocument</code>
-    </InvalidPropertyFetch>
     <MissingParamType occurrences="5">
       <code>$node</code>
       <code>$node</code>
@@ -221,13 +78,12 @@
       <code>isLastOfType</code>
       <code>lang</code>
     </MissingReturnType>
-    <MixedArgument occurrences="10">
+    <MixedArgument occurrences="9">
       <code>$node</code>
       <code>$node-&gt;tagName</code>
       <code>$selector</code>
       <code>$text</code>
       <code>$url</code>
-      <code>$value</code>
       <code>$value</code>
       <code>$value</code>
       <code>$value</code>
@@ -268,7 +124,7 @@
       <code>$groupSize</code>
       <code>$pos - $elementInGroup</code>
     </MixedOperand>
-    <MixedPropertyFetch occurrences="31">
+    <MixedPropertyFetch occurrences="30">
       <code>$attrNode-&gt;localName</code>
       <code>$attrNode-&gt;namespaceURI</code>
       <code>$attrNode-&gt;nodeName</code>
@@ -284,7 +140,6 @@
       <code>$node-&gt;nodeType</code>
       <code>$node-&gt;nodeType</code>
       <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;ownerDocument-&gt;documentElement</code>
       <code>$node-&gt;parentNode</code>
       <code>$node-&gt;previousSibling</code>
       <code>$node-&gt;previousSibling</code>
@@ -301,9 +156,7 @@
       <code>$node-&gt;textContent</code>
       <code>$node-&gt;textContent</code>
     </MixedPropertyFetch>
-    <MixedReturnStatement occurrences="6">
-      <code>$node-&gt;isSameNode($node-&gt;ownerDocument-&gt;documentElement)</code>
-      <code>$node-&gt;isSameNode($scope)</code>
+    <MixedReturnStatement occurrences="4">
       <code>$this-&gt;isFirstOfType($node)</code>
       <code>$this-&gt;isLast($node)</code>
       <code>$this-&gt;isLastOfType($node)</code>
@@ -337,9 +190,6 @@
       <code>hasAttribute</code>
       <code>hasAttributeNS</code>
     </MixedMethodCall>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>null === $value</code>
-    </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/CSS/EventHandler.php">
     <MissingReturnType occurrences="15">
@@ -563,15 +413,6 @@
       <code>parseException</code>
       <code>queryPathEventHandler</code>
     </InvalidClass>
-    <InvalidMethodCall occurrences="1">
-      <code>count</code>
-    </InvalidMethodCall>
-    <InvalidReturnStatement occurrences="1">
-      <code>$result</code>
-    </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
-      <code>array</code>
-    </InvalidReturnType>
     <MissingParamType occurrences="7">
       <code>$elementInGroup</code>
       <code>$elementInGroup</code>
@@ -982,66 +823,12 @@
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/CSS/Selector.php">
-    <MissingParamType occurrences="1">
-      <code>$combinatorName</code>
-    </MissingParamType>
-    <MissingPropertyType occurrences="4">
-      <code>$currSelector</code>
-      <code>$groupIndex</code>
+    <MissingPropertyType occurrences="1">
       <code>$selectorGroups</code>
-      <code>$selectors</code>
     </MissingPropertyType>
     <MissingReturnType occurrences="1">
       <code>toArray</code>
     </MissingReturnType>
-    <MixedArgument occurrences="3">
-      <code>$this-&gt;selectors</code>
-      <code>$this-&gt;selectors</code>
-      <code>$this-&gt;selectors[$this-&gt;groupIndex]</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="2">
-      <code>$this-&gt;selectors[$this-&gt;groupIndex]</code>
-      <code>$this-&gt;selectors[$this-&gt;groupIndex]</code>
-    </MixedArrayAccess>
-    <MixedArrayAssignment occurrences="7">
-      <code>$this-&gt;currSelector-&gt;attributes[]</code>
-      <code>$this-&gt;currSelector-&gt;attributes[]</code>
-      <code>$this-&gt;currSelector-&gt;classes[]</code>
-      <code>$this-&gt;currSelector-&gt;pseudoClasses[]</code>
-      <code>$this-&gt;currSelector-&gt;pseudoElements[]</code>
-      <code>$this-&gt;selectors[$this-&gt;groupIndex]</code>
-      <code>$this-&gt;selectors[$this-&gt;groupIndex]</code>
-    </MixedArrayAssignment>
-    <MixedArrayOffset occurrences="3">
-      <code>$this-&gt;selectors[$this-&gt;groupIndex]</code>
-      <code>$this-&gt;selectors[$this-&gt;groupIndex]</code>
-      <code>$this-&gt;selectors[$this-&gt;groupIndex]</code>
-    </MixedArrayOffset>
-    <MixedOperand occurrences="1">
-      <code>$this-&gt;groupIndex</code>
-    </MixedOperand>
-    <MixedPropertyAssignment occurrences="13">
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-      <code>$this-&gt;currSelector</code>
-    </MixedPropertyAssignment>
-    <MixedPropertyFetch occurrences="5">
-      <code>$this-&gt;currSelector-&gt;attributes</code>
-      <code>$this-&gt;currSelector-&gt;attributes</code>
-      <code>$this-&gt;currSelector-&gt;classes</code>
-      <code>$this-&gt;currSelector-&gt;pseudoClasses</code>
-      <code>$this-&gt;currSelector-&gt;pseudoElements</code>
-    </MixedPropertyFetch>
     <PossiblyUnusedMethod occurrences="1">
       <code>toArray</code>
     </PossiblyUnusedMethod>
@@ -1054,42 +841,11 @@
       <code>$code</code>
       <code>$code</code>
     </MissingParamType>
-    <MissingPropertyType occurrences="8">
-      <code>$attributes</code>
-      <code>$classes</code>
-      <code>$combinator</code>
-      <code>$element</code>
-      <code>$id</code>
-      <code>$ns</code>
-      <code>$pseudoClasses</code>
-      <code>$pseudoElements</code>
-    </MissingPropertyType>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$buffer</code>
-    </MixedArgumentTypeCoercion>
-    <MixedArrayAccess occurrences="6">
-      <code>$attr['name']</code>
-      <code>$attr['ns']</code>
-      <code>$attr['op']</code>
-      <code>$attr['value']</code>
-      <code>$ps['name']</code>
-      <code>$ps['value']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="7">
-      <code>$attr</code>
-      <code>$buffer[]</code>
-      <code>$buffer[]</code>
-      <code>$buffer[]</code>
-      <code>$buffer[]</code>
+    <MixedAssignment occurrences="1">
       <code>$pe</code>
-      <code>$ps</code>
     </MixedAssignment>
-    <MixedOperand occurrences="5">
-      <code>$attr['ns']</code>
+    <MixedOperand occurrences="1">
       <code>$pe</code>
-      <code>$ps['name']</code>
-      <code>$ps['value']</code>
-      <code>$this-&gt;id</code>
     </MixedOperand>
     <PossiblyUnusedMethod occurrences="1">
       <code>notEmpty</code>
@@ -1121,138 +877,28 @@
       <code>[ParseException::class, 'initializeFromError']</code>
       <code>[ParseException::class, 'initializeFromError']</code>
     </InvalidArgument>
-    <MissingParamType occurrences="3">
-      <code>$flags</code>
-      <code>$matches</code>
-      <code>$string</code>
-    </MissingParamType>
-    <MissingPropertyType occurrences="13">
-      <code>$document</code>
-      <code>$errTypes</code>
-      <code>$item-&gt;document</code>
-      <code>$item-&gt;matches</code>
-      <code>$matches</code>
-      <code>$options</code>
-      <code>$this-&gt;errTypes</code>
-      <code>$this-&gt;errTypes</code>
-      <code>$this-&gt;errTypes</code>
-      <code>$this-&gt;matches</code>
-      <code>$this-&gt;matches</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-    </MissingPropertyType>
-    <MissingReturnType occurrences="4">
-      <code>getFirstMatch</code>
+    <MissingReturnType occurrences="1">
       <code>isXMLish</code>
-      <code>parseXMLFile</code>
-      <code>parseXMLString</code>
     </MissingReturnType>
-    <MixedArgument occurrences="25">
+    <MixedArgument occurrences="10">
       <code>$context</code>
-      <code>$document</code>
-      <code>$flags ?? 0</code>
-      <code>$from_enc</code>
-      <code>$item</code>
-      <code>$m</code>
-      <code>$matches</code>
-      <code>$parser_flags</code>
       <code>$string</code>
       <code>$string</code>
       <code>$string</code>
       <code>$string</code>
       <code>$string</code>
       <code>$string</code>
-      <code>$string</code>
-      <code>$string</code>
-      <code>$this-&gt;errTypes</code>
-      <code>$this-&gt;errTypes</code>
-      <code>$this-&gt;errTypes</code>
-      <code>$this-&gt;errTypes</code>
-      <code>$this-&gt;matches</code>
       <code>$this-&gt;options['encoding']</code>
       <code>$this-&gt;options['use_parser']</code>
       <code>$this-&gt;options['use_parser']</code>
-      <code>$to_enc</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="8">
-      <code>$this-&gt;options['convert_from_encoding']</code>
-      <code>$this-&gt;options['convert_to_encoding']</code>
-      <code>$this-&gt;options['encoding']</code>
-      <code>$this-&gt;options['exception_level']</code>
-      <code>$this-&gt;options['replace_entities']</code>
-      <code>$this-&gt;options['replace_entities']</code>
-      <code>$this-&gt;options['use_parser']</code>
-      <code>$this-&gt;options['use_parser']</code>
-    </MixedArrayAccess>
-    <MixedArrayAssignment occurrences="1">
-      <code>$current[]</code>
-    </MixedArrayAssignment>
-    <MixedAssignment occurrences="13">
+    <MixedAssignment occurrences="2">
       <code>$context</code>
-      <code>$first</code>
-      <code>$frag</code>
-      <code>$frag</code>
-      <code>$from_enc</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$parser_flags</code>
       <code>$string</code>
-      <code>$to_enc</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="2">
-      <code>array</code>
-      <code>object|void</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="11">
-      <code>appendXML</code>
-      <code>appendXML</code>
-      <code>count</code>
-      <code>count</code>
-      <code>createDocumentFragment</code>
-      <code>createDocumentFragment</code>
-      <code>current</code>
-      <code>importNode</code>
-      <code>importNode</code>
-      <code>rewind</code>
-      <code>saveXML</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$this-&gt;options</code>
-    </MixedOperand>
-    <MixedPropertyAssignment occurrences="2">
-      <code>$this-&gt;document</code>
-      <code>$this-&gt;document</code>
-    </MixedPropertyAssignment>
-    <MixedPropertyFetch occurrences="5">
-      <code>$first-&gt;ownerDocument</code>
-      <code>$this-&gt;document-&gt;documentElement</code>
-      <code>$this-&gt;document-&gt;documentElement</code>
-      <code>$this-&gt;getFirstMatch()-&gt;ownerDocument</code>
-      <code>$this-&gt;getFirstMatch()-&gt;ownerDocument</code>
-    </MixedPropertyFetch>
-    <MixedReturnStatement occurrences="2">
-      <code>$current</code>
-      <code>$m</code>
-    </MixedReturnStatement>
-    <PossiblyInvalidArgument occurrences="5">
+    <PossiblyInvalidArgument occurrences="1">
       <code>$deepest</code>
-      <code>$string</code>
-      <code>$string</code>
-      <code>$string</code>
-      <code>$string</code>
     </PossiblyInvalidArgument>
-    <PossiblyInvalidCast occurrences="4">
-      <code>$string</code>
-      <code>$string</code>
-      <code>$string</code>
-      <code>$string</code>
-    </PossiblyInvalidCast>
-    <PossiblyNullArgument occurrences="1">
-      <code>$flags</code>
-    </PossiblyNullArgument>
     <ReferenceConstraintViolation occurrences="1">
       <code>return $current;</code>
     </ReferenceConstraintViolation>
@@ -1262,9 +908,6 @@
     <UndefinedDocblockClass occurrences="1">
       <code>queryPath::Exception</code>
     </UndefinedDocblockClass>
-    <UndefinedMethod occurrences="1">
-      <code>get</code>
-    </UndefinedMethod>
     <UndefinedPropertyFetch occurrences="1">
       <code>$document-&gt;documentElement</code>
     </UndefinedPropertyFetch>
@@ -1277,15 +920,10 @@
     <ArgumentTypeCoercion occurrences="1">
       <code>$owner</code>
     </ArgumentTypeCoercion>
-    <DocblockTypeContradiction occurrences="2">
-      <code>true === $markup</code>
+    <DocblockTypeContradiction occurrences="1">
       <code>true === $markup</code>
     </DocblockTypeContradiction>
-    <ImplementedReturnTypeMismatch occurrences="1">
-      <code>iterable</code>
-    </ImplementedReturnTypeMismatch>
-    <InvalidArgument occurrences="3">
-      <code>$nl-&gt;item($i)</code>
+    <InvalidArgument occurrences="2">
       <code>['\QueryPath\ParseException', 'initializeFromError']</code>
       <code>[IOException::class, 'initializeFromError']</code>
     </InvalidArgument>
@@ -1299,26 +937,16 @@
       <code>string</code>
       <code>string</code>
     </InvalidNullableReturnType>
-    <InvalidReturnStatement occurrences="1">
-      <code>$result</code>
-    </InvalidReturnStatement>
     <InvalidThrow occurrences="3">
       <code>QueryPath</code>
       <code>QueryPath</code>
       <code>QueryPath</code>
     </InvalidThrow>
-    <MismatchingDocblockReturnType occurrences="1">
-      <code>iterable</code>
-    </MismatchingDocblockReturnType>
-    <MissingParamType occurrences="4">
-      <code>$matches</code>
-      <code>$selector</code>
-      <code>$selector</code>
+    <MissingParamType occurrences="1">
       <code>$text</code>
     </MissingParamType>
-    <MissingPropertyType occurrences="3">
+    <MissingPropertyType occurrences="2">
       <code>$ext</code>
-      <code>$last</code>
       <code>$length</code>
     </MissingPropertyType>
     <MissingReturnType occurrences="3">
@@ -1326,181 +954,23 @@
       <code>ns</code>
       <code>textAfter</code>
     </MissingReturnType>
-    <MixedArgument occurrences="28">
+    <MixedArgument occurrences="9">
       <code>$arguments</code>
-      <code>$data</code>
-      <code>$data</code>
-      <code>$item</code>
-      <code>$m-&gt;cloneNode(true)</code>
       <code>$name</code>
       <code>$name</code>
       <code>$name</code>
-      <code>$node</code>
       <code>$options['namespace_prefix']</code>
       <code>$options['namespace_uri']</code>
       <code>$path</code>
-      <code>$replace</code>
-      <code>$selector</code>
       <code>$text</code>
-      <code>$text</code>
-      <code>$this-&gt;document</code>
-      <code>$this-&gt;document-&gt;saveHTML()</code>
-      <code>$this-&gt;document-&gt;saveXML(null, $options ?? 0)</code>
       <code>$this-&gt;ext[$owner]</code>
-      <code>$this-&gt;matches</code>
-      <code>$this-&gt;matches</code>
-      <code>$this-&gt;matches</code>
-      <code>$this-&gt;matches</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$txt</code>
     </MixedArgument>
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$comparator</code>
     </MixedArgumentTypeCoercion>
-    <MixedArrayAccess occurrences="6">
+    <MixedArrayAccess occurrences="1">
       <code>$this-&gt;ext[$owner]</code>
-      <code>$this-&gt;options['escape_xhtml_js_css_sections']</code>
-      <code>$this-&gt;options['omit_xml_declaration']</code>
-      <code>$this-&gt;options['omit_xml_declaration']</code>
-      <code>$this-&gt;options['replace_entities']</code>
-      <code>$this-&gt;options['replace_entities']</code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="39">
-      <code>$data</code>
-      <code>$doc</code>
-      <code>$doc</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$last</code>
-      <code>$length</code>
-      <code>$length</code>
-      <code>$length</code>
-      <code>$length</code>
-      <code>$length</code>
-      <code>$length</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$matches[]</code>
-      <code>$n</code>
-      <code>$n</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$oldFirst</code>
-      <code>$omit_xml_decl</code>
-      <code>$omit_xml_decl</code>
-      <code>$p</code>
-      <code>$p</code>
-      <code>$placeholder</code>
-      <code>$placeholder</code>
-      <code>$replace</code>
-      <code>$temp</code>
-      <code>$text</code>
-      <code>$text</code>
-      <code>$textNode</code>
-      <code>$textNode</code>
-      <code>$txt</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="9">
-      <code>DOMDocument</code>
-      <code>\QueryPath\DOMQuery</code>
-      <code>\QueryPath\DOMQuery|string</code>
-      <code>array</code>
-      <code>array</code>
-      <code>int</code>
-      <code>int</code>
-      <code>iterable</code>
-      <code>string</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="39">
-      <code>appendChild</code>
-      <code>appendXML</code>
-      <code>appendXML</code>
-      <code>attach</code>
-      <code>cloneNode</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>createDocumentFragment</code>
-      <code>createDocumentFragment</code>
-      <code>createElement</code>
-      <code>createTextNode</code>
-      <code>createTextNode</code>
-      <code>createTextNode</code>
-      <code>findInPlace</code>
-      <code>insertBefore</code>
-      <code>insertBefore</code>
-      <code>removeChild</code>
-      <code>removeChild</code>
-      <code>save</code>
-      <code>saveHTML</code>
-      <code>saveHTML</code>
-      <code>saveHTMLFile</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>xinclude</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="5">
-      <code>$m-&gt;textContent</code>
-      <code>$n-&gt;textContent</code>
-      <code>$p-&gt;textContent</code>
-      <code>$this-&gt;document-&gt;saveXML($child)</code>
-      <code>$this-&gt;document-&gt;saveXML($child, LIBXML_NOEMPTYTAG)</code>
-    </MixedOperand>
-    <MixedPropertyAssignment occurrences="1">
-      <code>$temp</code>
-    </MixedPropertyAssignment>
-    <MixedPropertyFetch occurrences="16">
-      <code>$m-&gt;textContent</code>
-      <code>$m-&gt;textContent</code>
-      <code>$n-&gt;nextSibling</code>
-      <code>$n-&gt;nextSibling-&gt;nodeType</code>
-      <code>$n-&gt;textContent</code>
-      <code>$node-&gt;parentNode</code>
-      <code>$oldFirst-&gt;ownerDocument</code>
-      <code>$oldFirst-&gt;parentNode</code>
-      <code>$p-&gt;previousSibling</code>
-      <code>$p-&gt;previousSibling-&gt;nodeType</code>
-      <code>$p-&gt;textContent</code>
-      <code>$placeholder-&gt;parentNode</code>
-      <code>$placeholder-&gt;parentNode</code>
-      <code>$this-&gt;document-&gt;documentElement</code>
-      <code>$this-&gt;get(0)-&gt;namespaceURI</code>
-      <code>$this-&gt;getFirstMatch()-&gt;tagName</code>
-    </MixedPropertyFetch>
-    <MixedReturnStatement occurrences="8">
-      <code>$temp</code>
-      <code>$this-&gt;attr($attr, $attVal)</code>
-      <code>$this-&gt;document</code>
-      <code>$this-&gt;get()</code>
-      <code>$this-&gt;matches-&gt;count()</code>
-      <code>$this-&gt;matches-&gt;count()</code>
-      <code>$this-&gt;options</code>
-      <code>($this-&gt;matches-&gt;count() &gt; 0) ? $this-&gt;getFirstMatch()-&gt;tagName : ''</code>
-    </MixedReturnStatement>
-    <NullArgument occurrences="1">
-      <code>$markup</code>
-    </NullArgument>
     <PossiblyNullPropertyFetch occurrences="7">
       <code>$first-&gt;ownerDocument-&gt;documentElement</code>
       <code>$first-&gt;ownerDocument-&gt;documentElement</code>
@@ -1516,18 +986,10 @@
       <code>toArray</code>
       <code>xinclude</code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedParam occurrences="1">
-      <code>$subject</code>
-    </PossiblyUnusedParam>
     <PossiblyUnusedReturnValue occurrences="1">
       <code>\QueryPath\DOMQuery</code>
     </PossiblyUnusedReturnValue>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>null === $markup</code>
-    </RedundantConditionGivenDocblockType>
-    <UndefinedDocblockClass occurrences="3">
-      <code>DOMDocument</code>
-      <code>DOMElement</code>
+    <UndefinedDocblockClass occurrences="1">
       <code>queryPath::Exception</code>
     </UndefinedDocblockClass>
   </file>
@@ -1552,10 +1014,6 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="src/Extension/Format.php">
-    <DocblockTypeContradiction occurrences="2">
-      <code>isset($additional)</code>
-      <code>isset($additional)</code>
-    </DocblockTypeContradiction>
     <LessSpecificReturnStatement occurrences="2">
       <code>$this-&gt;forAll($callback, $args, $getter, $setter)</code>
       <code>$this-&gt;forAll($callback, $args, $getter, $setter)</code>
@@ -1627,9 +1085,6 @@
     <InvalidPassByReference occurrences="1">
       <code>explode(':', $text)</code>
     </InvalidPassByReference>
-    <LessSpecificReturnStatement occurrences="1">
-      <code>$this-&gt;qp</code>
-    </LessSpecificReturnStatement>
     <MissingParamType occurrences="1">
       <code>$file</code>
     </MissingParamType>
@@ -1642,7 +1097,7 @@
       <code>$element</code>
       <code>$node</code>
     </MixedArgument>
-    <MixedAssignment occurrences="20">
+    <MixedAssignment occurrences="19">
       <code>$cdata</code>
       <code>$comment</code>
       <code>$comment</code>
@@ -1661,14 +1116,9 @@
       <code>$node</code>
       <code>$node</code>
       <code>$node</code>
-      <code>$node</code>
       <code>$nsUri</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>\QueryPath\DOMQuery</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="15">
-      <code>append</code>
+    <MixedMethodCall occurrences="14">
       <code>appendChild</code>
       <code>appendChild</code>
       <code>appendChild</code>
@@ -1704,12 +1154,6 @@
       <code>$node-&gt;textContent</code>
       <code>$this-&gt;qp-&gt;branch()-&gt;top()-&gt;get(0)-&gt;ownerDocument</code>
     </MixedPropertyFetch>
-    <MixedReturnStatement occurrences="1">
-      <code>QueryPath::with($node)</code>
-    </MixedReturnStatement>
-    <MoreSpecificReturnType occurrences="1">
-      <code>\QueryPath\DOMQuery</code>
-    </MoreSpecificReturnType>
     <PossiblyUnusedMethod occurrences="8">
       <code>appendElement</code>
       <code>cdata</code>
@@ -1720,10 +1164,6 @@
       <code>schema</code>
       <code>toXml</code>
     </PossiblyUnusedMethod>
-    <RedundantConditionGivenDocblockType occurrences="2">
-      <code>isset($text)</code>
-      <code>isset($text)</code>
-    </RedundantConditionGivenDocblockType>
     <UndefinedInterfaceMethod occurrences="12">
       <code>branch</code>
       <code>createElement</code>
@@ -1743,32 +1183,9 @@
     </UnusedVariable>
   </file>
   <file src="src/Extension/QPXSL.php">
-    <InvalidArgument occurrences="1">
-      <code>$processor-&gt;transformToDoc($sourceDoc)</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="3">
-      <code>$sourceDoc</code>
-      <code>$style</code>
-      <code>$styleDoc</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="3">
-      <code>$sourceDoc</code>
-      <code>$style</code>
-      <code>$styleDoc</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>QueryPath</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="2">
-      <code>get</code>
+    <MixedMethodCall occurrences="1">
       <code>get</code>
     </MixedMethodCall>
-    <MixedPropertyFetch occurrences="1">
-      <code>$this-&gt;src-&gt;top()-&gt;get(0)-&gt;ownerDocument</code>
-    </MixedPropertyFetch>
-    <MixedReturnStatement occurrences="1">
-      <code>QueryPath::with($processor-&gt;transformToDoc($sourceDoc))</code>
-    </MixedReturnStatement>
     <PossiblyUndefinedMethod occurrences="1">
       <code>get</code>
     </PossiblyUndefinedMethod>
@@ -1816,235 +1233,33 @@
       <code>self::$extensionRegistry</code>
     </MixedReturnStatement>
   </file>
-  <file src="src/Helpers/QueryChecks.php">
-    <InvalidArgument occurrences="1">
-      <code>$selector</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="7">
-      <code>$item</code>
-      <code>$item</code>
-      <code>$m-&gt;getAttribute('class')</code>
-      <code>$node</code>
-      <code>$this-&gt;get(0)</code>
-      <code>$this-&gt;matches</code>
-      <code>$this-&gt;matches</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="8">
-      <code>$item</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$match</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$nodes</code>
-      <code>$original_node</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="6">
-      <code>contains</code>
-      <code>contains</code>
-      <code>getAttribute</code>
-      <code>hasAttribute</code>
-      <code>hasAttribute</code>
-      <code>removeAttribute</code>
-    </MixedMethodCall>
-    <MixedPropertyFetch occurrences="1">
-      <code>$node-&gt;parentNode</code>
-    </MixedPropertyFetch>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>$selector instanceof DOMNode</code>
-    </RedundantConditionGivenDocblockType>
-  </file>
   <file src="src/Helpers/QueryFilters.php">
-    <DocblockTypeContradiction occurrences="3">
-      <code>$selector instanceof DOMElement</code>
-      <code>$selector instanceof SplObjectStorage</code>
-      <code>is_array($selector)</code>
-    </DocblockTypeContradiction>
-    <InvalidArgument occurrences="2">
-      <code>$c</code>
-      <code>$retval</code>
-    </InvalidArgument>
     <MissingParamType occurrences="1">
       <code>$index</code>
     </MissingParamType>
-    <MixedArgument occurrences="69">
-      <code>$c</code>
-      <code>$c</code>
+    <MixedArgument occurrences="7">
       <code>$c</code>
       <code>$c</code>
       <code>$c</code>
       <code>$c</code>
       <code>$index</code>
       <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item-&gt;textContent</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$n</code>
-      <code>$selector</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
       <code>$tmp</code>
     </MixedArgument>
-    <MixedAssignment occurrences="51">
+    <MixedAssignment occurrences="5">
       <code>$c</code>
       <code>$c</code>
       <code>$c</code>
       <code>$c</code>
-      <code>$c</code>
-      <code>$function</code>
       <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$n</code>
-      <code>$parent</code>
-      <code>$retval</code>
     </MixedAssignment>
-    <MixedFunctionCall occurrences="1">
-      <code>$function($i++, $item)</code>
-    </MixedFunctionCall>
-    <MixedMethodCall occurrences="13">
+    <MixedMethodCall occurrences="1">
       <code>attach</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
-      <code>is</code>
     </MixedMethodCall>
-    <MixedPropertyFetch occurrences="35">
+    <MixedPropertyFetch occurrences="3">
       <code>$c-&gt;nodeType</code>
       <code>$c-&gt;nodeType</code>
       <code>$c-&gt;nodeType</code>
-      <code>$item-&gt;textContent</code>
-      <code>$m-&gt;childNodes</code>
-      <code>$m-&gt;childNodes</code>
-      <code>$m-&gt;childNodes</code>
-      <code>$m-&gt;childNodes</code>
-      <code>$m-&gt;nextSibling</code>
-      <code>$m-&gt;nextSibling</code>
-      <code>$m-&gt;nextSibling</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;nodeType</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;previousSibling</code>
-      <code>$m-&gt;previousSibling</code>
-      <code>$m-&gt;previousSibling</code>
-      <code>$n-&gt;nodeType</code>
-      <code>$parent-&gt;childNodes</code>
     </MixedPropertyFetch>
     <MoreSpecificReturnType occurrences="1">
       <code>\QueryPath\DOMQuery</code>
@@ -2061,22 +1276,14 @@
       <code>is_callable($callback)</code>
       <code>is_callable($callback)</code>
     </RedundantConditionGivenDocblockType>
-    <UndefinedClass occurrences="1">
-      <code>\Iterable</code>
-    </UndefinedClass>
   </file>
   <file src="src/Helpers/QueryMutators.php">
-    <InvalidArgument occurrences="3">
-      <code>$document</code>
+    <InvalidArgument occurrences="1">
       <code>$local_deepest</code>
-      <code>$selector</code>
     </InvalidArgument>
     <InvalidNullableReturnType occurrences="1">
       <code>\QueryPath\DOMQuery</code>
     </InvalidNullableReturnType>
-    <InvalidParamDefault occurrences="1">
-      <code>string</code>
-    </InvalidParamDefault>
     <InvalidThrow occurrences="5">
       <code>QueryPath</code>
       <code>QueryPath</code>
@@ -2084,42 +1291,11 @@
       <code>QueryPath</code>
       <code>QueryPath</code>
     </InvalidThrow>
-    <MixedArgument occurrences="21">
-      <code>$copy</code>
+    <MixedArgument occurrences="2">
       <code>$data</code>
-      <code>$item-&gt;parentNode-&gt;removeChild($item)</code>
-      <code>$item-&gt;parentNode-&gt;removeChild($item)</code>
-      <code>$kid</code>
-      <code>$lele</code>
-      <code>$lele</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m-&gt;getAttribute('class')</code>
-      <code>$m-&gt;parentNode-&gt;removeChild($m)</code>
-      <code>$node</code>
-      <code>$parent</code>
-      <code>$parent-&gt;removeChild($m)</code>
-      <code>$style</code>
-      <code>$this-&gt;document</code>
-      <code>$this-&gt;document-&gt;documentElement</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;options</code>
       <code>$v</code>
-      <code>$wrapper</code>
     </MixedArgument>
-    <MixedArrayOffset occurrences="2">
-      <code>$buffer[$name]</code>
-      <code>$css[$name]</code>
-    </MixedArrayOffset>
-    <MixedAssignment occurrences="68">
-      <code>$attrNode</code>
-      <code>$bottom</code>
-      <code>$bottom</code>
-      <code>$bottom</code>
-      <code>$bottom</code>
-      <code>$bottom</code>
-      <code>$bottom</code>
-      <code>$buffer[$name]</code>
+    <MixedAssignment occurrences="11">
       <code>$copy</code>
       <code>$data</code>
       <code>$data</code>
@@ -2129,73 +1305,10 @@
       <code>$data</code>
       <code>$data</code>
       <code>$data</code>
-      <code>$data</code>
-      <code>$ele</code>
-      <code>$first</code>
-      <code>$ins</code>
-      <code>$ins</code>
-      <code>$ins</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$kid</code>
-      <code>$kid</code>
-      <code>$lele</code>
-      <code>$lele</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$match</code>
-      <code>$matches</code>
-      <code>$name</code>
-      <code>$node</code>
-      <code>$old</code>
-      <code>$parent</code>
-      <code>$parent</code>
-      <code>$parent</code>
-      <code>$parent</code>
-      <code>$replacement</code>
-      <code>$style</code>
       <code>$v</code>
-      <code>$v</code>
-      <code>$val</code>
       <code>$wrapper</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="2">
-      <code>\QueryPath\DOMQuery</code>
-      <code>\QueryPath\DOMQuery</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="63">
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>attach</code>
+    <MixedMethodCall occurrences="8">
       <code>cloneNode</code>
       <code>cloneNode</code>
       <code>cloneNode</code>
@@ -2204,79 +1317,7 @@
       <code>cloneNode</code>
       <code>cloneNode</code>
       <code>cloneNode</code>
-      <code>cloneNode</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>createTextNode</code>
-      <code>get</code>
-      <code>getAttribute</code>
-      <code>getAttribute</code>
-      <code>getAttribute</code>
-      <code>getAttribute</code>
-      <code>hasAttribute</code>
-      <code>hasAttribute</code>
-      <code>hasChildNodes</code>
-      <code>hasChildNodes</code>
-      <code>hasChildNodes</code>
-      <code>hasChildNodes</code>
-      <code>hasChildNodes</code>
-      <code>insertBefore</code>
-      <code>insertBefore</code>
-      <code>insertBefore</code>
-      <code>insertBefore</code>
-      <code>insertBefore</code>
-      <code>insertBefore</code>
-      <code>insertBefore</code>
-      <code>isSameNode</code>
-      <code>item</code>
-      <code>removeAttribute</code>
-      <code>removeAttribute</code>
-      <code>removeChild</code>
-      <code>removeChild</code>
-      <code>removeChild</code>
-      <code>removeChild</code>
-      <code>removeChild</code>
-      <code>removeChild</code>
-      <code>removeChild</code>
-      <code>removeChild</code>
-      <code>removeChild</code>
-      <code>replaceChild</code>
-      <code>setAttribute</code>
-      <code>setAttribute</code>
-      <code>setAttribute</code>
-      <code>setAttribute</code>
-      <code>setAttribute</code>
     </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$val</code>
-    </MixedOperand>
-    <MixedPropertyFetch occurrences="22">
-      <code>$attrNode-&gt;value</code>
-      <code>$ele-&gt;attributes</code>
-      <code>$ele-&gt;parentNode</code>
-      <code>$first-&gt;parentNode</code>
-      <code>$item-&gt;parentNode</code>
-      <code>$item-&gt;parentNode</code>
-      <code>$item-&gt;parentNode</code>
-      <code>$m-&gt;childNodes</code>
-      <code>$m-&gt;firstChild</code>
-      <code>$m-&gt;firstChild</code>
-      <code>$m-&gt;nextSibling</code>
-      <code>$m-&gt;ownerDocument</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$m-&gt;parentNode</code>
-      <code>$parent-&gt;parentNode</code>
-      <code>$this-&gt;document-&gt;documentElement</code>
-      <code>$this-&gt;getFirstMatch()-&gt;nodeType</code>
-    </MixedPropertyFetch>
     <PossiblyNullReference occurrences="3">
       <code>cloneNode</code>
       <code>cloneNode</code>
@@ -2307,27 +1348,9 @@
     </MissingParamType>
   </file>
   <file src="src/Options.php">
-    <MissingPropertyType occurrences="1">
-      <code>$options</code>
-    </MissingPropertyType>
     <MissingReturnType occurrences="1">
       <code>has</code>
     </MissingReturnType>
-    <MixedArgument occurrences="1">
-      <code>self::$options</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>self::$options</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>array</code>
-    </MixedInferredReturnType>
-    <MixedOperand occurrences="1">
-      <code>self::$options</code>
-    </MixedOperand>
-    <MixedReturnStatement occurrences="1">
-      <code>self::$options</code>
-    </MixedReturnStatement>
   </file>
   <file src="src/ParseException.php">
     <MissingParamType occurrences="9">
@@ -2354,11 +1377,7 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="src/Query.php">
-    <MissingParamType occurrences="10">
-      <code>$document</code>
-      <code>$options</code>
-      <code>$selector</code>
-      <code>$selector</code>
+    <MissingParamType occurrences="6">
       <code>$selector</code>
       <code>$selector</code>
       <code>$selector</code>
@@ -2377,47 +1396,21 @@
     </MissingReturnType>
   </file>
   <file src="src/QueryPath.php">
-    <InvalidStringClass occurrences="2">
-      <code>new $qpClass($document, $selector, $options)</code>
-      <code>new $qpClass($source, $selector, $options)</code>
-    </InvalidStringClass>
-    <LessSpecificReturnStatement occurrences="1">
-      <code>$qp</code>
-    </LessSpecificReturnStatement>
-    <MissingParamType occurrences="4">
-      <code>$selector</code>
-      <code>$selector</code>
-      <code>$source</code>
-      <code>$source</code>
-    </MissingParamType>
-    <MissingReturnType occurrences="2">
-      <code>withHTML</code>
-      <code>withXML</code>
-    </MissingReturnType>
-    <MixedArgument occurrences="6">
+    <MixedArgument occurrences="2">
       <code>$data</code>
       <code>$data</code>
-      <code>$selector</code>
-      <code>$selector</code>
-      <code>$source</code>
-      <code>$source</code>
     </MixedArgument>
-    <MixedAssignment occurrences="3">
+    <MixedAssignment occurrences="1">
       <code>$extension</code>
-      <code>$qpClass</code>
-      <code>$qpClass</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="2">
-      <code>new $qpClass($document, $selector, $options)</code>
-      <code>new $qpClass($source, $selector, $options)</code>
-    </MixedMethodCall>
-    <MoreSpecificReturnType occurrences="1">
-      <code>QueryPath</code>
-    </MoreSpecificReturnType>
     <PossiblyUnusedMethod occurrences="2">
       <code>enabledExtensions</code>
       <code>withXML</code>
     </PossiblyUnusedMethod>
+    <UnsafeInstantiation occurrences="2">
+      <code>new $qpClass($document, $selector, $options)</code>
+      <code>new $qpClass($source, $selector, $options)</code>
+    </UnsafeInstantiation>
   </file>
   <file src="src/QueryPathIterator.php">
     <MissingPropertyType occurrences="2">
@@ -2434,21 +1427,6 @@
     </MixedMethodCall>
     <MixedReturnStatement occurrences="1">
       <code>$this-&gt;qp</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/qp_functions.php">
-    <InvalidArgument occurrences="2">
-      <code>$document</code>
-      <code>$string</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="1">
-      <code>$document</code>
-    </MixedArgument>
-    <MixedInferredReturnType occurrences="1">
-      <code>\QueryPath\DOMQuery</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>QueryPath::with($document, $string, $options)</code>
     </MixedReturnStatement>
   </file>
   <file src="tests/QueryPath/CSS/DOMTraverserTest.php">
@@ -2665,22 +1643,7 @@
     <MissingReturnType occurrences="1">
       <code>doc</code>
     </MissingReturnType>
-    <MixedArgument occurrences="203">
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
+    <MixedArgument occurrences="159">
       <code>$ele</code>
       <code>$ele</code>
       <code>$ele</code>
@@ -2755,10 +1718,6 @@
       <code>$n</code>
       <code>$n</code>
       <code>$n</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
       <code>$nl-&gt;item(0)</code>
       <code>$nl-&gt;item(0)</code>
       <code>$nl-&gt;item(0)</code>
@@ -2766,31 +1725,6 @@
       <code>$nl-&gt;item(1)</code>
       <code>$nl-&gt;item(1)</code>
       <code>$node</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
-      <code>$root</code>
       <code>$root</code>
       <code>$root</code>
       <code>$root</code>
@@ -2996,7 +1930,7 @@
       <code>$root</code>
       <code>$root</code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="118">
+    <MixedAssignment occurrences="107">
       <code>$first</code>
       <code>$last</code>
       <code>$n</code>
@@ -3024,17 +1958,6 @@
       <code>$n</code>
       <code>$n</code>
       <code>$n</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
       <code>$nl</code>
       <code>$nl</code>
       <code>$nl</code>
@@ -3132,32 +2055,10 @@
       <code>item</code>
       <code>item</code>
     </MixedMethodCall>
-    <MixedOperand occurrences="4">
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-    </MixedOperand>
-    <MixedPropertyFetch occurrences="29">
+    <MixedPropertyFetch occurrences="13">
       <code>$ele-&gt;childNodes</code>
       <code>$ele-&gt;childNodes</code>
       <code>$ele-&gt;childNodes</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
-      <code>$n-&gt;tagName</code>
       <code>$root-&gt;childNodes</code>
       <code>$root-&gt;childNodes</code>
       <code>$root-&gt;childNodes</code>
@@ -3193,111 +2094,6 @@
     <DeprecatedMethod occurrences="1">
       <code>size</code>
     </DeprecatedMethod>
-    <InvalidMethodCall occurrences="103">
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-      <code>count</code>
-    </InvalidMethodCall>
     <MissingParamType occurrences="3">
       <code>$matches</code>
       <code>$matches</code>
@@ -3316,9 +2112,8 @@
       <code>$this-&gt;xml</code>
       <code>$this-&gt;xml</code>
     </MixedArgument>
-    <MixedAssignment occurrences="41">
+    <MixedAssignment occurrences="39">
       <code>$m</code>
-      <code>$m</code>
       <code>$match</code>
       <code>$match</code>
       <code>$match</code>
@@ -3356,12 +2151,10 @@
       <code>$match</code>
       <code>$match</code>
       <code>$match</code>
-      <code>$matchIDs[]</code>
       <code>$peers</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="86">
+    <MixedMethodCall occurrences="85">
       <code>current</code>
-      <code>getAttribute</code>
       <code>getAttribute</code>
       <code>getAttribute</code>
       <code>getAttribute</code>
@@ -3594,208 +2387,70 @@
       <code>val</code>
       <code>val</code>
     </DeprecatedMethod>
-    <InvalidArgument occurrences="16">
-      <code>$actual</code>
-      <code>$borken</code>
-      <code>$borken</code>
-      <code>$borken</code>
-      <code>$borken</code>
-      <code>$borken</code>
+    <InvalidArgument occurrences="8">
       <code>$cb</code>
       <code>$cb</code>
-      <code>$el</code>
-      <code>$list</code>
-      <code>'#after'</code>
-      <code>HTML_IN_XML_FILE</code>
-      <code>QueryPath::HTML_STUB</code>
-      <code>[$this, $fn]</code>
+      <code>$fn</code>
+      <code>$fn</code>
+      <code>$fn</code>
+      <code>$fn</code>
+      <code>$fn</code>
+      <code>$fn</code>
     </InvalidArgument>
-    <InvalidArrayOffset occurrences="2">
-      <code>$result['data']</code>
-      <code>$result['mime']</code>
-    </InvalidArrayOffset>
-    <InvalidCast occurrences="4">
-      <code>$actual</code>
-      <code>$el</code>
-    </InvalidCast>
-    <InvalidScalarArgument occurrences="2">
-      <code>true</code>
+    <InvalidScalarArgument occurrences="1">
       <code>true</code>
     </InvalidScalarArgument>
-    <InvalidThrow occurrences="9">
-      <code>throw $e;</code>
-      <code>throw $e;</code>
-      <code>throw $e;</code>
-      <code>throw $e;</code>
-      <code>throw $e;</code>
-      <code>throw $e;</code>
-      <code>throw $e;</code>
-      <code>throw $e;</code>
-      <code>throw $e;</code>
-    </InvalidThrow>
     <MissingClosureReturnType occurrences="3">
       <code>static function (DOMNode $a, DOMNode $b) {</code>
       <code>static function (DOMNode $a, DOMNode $b) {</code>
       <code>static function (DOMNode $a, DOMNode $b) {</code>
     </MissingClosureReturnType>
-    <MissingParamType occurrences="6">
+    <MissingParamType occurrences="2">
       <code>$index</code>
-      <code>$index</code>
-      <code>$index</code>
-      <code>$item</code>
-      <code>$item</code>
       <code>$item</code>
     </MissingParamType>
-    <MissingPropertyType occurrences="2">
-      <code>$foo</code>
+    <MissingPropertyType occurrences="1">
       <code>$qp-&gt;length</code>
     </MissingPropertyType>
-    <MissingReturnType occurrences="5">
+    <MissingReturnType occurrences="2">
       <code>contentsRecurse</code>
-      <code>eachCallbackFunction</code>
       <code>filterCallbackFunction</code>
-      <code>foonator</code>
-      <code>mapCallbackFunction</code>
     </MissingReturnType>
-    <MixedArgument occurrences="52">
-      <code>$arr</code>
-      <code>$arr</code>
-      <code>$arr</code>
-      <code>$attrs</code>
+    <MixedArgument occurrences="10">
       <code>$branch-&gt;top()-&gt;html()</code>
       <code>$cr</code>
       <code>$cr</code>
-      <code>$doc</code>
-      <code>$e1</code>
-      <code>$e1</code>
-      <code>$ele</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
-      <code>$qp-&gt;get()</code>
       <code>$qp-&gt;html()</code>
       <code>$qp-&gt;html()</code>
       <code>$qp-&gt;html()</code>
       <code>$qp-&gt;html()</code>
-      <code>$qp2-&gt;top()-&gt;xml()</code>
-      <code>$res</code>
-      <code>$xhtml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
       <code>htmlqp($borken)-&gt;html()</code>
       <code>htmlqp($borken)-&gt;html()</code>
       <code>qp($html)-&gt;html()</code>
-      <code>qp($xml)-&gt;xhtml(true)</code>
-      <code>qp($xml)-&gt;xml(true)</code>
-      <code>qp($xml, 'html')-&gt;xhtml()</code>
-      <code>qp($xml, 'html')-&gt;xml()</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$attrs['a1']</code>
-    </MixedArrayAccess>
     <MixedArrayAssignment occurrences="1">
       <code>$pack[]</code>
     </MixedArrayAssignment>
-    <MixedAssignment occurrences="44">
-      <code>$arr</code>
-      <code>$array</code>
-      <code>$attrs</code>
+    <MixedAssignment occurrences="11">
       <code>$child</code>
       <code>$children</code>
       <code>$cr</code>
-      <code>$doc</code>
-      <code>$e1</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele2</code>
       <code>$item</code>
       <code>$item</code>
       <code>$item</code>
       <code>$item</code>
       <code>$kid</code>
       <code>$li</code>
-      <code>$one</code>
-      <code>$one</code>
       <code>$pack</code>
       <code>$qp</code>
-      <code>$qp</code>
-      <code>$qp</code>
-      <code>$qp</code>
-      <code>$qp</code>
-      <code>$res</code>
-      <code>$selector</code>
-      <code>$two</code>
-      <code>$xhtml</code>
-      <code>$xhtml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="50">
-      <code>attr</code>
+    <MixedMethodCall occurrences="19">
       <code>attr</code>
       <code>contents</code>
-      <code>count</code>
       <code>find</code>
-      <code>find</code>
-      <code>find</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>getAttribute</code>
-      <code>getAttribute</code>
-      <code>hasAttribute</code>
       <code>html</code>
       <code>html</code>
       <code>html</code>
-      <code>html</code>
-      <code>html</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
-      <code>saveXML</code>
       <code>tag</code>
       <code>text</code>
       <code>text</code>
@@ -3809,106 +2464,34 @@
       <code>top</code>
       <code>top</code>
       <code>top</code>
-      <code>xhtml</code>
-      <code>xml</code>
-      <code>xml</code>
-      <code>xml</code>
-      <code>xml</code>
     </MixedMethodCall>
-    <MixedOperand occurrences="8">
+    <MixedOperand occurrences="3">
       <code>$index</code>
       <code>$qp-&gt;top()-&gt;html()</code>
-      <code>$qp-&gt;top()-&gt;xml()</code>
       <code>$this-&gt;contentsRecurse($child, $pack)</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
-      <code>$xml</code>
     </MixedOperand>
-    <MixedPropertyFetch occurrences="35">
-      <code>$appended-&gt;get(0)-&gt;nextSibling</code>
-      <code>$deepest-&gt;get(0)-&gt;tagName</code>
-      <code>$deepest-&gt;get(0)-&gt;tagName</code>
-      <code>$deepest-&gt;get(1)-&gt;tagName</code>
-      <code>$deepest-&gt;get(1)-&gt;tagName</code>
-      <code>$dest-&gt;end()-&gt;find('dest')-&gt;get(0)-&gt;previousSibling</code>
-      <code>$qp-&gt;get(0)-&gt;previousSibling</code>
-      <code>$qp-&gt;get(0)-&gt;tagName</code>
-      <code>$qp-&gt;get(0)-&gt;tagName</code>
-      <code>$qp-&gt;get(0)-&gt;tagName</code>
-      <code>$qp-&gt;get(0)-&gt;tagName</code>
-      <code>$qp-&gt;get(0)-&gt;tagName</code>
-      <code>$qp-&gt;get(0)-&gt;tagName</code>
-      <code>$qp-&gt;get(0)-&gt;tagName</code>
-      <code>$qp-&gt;get(0)-&gt;tagName</code>
-      <code>$two-&gt;tagName</code>
-      <code>qp($file, '#inner-one')-&gt;wrapInner('&lt;test class="testWrap"&gt;&lt;/test&gt;')-&gt;get(0)-&gt;ownerDocument</code>
-      <code>qp($file, 'inner')-&gt;wrapInner('&lt;test class="testWrap"&gt;&lt;/test&gt;')-&gt;get(0)-&gt;ownerDocument</code>
-      <code>qp($file, 'li')-&gt;wrap('&lt;test class="testWrap"&gt;&lt;/test&gt;')-&gt;get(0)-&gt;ownerDocument</code>
-      <code>qp($file, 'unary')-&gt;after('&lt;test/&gt;')-&gt;top(':root &gt; test')-&gt;get(0)-&gt;previousSibling</code>
-      <code>qp($file, 'unary')-&gt;before('&lt;test/&gt;')-&gt;top(':root &gt; test')-&gt;get(0)-&gt;nextSibling</code>
-      <code>qp($file, 'unary')-&gt;wrap('&lt;test id="testWrap"&gt;&lt;/test&gt;')-&gt;get(0)-&gt;ownerDocument</code>
-      <code>qp($file, 'unary')-&gt;wrapAll('&lt;test id="testWrap"&gt;&lt;/test&gt;')-&gt;get(0)-&gt;ownerDocument</code>
-      <code>qp($xml, '#testWrap')-&gt;get(0)-&gt;childNodes</code>
-      <code>qp($xml, '#testWrap')-&gt;get(0)-&gt;childNodes</code>
-      <code>qp($xml, '#testWrap')-&gt;get(0)-&gt;childNodes</code>
-      <code>qp($xml, '#testWrap')-&gt;get(0)-&gt;childNodes</code>
-      <code>qp($xml, '.testWrap')-&gt;get(0)-&gt;childNodes</code>
-      <code>qp($xml, '.testWrap')-&gt;get(0)-&gt;childNodes</code>
-      <code>qp($xml, '.testWrap')-&gt;get(1)-&gt;childNodes</code>
-      <code>qp('&lt;?xml version="1.0"?&gt;&lt;bob&gt;&lt;m/&gt;&lt;m/&gt;&lt;/bob&gt;')-&gt;get(0)-&gt;ownerDocument</code>
-    </MixedPropertyFetch>
-    <PossiblyInvalidArgument occurrences="1">
-      <code>$result</code>
-    </PossiblyInvalidArgument>
-    <PossiblyInvalidMethodCall occurrences="3">
-      <code>attr</code>
-      <code>dataURL</code>
-      <code>top</code>
-    </PossiblyInvalidMethodCall>
-    <PossiblyUnusedParam occurrences="2">
-      <code>$item</code>
+    <PossiblyUnusedParam occurrences="1">
       <code>$item</code>
     </PossiblyUnusedParam>
-    <PossiblyUnusedProperty occurrences="1">
-      <code>$foo</code>
-    </PossiblyUnusedProperty>
     <RedundantConditionGivenDocblockType occurrences="2">
       <code>assertTrue</code>
       <code>assertTrue</code>
     </RedundantConditionGivenDocblockType>
-    <UndefinedClass occurrences="9">
-      <code>Exception</code>
-      <code>Exception</code>
-      <code>Exception</code>
-      <code>Exception</code>
-      <code>Exception</code>
-      <code>Exception</code>
-      <code>Exception</code>
-      <code>Exception</code>
-      <code>Exception</code>
-    </UndefinedClass>
     <UndefinedInterfaceMethod occurrences="4">
       <code>count</code>
       <code>count</code>
       <code>eq</code>
       <code>get</code>
     </UndefinedInterfaceMethod>
-    <UnusedVariable occurrences="8">
+    <UnusedVariable occurrences="7">
       <code>$finish</code>
       <code>$qp</code>
       <code>$qp</code>
       <code>$qp</code>
       <code>$qp</code>
       <code>$qp</code>
-      <code>$res</code>
       <code>$start</code>
     </UnusedVariable>
-  </file>
-  <file src="tests/QueryPath/EntitiesTest.php">
-    <MixedArgument occurrences="1">
-      <code>$qp-&gt;xml()</code>
-    </MixedArgument>
   </file>
   <file src="tests/QueryPath/Extension/FormatTest.php">
     <MissingClosureParamType occurrences="1">
@@ -3922,14 +2505,8 @@
     <MixedOperand occurrences="1">
       <code>$text</code>
     </MixedOperand>
-    <MixedPropertyFetch occurrences="1">
-      <code>$qp-&gt;get(0)-&gt;textContent</code>
-    </MixedPropertyFetch>
   </file>
   <file src="tests/QueryPath/Extension/QPXMLTest.php">
-    <MissingPropertyType occurrences="1">
-      <code>$file</code>
-    </MissingPropertyType>
     <MixedArgument occurrences="2">
       <code>qp($this-&gt;file, 'root')-&gt;comment()</code>
       <code>qp($this-&gt;file, 'third')-&gt;pi()</code>
@@ -3985,24 +2562,9 @@
       <code>'\QueryPath\DOMQuery'</code>
       <code>'\QueryPath\DOMQuery'</code>
     </ArgumentTypeCoercion>
-    <InvalidArgument occurrences="4">
-      <code>QueryPath::HTML_STUB</code>
-      <code>QueryPath::XHTML_STUB</code>
-      <code>QueryPath::XHTML_STUB</code>
-      <code>QueryPath::XHTML_STUB</code>
-    </InvalidArgument>
     <MissingReturnType occurrences="1">
       <code>grrrrrrr</code>
     </MissingReturnType>
-    <MixedAssignment occurrences="4">
-      <code>$qp</code>
-      <code>$qp</code>
-      <code>$qp</code>
-      <code>$qp</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="1">
-      <code>grrrrrrr</code>
-    </MixedMethodCall>
     <PossiblyUnusedMethod occurrences="1">
       <code>grrrrrrr</code>
     </PossiblyUnusedMethod>

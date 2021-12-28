@@ -39,18 +39,31 @@ class Options
 	 *
 	 * Use the {@link set()}, {@link get()}, and {@link merge()} to
 	 * modify this array.
+	 *
+	 * @var array{
+	 *	parser_flags?: int|null,
+	 *	omit_xml_declaration?: bool,
+	 *	replace_entities?: bool,
+	 *	exception_level?: int,
+	 *	ignore_parser_warnings?: bool,
+	 *	escape_xhtml_js_css_sections?: string,
+	 *	convert_from_encoding?: string,
+	 *	convert_to_encoding?: string
+	 * }
 	 */
-	public static $options = [];
+	public static array $options = [];
 
 	/**
 	 * Set the default options.
 	 *
 	 * The passed-in array will be used as the default options list.
 	 *
-	 * @param array $array
+	 * @param array{
+	 *	QueryPath_class?:class-string<DOMQuery>
+	 * } $array
 	 *  An associative array of options
 	 */
-	public static function set($array) : void
+	public static function set(array $array) : void
 	{
 		self::$options = $array;
 	}
@@ -60,12 +73,21 @@ class Options
 	 *
 	 * Get all options currently set as default.
 	 *
-	 * @return array
+	 * @return array{
+	 *	parser_flags?: int|null,
+	 *	omit_xml_declaration?: bool,
+	 *	replace_entities?: bool,
+	 *	exception_level?: int,
+	 *	ignore_parser_warnings?: bool,
+	 *	escape_xhtml_js_css_sections?: string,
+	 *	convert_from_encoding?: string,
+	 *	convert_to_encoding?: string
+	 * }
 	 *  An array of options. Note that only explicitly set options are
 	 *  returned. {@link QueryPath} defines default options which are not
 	 *  stored in this object.
 	 */
-	public static function get()
+	public static function get() : array
 	{
 		return self::$options;
 	}
@@ -76,7 +98,16 @@ class Options
 	 * On duplicate keys, the value in $array will overwrite the
 	 * value stored in the options.
 	 *
-	 * @param array $array
+	 * @param array{
+	 *	parser_flags?: int|null,
+	 *	omit_xml_declaration?: bool,
+	 *	replace_entities?: bool,
+	 *	exception_level?: int,
+	 *	ignore_parser_warnings?: bool,
+	 *	escape_xhtml_js_css_sections?: string,
+	 *	convert_from_encoding?: string,
+	 *	convert_to_encoding?: string
+	 * } $array
 	 *  Associative array of options to merge into the existing options
 	 */
 	public static function merge($array) : void

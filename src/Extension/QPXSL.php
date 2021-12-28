@@ -20,7 +20,17 @@ declare(strict_types=1);
 
 namespace QueryPath\Extension;
 
+use DOMDocument;
+use DOMNode;
+use Masterminds\HTML5;
+use QueryPath\DOM;
+use QueryPath\DOMQuery;
+use QueryPath\Query;
 use QueryPath\QueryPath;
+use QueryPath\TextContent;
+use SimpleXMLElement;
+use SplObjectStorage;
+use UnexpectedValueException;
 use XSLTProcessor;
 
 /**
@@ -48,11 +58,9 @@ use XSLTProcessor;
  */
 class QPXSL implements \QueryPath\Extension
 {
-	protected $src;
-
-	public function __construct(\QueryPath\Query $qp)
+	public function __construct(
+		protected Query $qp)
 	{
-		$this->src = $qp;
 	}
 
 	/**
@@ -61,23 +69,38 @@ class QPXSL implements \QueryPath\Extension
 	 * This will attempt to read the provided stylesheet and then
 	 * execute it on the current source document.
 	 *
-	 * @param mixed $style
+	 * @param QueryPath|DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $style
 	 *  This takes a QueryPath object or <em>any</em> of the types that the
 	 *  {@link qp()} function can take
 	 *
-	 * @return QueryPath
-	 *  A QueryPath object wrapping the transformed document. Note that this is a
+	 * @return DOMQuery
+	 *  A DOMQuery object wrapping the transformed document. Note that this is a
 	 *  <i>different</em> document than the original. As such, it has no history.
 	 *  You cannot call {@link QueryPath::end()} to undo a transformation. (However,
 	 *  the original source document will remain unchanged.)
 	 */
-	public function xslt($style)
+	public function xslt(
+		QueryPath|DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $style
+	) : DOMQuery
 	{
 		if ( ! ($style instanceof QueryPath)) {
 			$style = QueryPath::with($style);
 		}
-		$sourceDoc = $this->src->top()->get(0)->ownerDocument;
-		$styleDoc = $style->get(0)->ownerDocument;
+		$top = $this->qp->top()->get(0);
+		assert(
+			($top instanceof DOMNode),
+			new UnexpectedValueException('Top node not found!')
+		);
+		assert(
+			($top->ownerDocument instanceof DOMDocument),
+			new UnexpectedValueException('Top node ownerDocument not found!')
+		);
+		$sourceDoc = $top->ownerDocument;
+		$styleDoc = $style->get(0)->ownerDocument ?? null;
+		assert(
+			($styleDoc instanceof DOMDocument),
+			new UnexpectedValueException('$style ownerDocument not found!')
+		);
 		$processor = new XSLTProcessor();
 		$processor->importStylesheet($styleDoc);
 

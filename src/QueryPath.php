@@ -91,11 +91,15 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use DOMDocument;
+use DOMNode;
 use const FILTER_VALIDATE_URL;
 use function is_array;
 use function is_resource;
 use function is_string;
 use Masterminds\HTML5;
+use SimpleXMLElement;
+use SplObjectStorage;
 
 class QueryPath
 {
@@ -183,19 +187,34 @@ class QueryPath
   </html>';
 
 	/**
-	 * @param null $document
-	 * @param null $selector
-	 *
-	 * @return mixed|\QueryPath\DOMQuery
+	 * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $document
+	 * @param array{
+	 *	QueryPath_class?:class-string<DOMQuery>
+	 * } $options
 	 */
-	public static function with($document = null, $selector = null, array $options = [])
+	public static function with(
+		DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
+		string $selector = null,
+		array $options = []
+	) : DOMQuery
 	{
+		/** @var class-string<DOMQuery> */
 		$qpClass = $options['QueryPath_class'] ?? '\QueryPath\DOMQuery';
 
 		return new $qpClass($document, $selector, $options);
 	}
 
-	public static function withXML($source = null, $selector = null, array $options = [])
+	/**
+	 * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $source
+	 * @param array{
+	 *	QueryPath_class?:class-string<DOMQuery>
+	 * } $options
+	 */
+	public static function withXML(
+		DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $source = null,
+		string $selector = null,
+		array $options = []
+	) : DOMQuery
 	{
 		$options += [
 			'use_parser' => 'xml',
@@ -204,7 +223,17 @@ class QueryPath
 		return self::with($source, $selector, $options);
 	}
 
-	public static function withHTML($source = null, $selector = null, array $options = [])
+	/**
+	 * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $source
+	 * @param array{
+	 *	QueryPath_class?:class-string<DOMQuery>
+	 * } $options
+	 */
+	public static function withHTML(
+		DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $source = null,
+		string $selector = null,
+		array $options = []
+	) : DOMQuery
 	{
 		// Need a way to force an HTML parse instead of an XML parse when the
 		// doctype is XHTML, since many XHTML documents are not valid XML
@@ -247,10 +276,11 @@ class QueryPath
 	 *   that the standard QueryPath options may be ignored for this function,
 	 *   since it uses a different parser.
 	 *
-	 * @return QueryPath
+	 * @return DOMQuery
 	 */
-	public static function withHTML5($source = null, $selector = null, $options = [])
+	public static function withHTML5($source = null, $selector = null, $options = []) : DOMQuery
 	{
+		/** @var class-string<DOMQuery> */
 		$qpClass = $options['QueryPath_class'] ?? '\QueryPath\DOMQuery';
 
 		if (is_string($source)) {

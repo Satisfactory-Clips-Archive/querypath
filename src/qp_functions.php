@@ -19,7 +19,12 @@ declare(strict_types=1);
  * @endcode
  */
 
+
+use Masterminds\HTML5;
+use QueryPath\DOM;
+use QueryPath\DOMQuery;
 use QueryPath\QueryPath;
+use QueryPath\TextContent;
 
 /** @addtogroup querypath_core Core API
  * Core classes and functions for QueryPath.
@@ -149,17 +154,23 @@ use QueryPath\QueryPath;
  *
  * @ingroup querypath_core
  *
- * @param mixed $document
+ * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $document
  *  A document in one of the forms listed above
- * @param string $string
+ * @param string|null $string
  *  A CSS 3 selector
- * @param array $options
+ * @param array{
+ *	QueryPath_class?:class-string<DOMQuery>
+ * } $options
  *  An associative array of options. Currently supported options are listed above.
  *
  * @return \QueryPath\DOMQuery
  *  Or possibly another QueryPath-like object if you overrode QueryPath_class
  */
-function qp($document = null, $string = null, array $options = [])
+function qp(
+	DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
+	string $string = null,
+	array $options = []
+) : \QueryPath\DOMQuery
 {
 	return QueryPath::with($document, $string, $options);
 }
@@ -189,13 +200,17 @@ function qp($document = null, $string = null, array $options = [])
  *
  * @see     qp()
  *
- * @param null $document
- * @param null $selector
- * @param array $options
- *
- * @return mixed|\QueryPath\DOMQuery
+ * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $document
+ * @param string|null $selector
+ * @param array{
+ *	QueryPath_class?:class-string<DOMQuery>
+ * } $options
  */
-function htmlqp($document = null, $selector = null, $options = [])
+function htmlqp(
+	DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
+	string $selector = null,
+	array $options = []
+) : \QueryPath\DOMQuery
 {
 	return QueryPath::withHTML($document, $selector, $options);
 }
@@ -212,17 +227,21 @@ function htmlqp($document = null, $selector = null, $options = [])
  * following options have meaning to QueryPath.
  * - QueryPath_class
  *
- * @param null $document
- * @param string $selector
+ * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $document
+ * @param string|null $selector
  *   A CSS3 selector
- * @param array $options
+ * @param array{
+ *	QueryPath_class?:class-string<DOMQuery>
+ * } $options
  *   An associative array of options, which is passed on into HTML5-PHP. Note
  *   that the standard QueryPath options may be ignored for this function,
  *   since it uses a different parser.
- *
- * @return QueryPath
  */
-function html5qp($document = null, $selector = null, array $options = [])
+function html5qp(
+	DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
+	string $selector = null,
+	array $options = []
+) : \QueryPath\DOMQuery
 {
 	return QueryPath::withHTML5($document, $selector, $options);
 }

@@ -7,6 +7,8 @@ namespace QueryPath\Helpers;
 use function count;
 use DOMDocument;
 use DOMDocumentFragment;
+use DOMElement;
+use DOMNode;
 use function in_array;
 use function is_array;
 use function is_null;
@@ -16,7 +18,10 @@ use QueryPath\DOMQuery;
 use QueryPath\Exception;
 use QueryPath\Query;
 use QueryPath\QueryPath;
+use QueryPath\TextContent;
+use SimpleXMLElement;
 use SplObjectStorage;
+use UnexpectedValueException;
 
 trait QueryMutators
 {
@@ -58,7 +63,7 @@ trait QueryMutators
 	 * (They are not the same -- there is no shared reference.) Instead, you
 	 * will need to retrieve the appended object and operate on that.
 	 *
-	 * @param mixed $data
+	 * @param string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|TextContent|null $data
 	 *  This can be either a string (the usual case), or a DOM Element
 	 *
 	 * @throws queryPath::Exception
@@ -71,20 +76,31 @@ trait QueryMutators
 	 * @see appendTo()
 	 * @see prepend()
 	 */
-	public function append($data) : Query
+	public function append(string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|TextContent|null $data) : Query
 	{
 		$data = $this->prepareInsert($data);
 		if (isset($data)) {
-			if (empty($this->document->documentElement) && 0 === $this->matches->count()) {
+			if (empty($this->document()->documentElement) && 0 === $this->getMatches()->count()) {
 				// Then we assume we are writing to the doc root
-				$this->document->appendChild($data);
+				$this->document()->appendChild($data);
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
-				$found->attach($this->document->documentElement);
+				$element = $this->document()->documentElement;
+				assert(
+					$element instanceof DOMNode,
+					new UnexpectedValueException(
+						'Freshly appended document element not found!'
+					)
+				);
+				$found->attach($element);
 				$this->setMatches($found);
 			} else {
 				// You can only append in item once. So in cases where we
 				// need to append multiple times, we have to clone the node.
-				foreach ($this->matches as $m) {
+				foreach ($this->getMatches() as $m) {
+					if ( ! ($m instanceof DOMNode)) {
+						continue;
+					}
 					// DOMDocumentFragments are even more troublesome, as they don't
 					// always clone correctly. So we have to clone their children.
 					if ($data instanceof DOMDocumentFragment) {
@@ -93,7 +109,12 @@ trait QueryMutators
 						}
 					} else {
 						// Otherwise a standard clone will do.
-						$m->appendChild($data->cloneNode(true));
+						$cloned = $data->cloneNode(true);
+						assert(
+							($cloned instanceof DOMNode),
+							new UnexpectedValueException('clone not a DOMNode!')
+						);
+						$m->appendChild($cloned);
 					}
 				}
 			}
@@ -107,7 +128,7 @@ trait QueryMutators
 	 *
 	 * The markup will be inserted into each match in the set.
 	 *
-	 * @param mixed $data
+	 * @param string|DOMQuery|DOMNode|SimpleXMLElement|TextContent|null $data
 	 *  This can be either a string (the usual case), or a DOM Element
 	 *
 	 * @throws queryPath::Exception
@@ -121,12 +142,19 @@ trait QueryMutators
 	 * @see after()
 	 * @see prependTo()
 	 */
-	public function prepend($data) : Query
+	public function prepend(string|DOMQuery|DOMNode|SimpleXMLElement|TextContent|null $data) : Query
 	{
 		$data = $this->prepareInsert($data);
 		if (isset($data)) {
-			foreach ($this->matches as $m) {
+			foreach ($this->getMatches() as $m) {
+				if ( ! ($m instanceof DOMNode)) {
+					continue;
+				}
 				$ins = $data->cloneNode(true);
+				assert(
+					($ins instanceof DOMNode),
+					new UnexpectedValueException('clone not a DOMNode!')
+				);
 				if ($m->hasChildNodes()) {
 					$m->insertBefore($ins, $m->childNodes->item(0));
 				} else {
@@ -162,7 +190,7 @@ trait QueryMutators
 	 */
 	public function prependTo(Query $dest)
 	{
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$dest->prepend($m);
 		}
 
@@ -175,7 +203,7 @@ trait QueryMutators
 	 * This will take the give data (XML or HTML) and put it before each of the items that
 	 * the DOMQuery object currently contains. Contrast this with after().
 	 *
-	 * @param mixed $data
+	 * @param string|DOMQuery|DOMNode|SimpleXMLElement|null $data
 	 *  The data to be inserted. This can be XML in a string, a DomFragment, a DOMElement,
 	 *  or the other usual suspects. (See {@link qp()}).
 	 *
@@ -192,11 +220,24 @@ trait QueryMutators
 	 * @see append()
 	 * @see prepend()
 	 */
-	public function before($data) : Query
+	public function before(string|DOMQuery|DOMNode|SimpleXMLElement|null $data) : Query
 	{
 		$data = $this->prepareInsert($data);
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
+			assert(
+				$m->parentNode instanceof DOMNode,
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 			$ins = $data->cloneNode(true);
+			assert(
+				($ins instanceof DOMNode),
+				new UnexpectedValueException('clone not a DOMNode!')
+			);
 			$m->parentNode->insertBefore($ins, $m);
 		}
 
@@ -224,7 +265,7 @@ trait QueryMutators
 	 */
 	public function insertBefore(Query $dest) : Query
 	{
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$dest->before($m);
 		}
 
@@ -250,7 +291,7 @@ trait QueryMutators
 	 */
 	public function insertAfter(Query $dest) : Query
 	{
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$dest->after($m);
 		}
 
@@ -264,7 +305,7 @@ trait QueryMutators
 	 * Contrast this with {@link append()}, which inserts the data as children
 	 * of matched elements.
 	 *
-	 * @param mixed $data
+	 * @param string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|null $data
 	 *  The data to be appended
 	 *
 	 * @throws queryPath::Exception
@@ -277,14 +318,24 @@ trait QueryMutators
 	 * @see before()
 	 * @see append()
 	 */
-	public function after($data) : Query
+	public function after(string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|null $data) : Query
 	{
 		if (empty($data)) {
 			return $this;
 		}
 		$data = $this->prepareInsert($data);
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			assert(
+				$m->parentNode instanceof DOMNode,
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 			$ins = $data->cloneNode(true);
+			assert(
+				($ins instanceof DOMNode),
+				new UnexpectedValueException('clone not a DOMNode!')
+			);
 			if (isset($m->nextSibling)) {
 				$m->parentNode->insertBefore($ins, $m->nextSibling);
 			} else {
@@ -298,7 +349,7 @@ trait QueryMutators
 	/**
 	 * Replace the existing element(s) in the list with a new one.
 	 *
-	 * @param mixed $new
+	 * @param string|DOMQuery|DOMNode|SimpleXMLElement|null $new
 	 *  A DOMElement or XML in a string. This will replace all elements
 	 *  currently wrapped in the DOMQuery object.
 	 *
@@ -317,13 +368,28 @@ trait QueryMutators
 	 * @see remove()
 	 * @see replaceAll()
 	 */
-	public function replaceWith($new) : Query
+	public function replaceWith(string|DOMQuery|DOMNode|SimpleXMLElement|null $new) : Query
 	{
 		$data = $this->prepareInsert($new);
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
+			assert(
+				$m->parentNode instanceof DOMNode,
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 			$parent = $m->parentNode;
-			$parent->insertBefore($data->cloneNode(true), $m);
+			$clone = $data->cloneNode(true);
+			assert(
+				($clone instanceof DOMNode),
+				new UnexpectedValueException('clone not a DOMNode!')
+			);
+			$parent->insertBefore($clone, $m);
 			$found->attach($parent->removeChild($m));
 		}
 
@@ -377,16 +443,32 @@ trait QueryMutators
 		// capture the case where two matches are
 		// under the same parent. Othwerwise we might
 		// remove a match before we can move it.
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$parents = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
+			assert(
+				$m->ownerDocument instanceof DOMDocument,
+				new UnexpectedValueException('ownerDocument missing!')
+			);
 			// Cannot unwrap the root element.
 			if ($m->isSameNode($m->ownerDocument->documentElement)) {
 				throw new \QueryPath\Exception('Cannot unwrap the root element.');
 			}
+			assert(
+				$m->parentNode instanceof DOMNode,
+				new UnexpectedValueException('parentNode missing!')
+			);
 
 			// Move children to peer of parent.
 			$parent = $m->parentNode;
 			$old = $parent->removeChild($m);
+			assert(
+				$parent->parentNode instanceof DOMNode,
+				new UnexpectedValueException('parentNode missing!')
+			);
 			$parent->parentNode->insertBefore($old, $parent);
 			$parents->attach($parent);
 		}
@@ -394,6 +476,13 @@ trait QueryMutators
 		// Now that all the children are moved, we
 		// remove all of the parents.
 		foreach ($parents as $ele) {
+			if ( ! ($ele instanceof DOMNode)) {
+				continue;
+			}
+			assert(
+				$ele->parentNode instanceof DOMNode,
+				new UnexpectedValueException('parentNode missing!')
+			);
 			$ele->parentNode->removeChild($ele);
 		}
 
@@ -407,7 +496,7 @@ trait QueryMutators
 	 * fragment, a SimpleXMLElement, or another DOMNode object (in which case
 	 * the first item in the list will be used.)
 	 *
-	 * @param mixed $markup
+	 * @param string|DOMQuery|DOMNode|SimpleXMLElement|null $markup
 	 *  Markup that will wrap each element in the current list
 	 *
 	 * @throws Exception
@@ -419,7 +508,7 @@ trait QueryMutators
 	 * @see wrapAll()
 	 * @see wrapInner()
 	 */
-	public function wrap($markup) : Query
+	public function wrap(string|DOMQuery|DOMNode|SimpleXMLElement|null $markup) : Query
 	{
 		$data = $this->prepareInsert($markup);
 
@@ -428,12 +517,19 @@ trait QueryMutators
 			return $this;
 		}
 
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
 			if ($data instanceof DOMDocumentFragment) {
 				$copy = $data->firstChild->cloneNode(true);
 			} else {
 				$copy = $data->cloneNode(true);
 			}
+			assert(
+				($copy instanceof DOMNode),
+				new UnexpectedValueException('clone not a DOMNode!')
+			);
 
 			// XXX: Should be able to avoid doing this over and over.
 			if ($copy->hasChildNodes()) {
@@ -443,6 +539,13 @@ trait QueryMutators
 			} else {
 				$bottom = $copy;
 			}
+
+			assert(
+				$m->parentNode instanceof DOMNode,
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 
 			$parent = $m->parentNode;
 			$parent->insertBefore($copy, $m);
@@ -466,7 +569,7 @@ trait QueryMutators
 	 * fragment, a SimpleXMLElement, or another DOMNode object (in which case
 	 * the first item in the list will be used.)
 	 *
-	 * @param string $markup
+	 * @param string|\QueryPath\DOMQuery|DOMNode|SimpleXMLElement $markup
 	 *  Markup that will wrap all elements in the current list
 	 *
 	 * @throws Exception
@@ -478,9 +581,9 @@ trait QueryMutators
 	 * @see wrap()
 	 * @see wrapInner()
 	 */
-	public function wrapAll($markup)
+	public function wrapAll(string|\QueryPath\DOMQuery|DOMNode|SimpleXMLElement $markup)
 	{
-		if (0 === $this->matches->count()) {
+		if (0 === $this->getMatches()->count()) {
 			return;
 		}
 
@@ -496,6 +599,11 @@ trait QueryMutators
 			$data = $data->cloneNode(true);
 		}
 
+		assert(
+			($data instanceof DOMNode),
+			new UnexpectedValueException('clone not a DOMNode!')
+		);
+
 		if ($data->hasChildNodes()) {
 			$deepest = $this->deepestNode($data);
 			// FIXME: Does this need fixing?
@@ -505,9 +613,27 @@ trait QueryMutators
 		}
 
 		$first = $this->getFirstMatch();
+		assert(
+			(
+				($first instanceof DOMNode)
+				&& ($first->parentNode instanceof DOMNode)
+			),
+			new UnexpectedValueException(
+				'parentNode not found!'
+			)
+		);
 		$parent = $first->parentNode;
 		$parent->insertBefore($data, $first);
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
+			assert(
+				$m->parentNode instanceof DOMNode,
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 			$bottom->appendChild($m->parentNode->removeChild($m));
 		}
 
@@ -521,7 +647,7 @@ trait QueryMutators
 	 * fragment, a SimpleXMLElement, or another DOMNode object (in which case
 	 * the first item in the list will be used.)
 	 *
-	 * @param string $markup
+	 * @param string|\QueryPath\DOMQuery $markup
 	 *  Markup that will wrap children of each element in the current list
 	 *
 	 * @throws \QueryPath\Exception
@@ -533,7 +659,7 @@ trait QueryMutators
 	 * @see wrap()
 	 * @see wrapAll()
 	 */
-	public function wrapInner($markup)
+	public function wrapInner(string|\QueryPath\DOMQuery $markup)
 	{
 		$data = $this->prepareInsert($markup);
 
@@ -542,12 +668,19 @@ trait QueryMutators
 			return $this;
 		}
 
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
 			if ($data instanceof DOMDocumentFragment) {
 				$wrapper = $data->firstChild->cloneNode(true);
 			} else {
 				$wrapper = $data->cloneNode(true);
 			}
+			assert(
+				($wrapper instanceof DOMNode),
+				new UnexpectedValueException('clone not a DOMNode!')
+			);
 
 			if ($wrapper->hasChildNodes()) {
 				$deepest = $this->deepestNode($wrapper);
@@ -590,13 +723,15 @@ trait QueryMutators
 	public function deepest() : Query
 	{
 		$deepest = 0;
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$winner = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$local_deepest = 0;
 			$local_ele = $this->deepestNode($m, 0, null, $local_deepest);
 
 			// Replace with the new deepest.
 			if ($local_deepest > $deepest) {
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$winner = new SplObjectStorage();
 				foreach ($local_ele as $lele) {
 					$winner->attach($lele);
@@ -634,7 +769,13 @@ trait QueryMutators
 	 */
 	public function addClass($class)
 	{
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			assert(
+				$m instanceof DOMElement,
+				new UnexpectedValueException(
+					'match not an Element!'
+				)
+			);
 			if ($m->hasAttribute('class')) {
 				$val = $m->getAttribute('class');
 				$m->setAttribute('class', $val . ' ' . $class);
@@ -671,7 +812,7 @@ trait QueryMutators
 	 *
 	 * To remove the entire 'class' attribute, you should use {@see removeAttr()}.
 	 *
-	 * @param string $class
+	 * @param string|false $class
 	 *  The class name to remove
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -681,15 +822,24 @@ trait QueryMutators
 	 * @see addClass()
 	 * @see hasClass()
 	 */
-	public function removeClass($class = false) : Query
+	public function removeClass(string|bool $class = false) : Query
 	{
 		if (empty($class)) {
-			foreach ($this->matches as $m) {
+			foreach ($this->getMatches() as $m) {
+				assert(
+					$m instanceof DOMElement,
+					new UnexpectedValueException(
+						'match not an Element!'
+					)
+				);
 				$m->removeAttribute('class');
 			}
 		} else {
 			$to_remove = array_filter(explode(' ', $class));
-			foreach ($this->matches as $m) {
+			foreach ($this->getMatches() as $m) {
+				if ( ! ($m instanceof DOMElement)) {
+					continue;
+				}
 				if ($m->hasAttribute('class')) {
 					$vals = array_filter(explode(' ', $m->getAttribute('class')));
 					$buf = [];
@@ -741,9 +891,19 @@ trait QueryMutators
 			$this->find($selector);
 		}
 
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$this->last = $this->matches;
-		foreach ($this->matches as $item) {
+		foreach ($this->getMatches() as $item) {
+			if ( ! ($item instanceof DOMNode)) {
+				continue;
+			}
+			assert(
+				$item->parentNode instanceof DOMNode,
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 			// The item returned is (according to docs) different from
 			// the one passed in, so we have to re-store it.
 			$found->attach($item->parentNode->removeChild($item));
@@ -776,7 +936,7 @@ trait QueryMutators
 	 */
 	public function attach(DOMQuery $dest) : Query
 	{
-		foreach ($this->last as $m) {
+		foreach ($this->last ?? [] as $m) {
 			$dest->append($m);
 		}
 
@@ -807,7 +967,7 @@ trait QueryMutators
 	 */
 	public function appendTo(DOMQuery $dest) : Query
 	{
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$dest->append($m);
 		}
 
@@ -847,8 +1007,18 @@ trait QueryMutators
 			$matches = $this->matches;
 		}
 
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($matches as $item) {
+		foreach ($matches ?? [] as $item) {
+			if ( ! ($item instanceof DOMNode)) {
+				continue;
+			}
+			assert(
+				$item->parentNode instanceof DOMNode,
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 			// The item returned is (according to docs) different from
 			// the one passed in, so we have to re-store it.
 			$found->attach($item->parentNode->removeChild($item));
@@ -889,14 +1059,29 @@ trait QueryMutators
 	 */
 	public function replaceAll($selector, DOMDocument $document) : Query
 	{
-		$replacement = $this->matches->count() > 0 ? $this->getFirstMatch() : $this->document->createTextNode('');
+		$replacement = $this->getMatches()->count() > 0 ? $this->getFirstMatch() : $this->document()->createTextNode('');
+		assert(
+			$replacement instanceof DOMNode,
+			new UnexpectedValueException(
+				'replacement not a DOMNode!'
+			)
+		);
 
 		$c = new QueryPathEventHandler($document);
 		$c->find($selector);
 		$temp = $c->getMatches();
 		foreach ($temp as $item) {
+			if ( ! ($item instanceof DOMNode)) {
+				continue;
+			}
 			$node = $replacement->cloneNode();
 			$node = $document->importNode($node);
+			assert(
+				$item->parentNode instanceof DOMNode,
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 			$item->parentNode->replaceChild($node, $item);
 		}
 
@@ -926,8 +1111,8 @@ trait QueryMutators
 		// This is destructive, so we need to set $last:
 		$this->last = $this->matches;
 
-		foreach (QueryPath::with($this->document, $selector, $this->options)->get() as $item) {
-			$this->matches->attach($item);
+		foreach (QueryPath::with($this->document(), $selector, $this->options)->get() as $item) {
+			$this->getMatches()->attach($item);
 		}
 
 		return $this;
@@ -948,7 +1133,10 @@ trait QueryMutators
 	 */
 	public function removeChildren() : Query
 	{
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
 			while ($kid = $m->firstChild) {
 				$m->removeChild($kid);
 			}
@@ -970,12 +1158,14 @@ trait QueryMutators
 	 * When an attribute value is retrieved, only the attribute value of the FIRST
 	 * match is returned.
 	 *
-	 * @param mixed $name
+	 * @template T as array|string|null
+	 *
+	 * @param T $name
 	 *   The name of the attribute or an associative array of name/value pairs
-	 * @param string $value
+	 * @param string|null $value
 	 *   A value (used only when setting an individual property)
 	 *
-	 * @return mixed
+	 * @return (T is null ? (array<string, string>|null) : (\QueryPath\DOMQuery|string|int|null))
 	 *   If this was a setter request, return the DOMQuery object. If this was
 	 *   an access request (getter), return the string value.
 	 *
@@ -984,14 +1174,23 @@ trait QueryMutators
 	 * @see hasAttr()
 	 * @see hasClass()
 	 */
-	public function attr($name = null, $value = null)
+	public function attr(array|string $name = null, string $value = null) : array|\QueryPath\DOMQuery|string|int|null
 	{
 		// Default case: Return all attributes as an assoc array.
 		if (is_null($name)) {
-			if (0 === $this->matches->count()) {
-				return;
+			if (0 === $this->getMatches()->count()) {
+				return null;
 			}
 			$ele = $this->getFirstMatch();
+
+			assert(
+				$ele instanceof DOMElement,
+				new UnexpectedValueException(
+					'ele not a DOMElement!'
+				)
+			);
+
+			/** @var array<string, string> */
 			$buffer = [];
 
 			// This does not appear to be part of the DOM
@@ -1005,8 +1204,14 @@ trait QueryMutators
 
 		// multi-setter
 		if (is_array($name)) {
+			/** @var array<string, string> */
+			$name = $name;
+
 			foreach ($name as $k => $v) {
-				foreach ($this->matches as $m) {
+				foreach ($this->getMatches() as $m) {
+					if ( ! ($m instanceof DOMElement)) {
+						continue;
+					}
 					$m->setAttribute($k, $v);
 				}
 			}
@@ -1015,25 +1220,44 @@ trait QueryMutators
 		}
 		// setter
 		if (isset($value)) {
-			foreach ($this->matches as $m) {
-				$m->setAttribute($name, $value);
+			foreach ($this->getMatches() as $m) {
+				if ( ! ($m instanceof DOMElement)) {
+					continue;
+				}
+				$m->setAttribute((string) $name, $value);
 			}
 
 			return $this;
 		}
 
 		//getter
-		if (0 === $this->matches->count()) {
-			return;
+		if (0 === $this->getMatches()->count()) {
+			return null;
 		}
+
+		$firstMatch = $this->getFirstMatch();
+
+		assert(
+			! is_null($firstMatch),
+			new UnexpectedValueException(
+				'firstMatch was null!'
+			)
+		);
 
 		// Special node type handler:
 		if ('nodeType' === $name) {
-			return $this->getFirstMatch()->nodeType;
+			return $firstMatch->nodeType;
 		}
 
+		assert(
+			$firstMatch instanceof DOMElement,
+			new UnexpectedValueException(
+				'firstMatch not a DOMElement!'
+			)
+		);
+
 		// Always return first match's attr.
-		return $this->getFirstMatch()->getAttribute($name);
+		return $firstMatch->getAttribute((string) $name);
 	}
 
 	/**
@@ -1069,16 +1293,18 @@ trait QueryMutators
 	 * (In previous versions of QueryPath, a call to css() overwrite the existing style
 	 * values).
 	 *
-	 * @param mixed $name
+	 * @template T as string|array|null
+	 *
+	 * @param T $name
 	 *  If this is a string, it will be used as a CSS name. If it is an array,
 	 *  this will assume it is an array of name/value pairs of CSS rules. It will
 	 *  apply all rules to all elements in the set.
 	 * @param string $value
 	 *  The value to set. This is only set if $name is a string.
 	 *
-	 * @return \QueryPath\DOMQuery
+	 * @return (T is null ? (string|int|null) : DOMQuery)
 	 */
-	public function css($name = null, $value = '')
+	public function css(string|array|null $name = null, $value = '') : DOMQuery|string|int|null
 	{
 		if (empty($name)) {
 			return $this->attr('style');
@@ -1086,7 +1312,10 @@ trait QueryMutators
 
 		// Get any existing CSS.
 		$css = [];
-		foreach ($this->matches as $match) {
+		foreach ($this->getMatches() as $match) {
+			if ( ! ($match instanceof DOMElement)) {
+				continue;
+			}
 			$style = $match->getAttribute('style');
 			if ( ! empty($style)) {
 				// XXX: Is this sufficient?

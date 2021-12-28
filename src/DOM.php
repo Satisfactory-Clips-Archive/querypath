@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use BadMethodCallException;
 use Countable;
 use DOMDocument;
+use DOMDocumentFragment;
 use DOMNode;
+use Exception;
 use const FILTER_FLAG_ENCODE_LOW;
 use const FILTER_UNSAFE_RAW;
 use function function_exists;
@@ -21,6 +24,7 @@ use SimpleXMLElement;
 use SplObjectStorage;
 use function strlen;
 use Traversable;
+use UnexpectedValueException;
 use const XML_ELEMENT_NODE;
 
 /**
@@ -37,7 +41,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 *
 	 * @since 2.0
 	 */
-	public const DEFAULT_PARSER_FLAGS = null;
+	public const DEFAULT_PARSER_FLAGS = 0;
 
 	public const JS_CSS_ESCAPE_CDATA = '\\1';
 	public const JS_CSS_ESCAPE_CDATA_CCOMMENT = '/* \\1 */';
@@ -45,17 +49,31 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	public const JS_CSS_ESCAPE_NONE = '';
 
 	/**
-	 * The array of matches.
+	 * The SplObjectStorage of matches.
+	 *
+	 * @var SplObjectStorage<DOMNode|TextContent, mixed>|null
 	 */
-	protected $matches = [];
+	protected ?SplObjectStorage $matches = null;
 
-	protected $errTypes = 771; //E_ERROR; | E_USER_ERROR;
+	protected int $errTypes = 771; //E_ERROR; | E_USER_ERROR;
 
-	protected $document;
+	protected DOMDocument|\Masterminds\HTML5|null $document;
+
 	/**
 	 * The base DOMDocument.
+	 *
+	 * @var array{
+	 *	parser_flags: int|null,
+	 *	omit_xml_declaration: bool,
+	 *	replace_entities: bool,
+	 *	exception_level: int,
+	 *	ignore_parser_warnings: bool,
+	 *	escape_xhtml_js_css_sections: string,
+	 *	convert_from_encoding?: string,
+	 *	convert_to_encoding?: string
+	 * }
 	 */
-	protected $options = [
+	protected array $options = [
 		'parser_flags' => null,
 		'omit_xml_declaration' => false,
 		'replace_entities' => false,
@@ -70,18 +88,27 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 * Typically, a new DOMQuery is created by QueryPath::with(), QueryPath::withHTML(),
 	 * qp(), or htmlqp().
 	 *
-	 * @param mixed $document
+	 * @param DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|\Masterminds\HTML5|SimpleXMLElement|list<DOMNode>|string|null $document
 	 *   A document-like object
 	 * @param string $string
 	 *   A CSS 3 Selector
-	 * @param array $options
+	 * @param array{
+	 *	parser_flags?: int|null,
+	 *	omit_xml_declaration?: bool,
+	 *	replace_entities?: bool,
+	 *	exception_level?: int,
+	 *	ignore_parser_warnings?: bool,
+	 *	escape_xhtml_js_css_sections?: string,
+	 *	convert_from_encoding?: string,
+	 *	convert_to_encoding?: string
+	 * } $options
 	 *   An associative array of options
 	 *
 	 * @see qp()
 	 *
 	 * @throws Exception
 	 */
-	public function __construct($document = null, $string = null, $options = [])
+	public function __construct(DOM|SplObjectStorage|DOMDocument|DOMNode|\Masterminds\HTML5|SimpleXMLElement|array|string|null $document = null, $string = null, array $options = [])
 	{
 		$string = trim($string ?? '');
 		$this->options = $options + Options::get() + $this->options;
@@ -116,8 +143,8 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 			} elseif ($document instanceof self) {
 				//$this->matches = $document->get(NULL, TRUE);
 				$this->setMatches($document->get(null, true));
-				if ($this->matches->count() > 0) {
-					$this->document = $this->getFirstMatch()->ownerDocument;
+				if ($this->getMatches()->count() > 0) {
+					$this->document = $this->getFirstMatch()->ownerDocument ?? null;
 				}
 			} elseif ($document instanceof DOMDocument) {
 				$this->document = $document;
@@ -129,41 +156,58 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 				$this->setMatches($document);
 			} elseif ($document instanceof \Masterminds\HTML5) {
 				$this->document = $document;
+				assert(
+					$document->documentElement instanceof DOMNode,
+					new UnexpectedValueException(
+						'$document->documentElement was not a DOMNode'
+					)
+				);
 				$this->setMatches($document->documentElement);
-			} elseif ($document instanceof SimpleXMLElement) {
+			} else { // SimpleXMLElement
 				$import = dom_import_simplexml($document);
 				$this->document = $import->ownerDocument;
 				//$this->matches = array($import);
 				$this->setMatches($import);
-			} else {
-				throw new \QueryPath\Exception('Unsupported class type: ' . get_class($document));
 			}
 		} elseif (is_array($document)) {
 			//trigger_error('Detected deprecated array support', E_USER_NOTICE);
-			if ( ! empty($document) && $document[0] instanceof DOMNode) {
+			if ((($document[0] ?? null) instanceof DOMNode)) {
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
 				foreach ($document as $item) {
 					$found->attach($item);
 				}
 				//$this->matches = $found;
 				$this->setMatches($found);
-				$this->document = $this->getFirstMatch()->ownerDocument;
+				$this->document = $this->getFirstMatch()->ownerDocument ?? null;
 			}
 		} elseif ($this->isXMLish($document)) {
 			// $document is a string with XML
 			$this->document = $this->parseXMLString($document);
-			$this->setMatches($this->document->documentElement);
+			assert(
+				$this->document()->documentElement instanceof DOMNode,
+				new UnexpectedValueException(
+					'$document->documentElement was not a DOMNode'
+				)
+			);
+			$this->setMatches($this->document()->documentElement);
 		} else {
 			// $document is a filename
 			$context = empty($options['context']) ? null : $options['context'];
 			$this->document = $this->parseXMLFile($document, $parser_flags, $context);
-			$this->setMatches($this->document->documentElement);
+			assert(
+				$this->document()->documentElement instanceof DOMNode,
+				new UnexpectedValueException(
+					'$document->documentElement was not a DOMNode'
+				)
+			);
+			$this->setMatches($this->document()->documentElement);
 		}
 
 		// Globally set the output option.
-		$this->document->formatOutput = true;
+		$this->document()->formatOutput = true;
 		if (isset($this->options['format_output']) && false === $this->options['format_output']) {
-			$this->document->formatOutput = false;
+			$this->document()->formatOutput = false;
 		}
 
 		// Do a find if the second param was set.
@@ -171,10 +215,37 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 			// We don't issue a find because that creates a new DOMQuery.
 			//$this->find($string);
 
-			$query = new DOMTraverser($this->matches);
+			$query = new DOMTraverser($this->getMatches());
 			$query->find($string);
 			$this->setMatches($query->matches());
 		}
+	}
+
+	/**
+	 * @template T as int|null
+	 *
+	 * @param T $index
+	 *
+	 * @return (T is int ? DOMNode|TextContent|null : (SplObjectStorage<DOMNode|TextContent, mixed>|list<DOMNode>))
+	 */
+	abstract public function get(
+		?int $index = null,
+		bool $asObject = false
+	) : SplObjectStorage|array|DOMNode|TextContent|null;
+
+	/**
+	 * Get the DOMDocument that we currently work with.
+	 *
+	 * This returns the current DOMDocument. Any changes made to this document will be
+	 * accessible to DOMQuery, as both will share access to the same object.
+	 */
+	public function document() : DOMDocument
+	{
+		assert(
+			$this->document instanceof DOMDocument,
+			new UnexpectedValueException('document somehow null!')
+		);
+		return $this->document;
 	}
 
 	/**
@@ -184,9 +255,9 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 *
 	 * @since 2.0
 	 *
-	 * @param $matches
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed>|list<DOMNode>|DOMNode|TextContent|null $matches
 	 */
-	public function setMatches($matches) : void
+	public function setMatches(SplObjectStorage|array|DOMNode|TextContent|null $matches) : void
 	{
 		// This causes a lot of overhead....
 		//if ($unique) $matches = self::unique($matches);
@@ -198,6 +269,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 		} // This is likely legacy code that needs conversion.
 		elseif (is_array($matches)) {
 			trigger_error('Legacy array detected.');
+			/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 			$tmp = new SplObjectStorage();
 			foreach ($matches as $m) {
 				$tmp->attach($m);
@@ -207,15 +279,30 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 		// For non-arrays, try to create a new match set and
 		// add this object.
 		else {
+			/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 			$found = new SplObjectStorage();
-			if (isset($matches)) {
+			if ($matches instanceof DOMNode || $matches instanceof TextContent) {
 				$found->attach($matches);
 			}
 			$this->matches = $found;
 		}
 
 		// EXPERIMENTAL: Support for qp()->length.
-		$this->length = $this->matches->count();
+		$this->length = $this->getMatches()->count();
+	}
+
+	/**
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
+	 */
+	public function getMatches() : SplObjectStorage
+	{
+		if (null === $this->matches) {
+			throw new BadMethodCallException(
+				'Matches not set prior to call!'
+			);
+		}
+
+		return $this->matches;
 	}
 
 	/**
@@ -224,28 +311,39 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 *
 	 * @see deepest();
 	 *
-	 * @param DOMNode $ele
+	 * @template T as DOMNode|TextContent
+	 *
+	 * @param T $ele
 	 *  The element
 	 * @param int $depth
 	 *  The depth guage
-	 * @param mixed $current
+	 * @param list<DOMNode>|null $current
 	 *  The current set
 	 * @param DOMNode $deepest
 	 *  A reference to the current deepest node
 	 *
-	 * @return array
+	 * @return (T is TextContent ? array{0:TextContent} : list<DOMNode>)
 	 *  Returns an array of DOM nodes
 	 */
-	protected function deepestNode(DOMNode $ele, $depth = 0, $current = null, &$deepest = null)
+	protected function deepestNode(DOMNode|TextContent $ele, $depth = 0, $current = null, &$deepest = null) : array
 	{
+		if ($ele instanceof TextContent) {
+			return [$ele];
+		}
+
+		/** @var DOMNode */
+		$ele = $ele;
+
 		// FIXME: Should this use SplObjectStorage?
 		if ( ! isset($current)) {
+			/** @var list<DOMNode> */
 			$current = [$ele];
 		}
 		if ( ! isset($deepest)) {
 			$deepest = $depth;
 		}
 		if ($ele->hasChildNodes()) {
+			/** @var DOMNode */
 			foreach ($ele->childNodes as $child) {
 				if (XML_ELEMENT_NODE === $child->nodeType) {
 					$current = $this->deepestNode($child, $depth + 1, $current, $deepest);
@@ -273,7 +371,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 * - If the item is a SimpleXMLElement, it is converted into a DOM node and then
 	 *   imported.
 	 *
-	 * @param mixed $item
+	 * @param string|DOMQuery|DOMNode|SimpleXMLElement|TextContent|null $item
 	 *  Item to prepare for insert
 	 *
 	 * @throws Exception
@@ -283,10 +381,12 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 * @return mixed
 	 *  Returns the prepared item
 	 */
-	protected function prepareInsert($item)
+	protected function prepareInsert(string|DOMQuery|DOMNode|SimpleXMLElement|TextContent|null $item) : DOMDocumentFragment|DOMNode|null
 	{
 		if (empty($item)) {
-			return;
+			return null;
+		} elseif ($item instanceof TextContent) {
+			$item = $item->textContent;
 		}
 
 		if (is_string($item)) {
@@ -295,7 +395,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 				$item = Entities::replaceAllEntities($item);
 			}
 
-			$frag = $this->document->createDocumentFragment();
+			$frag = $this->document()->createDocumentFragment();
 			try {
 				set_error_handler([ParseException::class, 'initializeFromError'], $this->errTypes);
 				$frag->appendXML($item);
@@ -311,12 +411,15 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 
 		if ($item instanceof self) {
 			if (0 === $item->count()) {
-				return;
+				return null;
 			}
 
-			$frag = $this->document->createDocumentFragment();
-			foreach ($item->matches as $m) {
-				$frag->appendXML($item->document->saveXML($m));
+			$frag = $this->document()->createDocumentFragment();
+			foreach ($item->getMatches() as $m) {
+				if ( ! ($m instanceof DOMNode)) {
+					continue;
+				}
+				$frag->appendXML($item->document()->saveXML($m));
 			}
 
 			return $frag;
@@ -325,30 +428,25 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 		if ($item instanceof DOMNode) {
 			if ($item->ownerDocument !== $this->document) {
 				// Deep clone this and attach it to this document
-				$item = $this->document->importNode($item, true);
+				$item = $this->document()->importNode($item, true);
 			}
 
 			return $item;
 		}
 
-		if ($item instanceof SimpleXMLElement) {
 			$element = dom_import_simplexml($item);
 
-			return $this->document->importNode($element, true);
-		}
-		// What should we do here?
-		//var_dump($item);
-		throw new \QueryPath\Exception('Cannot prepare item of unsupported type: ' . gettype($item));
+			return $this->document()->importNode($element, true);
 	}
 
 	/**
 	 * Convenience function for getNthMatch(0).
 	 */
-	protected function getFirstMatch()
+	protected function getFirstMatch() : DOMNode|TextContent|null
 	{
-		$this->matches->rewind();
+		$this->getMatches()->rewind();
 
-		return $this->matches->current();
+		return $this->getMatches()->current();
 	}
 
 	/**
@@ -381,26 +479,24 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 *
 	 * The internal data structure used in DOMQuery does not have
 	 * strong random access support, so we suppliment it with this method.
-	 *
-	 * @param $index
-	 *
-	 * @return object|void
 	 */
-	protected function getNthMatch(int $index)
+	protected function getNthMatch(int $index) : DOMNode|TextContent|null
 	{
-		if ($index < 0 || $index > $this->matches->count()) {
-			return;
+		if ($index < 0 || $index > $this->getMatches()->count()) {
+			return null;
 		}
 
 		$i = 0;
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			if ($i++ === $index) {
 				return $m;
 			}
 		}
+
+		return null;
 	}
 
-	private function parseXMLString($string, $flags = null)
+	private function parseXMLString(string $string, int $flags = null) : DOMDocument
 	{
 		$document = new DOMDocument('1.0');
 		$lead = strtolower(substr($string, 0, 5)); // <?xml
@@ -467,7 +563,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 * @param int $flags
 	 *  The OR-combined flags accepted by the DOM parser. See the PHP documentation
 	 *  for DOM or for libxml.
-	 * @param resource $context
+	 * @param resource|null $context
 	 *  The stream context for the file IO. If this is set, then an alternate
 	 *  parsing path is followed: The file is loaded by PHP's stream-aware IO
 	 *  facilities, read entirely into memory, and then handed off to
@@ -476,7 +572,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 * @throws \QueryPath\ParseException
 	 *  Thrown when a file cannot be loaded or parsed
 	 */
-	private function parseXMLFile($filename, $flags = null, $context = null)
+	private function parseXMLFile(string $filename, int $flags = 0, $context = null) : DOMDocument
 	{
 		// If a context is specified, we basically have to do the reading in
 		// two steps:
@@ -530,7 +626,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 				$document->loadHTMLFile($filename);
 			} // Default to XML.
 			else {
-				$document->load($filename, $flags ?? 0);
+				$document->load($filename, $flags);
 			}
 		} // Emulate 'finally' behavior.
 		catch (Exception $e) {

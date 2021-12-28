@@ -15,11 +15,13 @@ declare(strict_types=1);
 namespace QueryPath\CSS\DOMTraverser;
 
 use function count;
+use DOMNode;
 use function is_int;
 use const PHP_URL_SCHEME;
 use QueryPath\CSS\EventHandler;
 use QueryPath\CSS\NotImplementedException;
 use QueryPath\CSS\ParseException;
+use QueryPath\TextContent;
 use SPLObjectStorage;
 use const XML_ELEMENT_NODE;
 use const XML_TEXT_NODE;
@@ -34,11 +36,11 @@ class PseudoClass
 	 *
 	 * @param string $pseudoclass
 	 *   The string name of the pseudoclass
-	 * @param resource $node
+	 * @param DOMNode $node
 	 *   The DOMNode to be tested
-	 * @param resource $scope
+	 * @param DOMNode|null $scope
 	 *   The DOMElement that is the active root for this node
-	 * @param mixed $value
+	 * @param string|null $value
 	 *   The optional value string provided with this class. This is
 	 *   used, for example, in an+b psuedoclasses.
 	 *
@@ -49,7 +51,7 @@ class PseudoClass
 	 * @retval boolean
 	 *   TRUE if the node matches, FALSE otherwise.
 	 */
-	public function elementMatches($pseudoclass, $node, $scope, $value = null)
+	public function elementMatches(string $pseudoclass, DOMNode $node, ?DOMNode $scope, string $value = null) : bool
 	{
 		$name = strtolower($pseudoclass);
 		// Need to handle known pseudoclasses.
@@ -101,14 +103,14 @@ class PseudoClass
 			case 'local-link':
 				return $this->isLocalLink($node);
 			case 'root':
-				return $node->isSameNode($node->ownerDocument->documentElement);
+				return isset($node->ownerDocument) && $node->isSameNode($node->ownerDocument->documentElement);
 
 			// CSS 4 declares the :scope pseudo-class, which describes what was
 			// the :x-root QueryPath extension.
 			case 'x-root':
 			case 'x-reset':
 			case 'scope':
-				return $node->isSameNode($scope);
+				return isset($scope) && $node->isSameNode($scope);
 			// NON-STANDARD extensions for simple support of even and odd. These
 			// are supported by jQuery, FF, and other user agents.
 			case 'even':
@@ -377,6 +379,7 @@ class PseudoClass
 	 */
 	protected function has($node, $selector) : bool
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$splos = new SPLObjectStorage();
 		$splos->attach($node);
 		$traverser = new \QueryPath\CSS\DOMTraverser($splos, true);

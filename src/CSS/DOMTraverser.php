@@ -10,11 +10,13 @@ namespace QueryPath\CSS;
 use function count;
 use DOMDocument;
 use DOMElement;
+use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use const PHP_EOL;
 use QueryPath\CSS\DOMTraverser\PseudoClass;
 use QueryPath\CSS\DOMTraverser\Util;
+use QueryPath\TextContent;
 use SplObjectStorage;
 use const STDOUT;
 use function strlen;
@@ -65,21 +67,23 @@ use const XML_ELEMENT_NODE;
  */
 class DOMTraverser implements Traverser
 {
-	protected $matches = [];
-	protected $selector;
-	protected $dom;
-	protected $initialized = true;
-	protected $psHandler;
-	protected $scopeNode;
+	/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
+	protected SplObjectStorage $matches;
+	protected ?Selector $selector = null;
+	protected ?DOMDocument $dom = null;
+	protected bool $initialized;
+	protected PseudoClass $psHandler;
+	protected ?DOMNode $scopeNode = null;
 
 	/**
 	 * Build a new DOMTraverser.
 	 *
 	 * This requires a DOM-like object or collection of DOM nodes.
 	 *
-	 * @param null $scopeNode
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $splos
+	 * @param DOMNode|null $scopeNode
 	 */
-	public function __construct(SPLObjectStorage $splos, bool $initialized = false, $scopeNode = null)
+	public function __construct(SplObjectStorage $splos, bool $initialized = false, DOMNode $scopeNode = null)
 	{
 		$this->psHandler = new PseudoClass();
 		$this->initialized = $initialized;
@@ -98,7 +102,7 @@ class DOMTraverser implements Traverser
 
 			$this->scopeNode = $scopeNode;
 			if (empty($scopeNode)) {
-				$this->scopeNode = $this->dom->documentElement;
+				$this->scopeNode = $this->dom->documentElement ?? null;
 			}
 		}
 
@@ -130,7 +134,7 @@ class DOMTraverser implements Traverser
 	 * @return DOMTraverser a list of matched
 	 *   DOMNode objects
 	 */
-	public function find($selector) : DOMTraverser
+	public function find(string $selector) : DOMTraverser
 	{
 		// Setup
 		$handler = new Selector();
@@ -162,7 +166,10 @@ class DOMTraverser implements Traverser
 		return $this;
 	}
 
-	public function matches()
+	/**
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
+	 */
+	public function matches() : SplObjectStorage
 	{
 		return $this->matches;
 	}
@@ -183,12 +190,12 @@ class DOMTraverser implements Traverser
 	 *
 	 * @param DOMElement $node
 	 *   The DOMNode to check
-	 * @param $selector
+	 * @param array{0: SimpleSelector}|array<int, SimpleSelector> $selector
 	 *
 	 * @return bool
 	 *   A boolean TRUE if the node matches, false otherwise
 	 */
-	public function matchesSelector(DOMElement $node, $selector)
+	public function matchesSelector(DOMElement $node, array $selector) : bool
 	{
 		return $this->matchesSimpleSelector($node, $selector, 0);
 	}
@@ -200,16 +207,19 @@ class DOMTraverser implements Traverser
 	 * this checks only a simple selector (plus an optional
 	 * combinator).
 	 *
-	 * @param $selectors
-	 * @param $index
+	 * @param array<int, SimpleSelector> $selectors
 	 *
 	 * @throws NotImplementedException
 	 *
 	 * @return bool
 	 *   A boolean TRUE if the node matches, false otherwise
 	 */
-	public function matchesSimpleSelector(DOMElement $node, $selectors, $index)
+	public function matchesSimpleSelector(DOMNode $node, array $selectors, int $index) : bool
 	{
+		if ( ! ($node instanceof DOMElement)) {
+			return false;
+		}
+
 		$selector = $selectors[$index];
 		// Note that this will short circuit as soon as one of these
 		// returns FALSE.
@@ -253,7 +263,7 @@ class DOMTraverser implements Traverser
 	 *
 	 * @param DOMNode $node
 	 *   The DOMNode to test
-	 * @param array $selectors
+	 * @param array<int, SimpleSelector> $selectors
 	 *   The array of simple selectors
 	 * @param int $index
 	 *   The index of the current selector
@@ -261,7 +271,7 @@ class DOMTraverser implements Traverser
 	 * @return bool
 	 *   TRUE if the next selector(s) match
 	 */
-	public function combine(DOMElement $node, $selectors, $index)
+	public function combine(DOMElement $node, array $selectors, int $index) : bool
 	{
 		$selector = $selectors[$index];
 		//$this->debug(implode(' ', $selectors));
@@ -290,7 +300,7 @@ class DOMTraverser implements Traverser
 	 *
 	 * @param DOMNode $node
 	 *   A DOM Node
-	 * @param array $selectors
+	 * @param array<int, SimpleSelector> $selectors
 	 *   The selectors array
 	 * @param int $index
 	 *   The current index to the operative simple selector in the selectors
@@ -299,7 +309,7 @@ class DOMTraverser implements Traverser
 	 * @return bool
 	 *   TRUE if the combination matches, FALSE otherwise
 	 */
-	public function combineAdjacent($node, $selectors, $index)
+	public function combineAdjacent(DOMNode $node, array $selectors, int $index) : bool
 	{
 		while ( ! empty($node->previousSibling)) {
 			$node = $node->previousSibling;
@@ -320,7 +330,7 @@ class DOMTraverser implements Traverser
 	 *
 	 * @param DOMNode $node
 	 *   A DOM Node
-	 * @param array $selectors
+	 * @param array<int, SimpleSelector> $selectors
 	 *   The selectors array
 	 * @param int $index
 	 *   The current index to the operative simple selector in the selectors
@@ -329,7 +339,7 @@ class DOMTraverser implements Traverser
 	 * @return bool
 	 *   TRUE if the combination matches, FALSE otherwise
 	 */
-	public function combineSibling($node, $selectors, $index)
+	public function combineSibling(DOMNode $node, array $selectors, int $index) : bool
 	{
 		while ( ! empty($node->previousSibling)) {
 			$node = $node->previousSibling;
@@ -349,7 +359,7 @@ class DOMTraverser implements Traverser
 	 *
 	 * @param DOMNode $node
 	 *   A DOM Node
-	 * @param array $selectors
+	 * @param array<int, SimpleSelector> $selectors
 	 *   The selectors array
 	 * @param int $index
 	 *   The current index to the operative simple selector in the selectors
@@ -358,7 +368,7 @@ class DOMTraverser implements Traverser
 	 * @return bool
 	 *   TRUE if the combination matches, FALSE otherwise
 	 */
-	public function combineDirectDescendant($node, $selectors, $index)
+	public function combineDirectDescendant(DOMNode $node, array $selectors, int $index) : bool
 	{
 		$parent = $node->parentNode;
 		if (empty($parent)) {
@@ -376,7 +386,7 @@ class DOMTraverser implements Traverser
 	 *
 	 * @param DOMNode $node
 	 *   A DOM Node
-	 * @param array $selectors
+	 * @param array<int, SimpleSelector> $selectors
 	 *   The selectors array
 	 * @param int $index
 	 *   The current index to the operative simple selector in the selectors
@@ -385,7 +395,7 @@ class DOMTraverser implements Traverser
 	 * @return bool
 	 *   TRUE if the combination matches, FALSE otherwise
 	 */
-	public function combineAnyDescendant($node, $selectors, $index)
+	public function combineAnyDescendant(DOMNode $node, array $selectors, int $index) : bool
 	{
 		while ( ! empty($node->parentNode)) {
 			$node = $node->parentNode;
@@ -401,10 +411,14 @@ class DOMTraverser implements Traverser
 				return true;
 			}
 		}
+
+		return false;
 	}
 
 	/**
 	 * Attach all nodes in a node list to the given \SplObjectStorage.
+	 *
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $splos
 	 */
 	public function attachNodeList(DOMNodeList $nodeList, SplObjectStorage $splos) : void
 	{
@@ -413,7 +427,7 @@ class DOMTraverser implements Traverser
 		}
 	}
 
-	public function getDocument()
+	public function getDocument() : ?DOMDocument
 	{
 		return $this->dom;
 	}
@@ -423,6 +437,8 @@ class DOMTraverser implements Traverser
 	 *
 	 * This should only be executed when not working with
 	 * an existing match set.
+	 *
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $matches
 	 */
 	protected function initialMatch(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -468,6 +484,8 @@ class DOMTraverser implements Traverser
 	 * set, then this should be used to find by ID,
 	 * which will drastically reduce the amount of
 	 * comparison operations done in PHP.
+	 *
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $matches
 	 */
 	protected function initialMatchOnID(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -509,7 +527,7 @@ class DOMTraverser implements Traverser
 	 * In any other case, the element finding algo is
 	 * faster and should be used instead.
 	 *
-	 * @param $matches
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $matches
 	 */
 	protected function initialMatchOnClasses(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -556,8 +574,7 @@ class DOMTraverser implements Traverser
 	/**
 	 * Shortcut for setting the initial match.
 	 *
-	 * @param $selector
-	 * @param $matches
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $matches
 	 */
 	protected function initialMatchOnElement(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -586,6 +603,8 @@ class DOMTraverser implements Traverser
 
 	/**
 	 * Get elements and filter by namespace.
+	 *
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $matches
 	 */
 	protected function initialMatchOnElementNS(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -626,11 +645,8 @@ class DOMTraverser implements Traverser
 	 * - namespaced element (ns|foo)
 	 * - namespaced wildcard (ns|*)
 	 * - wildcard (* or *|*)
-	 *
-	 * @param $element
-	 * @param null $ns
 	 */
-	protected function matchElement(DOMElement $node, $element, $ns = null) : bool
+	protected function matchElement(DOMElement $node, ?string $element, string $ns = null) : bool
 	{
 		if (empty($element)) {
 			return true;
@@ -684,9 +700,13 @@ class DOMTraverser implements Traverser
 	 * This can handle namespaced attributes, including namespace
 	 * wildcards.
 	 *
-	 * @param $attributes
+	 * @param array{
+	 *	name:string,
+	 *	ns?:string,
+	 *	op:int|null
+	 * }[] $attributes
 	 */
-	protected function matchAttributes(DOMElement $node, $attributes) : bool
+	protected function matchAttributes(DOMElement $node, array $attributes) : bool
 	{
 		if (empty($attributes)) {
 			return true;
@@ -767,19 +787,19 @@ class DOMTraverser implements Traverser
 	}
 
 	/**
-	 * @param $pseudoClasses
+	 * @param array{name:string, value?:string|null}[] $pseudoClasses
 	 *
 	 * @throws NotImplementedException
 	 * @throws ParseException
 	 */
-	protected function matchPseudoClasses(DOMElement $node, $pseudoClasses) : bool
+	protected function matchPseudoClasses(DOMElement $node, array $pseudoClasses) : bool
 	{
-		$ret = true;
+		$ret = 1;
 		foreach ($pseudoClasses as $pseudoClass) {
 			$name = $pseudoClass['name'];
 			// Avoid E_STRICT violation.
 			$value = $pseudoClass['value'] ?? null;
-			$ret &= $this->psHandler->elementMatches($name, $node, $this->scopeNode, $value);
+			$ret &= (int) $this->psHandler->elementMatches($name, $node, $this->scopeNode, $value);
 		}
 
 		return (bool) $ret;
@@ -817,7 +837,10 @@ class DOMTraverser implements Traverser
 		return false;
 	}
 
-	protected function newMatches()
+	/**
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
+	 */
+	protected function newMatches() : SplObjectStorage
 	{
 		return new SplObjectStorage();
 	}
@@ -836,9 +859,9 @@ class DOMTraverser implements Traverser
 	 *
 	 * Internal utility function.
 	 *
-	 * @param mixed $matches
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $matches
 	 */
-	protected function setMatches($matches) : void
+	protected function setMatches(SplObjectStorage $matches) : void
 	{
 		$this->matches = $matches;
 	}
@@ -853,7 +876,7 @@ class DOMTraverser implements Traverser
 	{
 		// This works around a bug in which the document element
 		// does not correctly search with the $baseQuery.
-		if ($node->isSameNode($this->dom->documentElement)) {
+		if (isset($this->dom) && $node->isSameNode($this->dom->documentElement)) {
 			$query = mb_substr($query, 1);
 		}
 

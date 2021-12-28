@@ -9,7 +9,9 @@ namespace QueryPath\Extension;
 
 use QueryPath\DOMQuery;
 use QueryPath\Extension;
+use QueryPath\Query;
 use QueryPath\QueryPath;
+use UnexpectedValueException;
 use const XML_CDATA_SECTION_NODE;
 use const XML_COMMENT_NODE;
 use const XML_PI_NODE;
@@ -28,11 +30,10 @@ use const XML_PI_NODE;
  */
 class QPXML implements Extension
 {
-	protected $qp;
-
-	public function __construct(\QueryPath\Query $qp)
+	public function __construct(
+		protected Query $qp
+	)
 	{
-		$this->qp = $qp;
 	}
 
 	public function schema($file) : void
@@ -187,15 +188,11 @@ class QPXML implements Extension
 	/**
 	 * Create an element with the given namespace.
 	 *
-	 * @param string $text
-	 * @param string $nsUri
+	 * @param string|null $nsUri
 	 *   The namespace URI for the given element
-	 *
-	 * @return \QueryPath\DOMQuery
 	 */
-	public function createElement($text, $nsUri = null)
+	public function createElement(string $text, string $nsUri = null) : DOMQuery
 	{
-		if (isset($text)) {
 			foreach ($this->qp->get() as $element) {
 				if (null === $nsUri && false !== strpos($text, ':')) {
 					$ns = array_shift(explode(':', $text));
@@ -218,26 +215,27 @@ class QPXML implements Extension
 
 				return QueryPath::with($node);
 			}
-		}
 
 		return new DOMQuery();
 	}
 
 	/**
 	 * Append an element.
-	 *
-	 * @param string $text
-	 *
-	 * @return \QueryPath\DOMQuery
 	 */
-	public function appendElement($text)
+	public function appendElement(string $text) : Query
 	{
-		if (isset($text)) {
+		assert(
+			in_array(self::class, class_uses($this->qp), true),
+			new UnexpectedValueException(
+				'Query implementation does not have QPXML extension!'
+			)
+		);
+
 			foreach ($this->qp->get() as $element) {
+				/** @var DOMQuery */
 				$node = $this->qp->createElement($text);
 				QueryPath::with($element)->append($node);
 			}
-		}
 
 		return $this->qp;
 	}

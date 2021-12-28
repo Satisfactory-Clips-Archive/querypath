@@ -20,7 +20,7 @@ declare(strict_types=1);
  *  - All pseudo-elements require the double-colon (::) notation. This breaks
  *    backward compatibility with the 2.1 spec, but it makes visible the issue
  *    that pseudo-elements cannot be effectively used with most of the present
- *    library. They return <b>stdClass objects with a text property</b> (QP > 1.3)
+ *    library. They return <b>TextContent objects with a textContent property</b>
  *    instead of elements.
  *  - The pseudo-classes first-of-type, nth-of-type and last-of-type may or may
  *    not conform to the specification. The spec is unclear.
@@ -51,8 +51,8 @@ use DOMNodeList;
 use function get_class;
 use function in_array;
 use function is_array;
+use QueryPath\TextContent;
 use SplObjectStorage;
-use stdClass;
 use function strlen;
 use const XML_ELEMENT_NODE;
 use const XML_TEXT_NODE;
@@ -154,7 +154,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @return queryPathEventHandler
 	 *  Returns itself
 	 */
-	public function find($filter) : QueryPathEventHandler
+	public function find(string $filter) : QueryPathEventHandler
 	{
 		$parser = new Parser($filter, $this);
 		$parser->parse();
@@ -167,12 +167,12 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *
 	 * This should be called after the filter has been parsed.
 	 *
-	 * @return array
-	 *  The matched items. This is almost always an array of
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
+	 *  The matched items. This is almost always an SplObjectStorage of
 	 *  {@link DOMElement} objects. It is always an instance of
 	 *  {@link DOMNode} objects.
 	 */
-	public function getMatches()
+	public function getMatches() : SplObjectStorage
 	{
 		//$result = array_merge($this->alreadyMatched, $this->matches);
 		$result = new SplObjectStorage();
@@ -186,7 +186,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		return $result;
 	}
 
-	public function matches()
+	/**
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
+	 */
+	public function matches() : SplObjectStorage
 	{
 		return $this->getMatches();
 	}
@@ -642,14 +645,13 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			case 'first-line':
 				$matches = $this->candidateList();
 				$found = new SplObjectStorage();
-				$o = new stdClass();
 				foreach ($matches as $item) {
 					$str = $item->textContent;
 					$lines = explode("\n", $str);
 					if ( ! empty($lines)) {
 						$line = trim($lines[0]);
 						if ( ! empty($line)) {
-							$o->textContent = $line;
+							$o = new TextContent($line);
 							$found->attach($o); //trim($lines[0]);
 						}
 					}
@@ -661,12 +663,11 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			case 'first-letter':
 				$matches = $this->candidateList();
 				$found = new SplObjectStorage();
-				$o = new stdClass();
 				foreach ($matches as $item) {
 					$str = $item->textContent;
 					if ( ! empty($str)) {
 						$str = substr($str, 0, 1);
-						$o->textContent = $str;
+						$o = new TextContent($str);
 						$found->attach($o);
 					}
 				}

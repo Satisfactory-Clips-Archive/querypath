@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace QueryPathTests\CSS;
 
 use DomDocument;
+use DOMElement;
 use const LIBXML_NOBLANKS;
 use QueryPath\CSS\QueryPathEventHandler;
 use QueryPathTests\TestCase;
@@ -720,6 +721,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame(4, $matches->count());
 		$matchIDs = [];
 		foreach ($matches as $m) {
+			static::assertInstanceOf(DOMElement::class, $m);
 			$matchIDs[] = $m->getAttribute('id');
 		}
 		//    $matchIDs = sort($matchIDs);

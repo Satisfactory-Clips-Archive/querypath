@@ -87,20 +87,14 @@ class Format implements Extension
 	 * </code>
 	 *
 	 * @param callable $callback the callable to be called on every element
-	 * @param mixed $args        [optional] Zero or more parameters to be passed to the callback
-	 * @param null $additional
+	 * @param mixed ...$args        [optional] Zero or more parameters to be passed to the callback
 	 *
 	 * @throws Exception
 	 *
 	 * @return DOMQuery the DOMQuery object with the same element(s) selected
 	 */
-	public function format($callback, $args = null, $additional = null) : Query
+	public function format($callback, mixed ...$args) : Query
 	{
-		if (isset($additional)) {
-			$args = func_get_args();
-			array_shift($args);
-		}
-
 		$getter = static function ($qp) {
 			return $qp->text();
 		};
@@ -142,16 +136,15 @@ class Format implements Extension
 	 *
 	 * @param string $attrName   the attribute name
 	 * @param callable $callback the callable to be called on every element
-	 * @param mixed $args        [optional] Zero or more parameters to be passed to the callback
-	 * @param null $additional
+	 * @param mixed ...$args        [optional] Zero or more parameters to be passed to the callback
 	 *
 	 * @throws Exception
 	 *
 	 * @return DOMQuery the DOMQuery object with the same element(s) selected
 	 */
-	public function formatAttr($attrName, $callback, $args = null, $additional = null) : Query
+	public function formatAttr($attrName, $callback, mixed ...$args) : Query
 	{
-		if (isset($additional)) {
+		if (count($args) > 1) {
 			$args = array_slice(func_get_args(), 2);
 		}
 

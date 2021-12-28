@@ -8,6 +8,7 @@ use function call_user_func;
 use function count;
 use function create_function;
 use DOMElement;
+use DOMNode;
 use function in_array;
 use function is_array;
 use function is_callable;
@@ -17,9 +18,10 @@ use QueryPath\CSS\ParseException;
 use QueryPath\Exception;
 use QueryPath\Query;
 use QueryPath\QueryPath;
+use QueryPath\TextContent;
 use SplObjectStorage;
-use stdClass;
 use function strlen;
+use UnexpectedValueException;
 use const XML_DOCUMENT_NODE;
 use const XML_ELEMENT_NODE;
 
@@ -30,6 +32,11 @@ use const XML_ELEMENT_NODE;
  */
 trait QueryFilters
 {
+	/**
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
+	 */
+	abstract public function getMatches() : SplObjectStorage;
+
 	/**
 	 * Filter a list down to only elements that match the selector.
 	 * Use this, for example, to find all elements with a class, or with
@@ -51,10 +58,13 @@ trait QueryFilters
 	 */
 	public function filter($selector) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
+
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$tmp = new SplObjectStorage();
 
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$tmp->attach($m);
 			// Seems like this should be right... but it fails unit
 			// tests. Need to compare to jQuery.
@@ -103,10 +113,12 @@ trait QueryFilters
 	 */
 	public function filterLambda($fn) : Query
 	{
+		/** @var callable(int, DOMNode|TextContent) */
 		$function = create_function('$index, $item', $fn);
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$i = 0;
-		foreach ($this->matches as $item) {
+		foreach ($this->getMatches() as $item) {
 			if (false !== $function($i++, $item)) {
 				$found->attach($item);
 			}
@@ -156,9 +168,10 @@ trait QueryFilters
 	 */
 	public function filterPreg($regex) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 
-		foreach ($this->matches as $item) {
+		foreach ($this->getMatches() as $item) {
 			if (preg_match($regex, $item->textContent) > 0) {
 				$found->attach($item);
 			}
@@ -201,10 +214,11 @@ trait QueryFilters
 	 */
 	public function filterCallback($callback) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$i = 0;
 		if (is_callable($callback)) {
-			foreach ($this->matches as $item) {
+			foreach ($this->getMatches() as $item) {
 				if (false !== $callback($i++, $item)) {
 					$found->attach($item);
 				}
@@ -231,7 +245,7 @@ trait QueryFilters
 	 * - If the callback returns anything else, it will be appended to the array
 	 *   of matches.
 	 *
-	 * @param callable $callback
+	 * @param (callable(int, DOMNode|TextContent):(iterable<DOMNode|TextContent|scalar>|DOMNode|TextContent|scalar|null)) $callback
 	 *  The function or callback to use. The callback will be passed two params:
 	 *  - $index: The index position in the list of items wrapped by this object.
 	 *  - $item: The current item.
@@ -249,27 +263,24 @@ trait QueryFilters
 	 */
 	public function map($callback) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 
 		if (is_callable($callback)) {
 			$i = 0;
-			foreach ($this->matches as $item) {
+			foreach ($this->getMatches() as $item) {
 				$c = call_user_func($callback, $i, $item);
 				if (isset($c)) {
-					if (is_array($c) || $c instanceof \Iterable) {
+					if (is_iterable($c)) {
 						foreach ($c as $retval) {
 							if ( ! is_object($retval)) {
-								$tmp = new stdClass();
-								$tmp->textContent = $retval;
-								$retval = $tmp;
+								$retval = new TextContent((string) $retval);
 							}
 							$found->attach($retval);
 						}
 					} else {
 						if ( ! is_object($c)) {
-							$tmp = new stdClass();
-							$tmp->textContent = $c;
-							$c = $tmp;
+							$c = new TextContent((string) $c);
 						}
 						$found->attach($c);
 					}
@@ -302,13 +313,14 @@ trait QueryFilters
 	public function slice($start, $length = 0) : Query
 	{
 		$end = $length;
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		if ($start >= $this->count()) {
 			return $this->inst($found, null);
 		}
 
 		$i = $j = 0;
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			if ($i >= $start) {
 				if ($end > 0 && $j >= $end) {
 					break;
@@ -335,7 +347,7 @@ trait QueryFilters
 	 * - A TRUE return value from the callback is analogous to a continue statement.
 	 * - All other return values are ignored.
 	 *
-	 * @param callable $callback
+	 * @param callable(int, DOMNode|TextContent) $callback
 	 *  The callback to run
 	 *
 	 * @throws Exception
@@ -350,7 +362,7 @@ trait QueryFilters
 	{
 		if (is_callable($callback)) {
 			$i = 0;
-			foreach ($this->matches as $item) {
+			foreach ($this->getMatches() as $item) {
 				if (false === call_user_func($callback, $i, $item)) {
 					return $this;
 				}
@@ -382,9 +394,13 @@ trait QueryFilters
 	 */
 	public function even() : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$even = false;
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
 			if ($even && XML_ELEMENT_NODE === $m->nodeType) {
 				$found->attach($m);
 			}
@@ -413,9 +429,13 @@ trait QueryFilters
 	 */
 	public function odd() : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$odd = true;
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
 			if ($odd && XML_ELEMENT_NODE === $m->nodeType) {
 				$found->attach($m);
 			}
@@ -441,8 +461,9 @@ trait QueryFilters
 	 */
 	public function first() : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			if (XML_ELEMENT_NODE === $m->nodeType) {
 				$found->attach($m);
 				break;
@@ -471,7 +492,7 @@ trait QueryFilters
 		// Could possibly use $m->firstChild http://theserverpages.com/php/manual/en/ref.dom.php
 		$found = new SplObjectStorage();
 		$flag = false;
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			foreach ($m->childNodes as $c) {
 				if (XML_ELEMENT_NODE === $c->nodeType) {
 					$found->attach($c);
@@ -503,9 +524,10 @@ trait QueryFilters
 	 */
 	public function last() : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$item = null;
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			if (XML_ELEMENT_NODE === $m->nodeType) {
 				$item = $m;
 			}
@@ -533,9 +555,10 @@ trait QueryFilters
 	 */
 	public function lastChild() : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$item = null;
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			foreach ($m->childNodes as $c) {
 				if (XML_ELEMENT_NODE === $c->nodeType) {
 					$item = $c;
@@ -575,8 +598,9 @@ trait QueryFilters
 	 */
 	public function nextUntil($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			while (isset($m->nextSibling)) {
 				$m = $m->nextSibling;
 				if (XML_ELEMENT_NODE === $m->nodeType) {
@@ -617,8 +641,9 @@ trait QueryFilters
 	 */
 	public function prevUntil($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			while (isset($m->previousSibling)) {
 				$m = $m->previousSibling;
 				if (XML_ELEMENT_NODE === $m->nodeType) {
@@ -657,10 +682,21 @@ trait QueryFilters
 	 */
 	public function parentsUntil($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
-			while (XML_DOCUMENT_NODE !== $m->parentNode->nodeType) {
-				$m = $m->parentNode;
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
+			assert(
+				($m->parentNode instanceof DOMNode),
+				new UnexpectedValueException('parentNode not found!')
+			);
+			while (
+				(($parentNode = ($m->parentNode ?? null)) instanceof DOMNode)
+				&& XML_DOCUMENT_NODE !== $parentNode->nodeType
+			) {
+				$m = $parentNode;
 				// Is there any case where parent node is not an element?
 				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( ! empty($selector)) {
@@ -705,7 +741,7 @@ trait QueryFilters
 	/**
 	 * Filter a list to contain only items that do NOT match.
 	 *
-	 * @param string $selector
+	 * @param string|SplObjectStorage<DOMNode|TextContent, mixed>|list<DOMNode>|DOMElement $selector
 	 *  A selector to use as a negation filter. If the filter is matched, the
 	 *  element will be removed from the list.
 	 *
@@ -717,29 +753,33 @@ trait QueryFilters
 	 *
 	 * @see find()
 	 */
-	public function not($selector) : Query
+	public function not(SplObjectStorage|DOMElement|string|array $selector) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, null> */
 		$found = new SplObjectStorage();
 		if ($selector instanceof DOMElement) {
-			foreach ($this->matches as $m) {
+			foreach ($this->getMatches() as $m) {
 				if ($m !== $selector) {
 					$found->attach($m);
 				}
 			}
 		} elseif (is_array($selector)) {
-			foreach ($this->matches as $m) {
+			foreach ($this->getMatches() as $m) {
 				if ( ! in_array($m, $selector, true)) {
 					$found->attach($m);
 				}
 			}
 		} elseif ($selector instanceof SplObjectStorage) {
-			foreach ($this->matches as $m) {
+			foreach ($this->getMatches() as $m) {
 				if ($selector->contains($m)) {
 					$found->attach($m);
 				}
 			}
 		} else {
-			foreach ($this->matches as $m) {
+			foreach ($this->getMatches() as $m) {
+				if ( ! ($m instanceof DOMNode)) {
+					continue;
+				}
 				if ( ! QueryPath::with($m, null, $this->options)->is($selector)) {
 					$found->attach($m);
 				}
@@ -770,13 +810,20 @@ trait QueryFilters
 	 */
 	public function closest($selector) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
+			if ( ! ($m instanceof DOMNode)) {
+				continue;
+			}
 			if (QueryPath::with($m, null, $this->options)->is($selector) > 0) {
 				$found->attach($m);
 			} else {
-				while (XML_DOCUMENT_NODE !== $m->parentNode->nodeType) {
-					$m = $m->parentNode;
+				while (
+					(($parentNode = ($m->parentNode ?? null)) instanceof DOMNode)
+					&& (XML_DOCUMENT_NODE !== $parentNode->nodeType)
+				) {
+					$m = $parentNode;
 					// Is there any case where parent node is not an element?
 					if (XML_ELEMENT_NODE === $m->nodeType && QueryPath::with($m, null,
 							$this->options)->is($selector) > 0) {
@@ -811,10 +858,14 @@ trait QueryFilters
 	 */
 	public function parent($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
-			while (XML_DOCUMENT_NODE !== $m->parentNode->nodeType) {
-				$m = $m->parentNode;
+		foreach ($this->getMatches() as $m) {
+			while (
+				(($parentNode = ($m->parentNode ?? null)) instanceof DOMNode)
+				&& (XML_DOCUMENT_NODE !== $parentNode->nodeType)
+			) {
+				$m = $parentNode;
 				// Is there any case where parent node is not an element?
 				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( ! empty($selector)) {
@@ -854,10 +905,14 @@ trait QueryFilters
 	 */
 	public function parents($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
-			while (XML_DOCUMENT_NODE !== $m->parentNode->nodeType) {
-				$m = $m->parentNode;
+		foreach ($this->getMatches() as $m) {
+			while (
+				(($parentNode = ($m->parentNode ?? null)) instanceof DOMNode)
+				&& (XML_DOCUMENT_NODE !== $parentNode->nodeType)
+			) {
+				$m = $parentNode;
 				// Is there any case where parent node is not an element?
 				if (XML_ELEMENT_NODE === $m->nodeType) {
 					if ( ! empty($selector)) {
@@ -897,8 +952,9 @@ trait QueryFilters
 	 */
 	public function next($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			while (isset($m->nextSibling)) {
 				$m = $m->nextSibling;
 				if (XML_ELEMENT_NODE === $m->nodeType) {
@@ -941,8 +997,9 @@ trait QueryFilters
 	 */
 	public function nextAll($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			while (isset($m->nextSibling)) {
 				$m = $m->nextSibling;
 				if (XML_ELEMENT_NODE === $m->nodeType) {
@@ -984,8 +1041,9 @@ trait QueryFilters
 	 */
 	public function prev($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			while (isset($m->previousSibling)) {
 				$m = $m->previousSibling;
 				if (XML_ELEMENT_NODE === $m->nodeType) {
@@ -1028,8 +1086,9 @@ trait QueryFilters
 	 */
 	public function prevAll($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			while (isset($m->previousSibling)) {
 				$m = $m->previousSibling;
 				if (XML_ELEMENT_NODE === $m->nodeType) {
@@ -1069,13 +1128,15 @@ trait QueryFilters
 	 */
 	public function children($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$filter = strlen($selector ?? '') > 0;
 
 		if ($filter) {
+			/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 			$tmp = new SplObjectStorage();
 		}
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			foreach ($m->childNodes as $c) {
 				if (XML_ELEMENT_NODE === $c->nodeType) {
 					// This is basically an optimized filter() just for children().
@@ -1121,11 +1182,9 @@ trait QueryFilters
 	 */
 	public function contents() : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
-			if (empty($m->childNodes)) {
-				continue;
-			}
+		foreach ($this->getMatches() as $m) {
 			foreach ($m->childNodes as $c) {
 				$found->attach($c);
 			}
@@ -1163,10 +1222,11 @@ trait QueryFilters
 	 */
 	public function siblings($selector = null) : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$parent = $m->parentNode;
-			foreach ($parent->childNodes as $n) {
+			foreach ($parent->childNodes ?? [] as $n) {
 				if (XML_ELEMENT_NODE === $n->nodeType && $n !== $m) {
 					$found->attach($n);
 				}

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace QueryPathTests\Extension;
 
+use DOMElement;
 use QueryPath\Extension\Format;
 use QueryPath\QueryPath;
+use QueryPath\TextContent;
 use QueryPathTests\TestCase;
 
 class FormatTest extends TestCase
@@ -23,7 +25,12 @@ class FormatTest extends TestCase
 			return '*' . $text . '*';
 		});
 
-		$this->assertSame('*APPLE**ORANGE*', $qp->get(0)->textContent);
+		$result = $qp->get(0);
+		$this->assertTrue(
+			($result instanceof DOMElement)
+			|| ($result instanceof TextContent)
+		);
+		$this->assertSame('*APPLE**ORANGE*', $result->textContent);
 	}
 
 	/**

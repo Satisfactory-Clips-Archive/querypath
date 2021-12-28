@@ -38,14 +38,18 @@ class SimpleSelector
 	public const SIBLING = 0x8;
 	public const ANY_DESCENDANT = 0x10;
 
-	public $element;
-	public $ns;
-	public $id;
-	public $classes = [];
-	public $attributes = [];
-	public $pseudoClasses = [];
-	public $pseudoElements = [];
-	public $combinator;
+	public ?string $element = null;
+	public ?string $ns = null;
+	public ?string $id = null;
+	public array $classes = [];
+
+	/** @var array{ns?:string, name:string, value:string|null, op:int|null}[] */
+	public array $attributes = [];
+
+	/** @var array{name:string, value?:string|null}[] */
+	public array $pseudoClasses = [];
+	public array $pseudoElements = [];
+	public ?int $combinator = null;
 
 	public function __construct()
 	{

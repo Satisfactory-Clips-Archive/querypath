@@ -16,9 +16,9 @@ use DOMElement;
 use DOMNode;
 use function in_array;
 use QueryPath\DOMQuery;
+use QueryPath\Query;
 use QueryPath\QueryPath;
 use SplDoublyLinkedList;
-use stdClass;
 use const XML_ELEMENT_NODE;
 
 define('DATA_FILE', __DIR__ . '/../data.xml');
@@ -38,6 +38,7 @@ class DOMQueryTest extends TestCase
 {
 	public const test_tests_allowed_failures = [
 		'testxinclude',
+		'testgetmatches',
 	];
 
 	/**
@@ -79,7 +80,9 @@ class DOMQueryTest extends TestCase
 		// Now with a selector:
 		$qp = qp($file, '#head');
 		$this->assertCount(1, $qp->get());
-		$this->assertSame($qp->get(0)->tagName, 'head');
+		$a = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertSame($a->tagName, 'head');
 
 		// Test HTML:
 		$htmlFile = DATA_HTML_FILE;
@@ -196,6 +199,7 @@ class DOMQueryTest extends TestCase
 	public function testOptionXMLEncoding() : void
 	{
 		$xml = qp(null, null, ['encoding' => 'iso-8859-1'])->append('<test/>')->xml();
+		$this->assertIsString($xml);
 		$iso_found = 1 === preg_match('/iso-8859-1/', $xml);
 
 		$this->assertTrue($iso_found, 'Encoding should be iso-8859-1 in ' . $xml . 'Found ' . $iso_found);
@@ -204,6 +208,7 @@ class DOMQueryTest extends TestCase
 		$this->assertFalse($iso_found, 'Encoding should not be utf-8 in ' . $xml);
 
 		$xml = qp('<?xml version="1.0" encoding="utf-8"?><test/>', null, ['encoding' => 'iso-8859-1'])->xml();
+		$this->assertIsString($xml);
 		$iso_found = 1 === preg_match('/utf-8/', $xml);
 		$this->assertTrue($iso_found, 'Encoding should be utf-8 in ' . $xml);
 
@@ -235,54 +240,28 @@ class DOMQueryTest extends TestCase
 		qp()->fooMethod();
 	}
 
-	public function testFailedObjectConstruction() : void
-	{
-		$this->expectException(\QueryPath\Exception::class);
-		qp(new stdClass());
-	}
-
 	public function testFailedHTTPLoad() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-		try {
 			qp('http://localhost:8877/no_such_file.xml');
-		} catch (Exception $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testFailedHTTPLoadWithContext() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-		try {
 			qp('http://localhost:8877/no_such_file.xml', null, ['foo' => 'bar']);
-		} catch (Exception $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testFailedParseHTMLElement() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-		try {
 			qp('<foo>&foonator;</foo>', null);
-		} catch (Exception $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testFailedParseXMLElement() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-		try {
 			qp('<?xml version="1.0"?><foo><bar>foonator;</foo>', null);
-		} catch (Exception $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testIgnoreParserWarnings() : void
@@ -302,35 +281,34 @@ class DOMQueryTest extends TestCase
 	public function testFailedParseNonMarkup() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-		try {
 			qp('<23dfadf', null);
-		} catch (Exception $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testFailedParseEntity() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-		try {
 			qp('<?xml version="1.0"?><foo>&foonator;</foo>', null);
-		} catch (Exception $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testReplaceEntitiesOption() : void
 	{
 		$path = '<?xml version="1.0"?><root/>';
-		$xml = qp($path, null, ['replace_entities' => true])->xml('<foo>&</foo>')->xml();
+		$qp = qp($path, null, ['replace_entities' => true])->xml('<foo>&</foo>');
+		$this->assertInstanceOf(DOMQuery::class, $qp);
+		$xml = $qp->xml();
+		$this->assertIsString($xml);
 		$this->assertTrue(false !== strpos($xml, '<foo>&amp;</foo>'));
 
-		$xml = qp($path, null, ['replace_entities' => true])->html('<foo>&</foo>')->xml();
+		$qp = qp($path, null, ['replace_entities' => true])->html('<foo>&</foo>');
+		$this->assertInstanceOf(DOMQuery::class, $qp);
+		$xml = $qp->xml();
+		$this->assertIsString($xml);
 		$this->assertTrue(false !== strpos($xml, '<foo>&amp;</foo>'));
 
-		$xml = qp($path, null, ['replace_entities' => true])->xhtml('<foo>&</foo>')->xml();
+		$qp = qp($path, null, ['replace_entities' => true])->xhtml('<foo>&</foo>');
+		$this->assertInstanceOf(DOMQuery::class, $qp);
+		$xml = $qp->xml();
+		$this->assertIsString($xml);
 		$this->assertTrue(false !== strpos($xml, '<foo>&amp;</foo>'));
 
 		\QueryPath\Options::set(['replace_entities' => true]);
@@ -346,19 +324,25 @@ class DOMQueryTest extends TestCase
 		$file = DATA_FILE;
 		$qp = qp($file)->find('#head');
 		$this->assertCount(1, $qp->get());
-		$this->assertSame($qp->get(0)->tagName, 'head');
+		$a = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertSame($a->tagName, 'head');
 
 		$this->assertSame('inner', qp($file)->find('.innerClass')->tag());
 
 		$string = '<?xml version="1.0"?><root><a/>Test</root>';
 		$qp = qp($string)->find('root');
 		$this->assertCount(1, $qp->get(), 'Check tag.');
-		$this->assertSame($qp->get(0)->tagName, 'root');
+		$a = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertSame($a->tagName, 'root');
 
 		$string = '<?xml version="1.0"?><root class="findme">Test</root>';
 		$qp = qp($string)->find('.findme');
 		$this->assertCount(1, $qp->get(), 'Check class.');
-		$this->assertSame($qp->get(0)->tagName, 'root');
+		$a = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertSame($a->tagName, 'root');
 	}
 
 	public function testFindInPlace() : void
@@ -366,19 +350,25 @@ class DOMQueryTest extends TestCase
 		$file = DATA_FILE;
 		$qp = qp($file)->find('#head');
 		$this->assertCount(1, $qp->get());
-		$this->assertSame($qp->get(0)->tagName, 'head');
+		$a = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertSame($a->tagName, 'head');
 
 		$this->assertSame('inner', qp($file)->find('.innerClass')->tag());
 
 		$string = '<?xml version="1.0"?><root><a/>Test</root>';
 		$qp = qp($string)->find('root');
 		$this->assertCount(1, $qp->get(), 'Check tag.');
-		$this->assertSame($qp->get(0)->tagName, 'root');
+		$a = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertSame($a->tagName, 'root');
 
 		$string = '<?xml version="1.0"?><root class="findme">Test</root>';
 		$qp = qp($string)->find('.findme');
 		$this->assertCount(1, $qp->get(), 'Check class.');
-		$this->assertSame($qp->get(0)->tagName, 'root');
+		$a = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertSame($a->tagName, 'root');
 	}
 
 	/**
@@ -407,7 +397,9 @@ class DOMQueryTest extends TestCase
 
 		$qp = qp($file)->find('#head');
 		$this->assertSame(1, $qp->count());
-		$this->assertSame($qp->get(0)->getAttribute('id'), $qp->attr('id'));
+		$a = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertSame($a->getAttribute('id'), $qp->attr('id'));
 
 		$qp->attr('foo', 'bar');
 		$this->assertSame('bar', $qp->attr('foo'));
@@ -422,6 +414,7 @@ class DOMQueryTest extends TestCase
 		$xml = '<?xml version="1.0"?><root><one a1="1" a2="2" a3="3"/></root>';
 		$qp = qp($xml, 'one');
 		$attrs = $qp->attr();
+		$this->assertIsArray($attrs);
 		$this->assertCount(3, $attrs, 'Three attributes');
 		$this->assertSame('1', $attrs['a1'], 'Attribute a1 has value 1.');
 	}
@@ -452,6 +445,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('test', $qp->val());
 
 		$qp = qp('<?xml version="1.0"?><foo><bar/></foo>', 'bar')->val('test');
+		$this->assertInstanceOf(DOMQuery::class, $qp);
 		$this->assertSame('test', $qp->attr('value'));
 	}
 
@@ -468,6 +462,7 @@ class DOMQueryTest extends TestCase
 
 		$expects = 'color: blue;background-color: white;';
 		$actual = $qp->css();
+		$this->assertIsString($actual);
 		$this->assertSame(bin2hex($expects), bin2hex($actual), 'Two css calls should result in two attrs.');
 
 		// Make sure array merges work.
@@ -485,7 +480,9 @@ class DOMQueryTest extends TestCase
 
 		$qp = qp($file, 'inner')->removeAttr('class');
 		$this->assertSame(2, $qp->count());
-		$this->assertFalse($qp->get(0)->hasAttribute('class'));
+		$element = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertFalse($element->hasAttribute('class'));
 	}
 
 	public function testEq() : void
@@ -508,12 +505,16 @@ class DOMQueryTest extends TestCase
 
 		$qp = qp($file)->find('#one');
 		$ele = $qp->get(0);
+		$this->assertInstanceOf(DOMNode::class, $ele);
 		$this->assertTrue($qp->top('#one')->is($ele));
 
 		$qp = qp($file)->find('#one');
 		$ele = $qp->get(0);
 		$ele2 = $qp->top('#two')->get(0);
+		$this->assertInstanceOf(DOMNode::class, $ele);
+		$this->assertInstanceOf(DOMNode::class, $ele2);
 
+		/** @var SplDoublyLinkedList<mixed, DOMNode> */
 		$list = new SplDoublyLinkedList();
 		$list->push($ele);
 		$list->push($ele2);
@@ -527,6 +528,7 @@ class DOMQueryTest extends TestCase
 		$xml = '<?xml version="1.0"?><foo><bar id="one"/><baz id="two"/></foo>';
 		$qp = qp($xml, 'bar');
 		$e1 = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $e1);
 		$this->assertSame(0, $qp->find('bar')->index($e1));
 		$this->assertFalse($qp->top()->find('#two')->index($e1));
 	}
@@ -607,6 +609,8 @@ class DOMQueryTest extends TestCase
 		$qp = qp($file, 'li');
 		$arr = $qp->get();
 		$this->assertSame(count($arr), $qp->count());
+		$this->assertIsArray($arr);
+		$this->assertTrue(array_is_list($arr));
 		array_shift($arr);
 		$this->assertSame(1, $qp->not($arr)->count());
 	}
@@ -636,8 +640,17 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('three', $qp->eq(1)->attr('id'));
 	}
 
-	public function mapCallbackFunction($index, $item)
+	/**
+	 * @return callable(int, DOMNode):(false|list<int>|int)
+	 */
+	public function mapCallbackFunction()
 	{
+		return
+			/**
+			 * @return false|list<int>|int
+			 */
+			static function (int $index, DOMNode $_item) : bool|array|int
+			{
 		if (1 === $index) {
 			return false;
 		}
@@ -646,44 +659,39 @@ class DOMQueryTest extends TestCase
 		}
 
 		return $index;
+			}
+		;
 	}
 
 	public function testMap() : void
 	{
 		$file = DATA_FILE;
-		$fn = 'mapCallbackFunction';
-		$this->assertSame(7, qp($file, 'li')->map([$this, $fn])->count());
-	}
-
-	public function eachCallbackFunction($index, $item)
-	{
-		if ($index < 2) {
-			qp($item)->attr('class', 'test');
-		} else {
-			return false;
-		}
+		$fn = $this->mapCallbackFunction();
+		$this->assertSame(7, qp($file, 'li')->map($fn)->count());
 	}
 
 	public function testEach() : void
 	{
 		$file = DATA_FILE;
-		$fn = 'eachCallbackFunction';
-		$res = qp($file, 'li')->each([$this, $fn]);
+		$fn = static function (int $index, DOMNode $item) : ?bool
+		{
+			if ($index < 2) {
+				qp($item)->attr('class', 'test');
+
+				return null;
+			} else {
+				return false;
+			}
+		};
+		$res = qp($file, 'li')->each($fn);
 		$this->assertSame(5, $res->count());
-		$this->assertFalse(null === $res->get(4)->getAttribute('class'));
+		$element = $res->get(4);
+		$this->assertInstanceOf(DOMElement::class, $element);
 		$this->assertSame('test', $res->eq(1)->attr('class'));
 
 		// Test when each runs out of things to test before returning.
-		$res = qp($file, '#one')->each([$this, $fn]);
+		$res = qp($file, '#one')->each($fn);
 		$this->assertSame(1, $res->count());
-	}
-
-	public function testEachOnInvalidCallback() : void
-	{
-		$file = DATA_FILE;
-		$fn = 'eachCallbackFunctionFake';
-		$this->expectException(\QueryPath\Exception::class);
-		$res = qp($file, 'li')->each([$this, $fn]);
 	}
 
 	public function testDeepest() : void
@@ -699,13 +707,21 @@ class DOMQueryTest extends TestCase
     </root>';
 		$deepest = qp($str)->deepest();
 		$this->assertSame(2, $deepest->count());
-		$this->assertSame('four', $deepest->get(0)->tagName);
-		$this->assertSame('banana', $deepest->get(1)->tagName);
+		$a = $deepest->get(0);
+		$b = $deepest->get(1);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertInstanceOf(DOMElement::class, $b);
+		$this->assertSame('four', $a->tagName);
+		$this->assertSame('banana', $b->tagName);
 
 		$deepest = qp($str, 'one')->deepest();
 		$this->assertSame(2, $deepest->count());
-		$this->assertSame('four', $deepest->get(0)->tagName);
-		$this->assertSame('banana', $deepest->get(1)->tagName);
+		$a = $deepest->get(0);
+		$b = $deepest->get(1);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertInstanceOf(DOMElement::class, $b);
+		$this->assertSame('four', $a->tagName);
+		$this->assertSame('banana', $b->tagName);
 
 		$str = '<?xml version="1.0" ?>
     <root>
@@ -728,7 +744,9 @@ class DOMQueryTest extends TestCase
 
 		$appended = $qp->find('#appended');
 		$this->assertSame(1, $appended->count());
-		$this->assertNull($appended->get(0)->nextSibling);
+		$element = $appended->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertNull($element->nextSibling);
 
 		$this->assertSame(2, qp($file, 'inner')->append('<test/>')->top()->find('test')->count());
 		$this->assertSame(2,
@@ -765,24 +783,7 @@ class DOMQueryTest extends TestCase
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		$file = DATA_FILE;
-		try {
 			qp($file, 'root')->append('<foo><bar></foo>');
-		} catch (Exception $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
-	}
-
-	public function testAppendBadObject() : void
-	{
-		$this->expectException(\QueryPath\Exception::class);
-		$file = DATA_FILE;
-		try {
-			qp($file, 'root')->append(new stdClass());
-		} catch (Exception $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testAppendTo() : void
@@ -799,7 +800,9 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(1, qp($file, 'unary')->prepend('<test/>')->find(':root > unary > test')->count());
 		$qp = qp($file, '#inner-one')->prepend('<li id="appended"/>')->find('#appended');
 		$this->assertSame(1, $qp->count());
-		$this->assertNull($qp->get(0)->previousSibling);
+		$element = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertNull($element->previousSibling);
 
 		// Test repeated insert
 		$this->assertSame(2, qp($file, 'inner')->prepend('<test/>')->top()->find('test')->count());
@@ -820,8 +823,11 @@ class DOMQueryTest extends TestCase
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'unary')->before('<test/>')->find(':root > test ~ unary')->count());
 		$this->assertSame(1, qp($file, 'unary')->before('<test/>')->top('head ~ test')->count());
+		$element = qp($file, 'unary')->before('<test/>')->top(':root > test')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertInstanceOf(DOMElement::class, $element->nextSibling);
 		$this->assertSame('unary',
-			qp($file, 'unary')->before('<test/>')->top(':root > test')->get(0)->nextSibling->tagName);
+			$element->nextSibling->tagName);
 
 		// Test repeated insert
 		$this->assertSame(2, qp($file, 'inner')->before('<test/>')->top()->find('test')->count());
@@ -833,8 +839,11 @@ class DOMQueryTest extends TestCase
 	{
 		$file = DATA_FILE;
 		$this->assertSame(1, qp($file, 'unary')->after('<test/>')->top(':root > unary ~ test')->count());
+		$element = qp($file, 'unary')->after('<test/>')->top(':root > test')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertInstanceOf(DOMElement::class, $element->previousSibling);
 		$this->assertSame('unary',
-			qp($file, 'unary')->after('<test/>')->top(':root > test')->get(0)->previousSibling->tagName);
+			$element->previousSibling->tagName);
 
 		$this->assertSame(2, qp($file, 'inner')->after('<test/>')->top()->find('test')->count());
 		$this->assertSame(4, qp($file, 'inner')->after(qp('<?xml version="1.0"?><root><test/><test/></root>',
@@ -847,7 +856,10 @@ class DOMQueryTest extends TestCase
 		$dest = qp('<?xml version="1.0"?><root><dest/></root>', 'dest');
 		$qp = qp($file, 'li')->insertBefore($dest);
 		$this->assertSame(5, $dest->top(':root > li')->count());
-		$this->assertSame('li', $dest->end()->find('dest')->get(0)->previousSibling->tagName);
+		$element = $dest->end()->find('dest')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertInstanceOf(DOMElement::class, $element->previousSibling);
+		$this->assertSame('li', $element->previousSibling->tagName);
 	}
 
 	public function testInsertAfter() : void
@@ -874,7 +886,10 @@ class DOMQueryTest extends TestCase
 	public function testReplaceAll() : void
 	{
 		$qp1 = qp('<?xml version="1.0"?><root><l/><l/></root>');
-		$doc = qp('<?xml version="1.0"?><bob><m/><m/></bob>')->get(0)->ownerDocument;
+		$element = qp('<?xml version="1.0"?><bob><m/><m/></bob>')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$doc = $element->ownerDocument;
+		$this->assertInstanceOf(DOMDocument::class, $doc);
 
 		$qp2 = $qp1->find('l')->replaceAll('m', $doc);
 
@@ -923,19 +938,34 @@ class DOMQueryTest extends TestCase
 		$xml = qp($file, 'unary')->wrap('');
 		$this->assertTrue($xml instanceof DOMQuery);
 
-		$xml = qp($file, 'unary')->wrap('<test id="testWrap"></test>')->get(0)->ownerDocument->saveXML();
-		$this->assertSame(1, qp($xml, '#testWrap')->get(0)->childNodes->length);
+		$element = qp($file, 'unary')->wrap('<test id="testWrap"></test>')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertInstanceOf(DOMDocument::class, $element->ownerDocument);
+		$xml = $element->ownerDocument->saveXML();
+		$element = qp($xml, '#testWrap')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertSame(1, $element->childNodes->length);
 
-		$xml = qp($file,
+		$element = qp($file,
 			'unary')->wrap(qp('<?xml version="1.0"?><root><test id="testWrap"></test><test id="ignored"></test></root>',
-			'test'))->get(0)->ownerDocument->saveXML();
-		$this->assertSame(1, qp($xml, '#testWrap')->get(0)->childNodes->length);
+			'test'))->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertInstanceOf(DOMDocument::class, $element->ownerDocument);
+		$xml = $element->ownerDocument->saveXML();
+		$element = qp($xml, '#testWrap')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertSame(1, $element->childNodes->length);
 
-		$xml = qp($file, 'li')->wrap('<test class="testWrap"></test>')->get(0)->ownerDocument->saveXML();
+		$element = qp($file, 'li')->wrap('<test class="testWrap"></test>')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertInstanceOf(DOMDocument::class, $element->ownerDocument);
+		$xml = $element->ownerDocument->saveXML();
 		$this->assertSame(5, qp($xml, '.testWrap')->count());
 
-		$xml = qp($file,
-			'li')->wrap('<test class="testWrap"><inside><center/></inside></test>')->get(0)->ownerDocument->saveXML();
+		$element = qp($file, 'li')->wrap('<test class="testWrap"><inside><center/></inside></test>')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertInstanceOf(DOMDocument::class, $element->ownerDocument);
+		$xml = $element->ownerDocument->saveXML();
 		$this->assertSame(5, qp($xml, '.testWrap > inside > center > li')->count());
 	}
 
@@ -943,19 +973,28 @@ class DOMQueryTest extends TestCase
 	{
 		$file = DATA_FILE;
 
-		$xml = qp($file, 'unary')->wrapAll('');
-		$this->assertTrue($xml instanceof DOMQuery);
+		$element = qp($file, 'unary')->wrapAll('<test id="testWrap"></test>')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertInstanceOf(DOMDocument::class, $element->ownerDocument);
+		$xml = $element->ownerDocument->saveXML();
+		$element = qp($xml, '#testWrap')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertSame(1, $element->childNodes->length);
 
-		$xml = qp($file, 'unary')->wrapAll('<test id="testWrap"></test>')->get(0)->ownerDocument->saveXML();
-		$this->assertSame(1, qp($xml, '#testWrap')->get(0)->childNodes->length);
-
-		$xml = qp($file,
+		$a = qp($file,
 			'unary')->wrapAll(qp('<?xml version="1.0"?><root><test id="testWrap"></test><test id="ignored"></test></root>',
-			'test'))->get(0)->ownerDocument->saveXML();
-		$this->assertSame(1, qp($xml, '#testWrap')->get(0)->childNodes->length);
+			'test'))->get(0);
+		$this->assertInstanceOf(DOMNode::class, $a);
+		$this->assertInstanceOf(DOMDocument::class, $a->ownerDocument);
+		$xml = $a->ownerDocument->saveXML();
+		$element = qp($xml, '#testWrap')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertSame(1, $element->childNodes->length);
 
-		$xml = qp($file,
-			'li')->wrapAll('<test class="testWrap"><inside><center/></inside></test>')->get(0)->ownerDocument->saveXML();
+		$a = qp($file, 'li')->wrapAll('<test class="testWrap"><inside><center/></inside></test>')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertInstanceOf(DOMDocument::class, $a->ownerDocument);
+		$xml = $a->ownerDocument->saveXML();
 		$this->assertSame(5, qp($xml, '.testWrap > inside > center > li')->count());
 	}
 
@@ -965,13 +1004,25 @@ class DOMQueryTest extends TestCase
 
 		$this->assertTrue(qp($file, '#inner-one')->wrapInner('') instanceof DOMQuery);
 
-		$xml = qp($file, '#inner-one')->wrapInner('<test class="testWrap"></test>')->get(0)->ownerDocument->saveXML();
+		$a = qp($file, '#inner-one')->wrapInner('<test class="testWrap"></test>')->get(0);
+		$this->assertInstanceOf(DOMNode::class, $a);
+		$this->assertInstanceOf(DOMDocument::class, $a->ownerDocument);
+		$xml = $a->ownerDocument->saveXML();
+		$a = qp($xml, '.testWrap')->get(0);
+		$this->assertInstanceOf(DOMNode::class, $a);
 		// FIXME: 9 includes text nodes. Should fix this.
-		$this->assertSame(9, qp($xml, '.testWrap')->get(0)->childNodes->length);
+		$this->assertSame(9, $a->childNodes->length);
 
-		$xml = qp($file, 'inner')->wrapInner('<test class="testWrap"></test>')->get(0)->ownerDocument->saveXML();
-		$this->assertSame(9, qp($xml, '.testWrap')->get(0)->childNodes->length);
-		$this->assertSame(3, qp($xml, '.testWrap')->get(1)->childNodes->length);
+		$element = qp($file, 'inner')->wrapInner('<test class="testWrap"></test>')->get(0);
+		$this->assertInstanceOf(DOMElement::class, $element);
+		$this->assertInstanceOf(DOMDocument::class, $element->ownerDocument);
+		$xml = $element->ownerDocument->saveXML();
+		$a = qp($xml, '.testWrap')->get(0);
+		$b = qp($xml, '.testWrap')->get(1);
+		$this->assertInstanceOf(DOMElement::class, $a);
+		$this->assertInstanceOf(DOMElement::class, $b);
+		$this->assertSame(9, $a->childNodes->length);
+		$this->assertSame(3, $b->childNodes->length);
 
 		$qp = qp($file,
 			'inner')->wrapInner(qp('<?xml version="1.0"?><root><test class="testWrap"/><test class="ignored"/></root>',
@@ -1121,8 +1172,8 @@ class DOMQueryTest extends TestCase
 		$this->assertNull(qp()->html());
 
 		// Non-DOMNodes should not be rendered:
-		$fn = 'mapCallbackFunction';
-		$this->assertNull(qp($file, 'li')->map([$this, $fn])->html());
+		$fn = $this->mapCallbackFunction();
+		$this->assertNull(qp($file, 'li')->map($fn)->html());
 	}
 
 	public function testInnerHTML() : void
@@ -1171,22 +1222,30 @@ class DOMQueryTest extends TestCase
 		$file = DATA_FILE;
 		$qp = qp($file, 'unary');
 		$xml = '<b>test</b>';
-		$this->assertSame($xml, $qp->xml($xml)->find('b')->xml());
+		$xmlparse = $qp->xml($xml);
+		$this->assertInstanceOf(DOMQuery::class, $xmlparse);
+		$xmlfind = $xmlparse->find('b');
+		$this->assertInstanceOf(Query::class, $xmlfind);
+		$this->assertSame($xml, $xmlfind->xml());
 
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
+		$xmlstr = qp($xml, 'html')->xml();
+		$this->assertIsString($xmlstr);
 		// We expect an XML declaration to be prepended:
-		$this->assertSame('<?xml', substr(qp($xml, 'html')->xml(), 0, 5));
+		$this->assertSame('<?xml', substr($xmlstr, 0, 5));
 
 		// We don't want an XM/L declaration if xml(TRUE).
 		$xml = '<?xml version="1.0"?><foo/>';
-		$this->assertFalse(strpos(qp($xml)->xml(true), '<?xml'));
+		$xmlstr = qp($xml)->xml(true);
+		$this->assertIsString($xmlstr);
+		$this->assertFalse(strpos($xmlstr, '<?xml'));
 
 		// We expect NULL if the document is empty.
 		$this->assertNull(qp()->xml());
 
 		// Non-DOMNodes should not be rendered:
-		$fn = 'mapCallbackFunction';
-		$this->assertNull(qp($file, 'li')->map([$this, $fn])->xml());
+		$fn = $this->mapCallbackFunction();
+		$this->assertNull(qp($file, 'li')->map($fn)->xml());
 	}
 
 	public function testXHTML() : void
@@ -1196,22 +1255,30 @@ class DOMQueryTest extends TestCase
 		$file = DATA_FILE;
 		$qp = qp($file, 'unary');
 		$xml = '<b>test</b>';
-		$this->assertSame($xml, $qp->xml($xml)->find('b')->xhtml());
+		$xmlparse = $qp->xml($xml);
+		$this->assertInstanceOf(DOMQuery::class, $xmlparse);
+		$xmlfind = $xmlparse->find('b');
+		$this->assertInstanceOf(Query::class, $xmlfind);
+		$this->assertSame($xml, $xmlfind->xhtml());
 
 		$xml = '<html><head><title>foo</title></head><body>bar</body></html>';
+		$xhtml = qp($xml, 'html')->xhtml();
 		// We expect an XML declaration to be prepended:
-		$this->assertSame('<?xml', substr(qp($xml, 'html')->xhtml(), 0, 5));
+		$this->assertIsString($xhtml);
+		$this->assertSame('<?xml', substr($xhtml, 0, 5));
 
 		// We don't want an XM/L declaration if xml(TRUE).
 		$xml = '<?xml version="1.0"?><foo/>';
-		$this->assertFalse(strpos(qp($xml)->xhtml(true), '<?xml'));
+		$xhtml = qp($xml)->xhtml(true);
+		$this->assertIsString($xhtml);
+		$this->assertFalse(strpos($xhtml, '<?xml'));
 
 		// We expect NULL if the document is empty.
 		$this->assertNull(qp()->xhtml());
 
 		// Non-DOMNodes should not be rendered:
-		$fn = 'mapCallbackFunction';
-		$this->assertNull(qp($file, 'li')->map([$this, $fn])->xhtml());
+		$fn = $this->mapCallbackFunction();
+		$this->assertNull(qp($file, 'li')->map($fn)->xhtml());
 
 		// Regression for issue #10: Tags should not be unary (e.g. we want <script></script>, not <script/>)
 		$xml = '<html><head><title>foo</title></head>
@@ -1225,6 +1292,7 @@ class DOMQueryTest extends TestCase
       </body></html>';
 
 		$xhtml = qp($xml)->xhtml();
+		$this->assertIsString($xhtml);
 
 		//throw new Exception($xhtml);
 
@@ -1352,34 +1420,19 @@ class DOMQueryTest extends TestCase
 	public function testFailWriteXML() : void
 	{
 		$this->expectException(\QueryPath\IOException::class);
-		try {
 			qp()->writeXML('/dev/null');
-		} catch (Exception $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testFailWriteXHTML() : void
 	{
 		$this->expectException(\QueryPath\IOException::class);
-		try {
 			qp()->writeXHTML('/dev/null');
-		} catch (\QueryPath\IOException $e) {
-			//print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testFailWriteHTML() : void
 	{
 		$this->expectException(\QueryPath\IOException::class);
-		try {
 			qp('<?xml version="1.0"?><foo/>')->writeXML('/dev/null');
-		} catch (\QueryPath\IOException $e) {
-			// print $e->getMessage();
-			throw $e;
-		}
 	}
 
 	public function testWriteHTML() : void
@@ -1566,7 +1619,9 @@ class DOMQueryTest extends TestCase
 		while (null !== $qp->next('p')->html()) {
 			$qp = $qp->next('p');
 			$this->assertCount(1, $qp);
-			$this->assertSame($testarray[$i], $qp->text(), $i . " didn't match " . $qp->top()->xml());
+			$xml = $qp->top()->xml();
+			$this->assertIsString($xml);
+			$this->assertSame($testarray[$i], $qp->text(), $i . " didn't match " . $xml);
 			++$i;
 		}
 		$this->assertSame(3, $i);
@@ -1637,6 +1692,7 @@ class DOMQueryTest extends TestCase
 		$one = $qp->get(0);
 		$two = $qp->cloneAll()->get(0);
 		$this->assertTrue($one !== $two);
+		$this->assertInstanceOf(DOMElement::class, $two);
 		$this->assertSame('unary', $two->tagName);
 
 		// Deep test: make sure children are also cloned.
@@ -1681,7 +1737,9 @@ class DOMQueryTest extends TestCase
 		$this->assertFalse($qp === $qp2);
 		$qp2->findInPlace('li')->attr('foo', 'bar');
 		$this->assertSame('', $qp->find('li')->attr('foo'));
-		$this->assertSame('bar', $qp2->attr('foo'), $qp2->top()->xml());
+		$xml = $qp2->top()->xml();
+		$this->assertIsString($xml);
+		$this->assertSame('bar', $qp2->attr('foo'), $xml);
 	}
 
 	public function testStub() : void
@@ -1830,7 +1888,9 @@ class DOMQueryTest extends TestCase
 		// Test multiple matches.
 		$qp = qp($file, '#docRoot, #inner-two')->has('#five');
 		$this->assertSame(2, $qp->count(), 'Two elements are parents of #five');
-		$this->assertSame('inner', $qp->get(0)->tagName, 'Inner has li.');
+		$target = $qp->get(0);
+		$this->assertInstanceOf(DOMElement::class, $target);
+		$this->assertSame('inner', $target->tagName, 'Inner has li.');
 
 		/*
 		$this->assertEquals(qp($file, '#one')->children()->get(), qp($file, '#inner-one')->has($selector)->get(), "Both should be empty/false");
@@ -1964,6 +2024,7 @@ class DOMQueryTest extends TestCase
 		}
 		$res = $qp->top()->xml();
 		$expect_xml = '<?xml version="1.0"?><r><s/><i>1</i><i>1</i><i>2</i><i>5</i><e/></r>';
+		$this->assertIsString($res);
 		$this->assertXmlStringEqualsXmlString($expect_xml, $res);
 	}
 
@@ -2006,6 +2067,7 @@ class DOMQueryTest extends TestCase
 		$this->assertSame('data:text/plain;base64,SGkh', $qp->attr('secret'), 'Attr value should be data URL.');
 
 		$result = $qp->dataURL('secret');
+		$this->assertIsArray($result);
 		$this->assertCount(2, $result, 'Should return two-array.');
 		$this->assertSame($text, $result['data'], 'Should return original data, decoded.');
 		$this->assertSame('text/plain', $result['mime'], 'Should return the original MIME');
@@ -2037,20 +2099,5 @@ class DOMQueryTest extends TestCase
 		}
 
 		return $pack;
-	}
-}
-
-/**
- * A simple mock for testing qp()'s abstract factory.
- *
- * @ingroup querypath_tests
- */
-class QueryPathExtended extends DOMQuery
-{
-	public $foo = 'bar';
-
-	public function foonator()
-	{
-		return true;
 	}
 }

@@ -18,7 +18,7 @@ use const LIBXML_ERR_WARNING;
  *
  * @ingroup querypath_core
  */
-class ParseException extends \QueryPath\Exception
+class ParseException extends Exception
 {
 	public const ERR_MSG_FORMAT = 'Parse error in %s on line %d column %d: %s (%d)';
 	public const WARN_MSG_FORMAT = 'Parser warning in %s on line %d column %d: %s (%d)';

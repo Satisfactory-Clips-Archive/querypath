@@ -51,6 +51,8 @@ class EntitiesTest extends TestCase
 		$qp = qp($test, null, ['replace_entities' => true]);
 		// Interestingly, the XML serializer converts decimal to hex and ampersands
 		// to &amp;.
-		$this->assertSame($expect, trim($qp->xml()));
+		$xml = $qp->xml();
+		$this->assertIsString($xml);
+		$this->assertSame($expect, trim($xml));
 	}
 }

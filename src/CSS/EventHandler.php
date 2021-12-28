@@ -125,7 +125,7 @@ interface EventHandler
 	 *  The operation to be used for matching. See {@link EventHandler}
 	 *  constants for a list of supported operations.
 	 */
-	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY); // [name=attr]
+	public function attribute(string $name, string $value = null, int $operation = EventHandler::IS_EXACTLY); // [name=attr]
 
 	/**
 	 * Handle an attribute selector bound to a specific namespace.
@@ -142,7 +142,7 @@ interface EventHandler
 	 *  The operation to be used for matching. See {@link EventHandler}
 	 *  constants for a list of supported operations.
 	 */
-	public function attributeNS($name, $ns, $value = null, $operation = EventHandler::IS_EXACTLY);
+	public function attributeNS(string $name, string $ns, string $value = null, int $operation = EventHandler::IS_EXACTLY);
 
 	/**
 	 * Handle a pseudo-class.

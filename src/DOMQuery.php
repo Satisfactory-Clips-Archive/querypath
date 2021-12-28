@@ -16,6 +16,8 @@ declare(strict_types=1);
 namespace QueryPath;
 
 use function count;
+use DOMDocument;
+use DOMElement;
 use DOMNode;
 use DOMXPath;
 use function is_array;
@@ -31,6 +33,7 @@ use ReflectionException;
 use ReflectionMethod;
 use SplObjectStorage;
 use function strlen;
+use UnexpectedValueException;
 use const XML_TEXT_NODE;
 
 /**
@@ -64,9 +67,11 @@ class DOMQuery extends DOM
 	public $length = 0;
 
 	/**
-	 * The last array of matches.
+	 * The last SplObjectStorage of matches.
+	 *
+	 * @var SplObjectStorage<DOMNode|TextContent, mixed>|null
 	 */
-	protected $last = []; // Last set of matches.
+	protected ?SplObjectStorage $last = null; // Last set of matches.
 	private $ext = []; // Extensions array.
 
 	/**
@@ -189,7 +194,7 @@ class DOMQuery extends DOM
 	 */
 	public function top($selector = null) : Query
 	{
-		return $this->inst($this->document->documentElement, $selector);
+		return $this->inst($this->document()->documentElement, $selector);
 	}
 
 	/**
@@ -212,24 +217,22 @@ class DOMQuery extends DOM
 	 *   from which to determine what the root is. The workaround is to use
 	 *   {@link top()} to select the root element again.
 	 */
-	public function find($selector) : Query
+	public function find(string $selector) : Query
 	{
-		$query = new DOMTraverser($this->matches);
+		$query = new DOMTraverser($this->getMatches());
 		$query->find($selector);
 
 		return $this->inst($query->matches(), null);
 	}
 
 	/**
-	 * @param $selector
-	 *
 	 * @throws CSS\ParseException
 	 *
 	 * @return $this
 	 */
-	public function findInPlace($selector)
+	public function findInPlace(string $selector)
 	{
-		$query = new DOMTraverser($this->matches);
+		$query = new DOMTraverser($this->getMatches());
 		$query->find($selector);
 		$this->setMatches($query->matches());
 
@@ -269,15 +272,19 @@ class DOMQuery extends DOM
 	 */
 	public function xpath($query, $options = [])
 	{
-		$xpath = new DOMXPath($this->document);
+		$xpath = new DOMXPath($this->document());
 
 		// Register a default namespace.
 		if ( ! empty($options['namespace_prefix']) && ! empty($options['namespace_uri'])) {
 			$xpath->registerNamespace($options['namespace_prefix'], $options['namespace_uri']);
 		}
 
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $item) {
+		foreach ($this->getMatches() as $item) {
+			if ( ! ($item instanceof DOMNode)) {
+				continue;
+			}
 			$nl = $xpath->query($query, $item);
 			if ($nl->length > 0) {
 				for ($i = 0; $i < $nl->length; ++$i) {
@@ -301,7 +308,7 @@ class DOMQuery extends DOM
 	 */
 	public function size()
 	{
-		return $this->matches->count();
+		return $this->getMatches()->count();
 	}
 
 	/**
@@ -321,7 +328,7 @@ class DOMQuery extends DOM
 	 */
 	public function count() : int
 	{
-		return $this->matches->count();
+		return $this->getMatches()->count();
 	}
 
 	/**
@@ -344,36 +351,44 @@ class DOMQuery extends DOM
 	 * will be wrapped in a DOMQuery object. To learn more about iterating
 	 * in QueryPath, see {@link examples/techniques.php}.
 	 *
-	 * @param int $index
+	 * @template T as int|null
+	 *
+	 * @param T $index
 	 *   If specified, then only this index value will be returned. If this
 	 *   index is out of bounds, a NULL will be returned.
 	 * @param bool $asObject
 	 *   If this is TRUE, an SplObjectStorage object will be returned
 	 *   instead of an array. This is the preferred method for extensions to use.
 	 *
-	 * @return mixed
+	 * @return (T is int ? DOMNode|TextContent|null : (SplObjectStorage<DOMNode|TextContent, mixed>|list<DOMNode>))
 	 *   If an index is passed, one element will be returned. If no index is
 	 *   present, an array of all matches will be returned.
 	 *
 	 * @see eq()
 	 * @see SplObjectStorage
 	 */
-	public function get($index = null, $asObject = false)
+	public function get(
+		?int $index = null,
+		bool $asObject = false
+	) : SplObjectStorage|array|DOMNode|TextContent|null
 	{
 		if (null !== $index) {
+			/** @var DOMNode|TextContent|null */
 			return ($this->count() > $index) ? $this->getNthMatch($index) : null;
 		}
 		// Retain support for legacy.
 		if ( ! $asObject) {
 			$matches = [];
-			foreach ($this->matches as $m) {
+			foreach ($this->getMatches() as $m) {
 				$matches[] = $m;
 			}
 
+			/** @var list<DOMNode> */
 			return $matches;
 		}
 
-		return $this->matches;
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
+		return $this->getMatches();
 	}
 
 	/**
@@ -384,20 +399,15 @@ class DOMQuery extends DOM
 	 */
 	public function ns()
 	{
-		return $this->get(0)->namespaceURI;
-	}
+		$element = $this->get(0);
 
-	/**
-	 * Get the DOMDocument that we currently work with.
-	 *
-	 * This returns the current DOMDocument. Any changes made to this document will be
-	 * accessible to DOMQuery, as both will share access to the same object.
-	 *
-	 * @return DOMDocument
-	 */
-	public function document()
-	{
-		return $this->document;
+		if ( ! ($element instanceof DOMElement)) {
+			throw new UnexpectedValueException(
+				'First item expected to be element!'
+			);
+		}
+
+		return $element->namespaceURI;
 	}
 
 	/**
@@ -407,7 +417,7 @@ class DOMQuery extends DOM
 	 */
 	public function xinclude()
 	{
-		$this->document->xinclude();
+		$this->document()->xinclude();
 
 		return $this;
 	}
@@ -417,11 +427,12 @@ class DOMQuery extends DOM
 	 * Compatibility function for jQuery 1.4, but identical to calling {@link get()}
 	 * with no parameters.
 	 *
-	 * @return array
+	 * @return list<DOMNode>
 	 *  An array of DOMNodes (typically DOMElements)
 	 */
-	public function toArray()
+	public function toArray() : array
 	{
+		/** @var list<DOMNode> */
 		return $this->get();
 	}
 
@@ -439,9 +450,11 @@ class DOMQuery extends DOM
 	 *
 	 * Note that this is known *not* to work on IE 6, but should render fine in other browsers.
 	 *
+	 * @template T as resource|string|null
+	 *
 	 * @param string $attr
 	 *    The name of the attribute
-	 * @param mixed $data
+	 * @param T $data
 	 *    The contents to inject as the data. The value can be any one of the following:
 	 *    - A URL: If this is given, then the subsystem will read the content from that URL. THIS
 	 *    MUST BE A FULL URL, not a relative path.
@@ -456,7 +469,7 @@ class DOMQuery extends DOM
 	 *    A valid context. Use this only if you need to pass a stream context. This is only necessary
 	 *    if $data is a URL. (See {@link stream_context_create()}).
 	 *
-	 * @return \QueryPath\DOMQuery|string
+	 * @return (T is null ? null|array{mime:string, data:string|false} : \QueryPath\DOMQuery)
 	 *    If this is called as a setter, this will return a DOMQuery object. Otherwise, it
 	 *    will attempt to fetch data out of the attribute and return that.
 	 *
@@ -464,13 +477,13 @@ class DOMQuery extends DOM
 	 * @see   attr()
 	 * @since 2.1
 	 */
-	public function dataURL($attr, $data = null, $mime = 'application/octet-stream', $context = null)
+	public function dataURL($attr, $data = null, $mime = 'application/octet-stream', $context = null) : DOMQuery|array|null
 	{
 		if (is_null($data)) {
 			// Attempt to fetch the data
 			$data = $this->attr($attr);
-			if (empty($data) || is_array($data) || 0 !== strpos($data, 'data:')) {
-				return;
+			if (empty($data) || ! is_string($data) || 0 !== strpos($data, 'data:')) {
+				return null;
 			}
 
 			// So 1 and 2 should be MIME types, and 3 should be the base64-encoded data.
@@ -489,6 +502,7 @@ class DOMQuery extends DOM
 		} else {
 			$attVal = QueryPath::encodeDataURL($data, $mime, $context);
 
+			/** @var DOMQuery */
 			return $this->attr($attr, $attVal);
 		}
 	}
@@ -557,7 +571,7 @@ class DOMQuery extends DOM
 	public function sort($comparator, $modifyDOM = false) : Query
 	{
 		// Sort as an array.
-		$list = iterator_to_array($this->matches);
+		$list = iterator_to_array($this->getMatches());
 
 		if (empty($list)) {
 			return $this;
@@ -568,6 +582,7 @@ class DOMQuery extends DOM
 		usort($list, $comparator);
 
 		// Copy back into SplObjectStorage.
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($list as $node) {
 			$found->attach($node);
@@ -576,11 +591,34 @@ class DOMQuery extends DOM
 
 		// Do DOM modifications only if necessary.
 		if ($modifyDOM) {
+			assert(
+				$oldFirst instanceof DOMNode,
+				new UnexpectedValueException('oldFirst was not a DOMNode!')
+			);
+			assert(
+				$oldFirst->ownerDocument instanceof DOMDocument,
+				new UnexpectedValueException('ownerDocument missing!')
+			);
+			assert(
+				$oldFirst->parentNode instanceof DOMNode,
+				new UnexpectedValueException('parentNode missing!')
+			);
 			$placeholder = $oldFirst->ownerDocument->createElement('_PLACEHOLDER_');
 			$placeholder = $oldFirst->parentNode->insertBefore($placeholder, $oldFirst);
+			assert(
+				$placeholder->parentNode instanceof DOMNode,
+				new UnexpectedValueException('parentNode missing!')
+			);
 			$len = count($list);
 			for ($i = 0; $i < $len; ++$i) {
 				$node = $list[$i];
+				if ( ! ($node instanceof DOMNode)) {
+					continue;
+				}
+				assert(
+					$node->parentNode instanceof DOMNode,
+					new UnexpectedValueException('parentNode missing!')
+				);
 				$node = $node->parentNode->removeChild($node);
 				$placeholder->parentNode->insertBefore($node, $placeholder);
 			}
@@ -599,17 +637,17 @@ class DOMQuery extends DOM
 	 * @param DOMElement $subject
 	 *  The item to match
 	 *
-	 * @return mixed
+	 * @return int|false
 	 *  The index as an integer (if found), or boolean FALSE. Since 0 is a
 	 *  valid index, you should use strong equality (===) to test..
 	 *
 	 * @see get()
 	 * @see is()
 	 */
-	public function index($subject)
+	public function index(DOMElement $subject) : int|bool
 	{
 		$i = 0;
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			if ($m === $subject) {
 				return $i;
 			}
@@ -631,9 +669,11 @@ class DOMQuery extends DOM
 	 * @return string
 	 *  The tag name of the first element in the list
 	 */
-	public function tag()
+	public function tag() : string
 	{
-		return ($this->matches->count() > 0) ? $this->getFirstMatch()->tagName : '';
+		$first = $this->getFirstMatch();
+
+		return ($first instanceof DOMElement) ? $first->tagName : '';
 	}
 
 	/**
@@ -708,8 +748,8 @@ class DOMQuery extends DOM
 		// This is destructive, so we need to set $last:
 		$last = $this->matches;
 
-		foreach ($this->last as $item) {
-			$this->matches->attach($item);
+		foreach ($this->last ?? [] as $item) {
+			$this->getMatches()->attach($item);
 		}
 
 		$this->last = $last;
@@ -757,14 +797,14 @@ class DOMQuery extends DOM
 
 			// Parse the HTML and insert it into the DOM
 			//$doc = DOMDocument::loadHTML($markup);
-			$doc = $this->document->createDocumentFragment();
+			$doc = $this->document()->createDocumentFragment();
 			$doc->appendXML($markup);
 			$this->removeChildren();
 			$this->append($doc);
 
 			return $this;
 		}
-		$length = $this->matches->count();
+		$length = $this->getMatches()->count();
 		if (0 === $length) {
 			return;
 		}
@@ -782,11 +822,11 @@ class DOMQuery extends DOM
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
-			return $this->document->saveHTML();
+			return $this->document()->saveHTML();
 		}
 
 		// saveHTML cannot take a node and serialize it.
-		return $this->document->saveXML($first);
+		return $this->document()->saveXML($first);
 	}
 
 	/**
@@ -794,19 +834,19 @@ class DOMQuery extends DOM
 	 *
 	 * See html()
 	 *
-	 * @param null $markup
+	 * @param string|null $markup
 	 *
 	 * @throws \QueryPath\Exception
 	 * @throws QueryPath
 	 *
 	 * @return DOMQuery|string|null
 	 */
-	public function html5($markup = null)
+	public function html5(string $markup = null)
 	{
 		$html5 = new HTML5($this->options);
 
 		// append HTML to existing
-		if (null === $markup) {
+		if (null !== $markup) {
 			// Parse the HTML and insert it into the DOM
 			$doc = $html5->loadHTMLFragment($markup);
 			$this->removeChildren();
@@ -833,7 +873,7 @@ class DOMQuery extends DOM
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
-			return $html5->saveHTML($this->document); //$this->document->saveHTML();
+			return $html5->saveHTML($this->document); //$this->document()->saveHTML();
 		}
 
 		return $html5->saveHTML($first);
@@ -894,7 +934,7 @@ class DOMQuery extends DOM
 	 */
 	public function innerXHTML()
 	{
-		$length = $this->matches->count();
+		$length = $this->getMatches()->count();
 		if (0 === $length) {
 			return;
 		}
@@ -912,7 +952,7 @@ class DOMQuery extends DOM
 
 		$buffer = '';
 		foreach ($first->childNodes as $child) {
-			$buffer .= $this->document->saveXML($child, LIBXML_NOEMPTYTAG);
+			$buffer .= $this->document()->saveXML($child, LIBXML_NOEMPTYTAG);
 		}
 
 		return $buffer;
@@ -935,7 +975,7 @@ class DOMQuery extends DOM
 	 */
 	public function innerXML()
 	{
-		$length = $this->matches->count();
+		$length = $this->getMatches()->count();
 		if (0 === $length) {
 			return;
 		}
@@ -953,7 +993,7 @@ class DOMQuery extends DOM
 
 		$buffer = '';
 		foreach ($first->childNodes as $child) {
-			$buffer .= $this->document->saveXML($child);
+			$buffer .= $this->document()->saveXML($child);
 		}
 
 		return $buffer;
@@ -967,7 +1007,7 @@ class DOMQuery extends DOM
 	 */
 	public function innerHTML5()
 	{
-		$length = $this->matches->count();
+		$length = $this->getMatches()->count();
 		if (0 === $length) {
 			return;
 		}
@@ -1015,7 +1055,7 @@ class DOMQuery extends DOM
 	public function textImplode($sep = ', ', $filterEmpties = true) : string
 	{
 		$tmp = [];
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$txt = $m->textContent;
 			$trimmed = trim($txt);
 			// If filter empties out, then we only add items that have content.
@@ -1071,15 +1111,18 @@ class DOMQuery extends DOM
 	{
 		if (isset($text)) {
 			$this->removeChildren();
-			foreach ($this->matches as $m) {
-				$m->appendChild($this->document->createTextNode($text));
+			foreach ($this->getMatches() as $m) {
+				if ( ! ($m instanceof DOMNode)) {
+					continue;
+				}
+				$m->appendChild($this->document()->createTextNode($text));
 			}
 
 			return $this;
 		}
 		// Returns all text as one string:
 		$buf = '';
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$buf .= $m->textContent;
 		}
 
@@ -1119,12 +1162,12 @@ class DOMQuery extends DOM
 	public function textBefore($text = null)
 	{
 		if (isset($text)) {
-			$textNode = $this->document->createTextNode($text);
+			$textNode = $this->document()->createTextNode($text);
 
 			return $this->before($textNode);
 		}
 		$buffer = '';
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$p = $m;
 			while (isset($p->previousSibling) && XML_TEXT_NODE === $p->previousSibling->nodeType) {
 				$p = $p->previousSibling;
@@ -1138,12 +1181,12 @@ class DOMQuery extends DOM
 	public function textAfter($text = null)
 	{
 		if (isset($text)) {
-			$textNode = $this->document->createTextNode($text);
+			$textNode = $this->document()->createTextNode($text);
 
 			return $this->after($textNode);
 		}
 		$buffer = '';
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$n = $m;
 			while (isset($n->nextSibling) && XML_TEXT_NODE === $n->nextSibling->nodeType) {
 				$n = $n->nextSibling;
@@ -1169,13 +1212,15 @@ class DOMQuery extends DOM
 	 * @deprecated Just use attr(). There's no reason to use this on the server.
 	 * @see        attr()
 	 *
-	 * @param string $value
+	 * @template T as string|null
 	 *
-	 * @return mixed
+	 * @param T $value
+	 *
+	 * @return (T is string ? DOMQuery : (string|null))
 	 *  Returns a DOMQuery if a string was passed in, and a string if no string
 	 *  was passed in. In the later case, an error will produce NULL.
 	 */
-	public function val($value = null)
+	public function val(string $value = null) : DOMQuery|string|null
 	{
 		if (isset($value)) {
 			$this->attr('value', $value);
@@ -1183,6 +1228,7 @@ class DOMQuery extends DOM
 			return $this;
 		}
 
+		/** @var string|null */
 		return $this->attr('value');
 	}
 
@@ -1201,14 +1247,14 @@ class DOMQuery extends DOM
 	 * @param string $markup
 	 *  A string containing XML data
 	 *
-	 * @return mixed
+	 * @return DOMQuery|string|null
 	 *  If markup is passed in, a DOMQuery is returned. If no markup is passed
 	 *  in, XML representing the first matched element is returned.
 	 *
 	 * @see html()
 	 * @see innerXHTML()
 	 */
-	public function xhtml($markup = null)
+	public function xhtml($markup = null) : DOMQuery|string|null
 	{
 		// XXX: This is a minor reworking of the original xml() method.
 		// This should be refactored, probably.
@@ -1223,24 +1269,24 @@ class DOMQuery extends DOM
 			return $this->xml($markup);
 		}
 
-		$length = $this->matches->count();
+		$length = $this->getMatches()->count();
 		if (0 === $length) {
-			return;
+			return null;
 		}
 
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 		// Catch cases where first item is not a legit DOM object.
 		if ( ! ($first instanceof DOMNode)) {
-			return;
+			return null;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
 			// Has the unfortunate side-effect of stripping doctype.
-			//$text = ($omit_xml_decl ? $this->document->saveXML($first->ownerDocument->documentElement, LIBXML_NOEMPTYTAG) : $this->document->saveXML(NULL, LIBXML_NOEMPTYTAG));
-			$text = $this->document->saveXML(null, LIBXML_NOEMPTYTAG);
+			//$text = ($omit_xml_decl ? $this->document()->saveXML($first->ownerDocument->documentElement, LIBXML_NOEMPTYTAG) : $this->document()->saveXML(NULL, LIBXML_NOEMPTYTAG));
+			$text = $this->document()->saveXML(null, LIBXML_NOEMPTYTAG);
 		} else {
-			$text = $this->document->saveXML($first, LIBXML_NOEMPTYTAG);
+			$text = $this->document()->saveXML($first, LIBXML_NOEMPTYTAG);
 		}
 
 		// Issue #47: Using the old trick for removing the XML tag also removed the
@@ -1276,10 +1322,10 @@ class DOMQuery extends DOM
 	 * In getter mode, the first element wrapped by this DOMNode object will be
 	 * converted to an XML string and returned.
 	 *
-	 * @param string $markup
+	 * @param string|true|null $markup
 	 *  A string containing XML data
 	 *
-	 * @return mixed
+	 * @return DOMQuery|string|null
 	 *  If markup is passed in, a DOMQuery is returned. If no markup is passed
 	 *  in, XML representing the first matched element is returned.
 	 *
@@ -1289,7 +1335,7 @@ class DOMQuery extends DOM
 	 * @see content()
 	 * @see innerXML()
 	 */
-	public function xml($markup = null)
+	public function xml(string|bool $markup = null) : DOMQuery|string|null
 	{
 		$omit_xml_decl = $this->options['omit_xml_declaration'];
 		if (true === $markup) {
@@ -1300,30 +1346,30 @@ class DOMQuery extends DOM
 			if ($this->options['replace_entities']) {
 				$markup = Entities::replaceAllEntities($markup);
 			}
-			$doc = $this->document->createDocumentFragment();
+			$doc = $this->document()->createDocumentFragment();
 			$doc->appendXML($markup);
 			$this->removeChildren();
 			$this->append($doc);
 
 			return $this;
 		}
-		$length = $this->matches->count();
+		$length = $this->getMatches()->count();
 		if (0 === $length) {
-			return;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if ( ! ($first instanceof DOMNode)) {
-			return;
+			return null;
 		}
 
 		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
-			return $omit_xml_decl ? $this->document->saveXML($first->ownerDocument->documentElement) : $this->document->saveXML();
+			return $omit_xml_decl ? $this->document()->saveXML($first->ownerDocument->documentElement) : $this->document()->saveXML();
 		}
 
-		return $this->document->saveXML($first);
+		return $this->document()->saveXML($first);
 	}
 
 	/**
@@ -1354,11 +1400,11 @@ class DOMQuery extends DOM
 	public function writeXML($path = null, $options = null)
 	{
 		if (null === $path) {
-			echo $this->document->saveXML(null, $options ?? 0);
+			echo $this->document()->saveXML(null, $options ?? 0);
 		} else {
 			try {
 				set_error_handler([IOException::class, 'initializeFromError']);
-				$this->document->save($path, $options ?? 0);
+				$this->document()->save($path, $options ?? 0);
 			} catch (Exception $e) {
 				restore_error_handler();
 				throw $e;
@@ -1394,11 +1440,11 @@ class DOMQuery extends DOM
 	public function writeHTML($path = null)
 	{
 		if (null === $path) {
-			echo $this->document->saveHTML();
+			echo $this->document()->saveHTML();
 		} else {
 			try {
 				set_error_handler(['\QueryPath\ParseException', 'initializeFromError']);
-				$this->document->saveHTMLFile($path);
+				$this->document()->saveHTMLFile($path);
 			} catch (Exception $e) {
 				restore_error_handler();
 				throw $e;
@@ -1541,7 +1587,7 @@ class DOMQuery extends DOM
 	 */
 	public function branch($selector = null)
 	{
-		$temp = QueryPath::with($this->matches, null, $this->options);
+		$temp = QueryPath::with($this->getMatches(), null, $this->options);
 		//if (isset($selector)) $temp->find($selector);
 		$temp->document = $this->document;
 		if (isset($selector)) {
@@ -1572,8 +1618,9 @@ class DOMQuery extends DOM
 	 */
 	public function cloneAll() : Query
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($this->matches as $m) {
+		foreach ($this->getMatches() as $m) {
 			$found->attach($m->cloneNode(true));
 		}
 		$this->setMatches($found);
@@ -1584,26 +1631,26 @@ class DOMQuery extends DOM
 	/**
 	 * Get an iterator for the matches in this object.
 	 *
-	 * @return iterable
+	 * @return QueryPathIterator
 	 *  Returns an iterator
 	 */
 	public function getIterator() : QueryPathIterator
 	{
-		$i = new QueryPathIterator($this->matches);
+		$i = new QueryPathIterator($this->getMatches());
 		$i->options = $this->options;
 
 		return $i;
 	}
 
 	/**
-	 * @param $matches
-	 * @param $selector
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed>|list<DOMNode>|DOMNode|TextContent|null $matches
+	 * @param string|null $selector
 	 *
 	 * @throws CSS\ParseException
 	 *
 	 * @return DOMQuery
 	 */
-	protected function inst($matches, $selector) : Query
+	protected function inst(SplObjectStorage|array|DOMNode|TextContent|null $matches, $selector) : Query
 	{
 		$dolly = clone $this;
 		$dolly->setMatches($matches);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace QueryPathTests\CSS;
 
 use DOMDocument;
+use DOMElement;
 use QueryPath\CSS\DOMTraverser\PseudoClass;
 use QueryPathTests\TestCase;
 
@@ -388,6 +389,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-last-child', $n, $root, '2n+1');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertContains($name, $expects, sprintf('Expected b or d, got %s in slot %s', $name, ++$j));
 			}
@@ -400,6 +402,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-last-child', $n, $root, '3');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$this->assertSame('b', $n->tagName);
 			}
 		}
@@ -434,6 +437,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-child', $n, $root, '2n+1');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertContains($name, $expects, sprintf('Expected b or d, got %s in slot %s', $name, ++$j));
 			}
@@ -448,6 +452,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-child', $n, $root, 'odd');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertContains($name, $expects, sprintf('Expected b or d, got %s in slot %s', $name, ++$j));
 			}
@@ -461,6 +466,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-child', $n, $root, '2n');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertContains($name, $expects, 'Expected a or c, got ' . $name);
 			}
@@ -474,6 +480,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-child', $n, $root, 'even');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertContains($name, $expects, 'Expected a or c, got ' . $name);
 			}
@@ -486,6 +493,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-child', $n, $root, '4n-1');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertSame('c', $name, 'Expected c, got ' . $name);
 			}
@@ -538,6 +546,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-child', $n, $root, '3');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$this->assertSame('c', $n->tagName);
 			}
 		}
@@ -583,6 +592,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('even', $n, $root);
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertContains($name, $expects, 'Expected a or c, got ' . $name);
 			}
@@ -608,6 +618,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('odd', $n, $root);
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertContains($name, $expects, sprintf('Expected b or d, got %s in slot %s', $name, ++$j));
 			}
@@ -631,6 +642,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-of-type', $n, $root, '2n+1');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertSame('a', $name);
 			}
@@ -652,6 +664,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth-of-type', $n, $root, '2n+1');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 			}
 		}
@@ -741,7 +754,9 @@ class PseudoClassTest extends TestCase
 		foreach ($nl as $n) {
 			$res = $ps->elementMatches('lt', $n, $root, '15');
 			if ($res) {
+				static::assertInstanceOf(DOMElement::class, $n);
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 			}
 		}
@@ -764,6 +779,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('gt', $n, $root, '15');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 			}
 		}
@@ -785,6 +801,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('eq', $n, $root, '15');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertSame('c', $name);
 			}
@@ -796,6 +813,7 @@ class PseudoClassTest extends TestCase
 			$res = $ps->elementMatches('nth', $n, $root, '15');
 			if ($res) {
 				++$i;
+				static::assertInstanceOf(DOMElement::class, $n);
 				$name = $n->tagName;
 				$this->assertSame('c', $name);
 			}

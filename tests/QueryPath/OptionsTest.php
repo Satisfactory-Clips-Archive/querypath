@@ -55,8 +55,13 @@ class OptionsTest extends TestCase
 		Options::set($options);
 		Options::merge($options2);
 
-		$results = Options::get();
+		$this->assertTrue(Options::has('test1'));
+		$this->assertTrue(Options::has('test2'));
 		$this->assertTrue(Options::has('test4'));
+
+		/** @var array{test1:string, test2:'val2', test4:'val4'} */
+		$results = Options::get();
+
 		$this->assertSame('val3', $results['test1']);
 	}
 }
