@@ -47,35 +47,34 @@ class Entities implements EntitiesContract
 	{
 		return preg_replace_callback(
 			self::regex,
-
-	/**
-	 * Callback for processing replacements.
-	 *
-	 * @param string[] $matches
-	 *  The regular expression replacement array
-	 */
+			/**
+			 * Callback for processing replacements.
+			 *
+			 * @param string[] $matches
+			 *  The regular expression replacement array
+			 */
 			static function(array $matches) : string
-	{
-		// See how the regex above works out.
+			{
+				// See how the regex above works out.
 
-		// From count, we can tell whether we got a
-		// char, num, or bare ampersand.
-		$count = count($matches);
-		switch ($count) {
-			case 2:
-				// We have a character entity
-				return '&#' . self::replaceEntity($matches[1]) . ';';
-			case 3:
-			case 4:
-				// we have a numeric entity
-				return '&#' . $matches[$count - 1] . ';';
-			case 5:
-				// We have an unescaped ampersand.
-				return '&#38;';
-		}
+				// From count, we can tell whether we got a
+				// char, num, or bare ampersand.
+				$count = count($matches);
+				switch ($count) {
+					case 2:
+						// We have a character entity
+						return '&#' . self::replaceEntity($matches[1]) . ';';
+					case 3:
+					case 4:
+						// we have a numeric entity
+						return '&#' . $matches[$count - 1] . ';';
+					case 5:
+						// We have an unescaped ampersand.
+						return '&#38;';
+				}
 
-		return '';
-	},
+				return '';
+			},
 			$string
 		);
 	}
