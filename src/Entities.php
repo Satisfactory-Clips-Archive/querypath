@@ -28,7 +28,7 @@ class Entities implements EntitiesContract
 	 * XXX: Are octal encodings for entities acceptable?
 	 */
 	//protected static $regex = '/&([\w]+);|&#([\d]+);|&([\w]*[\s$]+)/m';
-	protected static $regex = '/&([\w]+);|&#([\d]+);|&#(x[0-9a-fA-F]+);|(&)/m';
+	const regex = '/&([\w]+);|&#([\d]+);|&#(x[0-9a-fA-F]+);|(&)/m';
 
 	/**
 	 * Replace all entities.
@@ -45,7 +45,7 @@ class Entities implements EntitiesContract
 	 */
 	public static function replaceAllEntities(string $string) : string
 	{
-		return preg_replace_callback(self::$regex, '\QueryPath\Entities::doReplacement', $string);
+		return preg_replace_callback(self::regex, '\QueryPath\Entities::doReplacement', $string);
 	}
 
 	/**
@@ -68,10 +68,10 @@ class Entities implements EntitiesContract
 	/**
 	 * Callback for processing replacements.
 	 *
-	 * @param array $matches
+	 * @param array<int, string> $matches
 	 *  The regular expression replacement array
 	 */
-	protected static function doReplacement($matches) : string
+	protected static function doReplacement(array $matches) : string
 	{
 		// See how the regex above works out.
 

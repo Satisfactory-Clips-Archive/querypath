@@ -880,16 +880,6 @@
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/Entities.php">
-    <MissingPropertyType occurrences="1">
-      <code>$regex</code>
-    </MissingPropertyType>
-    <MixedArgument occurrences="2">
-      <code>$matches[1]</code>
-      <code>self::$regex</code>
-    </MixedArgument>
-    <MixedOperand occurrences="1">
-      <code>$matches[$count - 1]</code>
-    </MixedOperand>
     <PossiblyUnusedMethod occurrences="1">
       <code>doReplacement</code>
     </PossiblyUnusedMethod>
