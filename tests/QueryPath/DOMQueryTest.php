@@ -1986,12 +1986,12 @@ class DOMQueryTest extends TestCase
 			 * @return -1|0|1
 			 */
 			static function (DOMNode|TextContent $a, DOMNode|TextContent $b) : int {
-			if ($a->textContent === $b->textContent) {
-				return 0;
-			}
+				if ($a->textContent === $b->textContent) {
+					return 0;
+				}
 
-			return $a->textContent > $b->textContent ? 1 : -1;
-		};
+				return $a->textContent > $b->textContent ? 1 : -1;
+			};
 		$qp = qp($xml, 'i')->sort($comp);
 		$expect = ['1', '1', '2', '5'];
 		foreach ($qp as $item) {
@@ -2003,15 +2003,15 @@ class DOMQueryTest extends TestCase
 			 * @return -1|0|1
 			 */
 			static function (DOMNode|TextContent $a, DOMNode|TextContent $b) : int {
-			$qpa = qp($a);
-			$qpb = qp($b);
+				$qpa = qp($a);
+				$qpb = qp($b);
 
-			if ($qpa->text() === $qpb->text()) {
-				return 0;
-			}
+				if ($qpa->text() === $qpb->text()) {
+					return 0;
+				}
 
-			return $qpa->text() > $qpb->text() ? 1 : -1;
-		};
+				return $qpa->text() > $qpb->text() ? 1 : -1;
+			};
 		$qp = qp($xml, 'i')->sort($comp);
 		$expect = ['1', '1', '2', '5'];
 		foreach ($qp as $item) {
@@ -2024,12 +2024,12 @@ class DOMQueryTest extends TestCase
 			 * @return -1|0|1
 			 */
 			static function (DOMNode|TextContent $a, DOMNode|TextContent $b) : int {
-			if ($a->textContent === $b->textContent) {
-				return 0;
-			}
+				if ($a->textContent === $b->textContent) {
+					return 0;
+				}
 
-			return $a->textContent > $b->textContent ? 1 : -1;
-		};
+				return $a->textContent > $b->textContent ? 1 : -1;
+			};
 		$qp = qp($xml, 'i')->sort($comp, true);
 		$expect = ['1', '1', '2', '5'];
 		foreach ($qp as $item) {
