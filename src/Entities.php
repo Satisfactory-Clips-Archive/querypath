@@ -53,8 +53,7 @@ class Entities implements EntitiesContract
 			 * @param string[] $matches
 			 *  The regular expression replacement array
 			 */
-			static function(array $matches) : string
-			{
+			static function (array $matches) : string {
 				// See how the regex above works out.
 
 				// From count, we can tell whether we got a
