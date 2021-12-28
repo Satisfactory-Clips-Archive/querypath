@@ -48,18 +48,18 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	public const JS_CSS_ESCAPE_NONE = '';
 
 	/**
-	 * The SplObjectStorage of matches.
-	 *
-	 * @var SplObjectStorage<DOMNode|TextContent, mixed>|null
-	 */
-	protected ?SplObjectStorage $matches = null;
-
-	/**
 	 * The number of current matches.
 	 *
 	 * @see count()
 	 */
 	public int $length = 0;
+
+	/**
+	 * The SplObjectStorage of matches.
+	 *
+	 * @var SplObjectStorage<DOMNode|TextContent, mixed>|null
+	 */
+	protected ?SplObjectStorage $matches = null;
 
 	/**
 	 * The last SplObjectStorage of matches.

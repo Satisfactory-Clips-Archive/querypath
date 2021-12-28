@@ -50,9 +50,8 @@ class ParseException extends Exception
 	 */
 	public static function initializeFromError() : Closure
 	{
-		return static function ($code, $str, $file, $line) : bool
-		{
-		//printf("\n\nCODE: %s %s\n\n", $code, $str);
+		return static function ($code, $str, $file, $line) : bool {
+			//printf("\n\nCODE: %s %s\n\n", $code, $str);
 			throw new static($str, $code, $file, $line);
 		};
 	}
