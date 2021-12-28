@@ -60,7 +60,8 @@ class DOMQuery extends DOM
 	use QueryMutators;
 	use QueryChecks;
 
-	private $ext = []; // Extensions array.
+	/** @var array<string, Extension> */
+	private array $ext = []; // Extensions array.
 
 	/**
 	 * Clone the DOMQuery.
@@ -85,15 +86,13 @@ class DOMQuery extends DOM
 	 * registered extenstensions for a matching function name. If one is found,
 	 * it is executed with the arguments in the $arguments array.
 	 *
-	 * @param mixed $name
-	 * @param mixed $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @throws Exception
-	 * @throws queryPath::Exception
 	 *  An exception is thrown if a non-existent method is called
 	 * @throws ReflectionException
 	 */
-	public function __call($name, $arguments)
+	public function __call(string $name, array $arguments)
 	{
 		if ( ! ExtensionRegistry::$useRegistry) {
 			throw new Exception("No method named $name found (Extensions disabled).");
@@ -241,7 +240,10 @@ class DOMQuery extends DOM
 	 *
 	 * @param string $query
 	 *      An XPath query
-	 * @param array $options
+	 * @param array{
+	 *	namespace_prefix?: string,
+	 *	namespace_uri?: string
+	 * } $options
 	 *      Currently supported options are:
 	 *      - 'namespace_prefix': And XML namespace prefix to be used as the default. Used
 	 *      in conjunction with 'namespace_uri'
@@ -258,7 +260,7 @@ class DOMQuery extends DOM
 	 * @author M Butcher
 	 * @author Xavier Prud'homme
 	 */
-	public function xpath($query, $options = [])
+	public function xpath(string $query, array $options = []) : DOMQuery
 	{
 		$xpath = new DOMXPath($this->document());
 
@@ -384,17 +386,11 @@ class DOMQuery extends DOM
 	 * If QP is currently pointed to a list of elements, this will get the
 	 * namespace of the first element.
 	 */
-	public function ns()
+	public function ns() : ?string
 	{
 		$element = $this->get(0);
 
-		if ( ! ($element instanceof DOMElement)) {
-			throw new UnexpectedValueException(
-				'First item expected to be element!'
-			);
-		}
-
-		return $element->namespaceURI;
+		return $element->namespaceURI ?? null;
 	}
 
 	/**
@@ -543,7 +539,7 @@ class DOMQuery extends DOM
 	 * ?>
 	 * @endcode
 	 *
-	 * @param callable $comparator
+	 * @param callable(DOMNode|TextContent, DOMNode|TextContent):(-1|0|1) $comparator
 	 *   A callback. This will be called during sorting to compare two DOMNode
 	 *   objects.
 	 * @param bool $modifyDOM
@@ -766,7 +762,6 @@ class DOMQuery extends DOM
 	 *  The text to insert
 	 *
 	 * @throws Exception
-	 * @throws QueryPath
 	 *
 	 * @return mixed
 	 *  A string if no markup was passed, or a DOMQuery if markup was passed
@@ -803,12 +798,14 @@ class DOMQuery extends DOM
 			return;
 		}
 
+		$node_arg = $first->ownerDocument->documentElement ?? null;
+
 		// Added by eabrand.
-		if ( ! $first->ownerDocument->documentElement) {
+		if ( ! $node_arg) {
 			return;
 		}
 
-		if ($first instanceof DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
+		if ($first instanceof DOMDocument || $first->isSameNode($node_arg)) {
 			return $this->document()->saveHTML();
 		}
 
@@ -822,7 +819,6 @@ class DOMQuery extends DOM
 	 * See html()
 	 *
 	 * @throws \QueryPath\Exception
-	 * @throws QueryPath
 	 *
 	 * @return DOMQuery|string|null
 	 */
@@ -852,12 +848,14 @@ class DOMQuery extends DOM
 			return;
 		}
 
+		$node_arg = $first->ownerDocument->documentElement ?? null;
+
 		// Added by eabrand.
-		if ( ! $first->ownerDocument->documentElement) {
+		if ( ! $node_arg) {
 			return;
 		}
 
-		if ($first instanceof DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
+		if ($first instanceof DOMDocument || $first->isSameNode($node_arg)) {
 			return $html5->saveHTML($this->document); //$this->document()->saveHTML();
 		}
 
@@ -897,7 +895,7 @@ class DOMQuery extends DOM
 	 * @see   innerXHTML()
 	 * @since 2.0
 	 */
-	public function innerHTML()
+	public function innerHTML() : ?string
 	{
 		return $this->innerXML();
 	}
@@ -911,24 +909,24 @@ class DOMQuery extends DOM
 	 * @see   innerHTML()
 	 * @see   innerXML()
 	 *
-	 * @return string
+	 * @return string|string
 	 *  Returns a string of XHTML that represents the children of the present
 	 *  node
 	 *
 	 * @since 2.0
 	 */
-	public function innerXHTML()
+	public function innerXHTML() : ?string
 	{
 		$length = $this->getMatches()->count();
 		if (0 === $length) {
-			return;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if ( ! ($first instanceof DOMNode)) {
-			return;
+			return null;
 		}
 
 		if ( ! $first->hasChildNodes()) {
@@ -952,24 +950,24 @@ class DOMQuery extends DOM
 	 * @see   innerHTML()
 	 * @see   innerXHTML()
 	 *
-	 * @return string
+	 * @return string|null
 	 *  Returns a string of XHTML that represents the children of the present
 	 *  node
 	 *
 	 * @since 2.0
 	 */
-	public function innerXML()
+	public function innerXML() : ?string
 	{
 		$length = $this->getMatches()->count();
 		if (0 === $length) {
-			return;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if ( ! ($first instanceof DOMNode)) {
-			return;
+			return null;
 		}
 
 		if ( ! $first->hasChildNodes()) {
@@ -990,18 +988,18 @@ class DOMQuery extends DOM
 	 * TODO: This is a very simple alteration of innerXML. Do we need better
 	 * support?
 	 */
-	public function innerHTML5()
+	public function innerHTML5() : ?string
 	{
 		$length = $this->getMatches()->count();
 		if (0 === $length) {
-			return;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if ( ! ($first instanceof DOMNode)) {
-			return;
+			return null;
 		}
 
 		if ( ! $first->hasChildNodes()) {
@@ -1138,7 +1136,6 @@ class DOMQuery extends DOM
 	 *  selected items
 	 *
 	 * @throws Exception
-	 * @throws QueryPath
 	 *
 	 * @return mixed
 	 *  Returns the DOMQuery object if $text was set, and returns a string (possibly empty)
@@ -1163,7 +1160,14 @@ class DOMQuery extends DOM
 		return $buffer;
 	}
 
-	public function textAfter($text = null)
+	/**
+	 * @template T as string|null
+	 *
+	 * @param T $text
+	 *
+	 * @return (T is string ? DOMQuery : string)
+	 */
+	public function textAfter(string $text = null) : DOMQuery|string
 	{
 		if (isset($text)) {
 			$textNode = $this->document()->createTextNode($text);
@@ -1229,7 +1233,7 @@ class DOMQuery extends DOM
 	 * This is a convenience function for fetching HTML in XML format.
 	 * It does no processing of the markup (such as schema validation).
 	 *
-	 * @param string $markup
+	 * @param string|true|null $markup
 	 *  A string containing XML data
 	 *
 	 * @return DOMQuery|string|null
@@ -1239,7 +1243,7 @@ class DOMQuery extends DOM
 	 * @see html()
 	 * @see innerXHTML()
 	 */
-	public function xhtml($markup = null) : DOMQuery|string|null
+	public function xhtml(string|bool $markup = null) : DOMQuery|string|null
 	{
 		// XXX: This is a minor reworking of the original xml() method.
 		// This should be refactored, probably.
@@ -1266,7 +1270,13 @@ class DOMQuery extends DOM
 			return null;
 		}
 
-		if ($first instanceof DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
+		if (
+			($first instanceof DOMDocument)
+			|| (
+				($first->ownerDocument instanceof DOMDocument)
+				&& $first->isSameNode($first->ownerDocument->documentElement)
+			)
+		) {
 			// Has the unfortunate side-effect of stripping doctype.
 			//$text = ($omit_xml_decl ? $this->document()->saveXML($first->ownerDocument->documentElement, LIBXML_NOEMPTYTAG) : $this->document()->saveXML(NULL, LIBXML_NOEMPTYTAG));
 			$text = $this->document()->saveXML(null, LIBXML_NOEMPTYTAG);
@@ -1350,8 +1360,10 @@ class DOMQuery extends DOM
 			return null;
 		}
 
-		if ($first instanceof DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
-			return $omit_xml_decl ? $this->document()->saveXML($first->ownerDocument->documentElement) : $this->document()->saveXML();
+		$node_arg = $first->ownerDocument->documentElement ?? null;
+
+		if ($first instanceof DOMDocument || $first->isSameNode($node_arg)) {
+			return $omit_xml_decl ? $this->document()->saveXML($node_arg) : $this->document()->saveXML();
 		}
 
 		return $this->document()->saveXML($first);
@@ -1372,7 +1384,7 @@ class DOMQuery extends DOM
 	 * @param int $options
 	 *  (As of QueryPath 2.1) Pass libxml options to the saving mechanism.
 	 *
-	 * @throws exception
+	 * @throws Exception
 	 *  In the event that a file cannot be written, an Exception will be thrown
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -1413,7 +1425,7 @@ class DOMQuery extends DOM
 	 *  this is NULL, data will be written to STDOUT, which is usually
 	 *  sent to the remote browser.
 	 *
-	 * @throws exception
+	 * @throws Exception
 	 *  In the event that a file cannot be written, an Exception will be thrown
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -1449,9 +1461,9 @@ class DOMQuery extends DOM
 	 * @see html5()
 	 * @see innerHTML5()
 	 *
-	 * @param mixed|null $path
+	 * @param string|resource|null $path
 	 *
-	 * @throws exception
+	 * @throws Exception
 	 *  In the event that a file cannot be written, an Exception will be thrown
 	 */
 	public function writeHTML5($path = null) : void
@@ -1486,7 +1498,7 @@ class DOMQuery extends DOM
 	 * @param string $path
 	 *  The filename of the file to write to
 	 *
-	 * @throws exception
+	 * @throws Exception
 	 *  In the event that the output file cannot be written, an exception is
 	 *  thrown
 	 *
@@ -1495,7 +1507,7 @@ class DOMQuery extends DOM
 	 *
 	 * @since 2.0
 	 */
-	public function writeXHTML($path = null)
+	public function writeXHTML($path = null) : DOMQuery
 	{
 		return $this->writeXML($path, LIBXML_NOEMPTYTAG);
 	}

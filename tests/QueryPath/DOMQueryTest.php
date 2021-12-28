@@ -18,6 +18,7 @@ use function in_array;
 use QueryPath\DOMQuery;
 use QueryPath\Query;
 use QueryPath\QueryPath;
+use QueryPath\TextContent;
 use SplDoublyLinkedList;
 use const XML_ELEMENT_NODE;
 
@@ -1212,7 +1213,9 @@ class DOMQueryTest extends TestCase
 		$xml = '<html><head><title>foo</title></head><body><div id="me">Test<p>Again<br/></p></div></body></html>';
 		// Look for a closing </br> tag
 		$regex = '/<\/br>/';
-		$this->assertMatchesRegularExpression($regex, qp($xml, '#me')->innerXHTML(), 'BR should have a closing tag.');
+		$xhtml = qp($xml, '#me')->innerXHTML();
+		$this->assertIsString($xhtml);
+		$this->assertMatchesRegularExpression($regex, $xhtml, 'BR should have a closing tag.');
 	}
 
 	public function testXML() : void
@@ -1978,7 +1981,11 @@ class DOMQueryTest extends TestCase
 		}
 
 		// Test simple ordering.
-		$comp = static function (DOMNode $a, DOMNode $b) {
+		$comp =
+			/**
+			 * @return -1|0|1
+			 */
+			static function (DOMNode|TextContent $a, DOMNode|TextContent $b) : int {
 			if ($a->textContent === $b->textContent) {
 				return 0;
 			}
@@ -1991,7 +1998,11 @@ class DOMQueryTest extends TestCase
 			$this->assertSame(array_shift($expect), $item->text());
 		}
 
-		$comp = static function (DOMNode $a, DOMNode $b) {
+		$comp =
+			/**
+			 * @return -1|0|1
+			 */
+			static function (DOMNode|TextContent $a, DOMNode|TextContent $b) : int {
 			$qpa = qp($a);
 			$qpb = qp($b);
 
@@ -2008,7 +2019,11 @@ class DOMQueryTest extends TestCase
 		}
 
 		// Test DOM re-ordering
-		$comp = static function (DOMNode $a, DOMNode $b) {
+		$comp =
+			/**
+			 * @return -1|0|1
+			 */
+			static function (DOMNode|TextContent $a, DOMNode|TextContent $b) : int {
 			if ($a->textContent === $b->textContent) {
 				return 0;
 			}

@@ -869,64 +869,6 @@
     </UndefinedDocblockClass>
   </file>
   <file src="src/DOMQuery.php">
-    <ArgumentTypeCoercion occurrences="1">
-      <code>$owner</code>
-    </ArgumentTypeCoercion>
-    <DocblockTypeContradiction occurrences="1">
-      <code>true === $markup</code>
-    </DocblockTypeContradiction>
-    <InvalidClass occurrences="4">
-      <code>exception</code>
-      <code>exception</code>
-      <code>exception</code>
-      <code>exception</code>
-    </InvalidClass>
-    <InvalidNullableReturnType occurrences="2">
-      <code>string</code>
-      <code>string</code>
-    </InvalidNullableReturnType>
-    <InvalidThrow occurrences="3">
-      <code>QueryPath</code>
-      <code>QueryPath</code>
-      <code>QueryPath</code>
-    </InvalidThrow>
-    <MissingParamType occurrences="1">
-      <code>$text</code>
-    </MissingParamType>
-    <MissingPropertyType occurrences="1">
-      <code>$ext</code>
-    </MissingPropertyType>
-    <MissingReturnType occurrences="3">
-      <code>innerHTML5</code>
-      <code>ns</code>
-      <code>textAfter</code>
-    </MissingReturnType>
-    <MixedArgument occurrences="9">
-      <code>$arguments</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$options['namespace_prefix']</code>
-      <code>$options['namespace_uri']</code>
-      <code>$path</code>
-      <code>$text</code>
-      <code>$this-&gt;ext[$owner]</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$comparator</code>
-    </MixedArgumentTypeCoercion>
-    <MixedArrayAccess occurrences="1">
-      <code>$this-&gt;ext[$owner]</code>
-    </MixedArrayAccess>
-    <PossiblyNullPropertyFetch occurrences="7">
-      <code>$first-&gt;ownerDocument-&gt;documentElement</code>
-      <code>$first-&gt;ownerDocument-&gt;documentElement</code>
-      <code>$first-&gt;ownerDocument-&gt;documentElement</code>
-      <code>$first-&gt;ownerDocument-&gt;documentElement</code>
-      <code>$first-&gt;ownerDocument-&gt;documentElement</code>
-      <code>$first-&gt;ownerDocument-&gt;documentElement</code>
-      <code>$first-&gt;ownerDocument-&gt;documentElement</code>
-    </PossiblyNullPropertyFetch>
     <PossiblyUnusedMethod occurrences="4">
       <code>html5</code>
       <code>innerHTML5</code>
@@ -936,9 +878,6 @@
     <PossiblyUnusedReturnValue occurrences="1">
       <code>\QueryPath\DOMQuery</code>
     </PossiblyUnusedReturnValue>
-    <UndefinedDocblockClass occurrences="1">
-      <code>queryPath::Exception</code>
-    </UndefinedDocblockClass>
   </file>
   <file src="src/Entities.php">
     <MissingPropertyType occurrences="1">
@@ -1141,44 +1080,9 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="src/ExtensionRegistry.php">
-    <InvalidClass occurrences="1">
-      <code>query</code>
-    </InvalidClass>
-    <MissingPropertyType occurrences="3">
-      <code>$extensionMethodRegistry</code>
-      <code>$extensionRegistry</code>
+    <MissingPropertyType occurrences="1">
       <code>$useRegistry</code>
     </MissingPropertyType>
-    <MixedArgument occurrences="2">
-      <code>$classname</code>
-      <code>self::$extensionRegistry</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>self::$extensionMethodRegistry[$name]</code>
-    </MixedArrayAccess>
-    <MixedArrayAssignment occurrences="2">
-      <code>self::$extensionMethodRegistry[$method-&gt;getName()]</code>
-      <code>self::$extensionRegistry[]</code>
-    </MixedArrayAssignment>
-    <MixedArrayOffset occurrences="1">
-      <code>$extInstances[$ext]</code>
-    </MixedArrayOffset>
-    <MixedAssignment occurrences="3">
-      <code>$ext</code>
-      <code>self::$extensionMethodRegistry[$method-&gt;getName()]</code>
-      <code>self::$extensionRegistry[]</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="2">
-      <code>array</code>
-      <code>string</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="1">
-      <code>new $ext($qp)</code>
-    </MixedMethodCall>
-    <MixedReturnStatement occurrences="2">
-      <code>self::$extensionMethodRegistry[$name]</code>
-      <code>self::$extensionRegistry</code>
-    </MixedReturnStatement>
   </file>
   <file src="src/Helpers/QueryFilters.php">
     <MissingParamType occurrences="1">
@@ -1311,9 +1215,6 @@
       <code>$data</code>
       <code>$data</code>
     </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$extension</code>
-    </MixedAssignment>
     <PossiblyUnusedMethod occurrences="2">
       <code>enabledExtensions</code>
       <code>withXML</code>
@@ -2308,14 +2209,6 @@
       <code>$fn</code>
       <code>$fn</code>
     </InvalidArgument>
-    <InvalidScalarArgument occurrences="1">
-      <code>true</code>
-    </InvalidScalarArgument>
-    <MissingClosureReturnType occurrences="3">
-      <code>static function (DOMNode $a, DOMNode $b) {</code>
-      <code>static function (DOMNode $a, DOMNode $b) {</code>
-      <code>static function (DOMNode $a, DOMNode $b) {</code>
-    </MissingClosureReturnType>
     <MissingParamType occurrences="2">
       <code>$index</code>
       <code>$item</code>
@@ -2352,7 +2245,7 @@
       <code>$pack</code>
       <code>$qp</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="19">
+    <MixedMethodCall occurrences="17">
       <code>attr</code>
       <code>contents</code>
       <code>find</code>
@@ -2367,9 +2260,7 @@
       <code>text</code>
       <code>text</code>
       <code>text</code>
-      <code>textAfter</code>
       <code>textBefore</code>
-      <code>top</code>
       <code>top</code>
       <code>top</code>
     </MixedMethodCall>

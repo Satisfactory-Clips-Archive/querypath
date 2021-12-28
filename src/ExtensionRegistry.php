@@ -39,16 +39,20 @@ class ExtensionRegistry
 	/**
 	 * The extension registry. This should consist of an array of class
 	 * names.
+	 *
+	 * @var list<class-string<Extension>>
 	 */
-	protected static $extensionRegistry = [];
-	protected static $extensionMethodRegistry = [];
+	protected static array $extensionRegistry = [];
+
+	/** @var array<string, class-string<Extension>> */
+	protected static array $extensionMethodRegistry = [];
 
 	/**
 	 * Extend a Query with the given extension class.
 	 *
-	 * @param mixed $classname
+	 * @param class-string<Extension> $classname
 	 */
-	public static function extend($classname) : void
+	public static function extend(string $classname) : void
 	{
 		self::$extensionRegistry[] = $classname;
 		$class = new ReflectionClass($classname);
@@ -103,10 +107,10 @@ class ExtensionRegistry
 	 * @param string $name
 	 *  The name of the method
 	 *
-	 * @return string
+	 * @return class-string<Extension>
 	 *  The name of the class
 	 */
-	public static function getMethodClass($name)
+	public static function getMethodClass(string $name) : string
 	{
 		return self::$extensionMethodRegistry[$name];
 	}
@@ -118,14 +122,15 @@ class ExtensionRegistry
 	 * an associative array of extension names to (new) instances.
 	 * Generally, this is intended to be used internally.
 	 *
-	 * @param query $qp
+	 * @param Query $qp
 	 *  The Query into which the extensions should be registered
 	 *
-	 * @return array
+	 * @return array<string, Extension>
 	 *  An associative array of classnames to instances
 	 */
-	public static function getExtensions(Query $qp)
+	public static function getExtensions(Query $qp) : array
 	{
+		/** @var array<string, Extension> */
 		$extInstances = [];
 		foreach (self::$extensionRegistry as $ext) {
 			$extInstances[$ext] = new $ext($qp);

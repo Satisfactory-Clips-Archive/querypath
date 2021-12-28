@@ -153,7 +153,7 @@ use QueryPath\TextContent;
  *
  * @ingroup querypath_core
  *
- * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $document
+ * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|TextContent|list<DOMNode>|string|null $document
  *  A document in one of the forms listed above
  * @param string|null $string
  *  A CSS 3 selector
@@ -166,7 +166,7 @@ use QueryPath\TextContent;
  *  Or possibly another QueryPath-like object if you overrode QueryPath_class
  */
 function qp(
-	DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
+	DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|TextContent|array|string|null $document = null,
 	string $string = null,
 	array $options = []
 ) : DOMQuery {

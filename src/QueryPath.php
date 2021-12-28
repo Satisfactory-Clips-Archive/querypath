@@ -187,13 +187,13 @@ class QueryPath
   </html>';
 
 	/**
-	 * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $document
+	 * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|TextContent|list<DOMNode>|string|null $document
 	 * @param array{
 	 *	QueryPath_class?:class-string<DOMQuery>
 	 * } $options
 	 */
 	public static function with(
-		DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
+		DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|TextContent|array|string|null $document = null,
 		string $selector = null,
 		array $options = []
 	) : DOMQuery {
@@ -321,12 +321,12 @@ class QueryPath
 	 * manually `require` or `include` the files that contain the
 	 * extensions.
 	 *
-	 * @param mixed $extensionNames
+	 * @param class-string<Extension>|non-empty-list<class-string<Extension>> $extensionNames
 	 *   The name of an extension or an array of extension names.
 	 *   QueryPath assumes that these are extension class names,
 	 *   and attempts to register these as QueryPath extensions.
 	 */
-	public static function enable($extensionNames) : void
+	public static function enable(string|array $extensionNames) : void
 	{
 		if (is_array($extensionNames)) {
 			foreach ($extensionNames as $extension) {
