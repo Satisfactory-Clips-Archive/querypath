@@ -15,13 +15,14 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use function assert;
 use function count;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
 use DOMXPath;
-use function is_array;
 use function is_null;
+use function is_string;
 use const LIBXML_NOEMPTYTAG;
 use Masterminds\HTML5;
 use QueryPath\CSS\DOMTraverser;
@@ -370,8 +371,7 @@ class DOMQuery extends DOM
 	public function get(
 		?int $index = null,
 		bool $asObject = false
-	) : SplObjectStorage|array|DOMNode|TextContent|null
-	{
+	) : SplObjectStorage|array|DOMNode|TextContent|null {
 		if (null !== $index) {
 			/** @var DOMNode|TextContent|null */
 			return ($this->count() > $index) ? $this->getNthMatch($index) : null;
@@ -821,7 +821,7 @@ class DOMQuery extends DOM
 			return;
 		}
 
-		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
+		if ($first instanceof DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
 			return $this->document()->saveHTML();
 		}
 
@@ -833,8 +833,6 @@ class DOMQuery extends DOM
 	 * Write the QueryPath document to HTML5.
 	 *
 	 * See html()
-	 *
-	 * @param string|null $markup
 	 *
 	 * @throws \QueryPath\Exception
 	 * @throws QueryPath
@@ -872,7 +870,7 @@ class DOMQuery extends DOM
 			return;
 		}
 
-		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
+		if ($first instanceof DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
 			return $html5->saveHTML($this->document); //$this->document()->saveHTML();
 		}
 
@@ -1281,7 +1279,7 @@ class DOMQuery extends DOM
 			return null;
 		}
 
-		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
+		if ($first instanceof DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
 			// Has the unfortunate side-effect of stripping doctype.
 			//$text = ($omit_xml_decl ? $this->document()->saveXML($first->ownerDocument->documentElement, LIBXML_NOEMPTYTAG) : $this->document()->saveXML(NULL, LIBXML_NOEMPTYTAG));
 			$text = $this->document()->saveXML(null, LIBXML_NOEMPTYTAG);
@@ -1365,7 +1363,7 @@ class DOMQuery extends DOM
 			return null;
 		}
 
-		if ($first instanceof \DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
+		if ($first instanceof DOMDocument || $first->isSameNode($first->ownerDocument->documentElement)) {
 			return $omit_xml_decl ? $this->document()->saveXML($first->ownerDocument->documentElement) : $this->document()->saveXML();
 		}
 

@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace QueryPath\CSS;
 
 use DOMNode;
-use SplObjectStorage;
 use QueryPath\TextContent;
+use SplObjectStorage;
 
 /**
  * An object capable of walking (and searching) a datastructure.

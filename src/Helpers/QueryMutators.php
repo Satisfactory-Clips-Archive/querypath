@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPath\Helpers;
 
+use function assert;
 use function count;
 use DOMDocument;
 use DOMDocumentFragment;
@@ -581,7 +582,7 @@ trait QueryMutators
 	 * @see wrap()
 	 * @see wrapInner()
 	 */
-	public function wrapAll(string|\QueryPath\DOMQuery|DOMNode|SimpleXMLElement $markup)
+	public function wrapAll(string|DOMQuery|DOMNode|SimpleXMLElement $markup)
 	{
 		if (0 === $this->getMatches()->count()) {
 			return;
@@ -659,7 +660,7 @@ trait QueryMutators
 	 * @see wrap()
 	 * @see wrapAll()
 	 */
-	public function wrapInner(string|\QueryPath\DOMQuery $markup)
+	public function wrapInner(string|DOMQuery $markup)
 	{
 		$data = $this->prepareInsert($markup);
 
@@ -1174,7 +1175,7 @@ trait QueryMutators
 	 * @see hasAttr()
 	 * @see hasClass()
 	 */
-	public function attr(array|string $name = null, string $value = null) : array|\QueryPath\DOMQuery|string|int|null
+	public function attr(array|string $name = null, string $value = null) : array|DOMQuery|string|int|null
 	{
 		// Default case: Return all attributes as an assoc array.
 		if (is_null($name)) {

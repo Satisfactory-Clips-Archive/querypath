@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace QueryPath\Extension;
 
+use function assert;
+use function in_array;
 use QueryPath\DOMQuery;
 use QueryPath\Extension;
 use QueryPath\Query;
@@ -32,8 +34,7 @@ class QPXML implements Extension
 {
 	public function __construct(
 		protected Query $qp
-	)
-	{
+	) {
 	}
 
 	public function schema($file) : void
@@ -193,28 +194,28 @@ class QPXML implements Extension
 	 */
 	public function createElement(string $text, string $nsUri = null) : DOMQuery
 	{
-			foreach ($this->qp->get() as $element) {
-				if (null === $nsUri && false !== strpos($text, ':')) {
-					$ns = array_shift(explode(':', $text));
-					$nsUri = $element->ownerDocument->lookupNamespaceURI($ns);
+		foreach ($this->qp->get() as $element) {
+			if (null === $nsUri && false !== strpos($text, ':')) {
+				$ns = array_shift(explode(':', $text));
+				$nsUri = $element->ownerDocument->lookupNamespaceURI($ns);
 
-					if (null === $nsUri) {
-						throw new \QueryPath\Exception('Undefined namespace for: ' . $text);
-					}
+				if (null === $nsUri) {
+					throw new \QueryPath\Exception('Undefined namespace for: ' . $text);
 				}
+			}
 
-				$node = null;
-				if (null !== $nsUri) {
-					$node = $element->ownerDocument->createElementNS(
+			$node = null;
+			if (null !== $nsUri) {
+				$node = $element->ownerDocument->createElementNS(
 						$nsUri,
 						$text
 					);
-				} else {
-					$node = $element->ownerDocument->createElement($text);
-				}
-
-				return QueryPath::with($node);
+			} else {
+				$node = $element->ownerDocument->createElement($text);
 			}
+
+			return QueryPath::with($node);
+		}
 
 		return new DOMQuery();
 	}
@@ -231,11 +232,11 @@ class QPXML implements Extension
 			)
 		);
 
-			foreach ($this->qp->get() as $element) {
-				/** @var DOMQuery */
-				$node = $this->qp->createElement($text);
-				QueryPath::with($element)->append($node);
-			}
+		foreach ($this->qp->get() as $element) {
+			/** @var DOMQuery */
+			$node = $this->qp->createElement($text);
+			QueryPath::with($element)->append($node);
+		}
 
 		return $this->qp;
 	}

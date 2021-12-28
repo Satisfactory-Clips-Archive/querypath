@@ -196,8 +196,7 @@ class QueryPath
 		DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
 		string $selector = null,
 		array $options = []
-	) : DOMQuery
-	{
+	) : DOMQuery {
 		/** @var class-string<DOMQuery> */
 		$qpClass = $options['QueryPath_class'] ?? '\QueryPath\DOMQuery';
 
@@ -214,8 +213,7 @@ class QueryPath
 		DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $source = null,
 		string $selector = null,
 		array $options = []
-	) : DOMQuery
-	{
+	) : DOMQuery {
 		$options += [
 			'use_parser' => 'xml',
 		];
@@ -233,8 +231,7 @@ class QueryPath
 		DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $source = null,
 		string $selector = null,
 		array $options = []
-	) : DOMQuery
-	{
+	) : DOMQuery {
 		// Need a way to force an HTML parse instead of an XML parse when the
 		// doctype is XHTML, since many XHTML documents are not valid XML
 		// (because of coding errors, not by design).
@@ -275,8 +272,6 @@ class QueryPath
 	 *   An associative array of options, which is passed on into HTML5-PHP. Note
 	 *   that the standard QueryPath options may be ignored for this function,
 	 *   since it uses a different parser.
-	 *
-	 * @return DOMQuery
 	 */
 	public static function withHTML5($source = null, $selector = null, $options = []) : DOMQuery
 	{

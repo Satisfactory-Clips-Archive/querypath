@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace QueryPath\Extension;
 
+use function assert;
 use DOMDocument;
 use DOMNode;
 use Masterminds\HTML5;
@@ -81,8 +82,7 @@ class QPXSL implements \QueryPath\Extension
 	 */
 	public function xslt(
 		QueryPath|DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $style
-	) : DOMQuery
-	{
+	) : DOMQuery {
 		if ( ! ($style instanceof QueryPath)) {
 			$style = QueryPath::with($style);
 		}

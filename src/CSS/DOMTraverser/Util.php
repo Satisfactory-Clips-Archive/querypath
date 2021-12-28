@@ -21,6 +21,9 @@ class Util
 {
 	/**
 	 * Check whether the given DOMElement has the given attribute.
+	 *
+	 * @param mixed $node
+	 * @param mixed $name
 	 */
 	public static function matchesAttribute($node, $name, mixed $value = null, ?int $operation = EventHandler::IS_EXACTLY) : bool
 	{
@@ -38,7 +41,6 @@ class Util
 	/**
 	 * Check whether the given DOMElement has the given namespaced attribute.
 	 *
-	 * @param mixed|null $value
 	 * @param mixed $node
 	 * @param mixed $name
 	 * @param mixed $nsuri

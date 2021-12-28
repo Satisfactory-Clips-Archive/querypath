@@ -19,7 +19,6 @@ declare(strict_types=1);
  * @endcode
  */
 
-
 use Masterminds\HTML5;
 use QueryPath\DOM;
 use QueryPath\DOMQuery;
@@ -170,8 +169,7 @@ function qp(
 	DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
 	string $string = null,
 	array $options = []
-) : \QueryPath\DOMQuery
-{
+) : DOMQuery {
 	return QueryPath::with($document, $string, $options);
 }
 
@@ -201,7 +199,6 @@ function qp(
  * @see     qp()
  *
  * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|list<DOMNode>|string|null $document
- * @param string|null $selector
  * @param array{
  *	QueryPath_class?:class-string<DOMQuery>
  * } $options
@@ -210,8 +207,7 @@ function htmlqp(
 	DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
 	string $selector = null,
 	array $options = []
-) : \QueryPath\DOMQuery
-{
+) : DOMQuery {
 	return QueryPath::withHTML($document, $selector, $options);
 }
 
@@ -241,7 +237,6 @@ function html5qp(
 	DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null,
 	string $selector = null,
 	array $options = []
-) : \QueryPath\DOMQuery
-{
+) : DOMQuery {
 	return QueryPath::withHTML5($document, $selector, $options);
 }

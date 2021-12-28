@@ -243,25 +243,25 @@ class DOMQueryTest extends TestCase
 	public function testFailedHTTPLoad() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-			qp('http://localhost:8877/no_such_file.xml');
+		qp('http://localhost:8877/no_such_file.xml');
 	}
 
 	public function testFailedHTTPLoadWithContext() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-			qp('http://localhost:8877/no_such_file.xml', null, ['foo' => 'bar']);
+		qp('http://localhost:8877/no_such_file.xml', null, ['foo' => 'bar']);
 	}
 
 	public function testFailedParseHTMLElement() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-			qp('<foo>&foonator;</foo>', null);
+		qp('<foo>&foonator;</foo>', null);
 	}
 
 	public function testFailedParseXMLElement() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-			qp('<?xml version="1.0"?><foo><bar>foonator;</foo>', null);
+		qp('<?xml version="1.0"?><foo><bar>foonator;</foo>', null);
 	}
 
 	public function testIgnoreParserWarnings() : void
@@ -281,13 +281,13 @@ class DOMQueryTest extends TestCase
 	public function testFailedParseNonMarkup() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-			qp('<23dfadf', null);
+		qp('<23dfadf', null);
 	}
 
 	public function testFailedParseEntity() : void
 	{
 		$this->expectException(\QueryPath\ParseException::class);
-			qp('<?xml version="1.0"?><foo>&foonator;</foo>', null);
+		qp('<?xml version="1.0"?><foo>&foonator;</foo>', null);
 	}
 
 	public function testReplaceEntitiesOption() : void
@@ -649,16 +649,15 @@ class DOMQueryTest extends TestCase
 			/**
 			 * @return false|list<int>|int
 			 */
-			static function (int $index, DOMNode $_item) : bool|array|int
-			{
-		if (1 === $index) {
-			return false;
-		}
-		if (2 === $index) {
-			return [1, 2, 3];
-		}
+			static function (int $index, DOMNode $_item) : bool|array|int {
+				if (1 === $index) {
+					return false;
+				}
+				if (2 === $index) {
+					return [1, 2, 3];
+				}
 
-		return $index;
+				return $index;
 			}
 		;
 	}
@@ -673,15 +672,14 @@ class DOMQueryTest extends TestCase
 	public function testEach() : void
 	{
 		$file = DATA_FILE;
-		$fn = static function (int $index, DOMNode $item) : ?bool
-		{
+		$fn = static function (int $index, DOMNode $item) : ?bool {
 			if ($index < 2) {
 				qp($item)->attr('class', 'test');
 
 				return null;
-			} else {
-				return false;
 			}
+
+			return false;
 		};
 		$res = qp($file, 'li')->each($fn);
 		$this->assertSame(5, $res->count());
@@ -783,7 +781,7 @@ class DOMQueryTest extends TestCase
 	{
 		$this->expectException(\QueryPath\ParseException::class);
 		$file = DATA_FILE;
-			qp($file, 'root')->append('<foo><bar></foo>');
+		qp($file, 'root')->append('<foo><bar></foo>');
 	}
 
 	public function testAppendTo() : void
@@ -1420,19 +1418,19 @@ class DOMQueryTest extends TestCase
 	public function testFailWriteXML() : void
 	{
 		$this->expectException(\QueryPath\IOException::class);
-			qp()->writeXML('/dev/null');
+		qp()->writeXML('/dev/null');
 	}
 
 	public function testFailWriteXHTML() : void
 	{
 		$this->expectException(\QueryPath\IOException::class);
-			qp()->writeXHTML('/dev/null');
+		qp()->writeXHTML('/dev/null');
 	}
 
 	public function testFailWriteHTML() : void
 	{
 		$this->expectException(\QueryPath\IOException::class);
-			qp('<?xml version="1.0"?><foo/>')->writeXML('/dev/null');
+		qp('<?xml version="1.0"?><foo/>')->writeXML('/dev/null');
 	}
 
 	public function testWriteHTML() : void

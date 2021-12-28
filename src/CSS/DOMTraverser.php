@@ -81,7 +81,6 @@ class DOMTraverser implements Traverser
 	 * This requires a DOM-like object or collection of DOM nodes.
 	 *
 	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $splos
-	 * @param DOMNode|null $scopeNode
 	 */
 	public function __construct(SplObjectStorage $splos, bool $initialized = false, DOMNode $scopeNode = null)
 	{

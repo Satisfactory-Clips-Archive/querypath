@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use function assert;
 use BadMethodCallException;
 use Countable;
 use DOMDocument;
@@ -13,8 +14,6 @@ use Exception;
 use const FILTER_FLAG_ENCODE_LOW;
 use const FILTER_UNSAFE_RAW;
 use function function_exists;
-use function get_class;
-use function gettype;
 use function is_array;
 use function is_object;
 use function is_string;
@@ -245,6 +244,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 			$this->document instanceof DOMDocument,
 			new UnexpectedValueException('document somehow null!')
 		);
+
 		return $this->document;
 	}
 
@@ -434,9 +434,9 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 			return $item;
 		}
 
-			$element = dom_import_simplexml($item);
+		$element = dom_import_simplexml($item);
 
-			return $this->document()->importNode($element, true);
+		return $this->document()->importNode($element, true);
 	}
 
 	/**

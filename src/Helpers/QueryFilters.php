@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPath\Helpers;
 
+use function assert;
 use function call_user_func;
 use function count;
 use function create_function;

@@ -64,22 +64,22 @@ trait QueryChecks
 				return 1 === count($matches) && $selector->isSameNode($first);
 			}
 
-				if (count($selector) !== count($matches)) {
+			if (count($selector) !== count($matches)) {
+				return false;
+			}
+			// Without $seen, there is an edge case here if $selector contains the same object
+			// more than once, but the counts are equal. For example, [a, a, a, a] will
+			// pass an is() on [a, b, c, d]. We use the $seen SPLOS to prevent this.
+			/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
+			$seen = new SplObjectStorage();
+			foreach ($selector as $item) {
+				if ( ! $matches->contains($item) || $seen->contains($item)) {
 					return false;
 				}
-				// Without $seen, there is an edge case here if $selector contains the same object
-				// more than once, but the counts are equal. For example, [a, a, a, a] will
-				// pass an is() on [a, b, c, d]. We use the $seen SPLOS to prevent this.
-				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
-				$seen = new SplObjectStorage();
-				foreach ($selector as $item) {
-					if ( ! $matches->contains($item) || $seen->contains($item)) {
-						return false;
-					}
-					$seen->attach($item);
-				}
+				$seen->attach($item);
+			}
 
-				return true;
+			return true;
 		}
 
 		return $this->branch($selector)->count() > 0;

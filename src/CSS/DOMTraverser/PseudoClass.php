@@ -47,7 +47,6 @@ class PseudoClass
 	 * @throws \QueryPath\CSS\ParseException
 	 * @throws NotImplementedException
 	 *
-	 * @return bool
 	 * @retval boolean
 	 *   TRUE if the node matches, FALSE otherwise.
 	 */
