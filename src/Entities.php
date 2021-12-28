@@ -28,7 +28,7 @@ class Entities implements EntitiesContract
 	 * XXX: Are octal encodings for entities acceptable?
 	 */
 	//protected static $regex = '/&([\w]+);|&#([\d]+);|&([\w]*[\s$]+)/m';
-	const regex = '/&([\w]+);|&#([\d]+);|&#(x[0-9a-fA-F]+);|(&)/m';
+	public const regex = '/&([\w]+);|&#([\d]+);|&#(x[0-9a-fA-F]+);|(&)/m';
 
 	/**
 	 * Replace all entities.
