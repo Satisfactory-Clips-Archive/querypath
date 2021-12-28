@@ -170,9 +170,7 @@
     </UnusedVariable>
   </file>
   <file src="src/CSS/DOMTraverser/Util.php">
-    <MissingParamType occurrences="3">
-      <code>$name</code>
-      <code>$node</code>
+    <MissingParamType occurrences="1">
       <code>$rule</code>
     </MissingParamType>
     <MissingReturnType occurrences="2">
@@ -870,52 +868,6 @@
       <code>\Traverser</code>
     </UndefinedDocblockClass>
   </file>
-  <file src="src/DOM.php">
-    <InvalidArgument occurrences="4">
-      <code>['\QueryPath\ParseException', 'initializeFromError']</code>
-      <code>[ParseException::class, 'initializeFromError']</code>
-      <code>[ParseException::class, 'initializeFromError']</code>
-      <code>[ParseException::class, 'initializeFromError']</code>
-    </InvalidArgument>
-    <MissingReturnType occurrences="1">
-      <code>isXMLish</code>
-    </MissingReturnType>
-    <MixedArgument occurrences="10">
-      <code>$context</code>
-      <code>$string</code>
-      <code>$string</code>
-      <code>$string</code>
-      <code>$string</code>
-      <code>$string</code>
-      <code>$string</code>
-      <code>$this-&gt;options['encoding']</code>
-      <code>$this-&gt;options['use_parser']</code>
-      <code>$this-&gt;options['use_parser']</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="2">
-      <code>$context</code>
-      <code>$string</code>
-    </MixedAssignment>
-    <PossiblyInvalidArgument occurrences="1">
-      <code>$deepest</code>
-    </PossiblyInvalidArgument>
-    <ReferenceConstraintViolation occurrences="1">
-      <code>return $current;</code>
-    </ReferenceConstraintViolation>
-    <TypeDoesNotContainType occurrences="1">
-      <code>empty($document)</code>
-    </TypeDoesNotContainType>
-    <UndefinedDocblockClass occurrences="1">
-      <code>queryPath::Exception</code>
-    </UndefinedDocblockClass>
-    <UndefinedPropertyFetch occurrences="1">
-      <code>$document-&gt;documentElement</code>
-    </UndefinedPropertyFetch>
-    <UndefinedThisPropertyAssignment occurrences="2">
-      <code>$this-&gt;last</code>
-      <code>$this-&gt;length</code>
-    </UndefinedThisPropertyAssignment>
-  </file>
   <file src="src/DOMQuery.php">
     <ArgumentTypeCoercion occurrences="1">
       <code>$owner</code>
@@ -923,10 +875,6 @@
     <DocblockTypeContradiction occurrences="1">
       <code>true === $markup</code>
     </DocblockTypeContradiction>
-    <InvalidArgument occurrences="2">
-      <code>['\QueryPath\ParseException', 'initializeFromError']</code>
-      <code>[IOException::class, 'initializeFromError']</code>
-    </InvalidArgument>
     <InvalidClass occurrences="4">
       <code>exception</code>
       <code>exception</code>
@@ -945,9 +893,8 @@
     <MissingParamType occurrences="1">
       <code>$text</code>
     </MissingParamType>
-    <MissingPropertyType occurrences="2">
+    <MissingPropertyType occurrences="1">
       <code>$ext</code>
-      <code>$length</code>
     </MissingPropertyType>
     <MissingReturnType occurrences="3">
       <code>innerHTML5</code>
@@ -1278,9 +1225,6 @@
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Helpers/QueryMutators.php">
-    <InvalidArgument occurrences="1">
-      <code>$local_deepest</code>
-    </InvalidArgument>
     <InvalidNullableReturnType occurrences="1">
       <code>\QueryPath\DOMQuery</code>
     </InvalidNullableReturnType>
@@ -1338,43 +1282,10 @@
       <code>new static()</code>
     </UnsafeInstantiation>
   </file>
-  <file src="src/IOException.php">
-    <MissingParamType occurrences="5">
-      <code>$code</code>
-      <code>$cxt</code>
-      <code>$file</code>
-      <code>$line</code>
-      <code>$str</code>
-    </MissingParamType>
-  </file>
   <file src="src/Options.php">
     <MissingReturnType occurrences="1">
       <code>has</code>
     </MissingReturnType>
-  </file>
-  <file src="src/ParseException.php">
-    <MissingParamType occurrences="9">
-      <code>$code</code>
-      <code>$code</code>
-      <code>$cxt</code>
-      <code>$file</code>
-      <code>$file</code>
-      <code>$line</code>
-      <code>$line</code>
-      <code>$msg</code>
-      <code>$str</code>
-    </MissingParamType>
-    <MixedArgument occurrences="1">
-      <code>$code</code>
-    </MixedArgument>
-    <MixedOperand occurrences="3">
-      <code>$file</code>
-      <code>$line</code>
-      <code>$msg</code>
-    </MixedOperand>
-    <PossiblyUnusedMethod occurrences="1">
-      <code>initializeFromError</code>
-    </PossiblyUnusedMethod>
   </file>
   <file src="src/Query.php">
     <MissingParamType occurrences="6">
@@ -2409,9 +2320,6 @@
       <code>$index</code>
       <code>$item</code>
     </MissingParamType>
-    <MissingPropertyType occurrences="1">
-      <code>$qp-&gt;length</code>
-    </MissingPropertyType>
     <MissingReturnType occurrences="2">
       <code>contentsRecurse</code>
       <code>filterCallbackFunction</code>
@@ -2657,9 +2565,6 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="tests/QueryPath/XMLishMock.php">
-    <MissingParamType occurrences="1">
-      <code>$str</code>
-    </MissingParamType>
     <MissingReturnType occurrences="1">
       <code>exposedIsXMLish</code>
     </MissingReturnType>

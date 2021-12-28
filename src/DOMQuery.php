@@ -60,19 +60,6 @@ class DOMQuery extends DOM
 	use QueryMutators;
 	use QueryChecks;
 
-	/**
-	 * The number of current matches.
-	 *
-	 * @see count()
-	 */
-	public $length = 0;
-
-	/**
-	 * The last SplObjectStorage of matches.
-	 *
-	 * @var SplObjectStorage<DOMNode|TextContent, mixed>|null
-	 */
-	protected ?SplObjectStorage $last = null; // Last set of matches.
 	private $ext = []; // Extensions array.
 
 	/**
@@ -1401,7 +1388,7 @@ class DOMQuery extends DOM
 			echo $this->document()->saveXML(null, $options ?? 0);
 		} else {
 			try {
-				set_error_handler([IOException::class, 'initializeFromError']);
+				set_error_handler(IOException::initializeFromError());
 				$this->document()->save($path, $options ?? 0);
 			} catch (Exception $e) {
 				restore_error_handler();
@@ -1441,7 +1428,7 @@ class DOMQuery extends DOM
 			echo $this->document()->saveHTML();
 		} else {
 			try {
-				set_error_handler(['\QueryPath\ParseException', 'initializeFromError']);
+				set_error_handler(ParseException::initializeFromError());
 				$this->document()->saveHTMLFile($path);
 			} catch (Exception $e) {
 				restore_error_handler();

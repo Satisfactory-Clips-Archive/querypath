@@ -54,6 +54,20 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 */
 	protected ?SplObjectStorage $matches = null;
 
+	/**
+	 * The number of current matches.
+	 *
+	 * @see count()
+	 */
+	public int $length = 0;
+
+	/**
+	 * The last SplObjectStorage of matches.
+	 *
+	 * @var SplObjectStorage<DOMNode|TextContent, mixed>|null
+	 */
+	protected ?SplObjectStorage $last = null; // Last set of matches.
+
 	protected int $errTypes = 771; //E_ERROR; | E_USER_ERROR;
 
 	protected DOMDocument|\Masterminds\HTML5|null $document;
@@ -62,6 +76,9 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 * The base DOMDocument.
 	 *
 	 * @var array{
+	 *	context?: resource,
+	 *	encoding?: string,
+	 *	use_parser?: 'xml'|'html',
 	 *	parser_flags: int|null,
 	 *	omit_xml_declaration: bool,
 	 *	replace_entities: bool,
@@ -92,6 +109,9 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 * @param string $string
 	 *   A CSS 3 Selector
 	 * @param array{
+	 *	context?: resource,
+	 *	encoding? : string,
+	 *	use_parser?: 'xml'|'html',
 	 *	parser_flags?: int|null,
 	 *	omit_xml_declaration?: bool,
 	 *	replace_entities?: bool,
@@ -155,6 +175,12 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 				$this->setMatches($document);
 			} elseif ($document instanceof \Masterminds\HTML5) {
 				$this->document = $document;
+				assert(
+					isset($document->documentElement),
+					new UnexpectedValueException(
+						'$document->documentElement was not present'
+					)
+				);
 				assert(
 					$document->documentElement instanceof DOMNode,
 					new UnexpectedValueException(
@@ -319,13 +345,13 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 *  The depth guage
 	 * @param list<DOMNode>|null $current
 	 *  The current set
-	 * @param DOMNode $deepest
+	 * @param int $deepest
 	 *  A reference to the current deepest node
 	 *
 	 * @return (T is TextContent ? array{0:TextContent} : list<DOMNode>)
 	 *  Returns an array of DOM nodes
 	 */
-	protected function deepestNode(DOMNode|TextContent $ele, $depth = 0, $current = null, &$deepest = null) : array
+	protected function deepestNode(DOMNode|TextContent $ele, int $depth = 0, array $current = null, int &$deepest = null) : array
 	{
 		if ($ele instanceof TextContent) {
 			return [$ele];
@@ -375,7 +401,6 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 *  Item to prepare for insert
 	 *
 	 * @throws Exception
-	 * @throws queryPath::Exception
 	 *  Thrown if the object passed in is not of a supprted object type
 	 *
 	 * @return mixed
@@ -397,7 +422,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 
 			$frag = $this->document()->createDocumentFragment();
 			try {
-				set_error_handler([ParseException::class, 'initializeFromError'], $this->errTypes);
+				set_error_handler(ParseException::initializeFromError(), $this->errTypes);
 				$frag->appendXML($item);
 			} // Simulate a finally block.
 			catch (Exception $e) {
@@ -466,10 +491,8 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 	 * core assumptions about how things work. Instead, classes should
 	 * override the constructor and pass in only one of the parsed types
 	 * that this class expects.
-	 *
-	 * @param mixed $string
 	 */
-	protected function isXMLish($string)
+	protected function isXMLish(string $string) : bool
 	{
 		return false !== strpos($string, '<') && false !== strpos($string, '>');
 	}
@@ -501,7 +524,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 		$document = new DOMDocument('1.0');
 		$lead = strtolower(substr($string, 0, 5)); // <?xml
 		try {
-			set_error_handler([ParseException::class, 'initializeFromError'], $this->errTypes);
+			set_error_handler(ParseException::initializeFromError(), $this->errTypes);
 
 			if (isset($this->options['convert_to_encoding'])) {
 				// Is there another way to do this?
@@ -517,13 +540,13 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 			// This is to avoid cases where low ascii digits have slipped into HTML.
 			// AFAIK, it should not adversly effect UTF-8 documents.
 			if ( ! empty($this->options['strip_low_ascii'])) {
-				$string = filter_var($string, FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW);
+				$string = (string) filter_var($string, FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW);
 			}
 
 			// Allow users to override parser settings.
 			$useParser = '';
 			if ( ! empty($this->options['use_parser'])) {
-				$useParser = strtolower($this->options['use_parser']);
+				$useParser = $this->options['use_parser'];
 			}
 
 			// If HTML parser is requested, we use it.
@@ -545,10 +568,6 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 			throw $e;
 		}
 		restore_error_handler();
-
-		if (empty($document)) {
-			throw new \QueryPath\ParseException('Unknown parser exception.');
-		}
 
 		return $document;
 	}
@@ -578,7 +597,7 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 		// two steps:
 		if ( ! empty($context)) {
 			try {
-				set_error_handler(['\QueryPath\ParseException', 'initializeFromError'], $this->errTypes);
+				set_error_handler(ParseException::initializeFromError(), $this->errTypes);
 				$contents = file_get_contents($filename, false, $context);
 			}
 			// Apparently there is no 'finally' in PHP, so we have to restore the error
@@ -609,13 +628,13 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 		if (empty($this->options['use_parser'])) {
 			$useParser = '';
 		} else {
-			$useParser = strtolower($this->options['use_parser']);
+			$useParser = $this->options['use_parser'];
 		}
 
 		$ext = false !== $lastDot ? strtolower(substr($filename, $lastDot)) : '';
 
 		try {
-			set_error_handler([ParseException::class, 'initializeFromError'], $this->errTypes);
+			set_error_handler(ParseException::initializeFromError(), $this->errTypes);
 
 			// If the parser is explicitly set to XML, use that parser.
 			if ('xml' === $useParser) {

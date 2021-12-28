@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use Closure;
 use const LIBXML_ERR_WARNING;
 
 /**
@@ -24,7 +25,7 @@ class ParseException extends Exception
 	public const WARN_MSG_FORMAT = 'Parser warning in %s on line %d column %d: %s (%d)';
 
 	// trigger_error
-	public function __construct($msg = '', $code = 0, $file = null, $line = null)
+	final public function __construct(string $msg = '', int $code = 0, string $file = null, int $line = null)
 	{
 		$msgs = [];
 		foreach (libxml_get_errors() as $err) {
@@ -44,10 +45,15 @@ class ParseException extends Exception
 		parent::__construct($msg, $code);
 	}
 
-	public static function initializeFromError($code, $str, $file, $line, $cxt = null) : void
+	/**
+	 * @return Closure(int, string, string|null, int|null):bool
+	 */
+	public static function initializeFromError() : Closure
 	{
+		return static function ($code, $str, $file, $line) : bool
+		{
 		//printf("\n\nCODE: %s %s\n\n", $code, $str);
-		$class = __CLASS__;
-		throw new $class($str, $code, $file, $line);
+			throw new static($str, $code, $file, $line);
+		};
 	}
 }

@@ -11,7 +11,7 @@ namespace QueryPathTests;
  */
 class XMLishMock extends \QueryPath\DOMQuery
 {
-	public function exposedIsXMLish($str)
+	public function exposedIsXMLish(string $str)
 	{
 		return $this->isXMLish($str);
 	}
