@@ -35,7 +35,7 @@ class ExtensionRegistry
 	 * be used for automatic extension loading. If this is false, then
 	 * implementations should not automatically load extensions.
 	 */
-	public static $useRegistry = true;
+	public static bool $useRegistry = true;
 	/**
 	 * The extension registry. This should consist of an array of class
 	 * names.

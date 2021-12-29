@@ -43,7 +43,7 @@ trait QueryMutators
 	 *
 	 * @deprecated the removeChildren() function is the preferred method
 	 */
-	public function emptyElement() : Query
+	public function emptyElement() : DOMQuery
 	{
 		$this->removeChildren();
 
@@ -77,7 +77,7 @@ trait QueryMutators
 	 * @see appendTo()
 	 * @see prepend()
 	 */
-	public function append(string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|TextContent|null $data) : Query
+	public function append(string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|TextContent|null $data) : DOMQuery
 	{
 		$data = $this->prepareInsert($data);
 		if (isset($data)) {
@@ -143,7 +143,7 @@ trait QueryMutators
 	 * @see after()
 	 * @see prependTo()
 	 */
-	public function prepend(string|DOMQuery|DOMNode|SimpleXMLElement|TextContent|null $data) : Query
+	public function prepend(string|DOMQuery|DOMNode|SimpleXMLElement|TextContent|null $data) : DOMQuery
 	{
 		$data = $this->prepareInsert($data);
 		if (isset($data)) {
@@ -221,7 +221,7 @@ trait QueryMutators
 	 * @see append()
 	 * @see prepend()
 	 */
-	public function before(string|DOMQuery|DOMNode|SimpleXMLElement|null $data) : Query
+	public function before(string|DOMQuery|DOMNode|SimpleXMLElement|null $data) : DOMQuery
 	{
 		$data = $this->prepareInsert($data);
 		foreach ($this->getMatches() as $m) {
@@ -264,7 +264,7 @@ trait QueryMutators
 	 * @see insertAfter()
 	 * @see appendTo()
 	 */
-	public function insertBefore(Query $dest) : Query
+	public function insertBefore(Query $dest) : DOMQuery
 	{
 		foreach ($this->getMatches() as $m) {
 			$dest->before($m);
@@ -290,7 +290,7 @@ trait QueryMutators
 	 * @see insertBefore()
 	 * @see append()
 	 */
-	public function insertAfter(Query $dest) : Query
+	public function insertAfter(Query $dest) : DOMQuery
 	{
 		foreach ($this->getMatches() as $m) {
 			$dest->after($m);
@@ -319,7 +319,7 @@ trait QueryMutators
 	 * @see before()
 	 * @see append()
 	 */
-	public function after(string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|null $data) : Query
+	public function after(string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|null $data) : DOMQuery
 	{
 		if (empty($data)) {
 			return $this;
@@ -369,7 +369,7 @@ trait QueryMutators
 	 * @see remove()
 	 * @see replaceAll()
 	 */
-	public function replaceWith(string|DOMQuery|DOMNode|SimpleXMLElement|null $new) : Query
+	public function replaceWith(string|DOMQuery|DOMNode|SimpleXMLElement|null $new) : DOMQuery
 	{
 		$data = $this->prepareInsert($new);
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
@@ -438,7 +438,7 @@ trait QueryMutators
 	 *
 	 * @author mbutcher
 	 */
-	public function unwrap() : Query
+	public function unwrap() : DOMQuery
 	{
 		// We do this in two loops in order to
 		// capture the case where two matches are
@@ -509,7 +509,7 @@ trait QueryMutators
 	 * @see wrapAll()
 	 * @see wrapInner()
 	 */
-	public function wrap(string|DOMQuery|DOMNode|SimpleXMLElement|null $markup) : Query
+	public function wrap(string|DOMQuery|DOMNode|SimpleXMLElement|null $markup) : DOMQuery
 	{
 		$data = $this->prepareInsert($markup);
 
@@ -721,7 +721,7 @@ trait QueryMutators
 	 * @return \QueryPath\DOMQuery
 	 *  The DOMQuery wrapping the single deepest node
 	 */
-	public function deepest() : Query
+	public function deepest() : DOMQuery
 	{
 		$deepest = 0;
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
@@ -823,7 +823,7 @@ trait QueryMutators
 	 * @see addClass()
 	 * @see hasClass()
 	 */
-	public function removeClass(string|bool $class = false) : Query
+	public function removeClass(string|bool $class = false) : DOMQuery
 	{
 		if (empty($class)) {
 			foreach ($this->getMatches() as $m) {
@@ -871,7 +871,7 @@ trait QueryMutators
 	 * If no selector is specified, this will remove all current matches from
 	 * the document.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A CSS Selector
 	 *
 	 * @throws ParseException
@@ -886,7 +886,7 @@ trait QueryMutators
 	 *
 	 * @author eabrand
 	 */
-	public function detach($selector = null) : Query
+	public function detach(string $selector = null) : DOMQuery
 	{
 		if (null !== $selector) {
 			$this->find($selector);
@@ -935,7 +935,7 @@ trait QueryMutators
 	 *
 	 * @author eabrand
 	 */
-	public function attach(DOMQuery $dest) : Query
+	public function attach(DOMQuery $dest) : DOMQuery
 	{
 		foreach ($this->last ?? [] as $m) {
 			$dest->append($m);
@@ -966,7 +966,7 @@ trait QueryMutators
 	 * @see append()
 	 * @see prependTo()
 	 */
-	public function appendTo(DOMQuery $dest) : Query
+	public function appendTo(DOMQuery $dest) : DOMQuery
 	{
 		foreach ($this->getMatches() as $m) {
 			$dest->append($m);
@@ -985,7 +985,7 @@ trait QueryMutators
 	 * If no selector is specified, this will remove all current matches from
 	 * the document.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A CSS Selector
 	 *
 	 * @throws ParseException
@@ -997,7 +997,7 @@ trait QueryMutators
 	 * @see replaceWith()
 	 * @see removeChildren()
 	 */
-	public function remove($selector = null) : Query
+	public function remove(string $selector = null) : DOMQuery
 	{
 		if ( ! empty($selector)) {
 			// Do a non-destructive find.
@@ -1058,7 +1058,7 @@ trait QueryMutators
 	 * @see        remove()
 	 * @see        replaceWith()
 	 */
-	public function replaceAll($selector, DOMDocument $document) : Query
+	public function replaceAll(string $selector, DOMDocument $document) : DOMQuery
 	{
 		$replacement = $this->getMatches()->count() > 0 ? $this->getFirstMatch() : $this->document()->createTextNode('');
 		assert(
@@ -1107,7 +1107,7 @@ trait QueryMutators
 	 * @see andSelf()
 	 * @see end()
 	 */
-	public function add($selector) : Query
+	public function add(string $selector) : DOMQuery
 	{
 		// This is destructive, so we need to set $last:
 		$this->last = $this->matches;
@@ -1132,7 +1132,7 @@ trait QueryMutators
 	 * @see replaceAll()
 	 * @see remove()
 	 */
-	public function removeChildren() : Query
+	public function removeChildren() : DOMQuery
 	{
 		foreach ($this->getMatches() as $m) {
 			if ( ! ($m instanceof DOMNode)) {
@@ -1159,14 +1159,15 @@ trait QueryMutators
 	 * When an attribute value is retrieved, only the attribute value of the FIRST
 	 * match is returned.
 	 *
-	 * @template T as array|string|null
+	 * @template T0 as array|string|null
+	 * @template T1 as string|null
 	 *
-	 * @param T $name
+	 * @param T0 $name
 	 *   The name of the attribute or an associative array of name/value pairs
-	 * @param string|null $value
+	 * @param T1 $value
 	 *   A value (used only when setting an individual property)
 	 *
-	 * @return (T is null ? (array<string, string>|null) : (\QueryPath\DOMQuery|string|int|null))
+	 * @return (T0 is null ? (array<string, string>|null) : (T0 is array ? \QueryPath\DOMQuery : (T1 is string ? DOMQuery : (string|int|null))))
 	 *   If this was a setter request, return the DOMQuery object. If this was
 	 *   an access request (getter), return the string value.
 	 *

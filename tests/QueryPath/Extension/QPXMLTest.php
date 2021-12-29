@@ -38,7 +38,9 @@ class QPXMLTest extends TestCase
 
 	public function testProcessingInstruction() : void
 	{
-		$this->assertSame('This is a processing instruction.', trim(qp($this->file, 'third')->pi()));
+		$pi = qp($this->file, 'third')->pi();
+		$this->assertIsString($pi);
+		$this->assertSame('This is a processing instruction.', trim($pi));
 		$msg = 'Message';
 		$this->assertSame($msg, qp($this->file, 'second')->pi('qp', $msg)->top()->find('second')->pi());
 	}

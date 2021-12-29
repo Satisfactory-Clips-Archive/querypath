@@ -6,7 +6,9 @@ namespace QueryPath\Extension;
 
 use function array_slice;
 use function call_user_func_array;
+use Closure;
 use function count;
+use DOMNode;
 use function func_get_args;
 use function is_array;
 use function is_callable;
@@ -15,6 +17,8 @@ use QueryPath\DOMQuery;
 use QueryPath\Exception;
 use QueryPath\Extension;
 use QueryPath\Query;
+use QueryPath\TextContent;
+use UnexpectedValueException;
 
 /**
  * A QueryPath extension that adds extra methods for formatting node values.
@@ -54,11 +58,10 @@ use QueryPath\Query;
  */
 class Format implements Extension
 {
-	protected $qp;
-
-	public function __construct(Query $qp)
+	public function __construct(
+		protected DOMQuery $qp
+	)
 	{
-		$this->qp = $qp;
 	}
 
 	/**
@@ -88,19 +91,19 @@ class Format implements Extension
 	 * </code>
 	 *
 	 * @param callable $callback the callable to be called on every element
-	 * @param mixed ...$args        [optional] Zero or more parameters to be passed to the callback
+	 * @param string ...$args        [optional] Zero or more parameters to be passed to the callback
 	 *
 	 * @throws Exception
 	 *
 	 * @return DOMQuery the DOMQuery object with the same element(s) selected
 	 */
-	public function format($callback, mixed ...$args) : Query
+	public function format($callback, string ...$args) : DOMQuery
 	{
-		$getter = static function ($qp) {
+		$getter = static function (DOMQuery $qp) : string {
 			return $qp->text();
 		};
 
-		$setter = static function ($qp, $value) : void {
+		$setter = static function (DOMQuery $qp, string $value = null) : void {
 			$qp->text($value);
 		};
 
@@ -137,23 +140,19 @@ class Format implements Extension
 	 *
 	 * @param string $attrName   the attribute name
 	 * @param callable $callback the callable to be called on every element
-	 * @param mixed ...$args        [optional] Zero or more parameters to be passed to the callback
+	 * @param string ...$args        [optional] Zero or more parameters to be passed to the callback
 	 *
 	 * @throws Exception
 	 *
 	 * @return DOMQuery the DOMQuery object with the same element(s) selected
 	 */
-	public function formatAttr($attrName, $callback, mixed ...$args) : Query
+	public function formatAttr(string $attrName, $callback, string ...$args) : DOMQuery
 	{
-		if (count($args) > 1) {
-			$args = array_slice(func_get_args(), 2);
-		}
-
-		$getter = static function ($qp) use ($attrName) {
+		$getter = static function (DOMQuery $qp) use ($attrName) : string|int|null {
 			return $qp->attr($attrName);
 		};
 
-		$setter = static function ($qp, $value) use ($attrName) {
+		$setter = static function (DOMQuery $qp, ?string $value) use ($attrName) : DOMQuery|int|string|null {
 			return $qp->attr($attrName, $value);
 		};
 
@@ -161,63 +160,75 @@ class Format implements Extension
 	}
 
 	/**
-	 * @param $callback
-	 * @param $args
-	 * @param $getter
-	 * @param $setter
+	 * @param string|array{0:string|object, 1:string, 2?:int}|Closure|callable $callback
+	 * @param string[] $args
+	 * @param Closure(DOMQuery):(string|int|null) $getter
+	 * @param Closure(DOMQuery, string|null):(DOMQuery|int|string|null) $setter
 	 *
 	 * @throws Exception
 	 */
-	protected function forAll($callback, $args, $getter, $setter) : Query
+	protected function forAll($callback, array $args, $getter, $setter) : DOMQuery
 	{
 		[$callback, $pos] = $this->prepareCallback($callback);
-		if ( ! is_callable($callback)) {
-			throw new Exception('Callback is not callable.');
-		}
 
 		$padded = $this->prepareArgs($args, $pos);
+		/** @var DOMQuery */
 		foreach ($this->qp as $qp) {
 			$padded[$pos] = $getter($qp);
-			$setter($qp, call_user_func_array($callback, $padded));
+			$result = call_user_func_array($callback, $padded);
+			assert(
+				(is_string($result) || is_null($result)),
+				new UnexpectedValueException(sprintf(
+					'result of callback should\'ve been string or null, %s given!',
+					gettype($result)
+				))
+			);
+			$setter($qp, $result);
 		}
 
 		return $this->qp;
 	}
 
 	/**
-	 * @param $callback
+	 * @param string|array{0:string|object, 1:string, 2?:int}|Closure|callable $callback
 	 *
-	 * @return array
+	 * @return array{0:callable, 1:int}
 	 */
-	protected function prepareCallback($callback)
+	protected function prepareCallback($callback) : array
 	{
 		if (is_string($callback)) {
-			[$callback, $trail] = $this->splitFunctionName($callback);
+			[$callback, $trail] = $this->splitFunctionName($callback) ?: [null, null];
 			$pos = (int) $trail;
 		} elseif (is_array($callback) && isset($callback[2])) {
+			/** @var int */
 			$pos = $callback[2];
 			$callback = [$callback[0], $callback[1]];
 		} else {
 			$pos = 0;
 		}
+		if ( ! is_callable($callback)) {
+			throw new Exception('Callback is not callable.');
+		}
 
+		/** @var array{0:callable, 1:int} */
 		return [$callback, $pos];
 	}
 
 	/**
 	 * @return array[]|false|string[]
 	 */
-	protected function splitFunctionName(string $string)
+	protected function splitFunctionName(string $string) : array|false
 	{
 		// 'func_name:2', 'func_name@3', 'func_name[1]', ...
 		return preg_split('/[^a-zA-Z0-9_\x7f-\xff][^\d]*|$/', $string, 2);
 	}
 
 	/**
-	 * @param $args
-	 * @param $pos
+	 * @param string|string[] $args
+	 *
+	 * @return (string|null)[]
 	 */
-	protected function prepareArgs($args, $pos) : array
+	protected function prepareArgs(string|array $args, int $pos) : array
 	{
 		$padded = array_pad((array) $args, (0 < $pos) ? $pos - 1 : 0, null);
 		array_splice($padded, $pos, 0, [null]); // insert null as a place holder

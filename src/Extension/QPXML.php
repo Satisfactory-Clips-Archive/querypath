@@ -9,6 +9,9 @@ namespace QueryPath\Extension;
 
 use function assert;
 use function in_array;
+use DOMDocument;
+use DOMNode;
+use DOMElement;
 use QueryPath\DOMQuery;
 use QueryPath\Extension;
 use QueryPath\Query;
@@ -33,13 +36,19 @@ use const XML_PI_NODE;
 class QPXML implements Extension
 {
 	public function __construct(
-		protected Query $qp
+		protected DOMQuery $qp
 	) {
 	}
 
-	public function schema($file) : void
+	public function schema(string $file) : void
 	{
-		$doc = $this->qp->branch()->top()->get(0)->ownerDocument;
+		$doc = $this->qp->branch()->top()->get(0)->ownerDocument ?? null;
+		assert(
+			($doc instanceof DOMDocument),
+			new UnexpectedValueException(
+				'ownerDocument missing!'
+			)
+		);
 
 		if ( ! $doc->schemaValidate($file)) {
 			throw new \QueryPath\Exception('Document did not validate against the schema.');
@@ -55,11 +64,13 @@ class QPXML implements Extension
 	 * If no parameter is passed in, this will return the first CDATA section that it
 	 * finds in the matched elements.
 	 *
-	 * @param string $text
+	 * @template T as string|null
+	 *
+	 * @param T $text
 	 *  The text data to insert into the current matches. If this is NULL, then the first
 	 *  CDATA will be returned.
 	 *
-	 * @return mixed
+	 * @return (T is string ? DOMQuery : string|null)
 	 *  If $text is not NULL, this will return a {@link QueryPath}. Otherwise, it will
 	 *  return a string. If no CDATA is found, this will return NULL.
 	 *
@@ -67,11 +78,23 @@ class QPXML implements Extension
 	 * @see QueryPath::text()
 	 * @see QueryPath::html()
 	 */
-	public function cdata($text = null)
+	public function cdata(string $text = null) : DOMQuery|string|null
 	{
 		if (isset($text)) {
 			// Add this text as CDATA in the current elements.
 			foreach ($this->qp->get() as $element) {
+				assert(
+					($element instanceof DOMNode),
+					new UnexpectedValueException(
+						'Element must be an instance of DOMNode!'
+					)
+				);
+				assert(
+					($element->ownerDocument instanceof DOMDocument),
+					new UnexpectedValueException(
+						'ownerDocument missing!'
+					)
+				);
 				$cdata = $element->ownerDocument->createCDATASection($text);
 				$element->appendChild($cdata);
 			}
@@ -80,6 +103,7 @@ class QPXML implements Extension
 		}
 
 		// Look for CDATA sections.
+		/** @var DOMNode */
 		foreach ($this->qp->get() as $ele) {
 			foreach ($ele->childNodes as $node) {
 				if (XML_CDATA_SECTION_NODE === $node->nodeType) {
@@ -90,6 +114,7 @@ class QPXML implements Extension
 		}
 
 		// Nothing found
+		return null;
 	}
 
 	/**
@@ -116,13 +141,21 @@ class QPXML implements Extension
 	public function comment($text = null)
 	{
 		if (isset($text)) {
+			/** @var DOMNode */
 			foreach ($this->qp->get() as $element) {
+				assert(
+					($element->ownerDocument instanceof DOMDocument),
+					new UnexpectedValueException(
+						'ownerDocument missing!'
+					)
+				);
 				$comment = $element->ownerDocument->createComment($text);
 				$element->appendChild($comment);
 			}
 
 			return $this->qp;
 		}
+		/** @var DOMNode */
 		foreach ($this->qp->get() as $ele) {
 			foreach ($ele->childNodes as $node) {
 				if (XML_COMMENT_NODE == $node->nodeType) {
@@ -136,23 +169,37 @@ class QPXML implements Extension
 	/**
 	 * Get or set a processor instruction.
 	 *
-	 * @param mixed|null $prefix
-	 * @param mixed|null $text
+	 * @template T as string|null
+	 *
+	 * @param T $text
+	 *
+	 * @return (T is string ? DOMQuery : string|null)
 	 */
-	public function pi($prefix = null, $text = null)
+	public function pi(string $prefix = null, string $text = null) : DOMQuery|string|null
 	{
 		if (isset($text)) {
+			/** @var DOMNode */
 			foreach ($this->qp->get() as $element) {
-				$comment = $element->ownerDocument->createProcessingInstruction($prefix, $text);
+				assert(
+					($element->ownerDocument instanceof DOMDocument),
+					new UnexpectedValueException(
+						'ownerDocument missing!'
+					)
+				);
+				$comment = $element->ownerDocument->createProcessingInstruction($prefix ?? '', $text);
 				$element->appendChild($comment);
 			}
 
 			return $this->qp;
 		}
+		/** @var DOMNode */
 		foreach ($this->qp->get() as $ele) {
 			foreach ($ele->childNodes as $node) {
 				if (XML_PI_NODE == $node->nodeType) {
 					if (isset($prefix)) {
+						if ( ! ($node instanceof DOMElement)) {
+							continue;
+						}
 						if ($node->tagName == $prefix) {
 							return $node->textContent;
 						}
@@ -163,24 +210,22 @@ class QPXML implements Extension
 				}
 			} // foreach
 		} // foreach
+
+		return null;
 	}
 
-	public function toXml()
+	public function toXml() : string
 	{
 		return $this->qp->document()->saveXml();
 	}
 
 	/**
 	 * Create a NIL element.
-	 *
-	 * @param string $text
-	 * @param string $value
-	 * @reval object $element
 	 */
-	public function createNilElement($text, $value)
+	public function createNilElement(string $text, string $value) : DOMQuery
 	{
 		$value = ($value) ? 'true' : 'false';
-		$element = $this->qp->createElement($text);
+		$element = $this->createElement($text);
 		$element->attr('xsi:nil', $value);
 
 		return $element;
@@ -195,16 +240,17 @@ class QPXML implements Extension
 	public function createElement(string $text, string $nsUri = null) : DOMQuery
 	{
 		foreach ($this->qp->get() as $element) {
+			assert(
+				($element->ownerDocument instanceof DOMDocument),
+				new UnexpectedValueException(
+					'ownerDocument not found!'
+				)
+			);
 			if (null === $nsUri && false !== strpos($text, ':')) {
-				$ns = array_shift(explode(':', $text));
+				$text_parts = explode(':', $text);
+				$ns = array_shift($text_parts);
 				$nsUri = $element->ownerDocument->lookupNamespaceURI($ns);
-
-				if (null === $nsUri) {
-					throw new \QueryPath\Exception('Undefined namespace for: ' . $text);
-				}
 			}
-
-			$node = null;
 			if (null !== $nsUri) {
 				$node = $element->ownerDocument->createElementNS(
 						$nsUri,
@@ -223,7 +269,7 @@ class QPXML implements Extension
 	/**
 	 * Append an element.
 	 */
-	public function appendElement(string $text) : Query
+	public function appendElement(string $text) : DOMQuery
 	{
 		assert(
 			in_array(self::class, class_uses($this->qp), true),

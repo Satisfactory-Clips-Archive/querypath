@@ -885,189 +885,26 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="src/Extension/Format.php">
-    <LessSpecificReturnStatement occurrences="2">
-      <code>$this-&gt;forAll($callback, $args, $getter, $setter)</code>
-      <code>$this-&gt;forAll($callback, $args, $getter, $setter)</code>
-    </LessSpecificReturnStatement>
-    <MissingClosureParamType occurrences="6">
-      <code>$qp</code>
-      <code>$qp</code>
-      <code>$qp</code>
-      <code>$qp</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MissingClosureParamType>
-    <MissingClosureReturnType occurrences="3">
-      <code>static function ($qp) use ($attrName) {</code>
-      <code>static function ($qp) {</code>
-      <code>static function ($qp, $value) use ($attrName) {</code>
-    </MissingClosureReturnType>
-    <MissingParamType occurrences="7">
-      <code>$args</code>
-      <code>$args</code>
-      <code>$callback</code>
-      <code>$callback</code>
-      <code>$getter</code>
-      <code>$pos</code>
-      <code>$setter</code>
-    </MissingParamType>
-    <MixedArgument occurrences="2">
-      <code>$pos</code>
-      <code>(0 &lt; $pos) ? $pos - 1 : 0</code>
-    </MixedArgument>
-    <MixedArrayOffset occurrences="1">
-      <code>$padded[$pos]</code>
-    </MixedArrayOffset>
-    <MixedAssignment occurrences="3">
-      <code>$padded[$pos]</code>
-      <code>$pos</code>
-      <code>$qp</code>
-    </MixedAssignment>
-    <MixedFunctionCall occurrences="2">
-      <code>$getter($qp)</code>
-      <code>$setter($qp, call_user_func_array($callback, $padded))</code>
-    </MixedFunctionCall>
-    <MixedMethodCall occurrences="4">
-      <code>attr</code>
-      <code>attr</code>
-      <code>text</code>
-      <code>text</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$pos</code>
-    </MixedOperand>
-    <MoreSpecificReturnType occurrences="2">
-      <code>DOMQuery</code>
-      <code>DOMQuery</code>
-    </MoreSpecificReturnType>
-    <PossiblyInvalidArrayAccess occurrences="2">
-      <code>$callback</code>
-      <code>$trail</code>
-    </PossiblyInvalidArrayAccess>
     <PossiblyUnusedMethod occurrences="2">
       <code>format</code>
       <code>formatAttr</code>
     </PossiblyUnusedMethod>
-    <RawObjectIteration occurrences="1">
-      <code>$this-&gt;qp</code>
-    </RawObjectIteration>
   </file>
   <file src="src/Extension/QPXML.php">
-    <InvalidPassByReference occurrences="1">
-      <code>explode(':', $text)</code>
-    </InvalidPassByReference>
-    <MissingParamType occurrences="1">
-      <code>$file</code>
-    </MissingParamType>
-    <MissingReturnType occurrences="3">
-      <code>createNilElement</code>
-      <code>pi</code>
-      <code>toXml</code>
-    </MissingReturnType>
-    <MixedArgument occurrences="2">
-      <code>$element</code>
-      <code>$node</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="19">
-      <code>$cdata</code>
-      <code>$comment</code>
-      <code>$comment</code>
-      <code>$doc</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$ele</code>
-      <code>$element</code>
-      <code>$element</code>
-      <code>$element</code>
-      <code>$element</code>
-      <code>$element</code>
-      <code>$element</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$nsUri</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="14">
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>appendChild</code>
-      <code>attr</code>
-      <code>createCDATASection</code>
-      <code>createComment</code>
-      <code>createElement</code>
-      <code>createElementNS</code>
-      <code>createProcessingInstruction</code>
-      <code>get</code>
-      <code>lookupNamespaceURI</code>
-      <code>saveXml</code>
-      <code>schemaValidate</code>
-      <code>top</code>
-    </MixedMethodCall>
-    <MixedPropertyFetch occurrences="18">
-      <code>$ele-&gt;childNodes</code>
-      <code>$ele-&gt;childNodes</code>
-      <code>$ele-&gt;childNodes</code>
-      <code>$element-&gt;ownerDocument</code>
-      <code>$element-&gt;ownerDocument</code>
-      <code>$element-&gt;ownerDocument</code>
-      <code>$element-&gt;ownerDocument</code>
-      <code>$element-&gt;ownerDocument</code>
-      <code>$element-&gt;ownerDocument</code>
-      <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;textContent</code>
-      <code>$node-&gt;textContent</code>
-      <code>$node-&gt;textContent</code>
-      <code>$node-&gt;textContent</code>
-      <code>$this-&gt;qp-&gt;branch()-&gt;top()-&gt;get(0)-&gt;ownerDocument</code>
-    </MixedPropertyFetch>
-    <PossiblyUnusedMethod occurrences="8">
+    <PossiblyUnusedMethod occurrences="7">
       <code>appendElement</code>
       <code>cdata</code>
       <code>comment</code>
-      <code>createElement</code>
       <code>createNilElement</code>
       <code>pi</code>
       <code>schema</code>
       <code>toXml</code>
     </PossiblyUnusedMethod>
-    <UndefinedInterfaceMethod occurrences="12">
-      <code>branch</code>
-      <code>createElement</code>
-      <code>createElement</code>
-      <code>document</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-      <code>get</code>
-    </UndefinedInterfaceMethod>
-    <UnusedVariable occurrences="1">
-      <code>$node</code>
-    </UnusedVariable>
   </file>
   <file src="src/Extension/QPXSL.php">
-    <MixedMethodCall occurrences="1">
-      <code>get</code>
-    </MixedMethodCall>
-    <PossiblyUndefinedMethod occurrences="1">
-      <code>get</code>
-    </PossiblyUndefinedMethod>
     <PossiblyUnusedMethod occurrences="1">
       <code>xslt</code>
     </PossiblyUnusedMethod>
-  </file>
-  <file src="src/ExtensionRegistry.php">
-    <MissingPropertyType occurrences="1">
-      <code>$useRegistry</code>
-    </MissingPropertyType>
   </file>
   <file src="src/Helpers/QueryFilters.php">
     <MissingParamType occurrences="1">
@@ -1097,12 +934,6 @@
       <code>$c-&gt;nodeType</code>
       <code>$c-&gt;nodeType</code>
     </MixedPropertyFetch>
-    <MoreSpecificReturnType occurrences="1">
-      <code>\QueryPath\DOMQuery</code>
-    </MoreSpecificReturnType>
-    <PossiblyNullArgument occurrences="1">
-      <code>$selector</code>
-    </PossiblyNullArgument>
     <PossiblyUndefinedVariable occurrences="2">
       <code>$tmp</code>
       <code>$tmp</code>
@@ -1174,25 +1005,6 @@
   <file src="src/Options.php">
     <MissingReturnType occurrences="1">
       <code>has</code>
-    </MissingReturnType>
-  </file>
-  <file src="src/Query.php">
-    <MissingParamType occurrences="6">
-      <code>$selector</code>
-      <code>$selector</code>
-      <code>$selector</code>
-      <code>$selector</code>
-      <code>$selector</code>
-      <code>$selector</code>
-    </MissingParamType>
-    <MissingReturnType occurrences="7">
-      <code>children</code>
-      <code>find</code>
-      <code>next</code>
-      <code>parent</code>
-      <code>prev</code>
-      <code>siblings</code>
-      <code>top</code>
     </MissingReturnType>
   </file>
   <file src="src/QueryPath.php">
@@ -2230,8 +2042,7 @@
       <code>$pack</code>
       <code>$qp</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="17">
-      <code>attr</code>
+    <MixedMethodCall occurrences="13">
       <code>contents</code>
       <code>find</code>
       <code>html</code>
@@ -2243,10 +2054,7 @@
       <code>text</code>
       <code>text</code>
       <code>text</code>
-      <code>text</code>
-      <code>text</code>
       <code>textBefore</code>
-      <code>top</code>
       <code>top</code>
     </MixedMethodCall>
     <MixedOperand occurrences="3">
@@ -2257,16 +2065,9 @@
     <PossiblyUnusedParam occurrences="1">
       <code>$item</code>
     </PossiblyUnusedParam>
-    <RedundantConditionGivenDocblockType occurrences="2">
-      <code>assertTrue</code>
+    <RedundantConditionGivenDocblockType occurrences="1">
       <code>assertTrue</code>
     </RedundantConditionGivenDocblockType>
-    <UndefinedInterfaceMethod occurrences="4">
-      <code>count</code>
-      <code>count</code>
-      <code>eq</code>
-      <code>get</code>
-    </UndefinedInterfaceMethod>
     <UnusedVariable occurrences="7">
       <code>$finish</code>
       <code>$qp</code>
@@ -2291,9 +2092,8 @@
     </MixedOperand>
   </file>
   <file src="tests/QueryPath/Extension/QPXMLTest.php">
-    <MixedArgument occurrences="2">
+    <MixedArgument occurrences="1">
       <code>qp($this-&gt;file, 'root')-&gt;comment()</code>
-      <code>qp($this-&gt;file, 'third')-&gt;pi()</code>
     </MixedArgument>
     <MixedMethodCall occurrences="9">
       <code>cdata</code>
@@ -2357,13 +2157,12 @@
     </UndefinedThisPropertyAssignment>
   </file>
   <file src="tests/QueryPath/StubExtensionOne.php">
+    <DeprecatedMethod occurrences="1">
+      <code>end</code>
+    </DeprecatedMethod>
     <MissingReturnType occurrences="1">
       <code>stubToe</code>
     </MissingReturnType>
-    <MixedMethodCall occurrences="2">
-      <code>append</code>
-      <code>end</code>
-    </MixedMethodCall>
     <PossiblyNullPropertyAssignmentValue occurrences="1">
       <code>null</code>
     </PossiblyNullPropertyAssignmentValue>

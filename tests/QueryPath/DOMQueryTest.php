@@ -934,8 +934,6 @@ class DOMQueryTest extends TestCase
 	public function testWrap() : void
 	{
 		$file = DATA_FILE;
-		$xml = qp($file, 'unary')->wrap('');
-		$this->assertTrue($xml instanceof DOMQuery);
 
 		$element = qp($file, 'unary')->wrap('<test id="testWrap"></test>')->get(0);
 		$this->assertInstanceOf(DOMElement::class, $element);

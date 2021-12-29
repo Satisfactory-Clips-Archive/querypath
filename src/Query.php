@@ -15,6 +15,8 @@ use SplObjectStorage;
  *
  * @method after($data)
  * @method before($data)
+ *
+ * @psalm-require-implements DOMQuery
  */
 interface Query
 {
@@ -36,17 +38,17 @@ interface Query
 	 */
 	public function __construct(DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $document = null, $string = null, array $options = []);
 
-	public function find(string $selector);
+	public function find(string $selector) : DOMQuery;
 
-	public function top($selector = null);
+	public function top(string $selector = null) : DOMQuery;
 
-	public function next($selector = null);
+	public function next(string $selector = null) : DOMQuery;
 
-	public function prev($selector = null);
+	public function prev(string $selector = null) : DOMQuery;
 
-	public function siblings($selector = null);
+	public function siblings(string $selector = null) : DOMQuery;
 
-	public function parent($selector = null);
+	public function parent(string $selector = null) : DOMQuery;
 
-	public function children($selector = null);
+	public function children(string $selector = null) : DOMQuery;
 }

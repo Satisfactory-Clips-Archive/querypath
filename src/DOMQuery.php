@@ -169,7 +169,7 @@ class DOMQuery extends DOM
 	 * case that is not handled by find(':root') because there is no element
 	 * whose root can be found).
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A selector. If this is supplied, QueryPath will navigate to the
 	 *  document root and then run the query. (Added in QueryPath 2.0 Beta 2)
 	 *
@@ -179,7 +179,7 @@ class DOMQuery extends DOM
 	 *  The DOMQuery object, wrapping the root element (document element)
 	 *  for the current document
 	 */
-	public function top($selector = null) : Query
+	public function top(string $selector = null) : DOMQuery
 	{
 		return $this->inst($this->document()->documentElement, $selector);
 	}
@@ -204,7 +204,7 @@ class DOMQuery extends DOM
 	 *   from which to determine what the root is. The workaround is to use
 	 *   {@link top()} to select the root element again.
 	 */
-	public function find(string $selector) : Query
+	public function find(string $selector) : DOMQuery
 	{
 		$query = new DOMTraverser($this->getMatches());
 		$query->find($selector);
@@ -551,7 +551,7 @@ class DOMQuery extends DOM
 	 * @return \QueryPath\DOMQuery
 	 *   This object
 	 */
-	public function sort($comparator, $modifyDOM = false) : Query
+	public function sort($comparator, $modifyDOM = false) : DOMQuery
 	{
 		// Sort as an array.
 		$list = iterator_to_array($this->getMatches());
@@ -1078,11 +1078,13 @@ class DOMQuery extends DOM
 	/**
 	 * Get or set the text contents of a node.
 	 *
-	 * @param string $text
+	 * @template T as string|null
+	 *
+	 * @param T $text
 	 *  If this is not NULL, this value will be set as the text of the node. It
 	 *  will replace any existing content.
 	 *
-	 * @return mixed
+	 * @return (T is string ? DOMQuery : string)
 	 *  A DOMQuery if $text is set, or the text content if no text
 	 *  is passed in as a pram
 	 *
@@ -1090,7 +1092,7 @@ class DOMQuery extends DOM
 	 * @see xml()
 	 * @see contents()
 	 */
-	public function text($text = null)
+	public function text(string $text = null) : DOMQuery|string
 	{
 		if (isset($text)) {
 			$this->removeChildren();
@@ -1568,7 +1570,7 @@ class DOMQuery extends DOM
 	 * in most cases, parsed -- which is costly). Branching makes it possible to
 	 * work on one document with multiple DOMNode objects.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  If a selector is passed in, an additional {@link find()} will be executed
 	 *  on the branch before it is returned. (Added in QueryPath 2.0.)
 	 *
@@ -1582,7 +1584,7 @@ class DOMQuery extends DOM
 	 * @see   cloneAll()
 	 * @see   find()
 	 */
-	public function branch($selector = null)
+	public function branch(string $selector = null)
 	{
 		$temp = QueryPath::with($this->getMatches(), null, $this->options);
 		//if (isset($selector)) $temp->find($selector);
@@ -1613,7 +1615,7 @@ class DOMQuery extends DOM
 	 *
 	 * @return \QueryPath\DOMQuery
 	 */
-	public function cloneAll() : Query
+	public function cloneAll() : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -1647,7 +1649,7 @@ class DOMQuery extends DOM
 	 *
 	 * @return DOMQuery
 	 */
-	protected function inst(SplObjectStorage|array|DOMNode|TextContent|null $matches, $selector) : Query
+	protected function inst(SplObjectStorage|array|DOMNode|TextContent|null $matches, $selector) : DOMQuery
 	{
 		$dolly = clone $this;
 		$dolly->setMatches($matches);

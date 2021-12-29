@@ -60,7 +60,7 @@ use XSLTProcessor;
 class QPXSL implements \QueryPath\Extension
 {
 	public function __construct(
-		protected Query $qp)
+		protected DOMQuery $qp)
 	{
 	}
 
@@ -83,7 +83,7 @@ class QPXSL implements \QueryPath\Extension
 	public function xslt(
 		QueryPath|DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|array|string|null $style
 	) : DOMQuery {
-		if ( ! ($style instanceof QueryPath)) {
+		if ( ! ($style instanceof DOMQuery)) {
 			$style = QueryPath::with($style);
 		}
 		$top = $this->qp->top()->get(0);

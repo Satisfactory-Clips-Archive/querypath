@@ -96,5 +96,5 @@ namespace QueryPath;
  */
 interface Extension
 {
-	public function __construct(Query $qp);
+	public function __construct(DOMQuery $qp);
 }

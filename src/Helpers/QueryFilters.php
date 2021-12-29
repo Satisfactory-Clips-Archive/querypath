@@ -16,6 +16,7 @@ use function is_callable;
 use function is_object;
 use QueryPath\CSS\DOMTraverser;
 use QueryPath\CSS\ParseException;
+use QueryPath\DOMQuery;
 use QueryPath\Exception;
 use QueryPath\Query;
 use QueryPath\QueryPath;
@@ -48,7 +49,7 @@ trait QueryFilters
 	 *
 	 * @throws ParseException
 	 *
-	 * @return Query The DOMQuery with non-matching items filtered out.*   The DOMQuery with non-matching items
+	 * @return DOMQuery The DOMQuery with non-matching items filtered out.*   The DOMQuery with non-matching items
 	 *               filtered out.
 	 *
 	 * @see filterLambda()
@@ -57,7 +58,7 @@ trait QueryFilters
 	 * @see find()
 	 * @see is()
 	 */
-	public function filter($selector) : Query
+	public function filter(string $selector) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -105,14 +106,12 @@ trait QueryFilters
 	 *
 	 * @throws ParseException
 	 *
-	 * @return \QueryPath\DOMQuery
-	 *
 	 * @see filter()
 	 * @see map()
 	 * @see mapLambda()
 	 * @see filterCallback()
 	 */
-	public function filterLambda($fn) : Query
+	public function filterLambda($fn) : DOMQuery
 	{
 		/** @var callable(int, DOMNode|TextContent) */
 		$function = create_function('$index, $item', $fn);
@@ -161,13 +160,11 @@ trait QueryFilters
 	 *
 	 * @throws ParseException
 	 *
-	 * @return \QueryPath\DOMQuery
-	 *
 	 * @see       filter()
 	 * @see       filterCallback()
 	 * @see       preg_match()
 	 */
-	public function filterPreg($regex) : Query
+	public function filterPreg(string $regex) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -213,7 +210,7 @@ trait QueryFilters
 	 * @see is()
 	 * @see find()
 	 */
-	public function filterCallback($callback) : Query
+	public function filterCallback($callback) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -262,7 +259,7 @@ trait QueryFilters
 	 * @see filter()
 	 * @see find()
 	 */
-	public function map($callback) : Query
+	public function map($callback) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -307,11 +304,9 @@ trait QueryFilters
 	 *
 	 * @throws ParseException
 	 *
-	 * @return \QueryPath\DOMQuery
-	 *
 	 * @see array_slice()
 	 */
-	public function slice($start, $length = 0) : Query
+	public function slice($start, $length = 0) : DOMQuery
 	{
 		$end = $length;
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
@@ -359,7 +354,7 @@ trait QueryFilters
 	 * @see filter()
 	 * @see map()
 	 */
-	public function each($callback) : Query
+	public function each($callback) : DOMQuery
 	{
 		if (is_callable($callback)) {
 			$i = 0;
@@ -393,7 +388,7 @@ trait QueryFilters
 	 *
 	 * @author eabrand
 	 */
-	public function even() : Query
+	public function even() : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -428,7 +423,7 @@ trait QueryFilters
 	 *
 	 * @author eabrand
 	 */
-	public function odd() : Query
+	public function odd() : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -460,7 +455,7 @@ trait QueryFilters
 	 *
 	 * @author eabrand
 	 */
-	public function first() : Query
+	public function first() : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -488,7 +483,7 @@ trait QueryFilters
 	 *
 	 * @author eabrand
 	 */
-	public function firstChild() : Query
+	public function firstChild() : DOMQuery
 	{
 		// Could possibly use $m->firstChild http://theserverpages.com/php/manual/en/ref.dom.php
 		$found = new SplObjectStorage();
@@ -523,7 +518,7 @@ trait QueryFilters
 	 *
 	 * @author eabrand
 	 */
-	public function last() : Query
+	public function last() : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -554,7 +549,7 @@ trait QueryFilters
 	 *
 	 * @author eabrand
 	 */
-	public function lastChild() : Query
+	public function lastChild() : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -581,7 +576,7 @@ trait QueryFilters
 	 * it. If a selector is passed in, then only siblings that match the
 	 * selector will be included.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A valid CSS 3 selector
 	 *
 	 * @throws Exception
@@ -597,7 +592,7 @@ trait QueryFilters
 	 *
 	 * @author eabrand
 	 */
-	public function nextUntil($selector = null) : Query
+	public function nextUntil(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -623,7 +618,7 @@ trait QueryFilters
 	 * For each element in the DOMQuery, get all previous siblings. If a
 	 * selector is provided, only matching siblings will be retrieved.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A valid CSS 3 selector
 	 *
 	 * @throws Exception
@@ -640,7 +635,7 @@ trait QueryFilters
 	 *
 	 * @author eabrand
 	 */
-	public function prevUntil($selector = null) : Query
+	public function prevUntil(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -667,7 +662,7 @@ trait QueryFilters
 	 *
 	 * @see    parent()
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A valid CSS 3 Selector
 	 *
 	 * @throws Exception
@@ -681,7 +676,7 @@ trait QueryFilters
 	 *
 	 * @author eabrand
 	 */
-	public function parentsUntil($selector = null) : Query
+	public function parentsUntil(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -728,13 +723,11 @@ trait QueryFilters
 	 *
 	 * @throws ParseException
 	 *
-	 * @return \QueryPath\DOMQuery
-	 *
 	 * @see get()
 	 * @see is()
 	 * @see end()
 	 */
-	public function eq($index) : Query
+	public function eq($index) : DOMQuery
 	{
 		return $this->inst($this->getNthMatch($index), null);
 	}
@@ -754,7 +747,7 @@ trait QueryFilters
 	 *
 	 * @see find()
 	 */
-	public function not(SplObjectStorage|DOMElement|string|array $selector) : Query
+	public function not(SplObjectStorage|DOMElement|string|array $selector) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, null> */
 		$found = new SplObjectStorage();
@@ -809,7 +802,7 @@ trait QueryFilters
 	 *
 	 * @since 2.0
 	 */
-	public function closest($selector) : Query
+	public function closest(string $selector) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -845,7 +838,7 @@ trait QueryFilters
 	 * If a selector is passed, this will return the nearest matching parent for
 	 * each element in the DOMQuery.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A valid CSS3 selector
 	 *
 	 * @throws Exception
@@ -857,7 +850,7 @@ trait QueryFilters
 	 * @see siblings()
 	 * @see parents()
 	 */
-	public function parent($selector = null) : Query
+	public function parent(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -892,7 +885,7 @@ trait QueryFilters
 	 *
 	 * @see parent()
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A valid CSS 3 Selector
 	 *
 	 * @throws ParseException
@@ -904,7 +897,7 @@ trait QueryFilters
 	 * @see siblings()
 	 * @see children()
 	 */
-	public function parents($selector = null) : Query
+	public function parents(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -935,7 +928,7 @@ trait QueryFilters
 	 *
 	 * If a selector is provided, the next matching sibling will be returned.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A CSS3 selector
 	 *
 	 * @throws Exception
@@ -951,7 +944,7 @@ trait QueryFilters
 	 * @see parent()
 	 * @see parents()
 	 */
-	public function next($selector = null) : Query
+	public function next(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -982,7 +975,7 @@ trait QueryFilters
 	 * it. If a selector is passed in, then only siblings that match the
 	 * selector will be included.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A valid CSS 3 selector
 	 *
 	 * @throws Exception
@@ -996,7 +989,7 @@ trait QueryFilters
 	 * @see children()
 	 * @see siblings()
 	 */
-	public function nextAll($selector = null) : Query
+	public function nextAll(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -1025,7 +1018,7 @@ trait QueryFilters
 	 * (if any). If a selector is supplied, it retrieves the first matching
 	 * sibling (if any is found).
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A valid CSS 3 selector
 	 *
 	 * @throws Exception
@@ -1040,7 +1033,7 @@ trait QueryFilters
 	 * @see siblings()
 	 * @see children()
 	 */
-	public function prev($selector = null) : Query
+	public function prev(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -1070,7 +1063,7 @@ trait QueryFilters
 	 * For each element in the DOMQuery, get all previous siblings. If a
 	 * selector is provided, only matching siblings will be retrieved.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A valid CSS 3 selector
 	 *
 	 * @throws ParseException
@@ -1085,7 +1078,7 @@ trait QueryFilters
 	 * @see contents()
 	 * @see children()
 	 */
-	public function prevAll($selector = null) : Query
+	public function prevAll(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -1113,7 +1106,7 @@ trait QueryFilters
 	 * If a selector is provided, the list of children will be filtered through
 	 * the selector.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  A valid selector
 	 *
 	 * @throws ParseException
@@ -1127,7 +1120,7 @@ trait QueryFilters
 	 * @see next()
 	 * @see prev()
 	 */
-	public function children($selector = null) : Query
+	public function children(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -1144,7 +1137,7 @@ trait QueryFilters
 					if ($filter) {
 						$tmp->attach($c);
 						$query = new DOMTraverser($tmp, true, $c);
-						$query->find($selector);
+						$query->find($selector ?? '');
 						if (count($query->matches()) > 0) {
 							$found->attach($c);
 						}
@@ -1181,7 +1174,7 @@ trait QueryFilters
 	 * @see xml()
 	 * @see innerXML()
 	 */
-	public function contents() : Query
+	public function contents() : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -1206,7 +1199,7 @@ trait QueryFilters
 	 * each other, than running siblings will return a set that contains
 	 * both a and b.
 	 *
-	 * @param string $selector
+	 * @param string|null $selector
 	 *  If the optional selector is provided, siblings will be filtered through
 	 *  this expression
 	 *
@@ -1221,7 +1214,7 @@ trait QueryFilters
 	 * @see parent()
 	 * @see parents()
 	 */
-	public function siblings($selector = null) : Query
+	public function siblings(string $selector = null) : DOMQuery
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();

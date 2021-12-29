@@ -187,13 +187,13 @@ class QueryPath
   </html>';
 
 	/**
-	 * @param DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|TextContent|list<DOMNode>|string|null $document
+	 * @param QueryPath|DOMQuery|DOM|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMNode|HTML5|SimpleXMLElement|TextContent|list<DOMNode>|string|null $document
 	 * @param array{
 	 *	QueryPath_class?:class-string<DOMQuery>
 	 * } $options
 	 */
 	public static function with(
-		DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|TextContent|array|string|null $document = null,
+		QueryPath|DOMQuery|DOM|SplObjectStorage|DOMDocument|DOMNode|HTML5|SimpleXMLElement|TextContent|array|string|null $document = null,
 		string $selector = null,
 		array $options = []
 	) : DOMQuery {
@@ -266,14 +266,14 @@ class QueryPath
 	 *   existing functions, a DOMDocument, SimpleXMLElement, DOMNode or array
 	 *   of DOMNodes will be passed through as well. However, these types are not
 	 *   validated in any way.
-	 * @param string $selector
+	 * @param string|null $selector
 	 *   A CSS3 selector
 	 * @param array $options
 	 *   An associative array of options, which is passed on into HTML5-PHP. Note
 	 *   that the standard QueryPath options may be ignored for this function,
 	 *   since it uses a different parser.
 	 */
-	public static function withHTML5($source = null, $selector = null, $options = []) : DOMQuery
+	public static function withHTML5($source = null, string $selector = null, $options = []) : DOMQuery
 	{
 		/** @var class-string<DOMQuery> */
 		$qpClass = $options['QueryPath_class'] ?? '\QueryPath\DOMQuery';
