@@ -194,7 +194,7 @@ trait QueryFilters
 	 * If the callback function returns FALSE, the item will be removed from the
 	 * set of matches. Otherwise the item will be considered a match and left alone.
 	 *
-	 * @param callable $callback .
+	 * @param callable(int, DOMNode|TextContent):bool $callback .
 	 *                           A callback either as a string (function) or an array (object, method OR
 	 *                           classname, method).
 	 *
@@ -215,15 +215,11 @@ trait QueryFilters
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$i = 0;
-		if (is_callable($callback)) {
 			foreach ($this->getMatches() as $item) {
 				if (false !== $callback($i++, $item)) {
 					$found->attach($item);
 				}
 			}
-		} else {
-			throw new Exception('The specified callback is not callable.');
-		}
 
 		return $this->inst($found, null);
 	}
@@ -264,7 +260,6 @@ trait QueryFilters
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 
-		if (is_callable($callback)) {
 			$i = 0;
 			foreach ($this->getMatches() as $item) {
 				$c = call_user_func($callback, $i, $item);
@@ -285,9 +280,6 @@ trait QueryFilters
 				}
 				++$i;
 			}
-		} else {
-			throw new Exception('Callback is not callable.');
-		}
 
 		return $this->inst($found, null);
 	}
@@ -356,7 +348,6 @@ trait QueryFilters
 	 */
 	public function each($callback) : DOMQuery
 	{
-		if (is_callable($callback)) {
 			$i = 0;
 			foreach ($this->getMatches() as $item) {
 				if (false === call_user_func($callback, $i, $item)) {
@@ -364,9 +355,6 @@ trait QueryFilters
 				}
 				++$i;
 			}
-		} else {
-			throw new \QueryPath\Exception('Callback is not callable.');
-		}
 
 		return $this;
 	}
@@ -486,6 +474,7 @@ trait QueryFilters
 	public function firstChild() : DOMQuery
 	{
 		// Could possibly use $m->firstChild http://theserverpages.com/php/manual/en/ref.dom.php
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$flag = false;
 		foreach ($this->getMatches() as $m) {
@@ -717,7 +706,7 @@ trait QueryFilters
 	 * at the index specified. This is a destructive operation, and can be undone
 	 * with {@link end()}.
 	 *
-	 * @param $index
+	 * @param int $index
 	 *  The index of the element to keep. The rest will be
 	 *  discarded.
 	 *
@@ -727,7 +716,7 @@ trait QueryFilters
 	 * @see is()
 	 * @see end()
 	 */
-	public function eq($index) : DOMQuery
+	public function eq(int $index) : DOMQuery
 	{
 		return $this->inst($this->getNthMatch($index), null);
 	}
@@ -1126,10 +1115,8 @@ trait QueryFilters
 		$found = new SplObjectStorage();
 		$filter = strlen($selector ?? '') > 0;
 
-		if ($filter) {
 			/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 			$tmp = new SplObjectStorage();
-		}
 		foreach ($this->getMatches() as $m) {
 			foreach ($m->childNodes as $c) {
 				if (XML_ELEMENT_NODE === $c->nodeType) {

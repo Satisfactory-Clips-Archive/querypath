@@ -906,97 +906,7 @@
       <code>xslt</code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="src/Helpers/QueryFilters.php">
-    <MissingParamType occurrences="1">
-      <code>$index</code>
-    </MissingParamType>
-    <MixedArgument occurrences="7">
-      <code>$c</code>
-      <code>$c</code>
-      <code>$c</code>
-      <code>$c</code>
-      <code>$index</code>
-      <code>$item</code>
-      <code>$tmp</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="5">
-      <code>$c</code>
-      <code>$c</code>
-      <code>$c</code>
-      <code>$c</code>
-      <code>$item</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="1">
-      <code>attach</code>
-    </MixedMethodCall>
-    <MixedPropertyFetch occurrences="3">
-      <code>$c-&gt;nodeType</code>
-      <code>$c-&gt;nodeType</code>
-      <code>$c-&gt;nodeType</code>
-    </MixedPropertyFetch>
-    <PossiblyUndefinedVariable occurrences="2">
-      <code>$tmp</code>
-      <code>$tmp</code>
-    </PossiblyUndefinedVariable>
-    <RedundantConditionGivenDocblockType occurrences="3">
-      <code>is_callable($callback)</code>
-      <code>is_callable($callback)</code>
-      <code>is_callable($callback)</code>
-    </RedundantConditionGivenDocblockType>
-  </file>
   <file src="src/Helpers/QueryMutators.php">
-    <InvalidNullableReturnType occurrences="1">
-      <code>\QueryPath\DOMQuery</code>
-    </InvalidNullableReturnType>
-    <InvalidThrow occurrences="5">
-      <code>QueryPath</code>
-      <code>QueryPath</code>
-      <code>QueryPath</code>
-      <code>QueryPath</code>
-      <code>QueryPath</code>
-    </InvalidThrow>
-    <MixedArgument occurrences="2">
-      <code>$data</code>
-      <code>$v</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="11">
-      <code>$copy</code>
-      <code>$data</code>
-      <code>$data</code>
-      <code>$data</code>
-      <code>$data</code>
-      <code>$data</code>
-      <code>$data</code>
-      <code>$data</code>
-      <code>$data</code>
-      <code>$v</code>
-      <code>$wrapper</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="8">
-      <code>cloneNode</code>
-      <code>cloneNode</code>
-      <code>cloneNode</code>
-      <code>cloneNode</code>
-      <code>cloneNode</code>
-      <code>cloneNode</code>
-      <code>cloneNode</code>
-      <code>cloneNode</code>
-    </MixedMethodCall>
-    <PossiblyNullReference occurrences="3">
-      <code>cloneNode</code>
-      <code>cloneNode</code>
-      <code>cloneNode</code>
-    </PossiblyNullReference>
-    <UndefinedDocblockClass occurrences="8">
-      <code>queryPath::Exception</code>
-      <code>queryPath::Exception</code>
-      <code>queryPath::Exception</code>
-      <code>queryPath::Exception</code>
-      <code>queryPath::Exception</code>
-      <code>queryPath::Exception</code>
-      <code>queryPath::Exception</code>
-      <code>queryPath::Exception</code>
-    </UndefinedDocblockClass>
     <UnsafeInstantiation occurrences="2">
       <code>new static($found)</code>
       <code>new static()</code>
@@ -1996,9 +1906,7 @@
       <code>val</code>
       <code>val</code>
     </DeprecatedMethod>
-    <InvalidArgument occurrences="8">
-      <code>$cb</code>
-      <code>$cb</code>
+    <InvalidArgument occurrences="6">
       <code>$fn</code>
       <code>$fn</code>
       <code>$fn</code>
@@ -2006,13 +1914,8 @@
       <code>$fn</code>
       <code>$fn</code>
     </InvalidArgument>
-    <MissingParamType occurrences="2">
-      <code>$index</code>
-      <code>$item</code>
-    </MissingParamType>
-    <MissingReturnType occurrences="2">
+    <MissingReturnType occurrences="1">
       <code>contentsRecurse</code>
-      <code>filterCallbackFunction</code>
     </MissingReturnType>
     <MixedArgument occurrences="10">
       <code>$branch-&gt;top()-&gt;html()</code>
@@ -2057,14 +1960,10 @@
       <code>textBefore</code>
       <code>top</code>
     </MixedMethodCall>
-    <MixedOperand occurrences="3">
-      <code>$index</code>
+    <MixedOperand occurrences="2">
       <code>$qp-&gt;top()-&gt;html()</code>
       <code>$this-&gt;contentsRecurse($child, $pack)</code>
     </MixedOperand>
-    <PossiblyUnusedParam occurrences="1">
-      <code>$item</code>
-    </PossiblyUnusedParam>
     <RedundantConditionGivenDocblockType occurrences="1">
       <code>assertTrue</code>
     </RedundantConditionGivenDocblockType>

@@ -564,32 +564,16 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(2, qp($file, 'li')->filterLambda($l)->count());
 	}
 
-	public function filterCallbackFunction($index, $item)
-	{
-		return ($index + 1) % 2 === 0;
-	}
-
 	public function testFilterCallback() : void
 	{
-		$file = DATA_FILE;
-		$cb = [$this, 'filterCallbackFunction'];
-		$this->assertSame(2, qp($file, 'li')->filterCallback($cb)->count());
-	}
-
-	public function testFailedFilterCallback() : void
-	{
-		$file = DATA_FILE;
-		$cb = [$this, 'noSuchFunction'];
-		$this->expectException(\QueryPath\Exception::class);
-		qp($file, 'li')->filterCallback($cb)->count();
-	}
-
-	public function testFailedMapCallback() : void
-	{
-		$file = DATA_FILE;
-		$cb = [$this, 'noSuchFunction'];
-		$this->expectException(\QueryPath\Exception::class);
-		qp($file, 'li')->map($cb)->count();
+		$this->assertSame(
+			2,
+			qp(DATA_FILE, 'li')->filterCallback(
+				static function (int $index, DOMNode|TextContent $_item) : bool {
+					return ($index + 1) % 2 === 0;
+				}
+			)->count()
+		);
 	}
 
 	public function testNot() : void
@@ -970,7 +954,9 @@ class DOMQueryTest extends TestCase
 	{
 		$file = DATA_FILE;
 
-		$element = qp($file, 'unary')->wrapAll('<test id="testWrap"></test>')->get(0);
+		$qp = qp($file, 'unary')->wrapAll('<test id="testWrap"></test>');
+		$this->assertInstanceOf(DOMQuery::class, $qp);
+		$element = $qp->get(0);
 		$this->assertInstanceOf(DOMElement::class, $element);
 		$this->assertInstanceOf(DOMDocument::class, $element->ownerDocument);
 		$xml = $element->ownerDocument->saveXML();
@@ -978,9 +964,11 @@ class DOMQueryTest extends TestCase
 		$this->assertInstanceOf(DOMElement::class, $element);
 		$this->assertSame(1, $element->childNodes->length);
 
-		$a = qp($file,
+		$qp = qp($file,
 			'unary')->wrapAll(qp('<?xml version="1.0"?><root><test id="testWrap"></test><test id="ignored"></test></root>',
-			'test'))->get(0);
+			'test'));
+		$this->assertInstanceOf(DOMQuery::class, $qp);
+		$a = $qp->get(0);
 		$this->assertInstanceOf(DOMNode::class, $a);
 		$this->assertInstanceOf(DOMDocument::class, $a->ownerDocument);
 		$xml = $a->ownerDocument->saveXML();
@@ -988,7 +976,9 @@ class DOMQueryTest extends TestCase
 		$this->assertInstanceOf(DOMElement::class, $element);
 		$this->assertSame(1, $element->childNodes->length);
 
-		$a = qp($file, 'li')->wrapAll('<test class="testWrap"><inside><center/></inside></test>')->get(0);
+		$qp = qp($file, 'li')->wrapAll('<test class="testWrap"><inside><center/></inside></test>');
+		$this->assertInstanceOf(DOMQuery::class, $qp);
+		$a = $qp->get(0);
 		$this->assertInstanceOf(DOMElement::class, $a);
 		$this->assertInstanceOf(DOMDocument::class, $a->ownerDocument);
 		$xml = $a->ownerDocument->saveXML();

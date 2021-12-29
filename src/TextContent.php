@@ -18,7 +18,11 @@ class TextContent
 	/** @readonly */
 	public DOMNode|null $parentNode = null;
 
-	/** @readonly */
+	/**
+	 * @readonly
+	 *
+	 * @var array<empty>
+	 */
 	public array $childNodes = [];
 
 	/** @readonly */

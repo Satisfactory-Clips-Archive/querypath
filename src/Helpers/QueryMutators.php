@@ -67,7 +67,6 @@ trait QueryMutators
 	 * @param string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|TextContent|null $data
 	 *  This can be either a string (the usual case), or a DOM Element
 	 *
-	 * @throws queryPath::Exception
 	 *  Thrown if $data is an unsupported object type
 	 * @throws Exception
 	 *
@@ -79,6 +78,7 @@ trait QueryMutators
 	 */
 	public function append(string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|TextContent|null $data) : DOMQuery
 	{
+		/** @var DOMDocumentFragment|DOMNode|null */
 		$data = $this->prepareInsert($data);
 		if (isset($data)) {
 			if (empty($this->document()->documentElement) && 0 === $this->getMatches()->count()) {
@@ -111,10 +111,6 @@ trait QueryMutators
 					} else {
 						// Otherwise a standard clone will do.
 						$cloned = $data->cloneNode(true);
-						assert(
-							($cloned instanceof DOMNode),
-							new UnexpectedValueException('clone not a DOMNode!')
-						);
 						$m->appendChild($cloned);
 					}
 				}
@@ -132,7 +128,6 @@ trait QueryMutators
 	 * @param string|DOMQuery|DOMNode|SimpleXMLElement|TextContent|null $data
 	 *  This can be either a string (the usual case), or a DOM Element
 	 *
-	 * @throws queryPath::Exception
 	 *  Thrown if $data is an unsupported object type
 	 * @throws Exception
 	 *
@@ -143,6 +138,7 @@ trait QueryMutators
 	 */
 	public function prepend(string|DOMQuery|DOMNode|SimpleXMLElement|TextContent|null $data) : DOMQuery
 	{
+		/** @var DOMDocumentFragment|DOMNode|null */
 		$data = $this->prepareInsert($data);
 		if (isset($data)) {
 			foreach ($this->getMatches() as $m) {
@@ -150,10 +146,6 @@ trait QueryMutators
 					continue;
 				}
 				$ins = $data->cloneNode(true);
-				assert(
-					($ins instanceof DOMNode),
-					new UnexpectedValueException('clone not a DOMNode!')
-				);
 				if ($m->hasChildNodes()) {
 					$m->insertBefore($ins, $m->childNodes->item(0));
 				} else {
@@ -181,7 +173,6 @@ trait QueryMutators
 	 * @param DOMQuery $dest
 	 *  The destination DOMQuery object
 	 *
-	 * @throws queryPath::Exception
 	 *  Thrown if $data is an unsupported object type
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -206,7 +197,6 @@ trait QueryMutators
 	 *  The data to be inserted. This can be XML in a string, a DomFragment, a DOMElement,
 	 *  or the other usual suspects. (See {@link qp()}).
 	 *
-	 * @throws queryPath::Exception
 	 *  Thrown if $data is an unsupported object type
 	 * @throws Exception
 	 *
@@ -221,7 +211,12 @@ trait QueryMutators
 	 */
 	public function before(string|DOMQuery|DOMNode|SimpleXMLElement|null $data) : DOMQuery
 	{
+		/** @var DOMDocumentFragment|DOMNode|null */
 		$data = $this->prepareInsert($data);
+		assert(
+			! is_null($data),
+			new UnexpectedValueException('data was null!')
+		);
 		foreach ($this->getMatches() as $m) {
 			if ( ! ($m instanceof DOMNode)) {
 				continue;
@@ -233,10 +228,6 @@ trait QueryMutators
 				)
 			);
 			$ins = $data->cloneNode(true);
-			assert(
-				($ins instanceof DOMNode),
-				new UnexpectedValueException('clone not a DOMNode!')
-			);
 			$m->parentNode->insertBefore($ins, $m);
 		}
 
@@ -251,7 +242,6 @@ trait QueryMutators
 	 * @param query $dest
 	 *  Destination DOMQuery document
 	 *
-	 * @throws queryPath::Exception
 	 *  Thrown if $data is an unsupported object type
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -278,7 +268,6 @@ trait QueryMutators
 	 * @param query $dest
 	 *  Destination object where the current elements will be deposited
 	 *
-	 * @throws queryPath::Exception
 	 *  Thrown if $data is an unsupported object type
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -307,7 +296,6 @@ trait QueryMutators
 	 * @param string|DOMNode|DOMDocumentFragment|DOMQuery|SimpleXMLElement|null $data
 	 *  The data to be appended
 	 *
-	 * @throws queryPath::Exception
 	 *  Thrown if $data is an unsupported object type
 	 * @throws Exception
 	 *
@@ -322,7 +310,12 @@ trait QueryMutators
 		if (empty($data)) {
 			return $this;
 		}
+		/** @var DOMDocumentFragment|DOMNode|null */
 		$data = $this->prepareInsert($data);
+		assert(
+			! is_null($data),
+			new UnexpectedValueException('data was null!')
+		);
 		foreach ($this->getMatches() as $m) {
 			assert(
 				$m->parentNode instanceof DOMNode,
@@ -331,10 +324,6 @@ trait QueryMutators
 				)
 			);
 			$ins = $data->cloneNode(true);
-			assert(
-				($ins instanceof DOMNode),
-				new UnexpectedValueException('clone not a DOMNode!')
-			);
 			if (isset($m->nextSibling)) {
 				$m->parentNode->insertBefore($ins, $m->nextSibling);
 			} else {
@@ -354,7 +343,6 @@ trait QueryMutators
 	 *
 	 * @throws Exception
 	 * @throws ParseException
-	 * @throws QueryPath
 	 *
 	 * @return \QueryPath\DOMQuery
 	 *  The DOMQuery object wrapping <b>the items that were removed</b>.
@@ -369,7 +357,12 @@ trait QueryMutators
 	 */
 	public function replaceWith(string|DOMQuery|DOMNode|SimpleXMLElement|null $new) : DOMQuery
 	{
+		/** @var DOMDocumentFragment|DOMNode|null */
 		$data = $this->prepareInsert($new);
+		assert(
+			! is_null($data),
+			new UnexpectedValueException('data was null!')
+		);
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($this->getMatches() as $m) {
@@ -384,10 +377,6 @@ trait QueryMutators
 			);
 			$parent = $m->parentNode;
 			$clone = $data->cloneNode(true);
-			assert(
-				($clone instanceof DOMNode),
-				new UnexpectedValueException('clone not a DOMNode!')
-			);
 			$parent->insertBefore($clone, $m);
 			$found->attach($parent->removeChild($m));
 		}
@@ -499,7 +488,6 @@ trait QueryMutators
 	 *  Markup that will wrap each element in the current list
 	 *
 	 * @throws Exception
-	 * @throws QueryPath
 	 *
 	 * @return \QueryPath\DOMQuery
 	 *  The DOMQuery object with the wrapping changes made
@@ -509,6 +497,7 @@ trait QueryMutators
 	 */
 	public function wrap(string|DOMQuery|DOMNode|SimpleXMLElement|null $markup) : DOMQuery
 	{
+		/** @var DOMDocumentFragment|DOMNode|null */
 		$data = $this->prepareInsert($markup);
 
 		// If the markup passed in is empty, we don't do any wrapping.
@@ -520,15 +509,15 @@ trait QueryMutators
 			if ( ! ($m instanceof DOMNode)) {
 				continue;
 			}
-			if ($data instanceof DOMDocumentFragment) {
-				$copy = $data->firstChild->cloneNode(true);
-			} else {
-				$copy = $data->cloneNode(true);
-			}
+
+			$data_source = ($data instanceof DOMDocumentFragment) ? $data->firstChild : $data;
+
 			assert(
-				($copy instanceof DOMNode),
+				($data_source instanceof DOMNode),
 				new UnexpectedValueException('clone not a DOMNode!')
 			);
+
+			$copy = $data_source->cloneNode(true);
 
 			// XXX: Should be able to avoid doing this over and over.
 			if ($copy->hasChildNodes()) {
@@ -572,36 +561,34 @@ trait QueryMutators
 	 *  Markup that will wrap all elements in the current list
 	 *
 	 * @throws Exception
-	 * @throws QueryPath
 	 *
-	 * @return \QueryPath\DOMQuery
+	 * @return $this|null
 	 *  The DOMQuery object with the wrapping changes made
 	 *
 	 * @see wrap()
 	 * @see wrapInner()
 	 */
-	public function wrapAll(string|DOMQuery|DOMNode|SimpleXMLElement $markup)
+	public function wrapAll(string|DOMQuery|DOMNode|SimpleXMLElement $markup) : ?DOMQuery
 	{
 		if (0 === $this->getMatches()->count()) {
-			return;
+			return null;
 		}
 
+		/** @var DOMDocumentFragment|DOMNode|null  */
 		$data = $this->prepareInsert($markup);
 
 		if (empty($data)) {
 			return $this;
 		}
 
-		if ($data instanceof DOMDocumentFragment) {
-			$data = $data->firstChild->cloneNode(true);
-		} else {
-			$data = $data->cloneNode(true);
-		}
+		$data_source = ($data instanceof DOMDocumentFragment) ? $data->firstChild : $data;
 
 		assert(
-			($data instanceof DOMNode),
+			($data_source instanceof DOMNode),
 			new UnexpectedValueException('clone not a DOMNode!')
 		);
+
+		$data = $data_source->cloneNode(true);
 
 		if ($data->hasChildNodes()) {
 			$deepest = $this->deepestNode($data);
@@ -650,7 +637,6 @@ trait QueryMutators
 	 *  Markup that will wrap children of each element in the current list
 	 *
 	 * @throws \QueryPath\Exception
-	 * @throws QueryPath
 	 *
 	 * @return \QueryPath\DOMQuery
 	 *  The DOMQuery object with the wrapping changes made
@@ -660,6 +646,7 @@ trait QueryMutators
 	 */
 	public function wrapInner(string|DOMQuery $markup)
 	{
+		/** @var DOMDocumentFragment|DOMNode|null  */
 		$data = $this->prepareInsert($markup);
 
 		// No data? Short circuit.
@@ -671,15 +658,12 @@ trait QueryMutators
 			if ( ! ($m instanceof DOMNode)) {
 				continue;
 			}
-			if ($data instanceof DOMDocumentFragment) {
-				$wrapper = $data->firstChild->cloneNode(true);
-			} else {
-				$wrapper = $data->cloneNode(true);
-			}
+			$wrapper_source = ($data instanceof DOMDocumentFragment) ? $data->firstChild : $data;
 			assert(
-				($wrapper instanceof DOMNode),
-				new UnexpectedValueException('clone not a DOMNode!')
+				($wrapper_source instanceof DOMNode),
+				new UnexpectedValueException('wrapper source not a DOMNode!')
 			);
+			$wrapper = $wrapper_source->cloneNode(true);
 
 			if ($wrapper->hasChildNodes()) {
 				$deepest = $this->deepestNode($wrapper);
@@ -920,7 +904,6 @@ trait QueryMutators
 	 * @param DOMQuery $dest
 	 *  A DOMQuery Selector
 	 *
-	 * @throws QueryPath
 	 * @throws Exception
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -953,7 +936,6 @@ trait QueryMutators
 	 * @param DOMQuery $dest
 	 *  A DOMQuery object that will be appended to
 	 *
-	 * @throws queryPath::Exception
 	 *  Thrown if $data is an unsupported object type
 	 * @throws Exception
 	 *
@@ -1293,7 +1275,7 @@ trait QueryMutators
 	 * (In previous versions of QueryPath, a call to css() overwrite the existing style
 	 * values).
 	 *
-	 * @template T as string|array|null
+	 * @template T as string|array<string, string>|null
 	 *
 	 * @param T $name
 	 *  If this is a string, it will be used as a CSS name. If it is an array,
@@ -1304,13 +1286,14 @@ trait QueryMutators
 	 *
 	 * @return (T is null ? (string|int|null) : DOMQuery)
 	 */
-	public function css(string|array|null $name = null, $value = '') : DOMQuery|string|int|null
+	public function css(string|array|null $name = null, string $value = '') : DOMQuery|string|int|null
 	{
 		if (empty($name)) {
 			return $this->attr('style');
 		}
 
 		// Get any existing CSS.
+		/** @var array<string, string> */
 		$css = [];
 		foreach ($this->getMatches() as $match) {
 			if ( ! ($match instanceof DOMElement)) {
@@ -1344,6 +1327,7 @@ trait QueryMutators
 		// Collapse CSS into a string.
 		$format = '%s: %s;';
 		$css_string = '';
+		/** @var string */
 		foreach ($css as $n => $v) {
 			$css_string .= sprintf($format, $n, trim($v));
 		}
