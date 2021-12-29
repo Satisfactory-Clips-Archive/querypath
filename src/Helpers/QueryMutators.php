@@ -68,6 +68,7 @@ trait QueryMutators
 	 *  This can be either a string (the usual case), or a DOM Element
 	 *
 	 *  Thrown if $data is an unsupported object type
+	 *
 	 * @throws Exception
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -129,6 +130,7 @@ trait QueryMutators
 	 *  This can be either a string (the usual case), or a DOM Element
 	 *
 	 *  Thrown if $data is an unsupported object type
+	 *
 	 * @throws Exception
 	 *
 	 * @see append()
@@ -198,6 +200,7 @@ trait QueryMutators
 	 *  or the other usual suspects. (See {@link qp()}).
 	 *
 	 *  Thrown if $data is an unsupported object type
+	 *
 	 * @throws Exception
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -297,6 +300,7 @@ trait QueryMutators
 	 *  The data to be appended
 	 *
 	 *  Thrown if $data is an unsupported object type
+	 *
 	 * @throws Exception
 	 *
 	 * @return \QueryPath\DOMQuery
@@ -574,7 +578,7 @@ trait QueryMutators
 			return null;
 		}
 
-		/** @var DOMDocumentFragment|DOMNode|null  */
+		/** @var DOMDocumentFragment|DOMNode|null */
 		$data = $this->prepareInsert($markup);
 
 		if (empty($data)) {
@@ -646,7 +650,7 @@ trait QueryMutators
 	 */
 	public function wrapInner(string|DOMQuery $markup)
 	{
-		/** @var DOMDocumentFragment|DOMNode|null  */
+		/** @var DOMDocumentFragment|DOMNode|null */
 		$data = $this->prepareInsert($markup);
 
 		// No data? Short circuit.
@@ -937,6 +941,7 @@ trait QueryMutators
 	 *  A DOMQuery object that will be appended to
 	 *
 	 *  Thrown if $data is an unsupported object type
+	 *
 	 * @throws Exception
 	 *
 	 * @return \QueryPath\DOMQuery

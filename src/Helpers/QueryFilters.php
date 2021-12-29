@@ -12,7 +12,6 @@ use DOMElement;
 use DOMNode;
 use function in_array;
 use function is_array;
-use function is_callable;
 use function is_object;
 use QueryPath\CSS\DOMTraverser;
 use QueryPath\CSS\ParseException;
@@ -215,11 +214,11 @@ trait QueryFilters
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$i = 0;
-			foreach ($this->getMatches() as $item) {
-				if (false !== $callback($i++, $item)) {
-					$found->attach($item);
-				}
+		foreach ($this->getMatches() as $item) {
+			if (false !== $callback($i++, $item)) {
+				$found->attach($item);
 			}
+		}
 
 		return $this->inst($found, null);
 	}
@@ -260,26 +259,26 @@ trait QueryFilters
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 
-			$i = 0;
-			foreach ($this->getMatches() as $item) {
-				$c = call_user_func($callback, $i, $item);
-				if (isset($c)) {
-					if (is_iterable($c)) {
-						foreach ($c as $retval) {
-							if ( ! is_object($retval)) {
-								$retval = new TextContent((string) $retval);
-							}
-							$found->attach($retval);
+		$i = 0;
+		foreach ($this->getMatches() as $item) {
+			$c = call_user_func($callback, $i, $item);
+			if (isset($c)) {
+				if (is_iterable($c)) {
+					foreach ($c as $retval) {
+						if ( ! is_object($retval)) {
+							$retval = new TextContent((string) $retval);
 						}
-					} else {
-						if ( ! is_object($c)) {
-							$c = new TextContent((string) $c);
-						}
-						$found->attach($c);
+						$found->attach($retval);
 					}
+				} else {
+					if ( ! is_object($c)) {
+						$c = new TextContent((string) $c);
+					}
+					$found->attach($c);
 				}
-				++$i;
 			}
+			++$i;
+		}
 
 		return $this->inst($found, null);
 	}
@@ -348,13 +347,13 @@ trait QueryFilters
 	 */
 	public function each($callback) : DOMQuery
 	{
-			$i = 0;
-			foreach ($this->getMatches() as $item) {
-				if (false === call_user_func($callback, $i, $item)) {
-					return $this;
-				}
-				++$i;
+		$i = 0;
+		foreach ($this->getMatches() as $item) {
+			if (false === call_user_func($callback, $i, $item)) {
+				return $this;
 			}
+			++$i;
+		}
 
 		return $this;
 	}
@@ -1115,8 +1114,8 @@ trait QueryFilters
 		$found = new SplObjectStorage();
 		$filter = strlen($selector ?? '') > 0;
 
-			/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
-			$tmp = new SplObjectStorage();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
+		$tmp = new SplObjectStorage();
 		foreach ($this->getMatches() as $m) {
 			foreach ($m->childNodes as $c) {
 				if (XML_ELEMENT_NODE === $c->nodeType) {
