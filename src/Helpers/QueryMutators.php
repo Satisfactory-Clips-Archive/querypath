@@ -136,8 +136,6 @@ trait QueryMutators
 	 *  Thrown if $data is an unsupported object type
 	 * @throws Exception
 	 *
-	 * @return \QueryPath\DOMQuery
-	 *
 	 * @see append()
 	 * @see before()
 	 * @see after()

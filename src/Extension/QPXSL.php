@@ -26,7 +26,6 @@ use DOMNode;
 use Masterminds\HTML5;
 use QueryPath\DOM;
 use QueryPath\DOMQuery;
-use QueryPath\Query;
 use QueryPath\QueryPath;
 use QueryPath\TextContent;
 use SimpleXMLElement;

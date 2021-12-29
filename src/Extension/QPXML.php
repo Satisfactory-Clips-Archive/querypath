@@ -8,13 +8,12 @@ declare(strict_types=1);
 namespace QueryPath\Extension;
 
 use function assert;
-use function in_array;
 use DOMDocument;
-use DOMNode;
 use DOMElement;
+use DOMNode;
+use function in_array;
 use QueryPath\DOMQuery;
 use QueryPath\Extension;
-use QueryPath\Query;
 use QueryPath\QueryPath;
 use UnexpectedValueException;
 use const XML_CDATA_SECTION_NODE;

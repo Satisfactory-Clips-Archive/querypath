@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace QueryPath\Extension;
 
-use function array_slice;
+use function assert;
 use function call_user_func_array;
 use Closure;
-use function count;
-use DOMNode;
-use function func_get_args;
+use function gettype;
 use function is_array;
 use function is_callable;
+use function is_null;
 use function is_string;
 use QueryPath\DOMQuery;
 use QueryPath\Exception;
 use QueryPath\Extension;
-use QueryPath\Query;
-use QueryPath\TextContent;
 use UnexpectedValueException;
 
 /**
@@ -60,8 +57,7 @@ class Format implements Extension
 {
 	public function __construct(
 		protected DOMQuery $qp
-	)
-	{
+	) {
 	}
 
 	/**

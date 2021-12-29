@@ -1646,8 +1646,6 @@ class DOMQuery extends DOM
 	 * @param string|null $selector
 	 *
 	 * @throws CSS\ParseException
-	 *
-	 * @return DOMQuery
 	 */
 	protected function inst(SplObjectStorage|array|DOMNode|TextContent|null $matches, $selector) : DOMQuery
 	{
