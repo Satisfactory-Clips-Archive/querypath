@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use function assert;
 use DOMNode;
-use function is_null;
+use function gettype;
 use IteratorIterator;
 use SplObjectStorage;
 use function sprintf;
-use Traversable;
 use UnexpectedValueException;
 
 /**

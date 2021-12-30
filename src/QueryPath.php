@@ -91,6 +91,7 @@ declare(strict_types=1);
 
 namespace QueryPath;
 
+use function assert;
 use DOMDocument;
 use DOMNode;
 use const FILTER_VALIDATE_URL;
