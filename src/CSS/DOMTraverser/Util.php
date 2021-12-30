@@ -28,8 +28,7 @@ class Util
 		string $name,
 		string $value = null,
 		?int $operation = EventHandler::IS_EXACTLY
-	) : bool
-	{
+	) : bool {
 		if ( ! $node->hasAttribute($name)) {
 			return false;
 		}
@@ -50,8 +49,7 @@ class Util
 		?string $nsuri,
 		string $value = null,
 		?int $operation = EventHandler::IS_EXACTLY
-	) : bool
-	{
+	) : bool {
 		if (is_null($nsuri)) {
 			return self::matchesAttribute($node, $name, $value, $operation);
 		}
@@ -74,8 +72,7 @@ class Util
 		string $needle,
 		string $haystack,
 		?int $operation
-	) : bool
-	{
+	) : bool {
 		if (strlen($haystack) < strlen($needle)) {
 			return false;
 		}
@@ -126,8 +123,9 @@ class Util
 	 *
 	 * @param string|int|null $rule
 	 *  Some rule in the an+b format
+	 *
 	 * @return array{0:int, 1:int}
-	 *  `array($aVal, $bVal)` of the two values.
+	 *  `array($aVal, $bVal)` of the two values
 	 */
 	public static function parseAnB(string|int|null $rule) : array
 	{

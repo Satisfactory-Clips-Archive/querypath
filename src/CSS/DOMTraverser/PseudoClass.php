@@ -48,8 +48,8 @@ class PseudoClass
 	 * @throws \QueryPath\CSS\ParseException
 	 * @throws NotImplementedException
 	 *
-	 * @return boolean
-	 *   TRUE if the node matches, FALSE otherwise.
+	 * @return bool
+	 *   TRUE if the node matches, FALSE otherwise
 	 */
 	public function elementMatches(string $pseudoclass, DOMNode $node, ?DOMNode $scope, string $value = null) : bool
 	{

@@ -9,7 +9,6 @@ use function define;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
-use const PHP_EOL;
 use QueryPath\CSS\DOMTraverser;
 use QueryPath\TextContent;
 use QueryPathTests\TestCase;

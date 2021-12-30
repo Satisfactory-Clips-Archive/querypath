@@ -13,7 +13,6 @@ use DOMElement;
 use DOMNode;
 use DOMNodeList;
 use DOMXPath;
-use const PHP_EOL;
 use QueryPath\CSS\DOMTraverser\PseudoClass;
 use QueryPath\CSS\DOMTraverser\Util;
 use QueryPath\TextContent;
@@ -497,7 +496,7 @@ class DOMTraverser implements Traverser
 			}
 
 			$nl = $this->initialXpathQuery($xpath, $node, $baseQuery);
-				$this->attachNodeList($nl, $found);
+			$this->attachNodeList($nl, $found);
 		}
 		// Unset the ID selector.
 		$selector->id = null;
@@ -582,7 +581,7 @@ class DOMTraverser implements Traverser
 				$found->attach($node);
 			}
 			$nl = $node->getElementsByTagName($element);
-				$this->attachNodeList($nl, $found);
+			$this->attachNodeList($nl, $found);
 		}
 
 		$selector->element = null;
