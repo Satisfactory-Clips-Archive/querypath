@@ -121,7 +121,7 @@ class Options
 	 * @param string $key
 	 *  The key to search for
 	 */
-	public static function has($key)
+	public static function has(string $key) : bool
 	{
 		return array_key_exists($key, self::$options);
 	}

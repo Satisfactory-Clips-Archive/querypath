@@ -100,6 +100,7 @@ use function is_string;
 use Masterminds\HTML5;
 use SimpleXMLElement;
 use SplObjectStorage;
+use UnexpectedValueException;
 
 class QueryPath
 {
@@ -366,7 +367,7 @@ class QueryPath
 	 * non-XML/HTML content. If you are working with QP objects, you may want to use
 	 * dataURL() instead.
 	 *
-	 * @param mixed $data
+	 * @param string|resource $data
 	 *    The contents to inject as the data. The value can be any one of the following:
 	 *    - A URL: If this is given, then the subsystem will read the content from that URL. THIS
 	 *    MUST BE A FULL URL, not a relative path.
@@ -390,6 +391,11 @@ class QueryPath
 		} elseif (filter_var($data, FILTER_VALIDATE_URL)) {
 			$data = file_get_contents($data, false, $context);
 		}
+
+		assert(
+			is_string($data),
+			new UnexpectedValueException('Could no get data!')
+		);
 
 		$encoded = base64_encode($data);
 

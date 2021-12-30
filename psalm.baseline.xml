@@ -912,16 +912,7 @@
       <code>new static()</code>
     </UnsafeInstantiation>
   </file>
-  <file src="src/Options.php">
-    <MissingReturnType occurrences="1">
-      <code>has</code>
-    </MissingReturnType>
-  </file>
   <file src="src/QueryPath.php">
-    <MixedArgument occurrences="2">
-      <code>$data</code>
-      <code>$data</code>
-    </MixedArgument>
     <PossiblyUnusedMethod occurrences="2">
       <code>enabledExtensions</code>
       <code>withXML</code>
@@ -930,23 +921,6 @@
       <code>new $qpClass($document, $selector, $options)</code>
       <code>new $qpClass($source, $selector, $options)</code>
     </UnsafeInstantiation>
-  </file>
-  <file src="src/QueryPathIterator.php">
-    <MissingPropertyType occurrences="2">
-      <code>$options</code>
-      <code>$qp</code>
-    </MissingPropertyType>
-    <MixedArgument occurrences="3">
-      <code>$this-&gt;options</code>
-      <code>parent::current()</code>
-      <code>parent::current()</code>
-    </MixedArgument>
-    <MixedMethodCall occurrences="1">
-      <code>setMatches</code>
-    </MixedMethodCall>
-    <MixedReturnStatement occurrences="1">
-      <code>$this-&gt;qp</code>
-    </MixedReturnStatement>
   </file>
   <file src="tests/QueryPath/CSS/DOMTraverserTest.php">
     <ArgumentTypeCoercion occurrences="3">
