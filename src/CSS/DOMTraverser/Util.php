@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS\DOMTraverser;
 
+use DOMElement;
 use function in_array;
 use function is_null;
 use QueryPath\CSS\EventHandler;
@@ -21,11 +22,13 @@ class Util
 {
 	/**
 	 * Check whether the given DOMElement has the given attribute.
-	 *
-	 * @param mixed $node
-	 * @param mixed $name
 	 */
-	public static function matchesAttribute($node, $name, mixed $value = null, ?int $operation = EventHandler::IS_EXACTLY) : bool
+	public static function matchesAttribute(
+		DOMElement $node,
+		string $name,
+		string $value = null,
+		?int $operation = EventHandler::IS_EXACTLY
+	) : bool
 	{
 		if ( ! $node->hasAttribute($name)) {
 			return false;
@@ -40,13 +43,19 @@ class Util
 
 	/**
 	 * Check whether the given DOMElement has the given namespaced attribute.
-	 *
-	 * @param mixed $node
-	 * @param mixed $name
-	 * @param mixed $nsuri
 	 */
-	public static function matchesAttributeNS($node, $name, $nsuri, mixed $value = null, ?int $operation = EventHandler::IS_EXACTLY)
+	public static function matchesAttributeNS(
+		DOMElement $node,
+		string $name,
+		?string $nsuri,
+		string $value = null,
+		?int $operation = EventHandler::IS_EXACTLY
+	) : bool
 	{
+		if (is_null($nsuri)) {
+			return self::matchesAttribute($node, $name, $value, $operation);
+		}
+
 		if ( ! $node->hasAttributeNS($nsuri, $name)) {
 			return false;
 		}
@@ -60,12 +69,12 @@ class Util
 
 	/**
 	 * Check for attr value matches based on an operation.
-	 *
-	 * @param mixed $needle
-	 * @param mixed $haystack
-	 * @param mixed $operation
 	 */
-	public static function matchesAttributeValue($needle, $haystack, $operation) : bool
+	public static function matchesAttributeValue(
+		string $needle,
+		string $haystack,
+		?int $operation
+	) : bool
 	{
 		if (strlen($haystack) < strlen($needle)) {
 			return false;
@@ -99,7 +108,7 @@ class Util
 	/**
 	 * Remove leading and trailing quotes.
 	 */
-	public static function removeQuotes(string $str)
+	public static function removeQuotes(string $str) : string
 	{
 		$f = mb_substr($str, 0, 1);
 		$l = mb_substr($str, -1);
@@ -115,12 +124,12 @@ class Util
 	 *
 	 * Invalid rules return `array(0, 0)`. This is per the spec.
 	 *
-	 * @param $rule
+	 * @param string|int|null $rule
 	 *  Some rule in the an+b format
-	 * @retval array
+	 * @return array{0:int, 1:int}
 	 *  `array($aVal, $bVal)` of the two values.
 	 */
-	public static function parseAnB($rule) : array
+	public static function parseAnB(string|int|null $rule) : array
 	{
 		if ('even' === $rule) {
 			return [2, 0];
@@ -140,7 +149,7 @@ class Util
 
 		$regex = '/^\s*([+\-]?[0-9]*)n\s*([+\-]?)\s*([0-9]*)\s*$/';
 		$matches = [];
-		$res = preg_match($regex, $rule, $matches);
+		$res = preg_match($regex, $rule ?? '', $matches);
 
 		// If it doesn't parse, return 0, 0.
 		if ( ! $res) {

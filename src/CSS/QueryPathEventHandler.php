@@ -151,7 +151,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *
 	 * @throws ParseException
 	 *
-	 * @return queryPathEventHandler
+	 * @return QueryPathEventHandler
 	 *  Returns itself
 	 */
 	public function find(string $filter) : QueryPathEventHandler

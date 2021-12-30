@@ -1,193 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.16.1@aa7e400908833b10c0333861f86cd48c510b60eb">
   <file src="src/CSS/DOMTraverser.php">
-    <ImplementedReturnTypeMismatch occurrences="1">
-      <code>DOMTraverser</code>
-    </ImplementedReturnTypeMismatch>
-    <MismatchingDocblockParamType occurrences="1">
-      <code>DOMNode</code>
-    </MismatchingDocblockParamType>
-    <MissingParamType occurrences="5">
-      <code>$classes</code>
-      <code>$id</code>
-      <code>$msg</code>
-      <code>$node</code>
-      <code>$pseudoElements</code>
-    </MissingParamType>
-    <MissingReturnType occurrences="2">
+    <PossiblyUnusedMethod occurrences="2">
       <code>ancestors</code>
-      <code>getMatches</code>
-    </MissingReturnType>
-    <MixedArgument occurrences="2">
-      <code>$classes</code>
-      <code>$classes</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="7">
-      <code>$buffer[]</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$nsuri</code>
-      <code>$parent</code>
-      <code>$parent</code>
-      <code>$pse</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="1">
-      <code>lookupNamespaceURI</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$msg</code>
-    </MixedOperand>
-    <MixedPropertyFetch occurrences="1">
-      <code>$parent-&gt;parentNode</code>
-    </MixedPropertyFetch>
-    <PossiblyUnusedMethod occurrences="4">
-      <code>ancestors</code>
-      <code>debug</code>
-      <code>getDocument</code>
       <code>getMatches</code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedProperty occurrences="1">
-      <code>$selector</code>
-    </PossiblyUnusedProperty>
-    <RedundantCondition occurrences="2">
-      <code>! empty($nl)</code>
-      <code>! empty($nl) &amp;&amp; $nl instanceof DOMNodeList</code>
-    </RedundantCondition>
-    <RedundantConditionGivenDocblockType occurrences="2">
-      <code>! empty($nl)</code>
-      <code>! empty($nl) &amp;&amp; $nl instanceof DOMNodeList</code>
-    </RedundantConditionGivenDocblockType>
-    <TypeDoesNotContainType occurrences="1">
-      <code>'*' === $element &amp;&amp; $node-&gt;parentNode instanceof DOMDocument</code>
-    </TypeDoesNotContainType>
-    <UndefinedPropertyFetch occurrences="1">
-      <code>$node-&gt;tagName</code>
-    </UndefinedPropertyFetch>
-  </file>
-  <file src="src/CSS/DOMTraverser/PseudoClass.php">
-    <MissingParamType occurrences="5">
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$value</code>
-    </MissingParamType>
-    <MissingReturnType occurrences="4">
-      <code>isFirstOfType</code>
-      <code>isLast</code>
-      <code>isLastOfType</code>
-      <code>lang</code>
-    </MissingReturnType>
-    <MixedArgument occurrences="9">
-      <code>$node</code>
-      <code>$node-&gt;tagName</code>
-      <code>$selector</code>
-      <code>$text</code>
-      <code>$url</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="21">
-      <code>$attrNode</code>
-      <code>$elementInGroup</code>
-      <code>$kid</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$node</code>
-      <code>$nsuri</code>
-      <code>$parent</code>
-      <code>$prod</code>
-      <code>$tag</code>
-      <code>$tag</code>
-      <code>$text</code>
-      <code>$text</code>
-      <code>$type</code>
-      <code>$type</code>
-      <code>$url</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>bool</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="2">
-      <code>getAttribute</code>
-      <code>hasAttribute</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="3">
-      <code>$elementInGroup</code>
-      <code>$groupSize</code>
-      <code>$pos - $elementInGroup</code>
-    </MixedOperand>
-    <MixedPropertyFetch occurrences="30">
-      <code>$attrNode-&gt;localName</code>
-      <code>$attrNode-&gt;namespaceURI</code>
-      <code>$attrNode-&gt;nodeName</code>
-      <code>$kid-&gt;nodeType</code>
-      <code>$node-&gt;attributes</code>
-      <code>$node-&gt;childNodes</code>
-      <code>$node-&gt;nextSibling</code>
-      <code>$node-&gt;nextSibling</code>
-      <code>$node-&gt;nextSibling</code>
-      <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;nodeType</code>
-      <code>$node-&gt;parentNode</code>
-      <code>$node-&gt;previousSibling</code>
-      <code>$node-&gt;previousSibling</code>
-      <code>$node-&gt;previousSibling</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;tagName</code>
-      <code>$node-&gt;textContent</code>
-      <code>$node-&gt;textContent</code>
-    </MixedPropertyFetch>
-    <MixedReturnStatement occurrences="4">
-      <code>$this-&gt;isFirstOfType($node)</code>
-      <code>$this-&gt;isLast($node)</code>
-      <code>$this-&gt;isLastOfType($node)</code>
-      <code>$this-&gt;lang($node, $value)</code>
-    </MixedReturnStatement>
-    <UnevaluatedCode occurrences="1">
-      <code>break;</code>
-    </UnevaluatedCode>
-    <UnusedVariable occurrences="1">
-      <code>$match</code>
-    </UnusedVariable>
-  </file>
-  <file src="src/CSS/DOMTraverser/Util.php">
-    <MissingParamType occurrences="1">
-      <code>$rule</code>
-    </MissingParamType>
-    <MissingReturnType occurrences="2">
-      <code>matchesAttributeNS</code>
-      <code>removeQuotes</code>
-    </MissingReturnType>
-    <MixedArgument occurrences="3">
-      <code>$haystack</code>
-      <code>$needle</code>
-      <code>$rule</code>
-    </MixedArgument>
-    <MixedMethodCall occurrences="4">
-      <code>getAttribute</code>
-      <code>getAttributeNS</code>
-      <code>hasAttribute</code>
-      <code>hasAttributeNS</code>
-    </MixedMethodCall>
   </file>
   <file src="src/CSS/EventHandler.php">
     <MissingReturnType occurrences="15">
@@ -392,9 +209,6 @@
     <DeprecatedMethod occurrences="1">
       <code>searchForAttr</code>
     </DeprecatedMethod>
-    <ImplementedReturnTypeMismatch occurrences="1">
-      <code>queryPathEventHandler</code>
-    </ImplementedReturnTypeMismatch>
     <InvalidArgument occurrences="10">
       <code>$dom</code>
       <code>$dom-&gt;documentElement</code>
@@ -407,9 +221,8 @@
       <code>$this-&gt;dom-&gt;item(0)-&gt;ownerDocument-&gt;documentElement</code>
       <code>$this-&gt;dom-&gt;ownerDocument-&gt;documentElement</code>
     </InvalidArgument>
-    <InvalidClass occurrences="2">
+    <InvalidClass occurrences="1">
       <code>parseException</code>
-      <code>queryPathEventHandler</code>
     </InvalidClass>
     <MissingParamType occurrences="7">
       <code>$elementInGroup</code>
@@ -835,16 +648,9 @@
     </PossiblyUnusedProperty>
   </file>
   <file src="src/CSS/SimpleSelector.php">
-    <MissingParamType occurrences="2">
-      <code>$code</code>
+    <MissingParamType occurrences="1">
       <code>$code</code>
     </MissingParamType>
-    <MixedAssignment occurrences="1">
-      <code>$pe</code>
-    </MixedAssignment>
-    <MixedOperand occurrences="1">
-      <code>$pe</code>
-    </MixedOperand>
     <PossiblyUnusedMethod occurrences="1">
       <code>notEmpty</code>
     </PossiblyUnusedMethod>
@@ -862,11 +668,6 @@
     <MixedArrayOffset occurrences="1">
       <code>$a[$const_int]</code>
     </MixedArrayOffset>
-  </file>
-  <file src="src/CSS/Traverser.php">
-    <UndefinedDocblockClass occurrences="1">
-      <code>\Traverser</code>
-    </UndefinedDocblockClass>
   </file>
   <file src="src/DOMQuery.php">
     <PossiblyUnusedMethod occurrences="4">
@@ -928,205 +729,13 @@
       <code>'\QueryPath\CSS\Traverser'</code>
       <code>'\QueryPath\CSS\Traverser'</code>
     </ArgumentTypeCoercion>
-    <MissingParamType occurrences="2">
-      <code>$msg</code>
-      <code>$selector</code>
-    </MissingParamType>
     <MissingPropertyType occurrences="1">
       <code>$xml_file</code>
     </MissingPropertyType>
-    <MissingReturnType occurrences="2">
-      <code>find</code>
-      <code>traverser</code>
-    </MissingReturnType>
-    <MixedArgument occurrences="73">
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$res</code>
+    <MixedArgument occurrences="2">
       <code>$this-&gt;xml_file</code>
       <code>$this-&gt;xml_file</code>
     </MixedArgument>
-    <MixedAssignment occurrences="83">
-      <code>$actual</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$m</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$matches</code>
-      <code>$res</code>
-      <code>$res</code>
-      <code>$traverser</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="8">
-      <code>find</code>
-      <code>find</code>
-      <code>find</code>
-      <code>getDocument</code>
-      <code>getElementsByTagName</code>
-      <code>matches</code>
-      <code>matches</code>
-      <code>matches</code>
-    </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$msg</code>
-    </MixedOperand>
-    <MixedPropertyFetch occurrences="10">
-      <code>$actual-&gt;length</code>
-      <code>$m-&gt;tagName</code>
-      <code>$m-&gt;tagName</code>
-      <code>$m-&gt;tagName</code>
-      <code>$m-&gt;tagName</code>
-      <code>$m-&gt;tagName</code>
-      <code>$m-&gt;tagName</code>
-      <code>$m-&gt;tagName</code>
-      <code>$m-&gt;tagName</code>
-      <code>$m-&gt;tagName</code>
-    </MixedPropertyFetch>
-    <PossiblyUnusedMethod occurrences="1">
-      <code>debug</code>
-    </PossiblyUnusedMethod>
   </file>
   <file src="tests/QueryPath/CSS/PseudoClassTest.php">
     <MissingParamType occurrences="2">

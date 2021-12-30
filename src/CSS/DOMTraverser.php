@@ -69,7 +69,6 @@ class DOMTraverser implements Traverser
 {
 	/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 	protected SplObjectStorage $matches;
-	protected ?Selector $selector = null;
 	protected ?DOMDocument $dom = null;
 	protected bool $initialized;
 	protected PseudoClass $psHandler;
@@ -114,11 +113,6 @@ class DOMTraverser implements Traverser
 		 */
 	}
 
-	public function debug($msg) : void
-	{
-		fwrite(STDOUT, PHP_EOL . $msg);
-	}
-
 	/**
 	 * Given a selector, find the matches in the given DOM.
 	 *
@@ -139,7 +133,6 @@ class DOMTraverser implements Traverser
 		$handler = new Selector();
 		$parser = new Parser($selector, $handler);
 		$parser->parse();
-		$this->selector = $handler;
 
 		//$selector = $handler->toArray();
 		$found = $this->newMatches();
@@ -155,7 +148,6 @@ class DOMTraverser implements Traverser
 			foreach ($candidates as $candidate) {
 				// fprintf(STDOUT, "Testing %s against %s.\n", $candidate->tagName, $selectorGroup[0]);
 				if ($this->matchesSelector($candidate, $selectorGroup)) {
-					// $this->debug('Attaching ' . $candidate->nodeName);
 					$found->attach($candidate);
 				}
 			}
@@ -260,7 +252,7 @@ class DOMTraverser implements Traverser
 	 * So if this function returns TRUE, it means that all
 	 * child selectors are also matches.
 	 *
-	 * @param DOMNode $node
+	 * @param DOMElement $node
 	 *   The DOMNode to test
 	 * @param array<int, SimpleSelector> $selectors
 	 *   The array of simple selectors
@@ -273,7 +265,6 @@ class DOMTraverser implements Traverser
 	public function combine(DOMElement $node, array $selectors, int $index) : bool
 	{
 		$selector = $selectors[$index];
-		//$this->debug(implode(' ', $selectors));
 		switch ($selector->combinator) {
 			case SimpleSelector::ADJACENT:
 				return $this->combineAdjacent($node, $selectors, $index);
@@ -313,7 +304,6 @@ class DOMTraverser implements Traverser
 		while ( ! empty($node->previousSibling)) {
 			$node = $node->previousSibling;
 			if (XML_ELEMENT_NODE == $node->nodeType) {
-				//$this->debug(sprintf('Testing %s against "%s"', $node->tagName, $selectors[$index]));
 				return $this->matchesSimpleSelector($node, $selectors, $index);
 			}
 		}
@@ -507,9 +497,7 @@ class DOMTraverser implements Traverser
 			}
 
 			$nl = $this->initialXpathQuery($xpath, $node, $baseQuery);
-			if ( ! empty($nl) && $nl instanceof DOMNodeList) {
 				$this->attachNodeList($nl, $found);
-			}
 		}
 		// Unset the ID selector.
 		$selector->id = null;
@@ -574,6 +562,8 @@ class DOMTraverser implements Traverser
 	 * Shortcut for setting the initial match.
 	 *
 	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $matches
+	 *
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
 	 */
 	protected function initialMatchOnElement(SimpleSelector $selector, SplObjectStorage $matches) : SplObjectStorage
 	{
@@ -582,17 +572,17 @@ class DOMTraverser implements Traverser
 			$element = '*';
 		}
 		$found = $this->newMatches();
-		/** @var DOMDocument $node */
 		foreach ($matches as $node) {
+			if ( ! ($node instanceof DOMElement)) {
+				continue;
+			}
 			// Capture the case where the initial element is the root element.
 			if ($node->tagName === $element
 				|| ('*' === $element && $node->parentNode instanceof DOMDocument)) {
 				$found->attach($node);
 			}
 			$nl = $node->getElementsByTagName($element);
-			if ( ! empty($nl) && $nl instanceof DOMNodeList) {
 				$this->attachNodeList($nl, $found);
-			}
 		}
 
 		$selector->element = null;
@@ -621,8 +611,11 @@ class DOMTraverser implements Traverser
 		// wrongly when an item is detached in an access loop.
 		$detach = [];
 		foreach ($elements as $node) {
+			if ( ! ($node instanceof DOMNode)) {
+				continue;
+			}
 			// This lookup must be done PER NODE.
-			$nsuri = $node->lookupNamespaceURI($ns);
+			$nsuri = $node->lookupNamespaceURI($ns ?? '');
 			if (empty($nsuri) || $node->namespaceURI !== $nsuri) {
 				$detach[] = $node;
 			}
@@ -681,8 +674,10 @@ class DOMTraverser implements Traverser
 
 	/**
 	 * Get a list of ancestors to the present node.
+	 *
+	 * @return list<DOMNode>
 	 */
-	protected function ancestors($node)
+	protected function ancestors(DOMNode $node) : array
 	{
 		$buffer = [];
 		$parent = $node;
@@ -750,7 +745,7 @@ class DOMTraverser implements Traverser
 	 *
 	 * @param $id
 	 */
-	protected function matchId(DOMElement $node, $id) : bool
+	protected function matchId(DOMElement $node, ?string $id) : bool
 	{
 		if (empty($id)) {
 			return true;
@@ -762,9 +757,9 @@ class DOMTraverser implements Traverser
 	/**
 	 * Check that the given DOMNode has all of the given classes.
 	 *
-	 * @param $classes
+	 * @param string[] $classes
 	 */
-	protected function matchClasses(DOMElement $node, $classes) : bool
+	protected function matchClasses(DOMElement $node, array $classes) : bool
 	{
 		if (empty($classes)) {
 			return true;
@@ -811,11 +806,11 @@ class DOMTraverser implements Traverser
 	 * <i>if conditions obtain that would allow the pseudo-element
 	 * to be created</i>. This does not modify the match in any way.
 	 *
-	 * @param $pseudoElements
+	 * @param string[] $pseudoElements
 	 *
 	 * @throws NotImplementedException
 	 */
-	protected function matchPseudoElements(DOMElement $node, $pseudoElements) : bool
+	protected function matchPseudoElements(DOMElement $node, array $pseudoElements) : bool
 	{
 		if (empty($pseudoElements)) {
 			return true;
@@ -847,8 +842,10 @@ class DOMTraverser implements Traverser
 	/**
 	 * Get the internal match set.
 	 * Internal utility function.
+	 *
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
 	 */
-	protected function getMatches()
+	protected function getMatches() : SplObjectStorage
 	{
 		return $this->matches();
 	}

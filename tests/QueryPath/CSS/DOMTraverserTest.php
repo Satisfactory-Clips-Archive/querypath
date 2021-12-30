@@ -7,6 +7,7 @@ namespace QueryPathTests\CSS;
 use function count;
 use function define;
 use DOMDocument;
+use DOMElement;
 use DOMNode;
 use const PHP_EOL;
 use QueryPath\CSS\DOMTraverser;
@@ -24,11 +25,6 @@ define('TRAVERSER_XML', __DIR__ . '/../../DOMTraverserTest.xml');
 class DOMTraverserTest extends TestCase
 {
 	protected $xml_file = TRAVERSER_XML;
-
-	public function debug($msg) : void
-	{
-		fwrite(STDOUT, PHP_EOL . $msg);
-	}
 
 	public function testConstructor() : void
 	{
@@ -82,7 +78,9 @@ class DOMTraverserTest extends TestCase
 		// Test wildcard.
 		$traverser = $this->traverser();
 		$matches = $traverser->find('*')->matches();
-		$actual = $traverser->getDocument()->getElementsByTagName('*');
+		$document = $traverser->getDocument();
+		$this->assertInstanceOf(DOMDocument::class, $document);
+		$actual = $document->getElementsByTagName('*');
 		$this->assertSame($actual->length, count($matches));
 
 		// Test with namespace
@@ -248,6 +246,7 @@ class DOMTraverserTest extends TestCase
 		$matches = $this->find('idtest + p');
 		$this->assertCount(1, $matches);
 		foreach ($matches as $m) {
+			$this->assertInstanceOf(DOMElement::class, $m);
 			$this->assertSame('p', $m->tagName);
 		}
 
@@ -255,12 +254,14 @@ class DOMTraverserTest extends TestCase
 		$matches = $this->find('p + one');
 		$this->assertCount(1, $matches);
 		foreach ($matches as $m) {
+			$this->assertInstanceOf(DOMElement::class, $m);
 			$this->assertSame('one', $m->tagName);
 		}
 
 		// Test that non-adjacent elements don't match.
 		$matches = $this->find('idtest + one');
 		foreach ($matches as $m) {
+			$this->assertInstanceOf(DOMElement::class, $m);
 			$this->assertSame('one', $m->tagName);
 		}
 		$this->assertCount(0, $matches, 'Non-adjacents should not match.');
@@ -268,6 +269,7 @@ class DOMTraverserTest extends TestCase
 		// Test that elements BEFORE don't match
 		$matches = $this->find('one + p');
 		foreach ($matches as $m) {
+			$this->assertInstanceOf(DOMElement::class, $m);
 			$this->assertSame('one', $m->tagName);
 		}
 		$this->assertCount(0, $matches, 'Match only if b is after a');
@@ -287,6 +289,7 @@ class DOMTraverserTest extends TestCase
 		$matches = $this->find('idtest ~ p');
 		$this->assertCount(1, $matches);
 		foreach ($matches as $m) {
+			$this->assertInstanceOf(DOMElement::class, $m);
 			$this->assertSame('p', $m->tagName);
 		}
 
@@ -294,6 +297,7 @@ class DOMTraverserTest extends TestCase
 		$matches = $this->find('outside ~ p');
 		$this->assertCount(1, $matches);
 		foreach ($matches as $m) {
+			$this->assertInstanceOf(DOMElement::class, $m);
 			$this->assertSame('p', $m->tagName);
 		}
 
@@ -311,12 +315,14 @@ class DOMTraverserTest extends TestCase
 		$matches = $this->find('two>three');
 		$this->assertCount(1, $matches);
 		foreach ($matches as $m) {
+			$this->assertInstanceOf(DOMElement::class, $m);
 			$this->assertSame('three', $m->tagName);
 		}
 
 		$matches = $this->find('one > two > three');
 		$this->assertCount(1, $matches);
 		foreach ($matches as $m) {
+			$this->assertInstanceOf(DOMElement::class, $m);
 			$this->assertSame('three', $m->tagName);
 		}
 
@@ -336,6 +342,7 @@ class DOMTraverserTest extends TestCase
 		$matches = $this->find('one two');
 		$this->assertCount(1, $matches);
 		foreach ($matches as $m) {
+			$this->assertInstanceOf(DOMElement::class, $m);
 			$this->assertSame('two', $m->tagName);
 		}
 
@@ -356,7 +363,7 @@ class DOMTraverserTest extends TestCase
 		$this->assertCount(2, $matches);
 	}
 
-	protected function traverser()
+	protected function traverser() : DOMTraverser
 	{
 		$dom = new DOMDocument('1.0');
 		$dom->load($this->xml_file);
@@ -370,7 +377,10 @@ class DOMTraverserTest extends TestCase
 		return $traverser;
 	}
 
-	protected function find($selector)
+	/**
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
+	 */
+	protected function find(string $selector) : SplObjectStorage
 	{
 		return $this->traverser()->find($selector)->matches();
 	}

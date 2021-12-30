@@ -41,6 +41,8 @@ class SimpleSelector
 	public ?string $element = null;
 	public ?string $ns = null;
 	public ?string $id = null;
+
+	/** @var string[] */
 	public array $classes = [];
 
 	/** @var array{ns?:string, name:string, value:string|null, op:int|null}[] */
@@ -48,6 +50,8 @@ class SimpleSelector
 
 	/** @var array{name:string, value?:string|null}[] */
 	public array $pseudoClasses = [];
+
+	/** @var string[] */
 	public array $pseudoElements = [];
 	public ?int $combinator = null;
 
@@ -126,10 +130,7 @@ class SimpleSelector
 		}
 	}
 
-	/**
-	 * @param $code
-	 */
-	public static function combinatorOperator($code) : string
+	public static function combinatorOperator(int $code) : string
 	{
 		switch ($code) {
 			case self::ADJACENT:
