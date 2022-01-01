@@ -43,6 +43,7 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS;
 
+use function assert;
 use function count;
 use DOMDocument;
 use DOMElement;
@@ -54,6 +55,7 @@ use function is_array;
 use QueryPath\TextContent;
 use SplObjectStorage;
 use function strlen;
+use UnexpectedValueException;
 use const XML_ELEMENT_NODE;
 use const XML_TEXT_NODE;
 
@@ -81,26 +83,34 @@ use const XML_TEXT_NODE;
  */
 class QueryPathEventHandler implements EventHandler, Traverser
 {
-	protected $dom; // Always points to the top level.
-	protected $matches; // The matches
-	protected $alreadyMatched; // Matches found before current selector.
-	protected $findAnyElement = true;
+	/** @var SplObjectStorage<DOMNode|TextContent, mixed>|DOMElement|DOMNodeList|list<DOMElement>|DOMNode|TextContent|null */
+	protected SplObjectStorage|DOMElement|DOMNodeList|DOMNode|TextContent|array|null $dom; // Always points to the top level.
+
+	/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
+	protected SplObjectStorage $matches; // The matches
+
+	/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
+	protected SplObjectStorage $alreadyMatched; // Matches found before current selector.
+	protected bool $findAnyElement = true;
 
 	/**
 	 * Create a new event handler.
 	 *
-	 * @param mixed $dom
+	 * @param list<DOMNode>|SplObjectStorage<DOMNode|TextContent, mixed>|DOMDocument|DOMElement|DOMNodeList|DOMNode|TextContent $dom
 	 */
-	public function __construct($dom)
+	public function __construct(array|SplObjectStorage|DOMDocument|DOMElement|DOMNodeList|DOMNode|TextContent $dom)
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$this->alreadyMatched = new SplObjectStorage();
+
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$matches = new SplObjectStorage();
 
 		// Array of DOMElements
 		if (is_array($dom) || $dom instanceof SplObjectStorage) {
 			//$matches = array();
 			foreach ($dom as $item) {
-				if ($item instanceof DOMNode && XML_ELEMENT_NODE == $item->nodeType) {
+				if ($item instanceof DOMElement) {
 					//$matches[] = $item;
 					$matches->attach($item);
 				}
@@ -124,9 +134,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			$matches->attach($dom);
 		} // NodeList -- We turn this into an array
 		elseif ($dom instanceof DOMNodeList) {
+			/** @var list<DOMElement> */
 			$a = []; // Not sure why we are doing this....
 			foreach ($dom as $item) {
-				if (XML_ELEMENT_NODE == $item->nodeType) {
+				if ($item instanceof DOMElement) {
 					$matches->attach($item);
 					$a[] = $item;
 				}
@@ -146,7 +157,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *
 	 * This is the primary searching method used throughout QueryPath.
 	 *
-	 * @param string $filter
+	 * @param string $selector
 	 *  A valid CSS 3 filter
 	 *
 	 * @throws ParseException
@@ -154,9 +165,9 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @return QueryPathEventHandler
 	 *  Returns itself
 	 */
-	public function find(string $filter) : QueryPathEventHandler
+	public function find(string $selector) : QueryPathEventHandler
 	{
-		$parser = new Parser($filter, $this);
+		$parser = new Parser($selector, $this);
 		$parser->parse();
 
 		return $this;
@@ -175,6 +186,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	public function getMatches() : SplObjectStorage
 	{
 		//$result = array_merge($this->alreadyMatched, $this->matches);
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$result = new SplObjectStorage();
 		foreach ($this->alreadyMatched as $m) {
 			$result->attach($m);
@@ -200,14 +212,21 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * If this finds an ID, it will immediately quit. Essentially, it doesn't
 	 * enforce ID uniqueness, but it assumes it.
 	 *
-	 * @param $id
+	 * @param string $id
 	 *  String ID for an element
 	 */
-	public function elementID($id) : void
+	public function elementID(string $id) : void
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
 		foreach ($matches as $item) {
+			assert(
+				($item instanceof DOMElement),
+				new UnexpectedValueException(
+					'match not instance of DOMElement!'
+				)
+			);
 			// Check if any of the current items has the desired ID.
 			if ($item->hasAttribute('id') && $item->getAttribute('id') === $id) {
 				$found->attach($item);
@@ -219,12 +238,19 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	}
 
 	// Inherited
-	public function element($name) : void
+	public function element(string $name) : void
 	{
 		$matches = $this->candidateList();
 		$this->findAnyElement = false;
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($matches as $item) {
+			assert(
+				($item instanceof DOMElement),
+				new UnexpectedValueException(
+					'match not instance of DOMElement!'
+				)
+			);
 			// Should the existing item be included?
 			// In some cases (e.g. element is root element)
 			// it definitely should. But what about other cases?
@@ -240,20 +266,27 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	}
 
 	// Inherited
-	public function elementNS($lname, $namespace = null) : void
+	public function elementNS(string $name, string $namespace = null) : void
 	{
 		$this->findAnyElement = false;
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
+		assert(
+			($this->dom instanceof DOMNode),
+			new UnexpectedValueException(
+				'dom property was not a DOMNode instance!'
+			)
+		);
 		foreach ($matches as $item) {
 			// Looking up NS URI only works if the XMLNS attributes are declared
 			// at a level equal to or above the searching doc. Normalizing a doc
 			// should fix this, but it doesn't. So we have to use a fallback
-			// detection scheme which basically searches by lname and then
+			// detection scheme which basically searches by name and then
 			// does a post hoc check on the tagname.
 
 			//$nsuri = $item->lookupNamespaceURI($namespace);
-			$nsuri = $this->dom->lookupNamespaceURI($namespace);
+			$nsuri = $this->dom->lookupNamespaceURI($namespace ?? '');
 
 			// XXX: Presumably the base item needs to be checked. Spec isn't
 			// too clear, but there are three possibilities:
@@ -262,21 +295,33 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			// - base should only be checked if it is the root node
 			if ($item instanceof DOMNode
 				&& $item->namespaceURI == $nsuri
-				&& $lname == $item->localName) {
+				&& $name == $item->localName) {
 				$found->attach($item);
 			}
 
 			if ( ! empty($nsuri)) {
-				$nl = $item->getElementsByTagNameNS($nsuri, $lname);
+				assert(
+					($item instanceof DOMElement),
+					new UnexpectedValueException(
+						'match not a DOMElement instance!'
+					)
+				);
+				$nl = $item->getElementsByTagNameNS($nsuri, $name);
 				// If something is found, merge them:
 				//if (!empty($nl)) $found = array_merge($found, $this->nodeListToArray($nl));
-				if ( ! empty($nl)) {
+				if (count($nl)) {
 					$this->attachNodeList($nl, $found);
 				}
 			} else {
-				//$nl = $item->getElementsByTagName($namespace . ':' . $lname);
-				$nl = $item->getElementsByTagName($lname);
-				$tagname = $namespace . ':' . $lname;
+				assert(
+					($item instanceof DOMElement),
+					new UnexpectedValueException(
+						'match not a DOMElement instance!'
+					)
+				);
+				//$nl = $item->getElementsByTagName($namespace . ':' . $name);
+				$nl = $item->getElementsByTagName($name);
+				$tagname = ($namespace ?? '') . ':' . $name;
 				$nsmatches = [];
 				foreach ($nl as $node) {
 					if ($node->tagName == $tagname) {
@@ -293,6 +338,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	public function anyElement() : void
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		//$this->findAnyElement = TRUE;
 		$matches = $this->candidateList();
@@ -308,10 +354,17 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function anyElementInNS($ns) : void
+	public function anyElementInNS(string $ns) : void
 	{
+		assert(
+			($this->dom instanceof DOMNode),
+			new UnexpectedValueException(
+				'dom property was not a DOMNode instance!'
+			)
+		);
 		//$this->findAnyElement = TRUE;
 		$nsuri = $this->dom->lookupNamespaceURI($ns);
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		if ( ! empty($nsuri)) {
 			$matches = $this->candidateList();
@@ -325,11 +378,18 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function elementClass($name) : void
+	public function elementClass(string $name) : void
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
 		foreach ($matches as $item) {
+			assert(
+				($item instanceof DOMElement),
+				new UnexpectedValueException(
+					'match was not a DOMElement instance!'
+				)
+			);
 			if ($item->hasAttribute('class')) {
 				$classes = explode(' ', $item->getAttribute('class'));
 				if (in_array($name, $classes, true)) {
@@ -342,11 +402,18 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function attribute($name, $value = null, $operation = EventHandler::IS_EXACTLY) : void
+	public function attribute(string $name, string $value = null, ?int $operation = EventHandler::IS_EXACTLY) : void
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
 		foreach ($matches as $item) {
+			assert(
+				($item instanceof DOMElement),
+				new UnexpectedValueException(
+					'match was not a DOMElement instance!'
+				)
+			);
 			if ($item->hasAttribute($name)) {
 				if (isset($value)) {
 					// If a value exists, then we need a match.
@@ -363,9 +430,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 	}
 
-	public function attributeNS($lname, $ns, $value = null, $operation = EventHandler::IS_EXACTLY) : void
+	public function attributeNS(string $name, string $ns, string $value = null, ?int $operation = EventHandler::IS_EXACTLY) : void
 	{
 		$matches = $this->candidateList();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		if (0 == count($matches)) {
 			$this->matches = $found;
@@ -377,15 +445,27 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		//$uri = $matches[0]->lookupNamespaceURI($ns);
 		$matches->rewind();
 		$e = $matches->current();
+		assert(
+			($e instanceof DOMElement),
+			new UnexpectedValueException(
+				'match was not a DOMElement instance!'
+			)
+		);
 		$uri = $e->lookupNamespaceURI($ns);
 
 		foreach ($matches as $item) {
+			assert(
+				($item instanceof DOMElement),
+				new UnexpectedValueException(
+					'match was not a DOMElement instance!'
+				)
+			);
 			//foreach ($item->attributes as $attr) {
 			//  print "$attr->prefix:$attr->localName ($attr->namespaceURI), Value: $attr->nodeValue\n";
 			//}
-			if ($item->hasAttributeNS($uri, $lname)) {
+			if ($item->hasAttributeNS($uri, $name)) {
 				if (isset($value)) {
-					if ($this->attrValMatches($value, $item->getAttributeNS($uri, $lname), $operation)) {
+					if ($this->attrValMatches($value, $item->getAttributeNS($uri, $name), $operation)) {
 						$found->attach($item);
 					}
 				} else {
@@ -401,11 +481,8 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * This also supports the following nonstandard pseudo classes:
 	 *  - :x-reset/:x-root (reset to the main item passed into the constructor. Less drastic than :root)
 	 *  - :odd/:even (shorthand for :nth-child(odd)/:nth-child(even)).
-	 *
-	 * @param mixed|null $value
-	 * @param mixed $name
 	 */
-	public function pseudoClass($name, $value = null) : void
+	public function pseudoClass(string $name, string $value = null) : void
 	{
 		$name = strtolower($name);
 		// Need to handle known pseudoclasses.
@@ -426,7 +503,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				// The assumption is that there is a UA and the format is HTML.
 				// I don't know if this should is useful without a UA.
 				throw new NotImplementedException(':indeterminate is not implemented.');
-				break;
 			case 'lang':
 				// No value = exception.
 				if ( ! isset($value)) {
@@ -435,25 +511,38 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				$this->lang($value);
 				break;
 			case 'link':
-				$this->searchForAttr('href');
+				$this->attribute('href');
 				break;
 			case 'root':
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
 				if (empty($this->dom)) {
 					$this->matches = $found;
 				} elseif (is_array($this->dom)) {
+					assert(
+						($this->dom[0]->ownerDocument instanceof DOMDocument),
+						new UnexpectedValueException(
+							'ownerDocument not found!'
+						)
+					);
 					$found->attach($this->dom[0]->ownerDocument->documentElement);
 					$this->matches = $found;
 				} elseif ($this->dom instanceof DOMNode) {
+					assert(
+						($this->dom->ownerDocument instanceof DOMDocument),
+						new UnexpectedValueException(
+							'ownerDocument not found!'
+						)
+					);
 					$found->attach($this->dom->ownerDocument->documentElement);
 					$this->matches = $found;
 				} elseif ($this->dom instanceof DOMNodeList && $this->dom->length > 0) {
 					$found->attach($this->dom->item(0)->ownerDocument->documentElement);
 					$this->matches = $found;
 				} else {
-					// Hopefully we never get here:
-					$found->attach($this->dom);
-					$this->matches = $found;
+					throw new UnexpectedValueException(
+						'unsupported root condition found!'
+					);
 				}
 				break;
 
@@ -461,7 +550,17 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			// the constructor.
 			case 'x-root':
 			case 'x-reset':
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$this->matches = new SplObjectStorage();
+				assert(
+					(
+						($this->dom instanceof DOMNode)
+						|| ($this->dom instanceof TextContent)
+					),
+					new UnexpectedValueException(
+						'dom property not of a supported type!'
+					)
+				);
 				$this->matches->attach($this->dom);
 				break;
 
@@ -476,19 +575,19 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 			// Standard child-checking items.
 			case 'nth-child':
-				[$aVal, $bVal] = $this->parseAnB($value);
+				[$aVal, $bVal] = DOMTraverser\Util::parseAnB($value);
 				$this->nthChild($aVal, $bVal);
 				break;
 			case 'nth-last-child':
-				[$aVal, $bVal] = $this->parseAnB($value);
+				[$aVal, $bVal] = DOMTraverser\Util::parseAnB($value);
 				$this->nthLastChild($aVal, $bVal);
 				break;
 			case 'nth-of-type':
-				[$aVal, $bVal] = $this->parseAnB($value);
+				[$aVal, $bVal] = DOMTraverser\Util::parseAnB($value);
 				$this->nthOfTypeChild($aVal, $bVal, false);
 				break;
 			case 'nth-last-of-type':
-				[$aVal, $bVal] = $this->parseAnB($value);
+				[$aVal, $bVal] = DOMTraverser\Util::parseAnB($value);
 				$this->nthLastOfTypeChild($aVal, $bVal);
 				break;
 			case 'first-child':
@@ -527,10 +626,17 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			case 'last':
 				//case 'even':
 				//case 'odd':
+				assert(
+					(is_null($value) || is_numeric($value)),
+					new UnexpectedValueException(
+						'unsupported value type found!'
+					)
+				);
 				$this->getByPosition($name, $value);
 				break;
 			case 'parent':
 				$matches = $this->candidateList();
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
 				foreach ($matches as $match) {
 					if ( ! empty($match->firstChild)) {
@@ -559,8 +665,15 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 			case 'header':
 				$matches = $this->candidateList();
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
 				foreach ($matches as $item) {
+					assert(
+						($item instanceof DOMElement),
+						new UnexpectedValueException(
+							'match not a DOMElement instance!'
+						)
+					);
 					$tag = $item->tagName;
 					$f = strtolower(substr($tag, 0, 1));
 					if ('h' == $f && 2 == strlen($tag) && ctype_digit(substr($tag, 1, 1))) {
@@ -570,14 +683,15 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				$this->matches = $found;
 				break;
 			case 'has':
-				$this->has($value);
+				$this->has($value ?? '');
 				break;
 			// Contains == text matches.
 			// In QP 2.1, this was changed.
 			case 'contains':
-				$value = $this->removeQuotes($value);
+				$value = $this->removeQuotes($value ?? '');
 
 				$matches = $this->candidateList();
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
 				foreach ($matches as $item) {
 					if (false !== strpos($item->textContent, $value)) {
@@ -589,9 +703,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 			// Since QP 2.1
 			case 'contains-exactly':
-				$value = $this->removeQuotes($value);
+				$value = $this->removeQuotes($value ?? '');
 
 				$matches = $this->candidateList();
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
 				foreach ($matches as $item) {
 					if ($item->textContent == $value) {
@@ -610,12 +725,13 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * Pseudo-class handler for :has(filter).
 	 * This can also be used as a general filtering routine.
 	 *
-	 * @param mixed $filter
+	 * @return $this
 	 */
-	public function has($filter)
+	public function has(string $filter) : QueryPathEventHandler
 	{
 		$matches = $this->candidateList();
 		//$found = array();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($matches as $item) {
 			$handler = new QueryPathEventHandler($item);
@@ -633,10 +749,8 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * As the spec mentions, these must be at the end of a selector or
 	 * else they will cause errors. Most selectors return elements. Pseudo-elements
 	 * do not.
-	 *
-	 * @param mixed $name
 	 */
-	public function pseudoElement($name) : void
+	public function pseudoElement(string $name) : void
 	{
 		// process the pseudoElement
 		switch ($name) {
@@ -644,17 +758,16 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			// each of the matched elements?
 			case 'first-line':
 				$matches = $this->candidateList();
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
 				foreach ($matches as $item) {
 					$str = $item->textContent;
 					$lines = explode("\n", $str);
-					if ( ! empty($lines)) {
 						$line = trim($lines[0]);
 						if ( ! empty($line)) {
 							$o = new TextContent($line);
 							$found->attach($o); //trim($lines[0]);
 						}
-					}
 				}
 				$this->matches = $found;
 				break;
@@ -662,6 +775,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			// of the matched elements?
 			case 'first-letter':
 				$matches = $this->candidateList();
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
 				foreach ($matches as $item) {
 					$str = $item->textContent;
@@ -680,7 +794,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			case 'selection':
 				// With no user agent, we don't have a concept of user selection.
 				throw new NotImplementedException("The $name pseudo-element is not implemented.");
-				break;
 		}
 		$this->findAnyElement = false;
 	}
@@ -689,11 +802,12 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	{
 		$this->findAnyElement = false;
 
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$kids = new SplObjectStorage();
 		foreach ($this->matches as $item) {
 			$kidsNL = $item->childNodes;
 			foreach ($kidsNL as $kidNode) {
-				if (XML_ELEMENT_NODE == $kidNode->nodeType) {
+				if ($kidNode instanceof DOMElement) {
 					$kids->attach($kidNode);
 				}
 			}
@@ -721,10 +835,11 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		$this->findAnyElement = false;
 		// List of nodes that are immediately adjacent to the current one.
 		//$found = array();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($this->matches as $item) {
 			while (isset($item->nextSibling)) {
-				if (isset($item->nextSibling) && XML_ELEMENT_NODE === $item->nextSibling->nodeType) {
+				if (($item->nextSibling instanceof DOMElement)) {
 					$found->attach($item->nextSibling);
 					break;
 				}
@@ -747,7 +862,14 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 		// Start over at the top of the tree.
 		$this->findAnyElement = true; // Reset depth flag.
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$this->matches = new SplObjectStorage();
+		assert(
+			($this->dom instanceof DOMNode),
+			new UnexpectedValueException(
+				'dom property not an instance of DOMNode!'
+			)
+		);
 		$this->matches->attach($this->dom);
 	}
 
@@ -764,6 +886,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		// Get the nodes at the same level.
 
 		if ($this->matches->count() > 0) {
+			/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 			$sibs = new SplObjectStorage();
 			foreach ($this->matches as $item) {
 				/*$candidates = $item->parentNode->childNodes;
@@ -773,9 +896,9 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				  }
 				}
 				*/
-				while (null != $item->nextSibling) {
-					$item = $item->nextSibling;
-					if (XML_ELEMENT_NODE === $item->nodeType) {
+				while (null != ($item->nextSibling ?? null)) {
+					$item = $item->nextSibling ?? null;
+					if ($item instanceof DOMElement) {
 						$sibs->attach($item);
 					}
 				}
@@ -790,8 +913,13 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	public function anyDescendant() : void
 	{
 		// Get children:
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($this->matches as $item) {
+			assert(
+				($item instanceof DOMElement),
+				new UnexpectedValueException('item not a DOMElement instance!')
+			);
 			$kids = $item->getElementsByTagName('*');
 			//$found = array_merge($found, $this->nodeListToArray($kids));
 			$this->attachNodeList($kids, $found);
@@ -815,6 +943,8 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Attach all nodes in a node list to the given \SplObjectStorage.
+	 *
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $splos
 	 */
 	public function attachNodeList(DOMNodeList $nodeList, SplObjectStorage $splos) : void
 	{
@@ -827,15 +957,19 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * Helper function to find all elements with exact matches.
 	 *
 	 * @deprecated all use cases seem to be covered by attribute()
-	 *
-	 * @param mixed|null $value
-	 * @param mixed $name
 	 */
-	protected function searchForAttr($name, $value = null) : void
+	protected function searchForAttr(string $name, string $value = null) : void
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
 		foreach ($matches as $candidate) {
+			assert(
+				($candidate instanceof DOMElement),
+				new UnexpectedValueException(
+					'candidate not a DOMElement instance!'
+				)
+			);
 			if ($candidate->hasAttribute($name)) {
 				// If value is required, match that, too.
 				if (isset($value) && $value == $candidate->getAttribute($name)) {
@@ -853,16 +987,16 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Parse an an+b rule for CSS pseudo-classes.
 	 *
-	 * @param $rule
+	 * @param string $rule
 	 *  Some rule in the an+b format
 	 *
-	 * @throws parseException
+	 * @throws ParseException
 	 *  If the rule does not follow conventions
 	 *
-	 * @return
+	 * @return array{0:int, 1:int}
 	 *  Array (list($aVal, $bVal)) of the two values
 	 */
-	protected function parseAnB($rule)
+	protected function parseAnB(string $rule) : array
 	{
 		if ('even' == $rule) {
 			return [2, 0];
@@ -899,46 +1033,63 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *  Whether counting should begin with the last child. By default, this is false.
 	 *  Pseudo-classes that start with the last-child can set this to true.
 	 */
-	protected function nthChild($groupSize, $elementInGroup, $lastChild = false) : void
+	protected function nthChild(int $groupSize, int $elementInGroup, bool $lastChild = false) : void
 	{
 		// EXPERIMENTAL: New in Quark. This should be substantially faster
 		// than the old (jQuery-ish) version. It still has E_STRICT violations
 		// though.
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$parents = new SplObjectStorage();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$matches = new SplObjectStorage();
 
-		$i = 0;
+		/** @var SplObjectStorage<DOMNode|TextContent, int> */
+		$nodeIndex = new SplObjectStorage();
+
+		/** @var SplObjectStorage<DOMNode|TextContent, int> */
+		$numElements = new SplObjectStorage();
+
 		foreach ($this->matches as $item) {
 			$parent = $item->parentNode;
+			assert(
+				($parent instanceof DOMNode),
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 
 			// Build up an array of all of children of this parent, and store the
 			// index of each element for reference later. We only need to do this
 			// once per parent, though.
 			if ( ! $parents->contains($parent)) {
 				$c = 0;
+				assert(
+					($item instanceof DOMElement),
+					new UnexpectedValueException(
+						'item not a DOMElement instance!'
+					)
+				);
 				foreach ($parent->childNodes as $child) {
 					// We only want nodes, and if this call is preceded by an element
 					// selector, we only want to match elements with the same tag name.
 					// !!! This last part is a grey area in the CSS 3 Selector spec. It seems
 					// necessary to make the implementation match the examples in the spec. However,
 					// jQuery 1.2 does not do this.
-					if (XML_ELEMENT_NODE == $child->nodeType && ($this->findAnyElement || $child->tagName == $item->tagName)) {
-						// This may break E_STRICT.
-						$child->nodeIndex = ++$c;
+					if (($child instanceof DOMElement) && ($this->findAnyElement || $child->tagName == $item->tagName)) {
+						$nodeIndex[$child] = ++$c;
 					}
 				}
-				// This may break E_STRICT.
-				$parent->numElements = $c;
+				$numElements[$parent] = $c;
 				$parents->attach($parent);
 			}
 
 			// If we are looking for the last child, we count from the end of a list.
 			// Note that we add 1 because CSS indices begin at 1, not 0.
 			if ($lastChild) {
-				$indexToMatch = $item->parentNode->numElements - $item->nodeIndex + 1;
+				$indexToMatch = ($numElements[$parent] ?? 0) - ($nodeIndex[$item] ?? 0) + 1;
 			} // Otherwise we count from the beginning of the list.
 			else {
-				$indexToMatch = $item->nodeIndex;
+				$indexToMatch = ($nodeIndex[$item] ?? 0);
 			}
 
 			// If group size is 0, then we return element at the right index.
@@ -955,9 +1106,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 					$matches->attach($item);
 				}
 			}
-
-			// Iterate.
-			++$i;
 		}
 		$this->matches = $matches;
 	}
@@ -986,7 +1134,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for :nth-last-child and related pseudo-classes.
 	 */
-	protected function nthLastChild($groupSize, $elementInGroup) : void
+	protected function nthLastChild(int $groupSize, int $elementInGroup) : void
 	{
 		// New in Quark.
 		$this->nthChild($groupSize, $elementInGroup, true);
@@ -1098,43 +1246,61 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * Pseudo-class handler for nth-of-type-child.
 	 * Not implemented.
 	 */
-	protected function nthOfTypeChild($groupSize, $elementInGroup, $lastChild) : void
+	protected function nthOfTypeChild(int $groupSize, int $elementInGroup, bool $lastChild) : void
 	{
 		// EXPERIMENTAL: New in Quark. This should be substantially faster
 		// than the old (jQuery-ish) version. It still has E_STRICT violations
 		// though.
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$parents = new SplObjectStorage();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$matches = new SplObjectStorage();
 
-		$i = 0;
+		/** @var SplObjectStorage<DOMNode|TextContent, int> */
+		$nodeIndex = new SplObjectStorage();
+
+		/** @var SplObjectStorage<DOMNode|TextContent, int> */
+		$numElements = new SplObjectStorage();
+
 		foreach ($this->matches as $item) {
 			$parent = $item->parentNode;
+			assert(
+				($parent instanceof DOMNode),
+				new UnexpectedValueException(
+					'parentNode not found!'
+				)
+			);
 
 			// Build up an array of all of children of this parent, and store the
 			// index of each element for reference later. We only need to do this
 			// once per parent, though.
 			if ( ! $parents->contains($parent)) {
+				assert(
+					($item instanceof DOMElement),
+					new UnexpectedValueException(
+						'match was not a DOMElement instance!'
+					)
+				);
 				$c = 0;
 				foreach ($parent->childNodes as $child) {
 					// This doesn't totally make sense, since the CSS 3 spec does not require that
 					// this pseudo-class be adjoined to an element (e.g. ' :nth-of-type' is allowed).
-					if (XML_ELEMENT_NODE == $child->nodeType && $child->tagName == $item->tagName) {
+					if (($child instanceof DOMElement) && $child->tagName == $item->tagName) {
 						// This may break E_STRICT.
-						$child->nodeIndex = ++$c;
+						$nodeIndex[$child] = ++$c;
 					}
 				}
-				// This may break E_STRICT.
-				$parent->numElements = $c;
+				$numElements[$parent] = $c;
 				$parents->attach($parent);
 			}
 
 			// If we are looking for the last child, we count from the end of a list.
 			// Note that we add 1 because CSS indices begin at 1, not 0.
 			if ($lastChild) {
-				$indexToMatch = $item->parentNode->numElements - $item->nodeIndex + 1;
+				$indexToMatch = ($numElements[$parent] ?? 0) - ($nodeIndex[$item] ?? 0) + 1;
 			} // Otherwise we count from the beginning of the list.
 			else {
-				$indexToMatch = $item->nodeIndex;
+				$indexToMatch = ($nodeIndex[$item] ?? 0);
 			}
 
 			// If group size is 0, then we return element at the right index.
@@ -1153,7 +1319,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			}
 
 			// Iterate.
-			++$i;
 		}
 		$this->matches = $matches;
 	}
@@ -1161,21 +1326,16 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	/**
 	 * Pseudo-class handler for nth-last-of-type-child.
 	 * Not implemented.
-	 *
-	 * @param mixed $groupSize
-	 * @param mixed $elementInGroup
 	 */
-	protected function nthLastOfTypeChild($groupSize, $elementInGroup) : void
+	protected function nthLastOfTypeChild(int $groupSize, int $elementInGroup) : void
 	{
 		$this->nthOfTypeChild($groupSize, $elementInGroup, true);
 	}
 
 	/**
 	 * Pseudo-class handler for :lang.
-	 *
-	 * @param mixed $value
 	 */
-	protected function lang($value) : void
+	protected function lang(string $value) : void
 	{
 		// TODO: This checks for cases where an explicit language is
 		// set. The spec seems to indicate that an element should inherit
@@ -1216,12 +1376,19 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * @param string $filter
 	 *  A CSS selector
 	 */
-	protected function not($filter) : void
+	protected function not(string $filter) : void
 	{
 		$matches = $this->candidateList();
 		//$found = array();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($matches as $item) {
+			assert(
+				($item instanceof DOMElement),
+				new UnexpectedValueException(
+					'match was not a DOMElement instance!'
+				)
+			);
 			$handler = new QueryPathEventHandler($item);
 			$not_these = $handler->find($filter)->getMatches();
 			if (0 == $not_these->count()) {
@@ -1239,11 +1406,18 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	protected function firstOfType() : void
 	{
 		$matches = $this->candidateList();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($matches as $item) {
+			if ( ! ($item instanceof DOMElement)) {
+				continue;
+			}
 			$type = $item->tagName;
 			$parent = $item->parentNode;
-			foreach ($parent->childNodes as $kid) {
+			foreach ($parent->childNodes ?? [] as $kid) {
+				if ( ! ($kid instanceof DOMElement)) {
+					continue;
+				}
 				if (XML_ELEMENT_NODE == $kid->nodeType && $kid->tagName == $type) {
 					if ( ! $found->contains($kid)) {
 						$found->attach($kid);
@@ -1261,12 +1435,25 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	protected function lastOfType() : void
 	{
 		$matches = $this->candidateList();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($matches as $item) {
+			if ( ! ($item instanceof DOMElement)) {
+				continue;
+			}
 			$type = $item->tagName;
 			$parent = $item->parentNode;
+			assert(
+				($parent instanceof DOMNode),
+				new UnexpectedValueException(
+					'Parent not an instance of DOMNode!'
+				)
+			);
 			for ($i = $parent->childNodes->length - 1; $i >= 0; --$i) {
 				$kid = $parent->childNodes->item($i);
+				if ( ! ($kid instanceof DOMElement)) {
+					continue;
+				}
 				if (XML_ELEMENT_NODE == $kid->nodeType && $kid->tagName == $type) {
 					if ( ! $found->contains($kid)) {
 						$found->attach($kid);
@@ -1284,11 +1471,17 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	protected function onlyChild() : void
 	{
 		$matches = $this->candidateList();
+
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($matches as $item) {
 			$parent = $item->parentNode;
+			/** @var list<DOMElement> */
 			$kids = [];
-			foreach ($parent->childNodes as $kid) {
+			foreach ($parent->childNodes ?? [] as $kid) {
+				if ( ! ($kid instanceof DOMElement)) {
+					continue;
+				}
 				if (XML_ELEMENT_NODE == $kid->nodeType) {
 					$kids[] = $kid;
 				}
@@ -1307,6 +1500,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 */
 	protected function emptyElement() : void
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$matches = $this->candidateList();
 		foreach ($matches as $item) {
@@ -1332,16 +1526,24 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	protected function onlyOfType() : void
 	{
 		$matches = $this->candidateList();
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($matches as $item) {
+			if ( ! ($item instanceof DOMElement)) {
+				continue;
+			}
 			if ( ! $item->parentNode) {
+				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$this->matches = new SplObjectStorage();
 			}
 			$parent = $item->parentNode;
 			$onlyOfType = true;
 
 			// See if any peers are of the same type
-			foreach ($parent->childNodes as $kid) {
+			foreach ($parent->childNodes ?? [] as $kid) {
+				if ( ! ($kid instanceof DOMElement)) {
+					continue;
+				}
 				if (XML_ELEMENT_NODE == $kid->nodeType
 					&& $kid->tagName == $item->tagName
 					&& $kid !== $item) {
@@ -1361,12 +1563,8 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Check for attr value matches based on an operation.
-	 *
-	 * @param mixed $needle
-	 * @param mixed $haystack
-	 * @param mixed $operation
 	 */
-	protected function attrValMatches($needle, $haystack, $operation)
+	protected function attrValMatches(string $needle, string $haystack, ?int $operation) : bool
 	{
 		if (strlen($haystack) < strlen($needle)) {
 			return false;
@@ -1397,10 +1595,8 @@ class QueryPathEventHandler implements EventHandler, Traverser
 
 	/**
 	 * Remove leading and trailing quotes.
-	 *
-	 * @param mixed $str
 	 */
-	private function removeQuotes($str)
+	private function removeQuotes(string $str) : string
 	{
 		$f = substr($str, 0, 1);
 		$l = substr($str, -1);
@@ -1415,12 +1611,14 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * Pseudo-class handler for a variety of jQuery pseudo-classes.
 	 * Handles lt, gt, eq, nth, first, last pseudo-classes.
 	 *
-	 * @param mixed $operator
-	 * @param mixed $pos
+	 * @param 'nth'|'eq'|'first'|'last'|'lt'|'gt' $operator
+	 * @param int|numeric-string|null $pos
 	 */
-	private function getByPosition($operator, $pos) : void
+	private function getByPosition(string $operator, int|string|null $pos) : void
 	{
 		$matches = $this->candidateList();
+
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		if (0 == $matches->count()) {
 			return;
@@ -1451,6 +1649,13 @@ class QueryPathEventHandler implements EventHandler, Traverser
 					// Spin through iterator.
 					foreach ($matches as $item) {
 					}
+
+					assert(
+						(isset($item) && ($item instanceof DOMNode)),
+						new UnexpectedValueException(
+							'Non DOMNode value somehow in $matches!'
+						)
+					);
 
 					$found->attach($item);
 				}
@@ -1498,8 +1703,10 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 * is TRUE, this will return a list of every element that appears in
 	 * the subtree of $this->matches. Otherwise, it will just return
 	 * $this->matches.
+	 *
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
 	 */
-	private function candidateList()
+	private function candidateList() : SplObjectStorage
 	{
 		if ($this->findAnyElement) {
 			return $this->getAllCandidates($this->matches);
@@ -1513,17 +1720,22 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	 *
 	 * This is used when $this->findAnyElement is TRUE.
 	 *
-	 * @param $elements
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $elements
 	 *  A list of current elements (usually $this->matches)
 	 *
-	 * @return
+	 * @return SplObjectStorage<DOMNode|TextContent, mixed>
 	 *  A list of all candidate elements
 	 */
-	private function getAllCandidates($elements)
+	private function getAllCandidates(SplObjectStorage $elements) : SplObjectStorage
 	{
+		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($elements as $item) {
+			if ( ! ($item instanceof DOMElement)) {
+				continue;
+			}
 			$found->attach($item); // put self in
+			/** @var DOMNodeList<DOMNode> */
 			$nl = $item->getElementsByTagName('*');
 			//foreach ($nl as $node) $found[] = $node;
 			$this->attachNodeList($nl, $found);

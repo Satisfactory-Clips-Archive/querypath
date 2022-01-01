@@ -66,7 +66,7 @@ interface EventHandler
 	 * @param string $id
 	 *  The ID passed in
 	 */
-	public function elementID($id); // #name
+	public function elementID(string $id) : void; // #name
 
 	/**
 	 * Handle an element name.
@@ -75,7 +75,7 @@ interface EventHandler
 	 * @param string $name
 	 *  The name of the element
 	 */
-	public function element($name); // name
+	public function element(string $name) : void; // name
 
 	/**
 	 * Handle a namespaced element name.
@@ -83,16 +83,16 @@ interface EventHandler
 	 *
 	 * @param string $name
 	 *  The tag name
-	 * @param string $namespace
+	 * @param string|null $namespace
 	 *  The namespace identifier (Not the URI)
 	 */
-	public function elementNS($name, $namespace = null);
+	public function elementNS(string $name, string $namespace = null) : void;
 
 	/**
 	 * Handle an any-element (*) operator.
 	 * Example: *.
 	 */
-	public function anyElement(); // *
+	public function anyElement() : void; // *
 
 	/**
 	 * Handle an any-element operator that is constrained to a namespace.
@@ -101,7 +101,7 @@ interface EventHandler
 	 * @param string $ns
 	 *  The namespace identifier (not the URI)
 	 */
-	public function anyElementInNS($ns); // ns|*
+	public function anyElementInNS(string $ns) : void; // ns|*
 
 	/**
 	 * Handle a CSS class selector.
@@ -110,7 +110,7 @@ interface EventHandler
 	 * @param string $name
 	 *  The name of the class
 	 */
-	public function elementClass($name); // .name
+	public function elementClass(string $name) : void; // .name
 
 	/**
 	 * Handle an attribute selector.
@@ -121,11 +121,11 @@ interface EventHandler
 	 *  The attribute name
 	 * @param string $value
 	 *  The value of the attribute, if given
-	 * @param int $operation
+	 * @param int|null $operation
 	 *  The operation to be used for matching. See {@link EventHandler}
 	 *  constants for a list of supported operations.
 	 */
-	public function attribute(string $name, string $value = null, int $operation = EventHandler::IS_EXACTLY); // [name=attr]
+	public function attribute(string $name, string $value = null, ?int $operation = EventHandler::IS_EXACTLY) : void; // [name=attr]
 
 	/**
 	 * Handle an attribute selector bound to a specific namespace.
@@ -138,11 +138,11 @@ interface EventHandler
 	 *  The namespace identifier (not the URI)
 	 * @param string $value
 	 *  The value of the attribute, if given
-	 * @param int $operation
+	 * @param int|null $operation
 	 *  The operation to be used for matching. See {@link EventHandler}
 	 *  constants for a list of supported operations.
 	 */
-	public function attributeNS(string $name, string $ns, string $value = null, int $operation = EventHandler::IS_EXACTLY);
+	public function attributeNS(string $name, string $ns, string $value = null, ?int $operation = EventHandler::IS_EXACTLY) : void;
 
 	/**
 	 * Handle a pseudo-class.
@@ -150,10 +150,10 @@ interface EventHandler
 	 *
 	 * @param string $name
 	 *  The pseudo-class name
-	 * @param string $value
+	 * @param string|null $value
 	 *  The value, if one is found
 	 */
-	public function pseudoClass($name, $value = null); //:name(value)
+	public function pseudoClass(string $name, string $value = null) : void; //:name(value)
 
 	/**
 	 * Handle a pseudo-element.
@@ -162,35 +162,35 @@ interface EventHandler
 	 * @param string $name
 	 *  The pseudo-element name
 	 */
-	public function pseudoElement($name); // ::name
+	public function pseudoElement(string $name) : void; // ::name
 
 	/**
 	 * Handle a direct descendant combinator.
 	 * Example: >.
 	 */
-	public function directDescendant(); // >
+	public function directDescendant() : void; // >
 
 	/**
 	 * Handle a adjacent combinator.
 	 * Example: +.
 	 */
-	public function adjacent(); // +
+	public function adjacent() : void; // +
 
 	/**
 	 * Handle an another-selector combinator.
 	 * Example: ,.
 	 */
-	public function anotherSelector(); // ,
+	public function anotherSelector() : void; // ,
 
 	/**
 	 * Handle a sibling combinator.
 	 * Example: ~.
 	 */
-	public function sibling(); // ~ combinator
+	public function sibling() : void; // ~ combinator
 
 	/**
 	 * Handle an any-descendant combinator.
 	 * Example: ' '.
 	 */
-	public function anyDescendant(); // ' ' (space) operator.
+	public function anyDescendant() : void; // ' ' (space) operator.
 }

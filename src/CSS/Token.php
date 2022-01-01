@@ -44,10 +44,8 @@ final class Token
 
 	/**
 	 * Get a name for a given constant. Used for error handling.
-	 *
-	 * @param mixed $const_int
 	 */
-	public static function name($const_int)
+	public static function name(string|int|false $const_int) : string
 	{
 		$a = [
 			'character',

@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace QueryPath\CSS;
 
 use function chr;
+use function is_string;
 use function ord;
+use UnexpectedValueException;
 
 /**
  * Scanner for CSS selector parsing.
@@ -19,19 +21,19 @@ use function ord;
  */
 final class Scanner
 {
-	public $is;
-	public $value;
-	public $token;
+	public InputStream $is;
+	public ?string $value = null;
+	public int|false|null $token = null;
 
-	public $recurse = false;
-	public $it = 0;
+	public bool $recurse = false;
+	public int $it = 0;
 
 	/**
 	 * Given a new input stream, tokenize the CSS selector string.
 	 *
 	 * @see InputStream
 	 *
-	 * @param inputStream $in
+	 * @param InputStream $in
 	 *  An input stream to be scanned
 	 */
 	public function __construct(InputStream $in)
@@ -87,6 +89,13 @@ final class Scanner
 			return false;
 		}
 		$ch = $this->is->consume();
+		assert(
+			is_string($ch),
+			new UnexpectedValueException(sprintf(
+				'non-empty input stream returned %s',
+				gettype($ch)
+			))
+		);
 		//print __FUNCTION__ . " Testing $ch.\n";
 		if (ctype_space($ch)) {
 			$this->value = ' '; // Collapse all WS to a space.
@@ -196,11 +205,11 @@ final class Scanner
 	 * A name string must be composed of
 	 * only characters defined in Token:char: -_a-zA-Z0-9.
 	 */
-	public function getNameString()
+	public function getNameString() : string
 	{
 		$buf = '';
 		while (Token::CHAR === $this->token) {
-			$buf .= $this->value;
+			$buf .= $this->value ?? '';
 			$this->nextToken();
 		}
 
@@ -223,7 +232,7 @@ final class Scanner
 	 * examples given use URLs among other things, making them closer to the
 	 * definition of 'string' than to 'name'. So we handle them here as strings.
 	 */
-	public function getQuotedString()
+	public function getQuotedString() : string
 	{
 		if (Token::QUOTE === $this->token || Token::SQUOTE === $this->token || Token::LPAREN === $this->token) {
 			$end = (Token::LPAREN === $this->token) ? Token::RPAREN : $this->token;
@@ -242,7 +251,7 @@ final class Scanner
 					$escape = true;
 				} elseif ($escape) {
 					// Turn off escaping
-					$buf .= $this->value;
+					$buf .= $this->value ?? '';
 					$escape = false;
 				} elseif ($this->token === $end) {
 					// At end of string; skip token and break.
@@ -250,17 +259,19 @@ final class Scanner
 					break;
 				} else {
 					// Append char.
-					$buf .= $this->value;
+					$buf .= $this->value ?? '';
 				}
 				$this->nextToken();
 			}
 
 			return $buf;
 		}
+
+		return '';
 	}
 
 	// Get the contents inside of a pseudoClass().
-	public function getPseudoClassString()
+	public function getPseudoClassString() : string
 	{
 		if (Token::QUOTE === $this->token || Token::SQUOTE === $this->token || Token::LPAREN === $this->token) {
 			$end = (Token::LPAREN === $this->token) ? Token::RPAREN : $this->token;
@@ -279,7 +290,7 @@ final class Scanner
 					$escape = true;
 				} elseif ($escape) {
 					// Turn off escaping
-					$buf .= $this->value;
+					$buf .= $this->value ?? '';
 					$escape = false;
 				} // Allow nested pseudoclasses.
 				elseif (Token::LPAREN === $this->token) {
@@ -292,13 +303,15 @@ final class Scanner
 					break;
 				} else {
 					// Append char.
-					$buf .= $this->value;
+					$buf .= $this->value ?? '';
 				}
 				$this->nextToken();
 			}
 
 			return $buf;
 		}
+
+		return '';
 	}
 
 	/**

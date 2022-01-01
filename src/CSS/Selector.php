@@ -59,7 +59,6 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 	/** @var array<int, array<int, SimpleSelector>> */
 	protected array $selectors = [];
 	protected SimpleSelector $currSelector;
-	protected $selectorGroups = [];
 	protected int $groupIndex = 0;
 
 	public function __construct()
@@ -88,8 +87,10 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 	 * Normally, one iterates over a Selector. However, if it is
 	 * necessary to get the selector array and manipulate it, this
 	 * method can be used.
+	 *
+	 * @return array<int, array<int, SimpleSelector>>
 	 */
-	public function toArray()
+	public function toArray() : array
 	{
 		return $this->selectors;
 	}

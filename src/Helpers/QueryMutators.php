@@ -986,16 +986,16 @@ trait QueryMutators
 	{
 		if ( ! empty($selector)) {
 			// Do a non-destructive find.
-			$query = new QueryPathEventHandler($this->matches);
+			$query = new QueryPathEventHandler($this->getMatches());
 			$query->find($selector);
 			$matches = $query->getMatches();
 		} else {
-			$matches = $this->matches;
+			$matches = $this->getMatches();
 		}
 
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		foreach ($matches ?? [] as $item) {
+		foreach ($matches as $item) {
 			if ( ! ($item instanceof DOMNode)) {
 				continue;
 			}

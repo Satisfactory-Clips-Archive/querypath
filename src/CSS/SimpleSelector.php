@@ -109,10 +109,7 @@ class SimpleSelector
 		return implode('', $buffer);
 	}
 
-	/**
-	 * @param $code
-	 */
-	public static function attributeOperator($code) : string
+	public static function attributeOperator(?int $code) : string
 	{
 		switch ($code) {
 			case EventHandler::CONTAINS_WITH_SPACE:
@@ -145,7 +142,6 @@ class SimpleSelector
 				return '   ';
 			default:
 				return '';
-				break;
 		}
 	}
 

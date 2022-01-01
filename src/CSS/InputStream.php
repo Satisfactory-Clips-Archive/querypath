@@ -18,17 +18,18 @@ use function count;
  */
 class InputStream
 {
-	public $position = 0;
-	protected $stream;
+	public int $position = 0;
+
+	/** @var list<string> */
+	protected array $stream;
 
 	/**
 	 * Build a new CSS input stream from a string.
 	 *
-	 * @param string
+	 * @param string $string
 	 *  String to turn into an input stream
-	 * @param mixed $string
 	 */
-	public function __construct($string)
+	public function __construct(string $string)
 	{
 		$this->stream = str_split($string);
 	}
@@ -36,11 +37,11 @@ class InputStream
 	/**
 	 * Look ahead one character.
 	 *
-	 * @return char
+	 * @return string
 	 *  Returns the next character, but does not remove it from
 	 *  the stream
 	 */
-	public function peek()
+	public function peek() : string
 	{
 		return $this->stream[0];
 	}
@@ -50,7 +51,7 @@ class InputStream
 	 * This will remove that character from the front of the
 	 * stream and return it.
 	 */
-	public function consume()
+	public function consume() : ?string
 	{
 		$ret = array_shift($this->stream);
 		if ( ! empty($ret)) {
@@ -66,7 +67,7 @@ class InputStream
 	 * @return bool
 	 *   Returns TRUE when the stream is empty, FALSE otherwise
 	 */
-	public function isEmpty()
+	public function isEmpty() : bool
 	{
 		return 0 === count($this->stream);
 	}
