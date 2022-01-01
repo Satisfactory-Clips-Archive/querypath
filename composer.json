@@ -28,6 +28,7 @@
 	"scripts": {
 		"static-analysis": [
 			"psalm",
+			"composer-require-checker check ./composer.json",
 			"php-cs-fixer fix --diff --dry-run --verbose"
 		]
 	},
@@ -46,6 +47,7 @@
 		"masterminds/html5": "^2.7"
 	},
 	"require-dev": {
+		"maglnet/composer-require-checker": "^4.0",
 		"phpunit/phpunit": "^9.5",
 		"psalm/plugin-phpunit": "^0.16.1",
 		"roave/security-advisories": "dev-latest",
