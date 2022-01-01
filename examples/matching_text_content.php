@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Matching Text Content.
  *
@@ -11,7 +13,6 @@
  * As of QueryPath 2.1beta2, `:contains()` performs a substring match instead of
  * and exact match, so the method outline below is roughly the same as merely
  * using `:contains(Release)`.
- *
  *
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
@@ -28,10 +29,15 @@ require_once '../src/QueryPath/QueryPath.php';
  *
  * Note that $item is a DOMNode (actually, a DOMElement). So if we wanted to do QueryPath
  * manipulations on it, we could wrap it in a `qp()`.
+ *
+ * @param mixed $index
+ * @param mixed $item
  */
-function exampleCallback($index, $item) {
-  $text = qp($item)->text();
-  return strpos($text, 'Release') !== FALSE;
+function exampleCallback($index, $item)
+{
+	$text = qp($item)->text();
+
+	return false !== strpos($text, 'Release');
 }
 
 /*
@@ -44,7 +50,7 @@ function exampleCallback($index, $item) {
  * NOTE: If you are using PHP 5.3, you can define the callback inline instead of separating it
  * into a stand-alone function.
  */
-print htmlqp('http://php.net/', 'h1.summary a')
+echo htmlqp('http://php.net/', 'h1.summary a')
   ->filterCallback('exampleCallback')
-  ->textImplode(PHP_EOL);
-?>
+  ->textImplode(\PHP_EOL)
+;

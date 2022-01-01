@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file shows five different ways to iterate through the contents of a
  * QueryPath.
@@ -18,7 +20,6 @@
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL (The GNU Lesser GPL) or an MIT-like license.
  */
-
 require '../src/QueryPath/QueryPath.php';
 
 $demo = '<?xml version="1.0" ?>
@@ -35,16 +36,17 @@ $qp = qp($demo, 'data');
 
 // Iterate over elements as DOMNodes:
 foreach ($qp->get() as $li_ele) {
-  print $li_ele->tagName . PHP_EOL; // Prints 'li' five times.
+	echo $li_ele->tagName . \PHP_EOL; // Prints 'li' five times.
 }
 
 // Iterate over elements as QueryPath objects
 foreach ($qp as $li_qp) {
-  print $li_qp->tag() . PHP_EOL; // Prints 'li' five times
+	echo $li_qp->tag() . \PHP_EOL; // Prints 'li' five times
 }
 
-function callbackFunction($index, $element) {
-  print $element->tagName . PHP_EOL;
+function callbackFunction($index, $element) : void
+{
+	echo $element->tagName . \PHP_EOL;
 }
 
 // Iterate using a callback function
@@ -52,6 +54,6 @@ $qp->each('callbackFunction');
 
 // Loop through by index/count
 for ($i = 0; $i < $qp->count(); ++$i) {
-  $domElement = $qp->get($i);
-  print $domElement->tagName . PHP_EOL;
+	$domElement = $qp->get($i);
+	echo $domElement->tagName . \PHP_EOL;
 }

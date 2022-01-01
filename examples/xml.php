@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Using QueryPath.
  *
@@ -18,9 +20,7 @@
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
  */
-
 require_once '../src/QueryPath/QueryPath.php';
-
 
 // Create a new XML document wrapped in a QueryPath.
 // By default, it will point to the root element,
@@ -49,7 +49,8 @@ $record = qp('<?xml version="1.0"?><author></author>')
   // turn the QueryPath contents back into a string. Since we are
   // at the top of the document, the whole document will be converted
   // to a string.
-  ->xml();
+  ->xml()
+;
 
 // Print our results.
-print $record;
+echo $record;

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /** @file
  * Using QueryPath.
  *
@@ -15,7 +17,6 @@
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
  */
-
 require_once '../src/qp.php';
 
 // Begin with an HTML stub document (XHTML, actually), and navigate to the title.
@@ -53,5 +54,5 @@ qp(QueryPath::HTML_STUB, 'title')
   // Add some data to this row
   ->append('<td>This is the data</td>')
   // Write it all out as HTML
-  ->writeHTML();
-?>
+  ->writeHTML()
+;

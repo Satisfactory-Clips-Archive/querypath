@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * Parsing PHP with QueryPath
+ * Parsing PHP with QueryPath.
  *
  * This file contains an example of how QueryPath can be used
  * to parse a PHP file. Any well-formed XML or HTML document can be parsed. Since
@@ -9,7 +9,6 @@
  * to read, modify, and traverse PHP files.
  *
  * This example illustrates how such a file can be parsed and manipulated.
- *
  *
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
@@ -24,7 +23,7 @@
 require '../src/QueryPath/QueryPath.php';
 
 // Parse this file with QueryPath.
-print qp(__FILE__, 'title')->text();
+echo qp(__FILE__, 'title')->text();
 ?>
 </body>
 </html>

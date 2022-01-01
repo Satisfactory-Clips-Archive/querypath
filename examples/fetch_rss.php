@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Retrieving remote RSS feeds.
  *
@@ -10,7 +12,6 @@
  * In this example, we grab the RSS feed from remote server and
  * parse it. From there, we make a list of hyperlinks, one for each item in
  * the original feed.
- *
  *
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
@@ -26,19 +27,20 @@ $out = qp(QueryPath::HTML_STUB, 'title')
   ->top()
   ->find('body')
   ->append('<ul/>')
-  ->children('ul');
+  ->children('ul')
+;
 
 // Load the remote document and loop through all of the items.
 foreach (qp($remote, 'channel>item') as $item) {
-  // Get title and link.
-  $title = $item->find('title')->text();
-  $link = $item->next('link')->text();
+	// Get title and link.
+	$title = $item->find('title')->text();
+	$link = $item->next('link')->text();
 
-  // Do a little string building.
-  $bullet = '<li><a href="' . htmlspecialchars($link, ENT_QUOTES, 'UTF-8') . '">' . $title . '</a></li>';
+	// Do a little string building.
+	$bullet = '<li><a href="' . htmlspecialchars($link, \ENT_QUOTES, 'UTF-8') . '">' . $title . '</a></li>';
 
-  // Add it to the output document.
-  $out->append($bullet);
+	// Add it to the output document.
+	$out->append($bullet);
 }
 
 // Write the results.

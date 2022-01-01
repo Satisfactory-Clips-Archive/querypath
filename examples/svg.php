@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Using QueryPath to Generate a Scalable Vector Graphic (SVG).
  *
@@ -11,11 +13,9 @@
  * at {@link http://querypath.org/svg.php}. (That URL actually runs the script displayed
  * here.)
  *
- *
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
  */
-
 require_once '../src/QueryPath/QueryPath.php';
 
 // Let's stub out a basic SVG document.
@@ -32,11 +32,11 @@ $svg_stub = '<?xml version="1.0"?>
 </svg>';
 
 qp($svg_stub)
-  ->attr(array('width' => 800, 'height' => 600))
+  ->attr(['width' => 800, 'height' => 600])
   ->append('<rect id="first"/><rect id="second"/>')
   ->find('#second')
-  ->attr(array('x' => 15, 'y' => 4, 'width' => 40, 'height' => 60, 'fill' => 'red'))
+  ->attr(['x' => 15, 'y' => 4, 'width' => 40, 'height' => 60, 'fill' => 'red'])
   ->prev()
-  ->attr(array('x' => 2, 'y' => 2, 'width' => 40, 'height' => 60, 'fill' => 'navy'))
-  ->writeXML();
-
+  ->attr(['x' => 2, 'y' => 2, 'width' => 40, 'height' => 60, 'fill' => 'navy'])
+  ->writeXML()
+;

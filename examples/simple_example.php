@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Basic example of QueryPath usage.
  *
@@ -13,9 +15,9 @@
  * This file is fully explained in the official QueryPath tutorial, located
  * at {@link https://fedorahosted.org/querypath/wiki/QueryPathTutorial}
  *
- *
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
+ *
  * @see qp()
  * @see QueryPath::find()
  * @see QueryPath::writeHTML()
@@ -27,11 +29,11 @@ qp(QueryPath::HTML_STUB)->find('body')->text('Hello World')->writeHTML();
 
 $qp = htmlqp(QueryPath::HTML_STUB, 'body');
 
-
    $qp->append('<div></div><p id="cool">Hello</p><p id="notcool">Goodbye</p>')
-      ->children('p')
-      ->after('<p id="new">new paragraph</p>');
+	  ->children('p')
+	  ->after('<p id="new">new paragraph</p>')
+   ;
 
-         echo ($qp->find('p')->children('p')->html()) ? 'print' : 'dont print';;
+		 echo ($qp->find('p')->children('p')->html()) ? 'print' : 'dont print';
 
 //         ->writeHTML();

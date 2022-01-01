@@ -28,4 +28,5 @@ return QueryPathConfig::createWithPaths(...[
 	__FILE__,
 	__DIR__ . '/src/',
 	__DIR__ . '/tests/',
+	__DIR__ . '/examples/',
 ]);
