@@ -15,7 +15,7 @@ documents in PHP. It now contains support for HTML5 via the
 - Incompatible with php 8.1
 
 ### Installation
-``` 
+```
 composer require satisfactory-clips-archive/querypath
 ```
 
@@ -81,7 +81,7 @@ accomplish sophisticated XML and HTML processing using QueryPath.
 
 From there, the main functions you will want to use are `qp()`
 (alias of `QueryPath::with()`) and `htmlqp()` (alias of
-`QueryPath::withHTML()`). 
+`QueryPath::withHTML()`).
 
 ## QueryPath Format Extension
 
