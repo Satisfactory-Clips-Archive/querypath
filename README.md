@@ -1,12 +1,6 @@
 # QueryPath: Find the better way
 
-Authors: Matt Butcher (lead), Emily Brand, and many others
-
-[Website](http://querypath.org) |
-[API Docs](http://api.querypath.org/docs) |
-[VCS and Issue Tracking](http://github.com/satisfactory-clips-archive/querypath) |
-[Support List](http://groups.google.com/group/support-querypath) |
-[Developer List](http://groups.google.com/group/devel-querypath)
+This package is based on [querypath/querypath](https://github.com/technosophos/querypath), and [arthurkushman/query-path](https://github.com/arthurkushman/querypath)
 
 This package is licensed under an MIT license (COPYING-MIT.txt).
 
@@ -18,11 +12,7 @@ documents in PHP. It now contains support for HTML5 via the
 
 ### Why this lib was forked and recoded
 
-- Legacy code (repo was left for > 3 years) didn't allow to support new features of PHP>=7.1
-- A lot of DeaDBeaF code like: unused params, unused local variables etc
-- A lot of needless flow structures 
-- DRY/KISS/SOLID rules were thrown away when it was developed
-- Minor bugs and fragile functionality 
+- Incompatible with php 8.1
 
 ### Installation
 ``` 
