@@ -40,14 +40,16 @@ class QueryPathExtensionTest extends TestCase
 
 	public function testStubToe() : void
 	{
-		$qp = qp(self::DATA_FILE_XML, 'unary')->stubToe();
-		$this->assertInstanceOf(DOMQuery::class, $qp);
-		$this->assertSame(1, $qp->top(':root > toe')->count());
+		/** @var DOMQuery&StubExtensionOne */
+		$qp = qp(self::DATA_FILE_XML, 'unary');
+		$this->assertSame(1, $qp->stubToe()->top(':root > toe')->count());
 	}
 
 	public function testStuble() : void
 	{
-		$this->assertSame('arg1arg2', qp(self::DATA_FILE_XML)->stuble('arg1', 'arg2'));
+		/** @var DOMQuery&StubExtensionTwo|DOMQuery&StubExtensionThree */
+		$qp = qp(self::DATA_FILE_XML);
+		$this->assertSame('arg1arg2', $qp->stuble('arg1', 'arg2'));
 	}
 
 	public function testNoRegistry() : void

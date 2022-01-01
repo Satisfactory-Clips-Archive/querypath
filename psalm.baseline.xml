@@ -99,9 +99,6 @@
     </DeprecatedMethod>
   </file>
   <file src="tests/QueryPath/DummyExtension.php">
-    <PossiblyUnusedMethod occurrences="1">
-      <code>grrrrrrr</code>
-    </PossiblyUnusedMethod>
     <UnusedProperty occurrences="1">
       <code>$qp</code>
     </UnusedProperty>
@@ -110,22 +107,13 @@
     <DeprecatedMethod occurrences="1">
       <code>end</code>
     </DeprecatedMethod>
-    <PossiblyUnusedMethod occurrences="1">
-      <code>stubToe</code>
-    </PossiblyUnusedMethod>
   </file>
   <file src="tests/QueryPath/StubExtensionThree.php">
-    <PossiblyUnusedMethod occurrences="1">
-      <code>stuble</code>
-    </PossiblyUnusedMethod>
     <UnusedProperty occurrences="1">
       <code>$qp</code>
     </UnusedProperty>
   </file>
   <file src="tests/QueryPath/StubExtensionTwo.php">
-    <PossiblyUnusedMethod occurrences="1">
-      <code>stuble</code>
-    </PossiblyUnusedMethod>
     <UnusedProperty occurrences="1">
       <code>$qp</code>
     </UnusedProperty>

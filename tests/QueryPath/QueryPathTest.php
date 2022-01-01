@@ -41,6 +41,7 @@ class QueryPathTest extends TestCase
 	{
 		QueryPath::enable(DummyExtension::class);
 
+		/** @var DOMQuery&DummyExtension */
 		$qp = QueryPath::with(QueryPath::XHTML_STUB);
 
 		$this->assertTrue($qp->grrrrrrr());
