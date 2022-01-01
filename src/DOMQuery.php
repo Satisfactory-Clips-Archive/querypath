@@ -289,21 +289,6 @@ class DOMQuery extends DOM
 	/**
 	 * Get the number of elements currently wrapped by this object.
 	 *
-	 * Note that there is no length property on this object.
-	 *
-	 * @return int
-	 *  Number of items in the object
-	 *
-	 * @deprecated queryPath now implements Countable, so use count()
-	 */
-	public function size()
-	{
-		return $this->getMatches()->count();
-	}
-
-	/**
-	 * Get the number of elements currently wrapped by this object.
-	 *
 	 * Since DOMQuery is Countable, the PHP count() function can also
 	 * be used on a DOMQuery.
 	 *
@@ -758,19 +743,21 @@ class DOMQuery extends DOM
 	 *
 	 * By default, this is HTML 4.01, not XHTML. Use {@link xml()} for XHTML.
 	 *
-	 * @param string $markup
+	 * @template T as string|null
+	 *
+	 * @param T $markup
 	 *  The text to insert
 	 *
 	 * @throws Exception
 	 *
-	 * @return mixed
+	 * @return (T is string ? ($this) : (string|null))
 	 *  A string if no markup was passed, or a DOMQuery if markup was passed
 	 *
 	 * @see xml()
 	 * @see text()
 	 * @see contents()
 	 */
-	public function html($markup = null)
+	public function html(string $markup = null) : DOMQuery|string|null
 	{
 		if (isset($markup)) {
 			if ($this->options['replace_entities']) {
@@ -788,21 +775,21 @@ class DOMQuery extends DOM
 		}
 		$length = $this->getMatches()->count();
 		if (0 === $length) {
-			return;
+			return null;
 		}
 		// Only return the first item -- that's what JQ does.
 		$first = $this->getFirstMatch();
 
 		// Catch cases where first item is not a legit DOM object.
 		if ( ! ($first instanceof DOMNode)) {
-			return;
+			return null;
 		}
 
 		$node_arg = $first->ownerDocument->documentElement ?? null;
 
 		// Added by eabrand.
 		if ( ! $node_arg) {
-			return;
+			return null;
 		}
 
 		if ($first instanceof DOMDocument || $first->isSameNode($node_arg)) {
@@ -1133,17 +1120,19 @@ class DOMQuery extends DOM
 	 * ?>
 	 * @endcode
 	 *
-	 * @param string $text
+	 * @template T as string|null
+	 *
+	 * @param T $text
 	 *  If this is set, it will be inserted before each node in the current set of
 	 *  selected items
 	 *
 	 * @throws Exception
 	 *
-	 * @return mixed
+	 * @return (T is string ? DOMQuery : string)
 	 *  Returns the DOMQuery object if $text was set, and returns a string (possibly empty)
 	 *  if no param is passed
 	 */
-	public function textBefore($text = null)
+	public function textBefore(string $text = null) : DOMQuery|string
 	{
 		if (isset($text)) {
 			$textNode = $this->document()->createTextNode($text);

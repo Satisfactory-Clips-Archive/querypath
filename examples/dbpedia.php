@@ -58,11 +58,11 @@ $cxt = stream_context_create($options);
 $qp = qp($url, 'rdf|Description', array('context' => $cxt));
 //$qp = qp('The_Beatles.rdf');
 
-printf("There are %d descriptions in this record.\n", $qp->size());
+printf("There are %d descriptions in this record.\n", $qp->count());
 
 // Here, we use rdf|* to select all elements in the RDF namespace.
 $qp->top()->find('rdf|*');
-printf("There are %d RDF items in this record.\n", $qp->size());
+printf("There are %d RDF items in this record.\n", $qp->count());
 
 // Standard pseudo-classes that are not HTML specific can be used on 
 // namespaced elements, too.

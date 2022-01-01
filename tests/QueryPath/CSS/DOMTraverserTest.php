@@ -15,20 +15,18 @@ use QueryPathTests\TestCase;
 use SPLObjectStorage;
 use const STDOUT;
 
-define('TRAVERSER_XML', __DIR__ . '/../../DOMTraverserTest.xml');
-
 /**
  * @ingroup querypath_tests
  * @group   CSS
  */
 class DOMTraverserTest extends TestCase
 {
-	protected $xml_file = TRAVERSER_XML;
+	const TRAVERSER_XML = __DIR__ . '/../../DOMTraverserTest.xml';
 
 	public function testConstructor() : void
 	{
 		$dom = new DOMDocument('1.0');
-		$dom->load($this->xml_file);
+		$dom->load(self::TRAVERSER_XML);
 
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$splos = new SPLObjectStorage();
@@ -36,8 +34,8 @@ class DOMTraverserTest extends TestCase
 
 		$traverser = new DOMTraverser($splos);
 
-		$this->assertInstanceOf('\QueryPath\CSS\Traverser', $traverser);
-		$this->assertInstanceOf('\QueryPath\CSS\DOMTraverser', $traverser);
+		$this->assertInstanceOf(\QueryPath\CSS\Traverser::class, $traverser);
+		$this->assertInstanceOf(\QueryPath\CSS\DOMTraverser::class, $traverser);
 	}
 
 	public function testFind() : void
@@ -45,7 +43,7 @@ class DOMTraverserTest extends TestCase
 		$res = $this->traverser()->find('root');
 
 		// Ensure that return contract is not violated.
-		$this->assertInstanceOf('\QueryPath\CSS\Traverser', $res);
+		$this->assertInstanceOf(\QueryPath\CSS\Traverser::class, $res);
 	}
 
 	public function testMatches() : void
@@ -365,7 +363,7 @@ class DOMTraverserTest extends TestCase
 	protected function traverser() : DOMTraverser
 	{
 		$dom = new DOMDocument('1.0');
-		$dom->load($this->xml_file);
+		$dom->load(self::TRAVERSER_XML);
 
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$splos = new SPLObjectStorage();

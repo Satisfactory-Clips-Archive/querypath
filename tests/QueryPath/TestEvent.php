@@ -30,25 +30,23 @@ class TestEvent
 	public const ANY_ELEMENT_IN_NS = 13;
 	public const ANY_DESCENDANT = 14;
 
-	public $type;
-	public $params;
+	/**
+	 * @var self::ELEMENT_ID|self::ELEMENT|self::ELEMENT_NS|self::ANY_ELEMENT|self::ELEMENT_CLASS|self::ATTRIBUTE|self::ATTRIBUTE_NS|self::PSEUDO_CLASS|self::PSEUDO_ELEMENT|self::DIRECT_DESCENDANT|self::ADJACENT|self::ANOTHER_SELECTOR|self::SIBLING|self::ANY_ELEMENT_IN_NS|self::ANY_DESCENDANT
+	 */
+	public int $type;
 
-	public function __construct($event_type)
+	/** @var list<string|int|null> */
+	public array $params;
+
+	/**
+	 * @param self::ELEMENT_ID|self::ELEMENT|self::ELEMENT_NS|self::ANY_ELEMENT|self::ELEMENT_CLASS|self::ATTRIBUTE|self::ATTRIBUTE_NS|self::PSEUDO_CLASS|self::PSEUDO_ELEMENT|self::DIRECT_DESCENDANT|self::ADJACENT|self::ANOTHER_SELECTOR|self::SIBLING|self::ANY_ELEMENT_IN_NS|self::ANY_DESCENDANT $event_type
+	 */
+	public function __construct(int $event_type, string|int|null ...$args)
 	{
 		$this->type = $event_type;
-		$args = func_get_args();
-		array_shift($args);
+
+		/** @var list<string|int|null> */
 		$this->params = $args;
-	}
-
-	public function eventType()
-	{
-		return $this->type;
-	}
-
-	public function params()
-	{
-		return $this->params;
 	}
 
 	public function compare(self $against) : bool

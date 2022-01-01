@@ -6,6 +6,8 @@ namespace QueryPathTests\CSS;
 
 use DOMDocument;
 use DOMElement;
+use DOMNode;
+use DOMNodeList;
 use QueryPath\CSS\DOMTraverser\PseudoClass;
 use QueryPathTests\TestCase;
 
@@ -323,7 +325,7 @@ class PseudoClassTest extends TestCase
 		$ret = $ps->elementMatches('last-of-type', $ele, $root);
 		$this->assertTrue($ret);
 
-		[$ele, $root] = $this->doc($xml, 'a');
+		[, $root] = $this->doc($xml, 'a');
 		$nl = $root->getElementsByTagName('d');
 
 		$ret = $ps->elementMatches('last-of-type', $nl->item(0), $root);
@@ -342,7 +344,7 @@ class PseudoClassTest extends TestCase
 		$ret = $ps->elementMatches('first-of-type', $ele, $root);
 		$this->assertTrue($ret);
 
-		[$ele, $root] = $this->doc($xml, 'a');
+		[, $root] = $this->doc($xml, 'a');
 		$nl = $root->getElementsByTagName('d');
 
 		$ret = $ps->elementMatches('first-of-type', $nl->item(0), $root);
@@ -361,7 +363,7 @@ class PseudoClassTest extends TestCase
 		$ret = $ps->elementMatches('only-of-type', $ele, $root);
 		$this->assertTrue($ret);
 
-		[$ele, $root] = $this->doc($xml, 'a');
+		[, $root] = $this->doc($xml, 'a');
 		$nl = $root->getElementsByTagName('d');
 
 		$ret = $ps->elementMatches('only-of-type', $nl->item(0), $root);
@@ -378,7 +380,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// 2n + 1 -- Every odd row, from the last element.
@@ -426,7 +428,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// 2n + 1 -- Every odd row.
@@ -583,7 +585,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		$i = 0;
@@ -607,7 +609,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -633,7 +635,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -655,7 +657,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '<a/><b/><c/><a/><a/><a/>';
 		$xml .= '</root>';
 
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -665,7 +667,6 @@ class PseudoClassTest extends TestCase
 			if ($res) {
 				++$i;
 				static::assertInstanceOf(DOMElement::class, $n);
-				$name = $n->tagName;
 			}
 		}
 		// THis should be: 2 x a + 1 x b + 1 x c = 4
@@ -679,7 +680,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Third from beginning is second from last.
@@ -746,7 +747,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -757,7 +758,6 @@ class PseudoClassTest extends TestCase
 				static::assertInstanceOf(DOMElement::class, $n);
 				++$i;
 				static::assertInstanceOf(DOMElement::class, $n);
-				$name = $n->tagName;
 			}
 		}
 		$this->assertSame(15, $i, 'Less than or equal to 15.');
@@ -770,7 +770,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		// Odd
@@ -780,7 +780,6 @@ class PseudoClassTest extends TestCase
 			if ($res) {
 				++$i;
 				static::assertInstanceOf(DOMElement::class, $n);
-				$name = $n->tagName;
 			}
 		}
 		$this->assertSame(5, $i, 'Greater than the 15th element.');
@@ -793,7 +792,7 @@ class PseudoClassTest extends TestCase
 		$xml .= '</root>';
 
 		$ps = new PseudoClass();
-		[$ele, $root] = $this->doc($xml, 'root');
+		[, $root] = $this->doc($xml, 'root');
 		$nl = $root->childNodes;
 
 		$i = 0;
@@ -870,13 +869,16 @@ class PseudoClassTest extends TestCase
 		$ps = new PseudoClass();
 		$xml = '<?xml version="1.0"?><root><a href="foo"><b>test</b></a></root>';
 
-		[$ele, $root] = $this->doc($xml, 'a');
+		[$ele] = $this->doc($xml, 'a');
 		$node = $ele->childNodes->item(0);
 		$ret = $ps->elementMatches('scope', $node, $ele);
 		$this->assertFalse($ret);
 	}
 
-	protected function doc($string, $tagname)
+	/**
+	 * @return array{0:DOMNode, 1:DOMElement}
+	 */
+	protected function doc(string $string, string $tagname) : array
 	{
 		$doc = new DOMDocument('1.0');
 		$doc->loadXML($string);

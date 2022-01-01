@@ -21,7 +21,7 @@ $artist_url = 'http://musicbrainz.org/ws/1/artist/?type=xml&name=u2';
 $album_url = 'http://musicbrainz.org/ws/1/release/?type=xml&artistid=';
 try {
   $artist = qp($artist_url, 'artist:first');
-  if ($artist->size() > 0) {
+  if ($artist->count() > 0) {
     $id = $artist->attr('id');
     print '<p>The best match we found was for ' . $artist->children('name')->text() . PHP_EOL;
     print '</p><p>Artist ID: ' . $id . PHP_EOL;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPathTests\Extension;
 
+use QueryPath\DOMQuery;
 use QueryPath\Extension\QPXML;
 use QueryPath\QueryPath;
 use QueryPathTests\TestCase;
@@ -26,14 +27,28 @@ class QPXMLTest extends TestCase
 		$this->assertSame('This is a CDATA section.', qp($this->file, 'first')->cdata());
 
 		$msg = 'Another CDATA Section';
-		$this->assertSame($msg, qp($this->file, 'second')->cdata($msg)->top()->find('second')->cdata());
+		$qp1 = qp($this->file, 'second')->cdata($msg);
+		$this->assertInstanceOf(DOMQuery::class, $qp1);
+		$qp2 = $qp1->top();
+		$this->assertInstanceOf(DOMQuery::class, $qp2);
+		$qp3 = $qp2->find('second');
+		$this->assertInstanceOf(DOMQuery::class, $qp3);
+		$this->assertSame($msg, $qp3->cdata());
 	}
 
 	public function testComment() : void
 	{
-		$this->assertSame('This is a comment.', trim(qp($this->file, 'root')->comment()));
+		$qp = qp($this->file, 'root')->comment();
+		$this->assertIsString($qp);
+		$this->assertSame('This is a comment.', trim($qp));
 		$msg = 'Message';
-		$this->assertSame($msg, qp($this->file, 'second')->comment($msg)->top()->find('second')->comment());
+		$qp = qp($this->file, 'second');
+		$this->assertInstanceOf(DOMQuery::class, $qp);
+		$qp2 = $qp->comment($msg);
+		$this->assertInstanceOf(DOMQuery::class, $qp2);
+		$qp3 = $qp2->top();
+		$this->assertInstanceOf(DOMQuery::class, $qp3);
+		$this->assertSame($msg, $qp3->find('second')->comment());
 	}
 
 	public function testProcessingInstruction() : void
@@ -42,6 +57,8 @@ class QPXMLTest extends TestCase
 		$this->assertIsString($pi);
 		$this->assertSame('This is a processing instruction.', trim($pi));
 		$msg = 'Message';
-		$this->assertSame($msg, qp($this->file, 'second')->pi('qp', $msg)->top()->find('second')->pi());
+		$qp_pi = qp($this->file, 'second')->pi('qp', $msg);
+		$this->assertInstanceOf(DOMQuery::class, $qp_pi);
+		$this->assertSame($msg, $qp_pi->top()->find('second')->pi());
 	}
 }

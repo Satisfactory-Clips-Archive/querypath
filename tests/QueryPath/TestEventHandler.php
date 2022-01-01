@@ -25,25 +25,9 @@ class TestEventHandler implements EventHandler
 	{
 	}
 
-	public function getStack() : array
-	{
-		return $this->stack;
-	}
-
-	public function dumpStack() : void
-	{
-		echo "\nExpected:\n";
-		$format = "Element %d: %s\n";
-		foreach ($this->expect as $item) {
-			printf($format, $item->eventType(), implode(',', $item->params()));
-		}
-
-		echo "Got:\n";
-		foreach ($this->stack as $item) {
-			printf($format, $item->eventType(), implode(',', $item->params()));
-		}
-	}
-
+	/**
+	 * @param list<TestEvent> $stack
+	 */
 	public function expectsSmth(array $stack) : void
 	{
 		$this->expect = $stack;

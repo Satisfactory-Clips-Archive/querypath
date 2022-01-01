@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace QueryPathTests\Extension;
 
+use QueryPath\DOMQuery;
 use QueryPath\Extension\QPXSL;
 use QueryPath\QueryPath;
 use QueryPathTests\TestCase;
 
 class QPXSLTest extends TestCase
 {
-	protected $file = './test/advanced.xml';
-
 	public static function setUpBeforeClass() : void
 	{
 		QueryPath::enable(QPXSL::class);
@@ -52,6 +51,7 @@ class QPXSLTest extends TestCase
     ';
 
 		$qp = qp($orig)->xslt($template);
-		$this->assertSame(2, $qp->top('h1')->size(), 'Make sure that data was formatted');
+		$this->assertInstanceOf(DOMQuery::class, $qp);
+		$this->assertSame(2, $qp->top('h1')->count(), 'Make sure that data was formatted');
 	}
 }

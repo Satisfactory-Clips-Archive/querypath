@@ -20,8 +20,6 @@ class OptionsTest extends TestCase
 
 		$results = Options::get();
 		$this->assertSame($expect, $results);
-
-		$this->assertSame('val1', $results['test1']);
 	}
 
 	public function testQPOverrideOrder() : void

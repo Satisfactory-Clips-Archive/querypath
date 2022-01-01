@@ -33,7 +33,7 @@ trait QueryMutators
 	 * empty() function. However, `empty` is a built-in in PHP, and cannot be used as a
 	 * function name.
 	 *
-	 * @return \QueryPath\DOMQuery
+	 * @return $this
 	 *  The DOMQuery object with the newly emptied elements
 	 *
 	 * @see        removeChildren()
@@ -1110,7 +1110,7 @@ trait QueryMutators
 	 * This is equivalent to jQuery's empty() function. (However, empty() is a
 	 * PHP built-in, and cannot be used as a method name.)
 	 *
-	 * @return \QueryPath\DOMQuery
+	 * @return $this
 	 *  The DOMQuery object with the child nodes removed
 	 *
 	 * @see replaceWith()

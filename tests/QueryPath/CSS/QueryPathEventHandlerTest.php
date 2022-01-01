@@ -6,9 +6,13 @@ namespace QueryPathTests\CSS;
 
 use DomDocument;
 use DOMElement;
+use DOMNode;
 use const LIBXML_NOBLANKS;
 use QueryPath\CSS\QueryPathEventHandler;
+use QueryPath\TextContent;
 use QueryPathTests\TestCase;
+use SplObjectStorage;
+use UnexpectedValueException;
 
 /**
  * Tests for QueryPathEventHandler class.
@@ -18,7 +22,7 @@ use QueryPathTests\TestCase;
  */
 class QueryPathEventHandlerTest extends TestCase
 {
-	public $xml = '<?xml version="1.0" ?>
+	const xml = '<?xml version="1.0" ?>
   <html>
   <head>
     <title>This is the title</title>
@@ -61,6 +65,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertTrue(1 === $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('test', $match->tagName);
 
 		// Test handling single element
@@ -69,6 +74,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(1, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('test', $match->tagName);
 
 		// Test handling a node list
@@ -77,6 +83,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(2, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('inside', $match->tagName);
 
 		// Test handling an array of elements
@@ -89,6 +96,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(2, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('inside', $match->tagName);
 	}
 
@@ -119,6 +127,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(2, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('t:inside', $match->tagName);
 
 		// Basic test
@@ -127,6 +136,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(1, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('t:test', $match->tagName);
 	}
 
@@ -153,10 +163,11 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(2, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('inside', $match->tagName);
 
 		$doc = new DomDocument();
-		$doc->loadXML($this->xml);
+		$doc->loadXML(self::xml);
 
 		// Test getting nested
 		$handler = new QueryPathEventHandler($doc);
@@ -164,6 +175,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(3, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('div', $match->tagName);
 		$this->assertSame('one', $match->getAttribute('id'));
 
@@ -173,6 +185,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(10, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		//$this->assertEquals('div', $match->tagName);
 		$this->assertSame('li-one', $match->getAttribute('id'));
 
@@ -182,6 +195,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(1, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('html', $match->tagName);
 	}
 
@@ -197,6 +211,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(1, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('inside', $match->tagName);
 
 		// Test a search with restricted scope:
@@ -206,6 +221,7 @@ class QueryPathEventHandlerTest extends TestCase
 
 		$this->assertSame(1, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('inside', $match->tagName);
 	}
 
@@ -222,6 +238,7 @@ class QueryPathEventHandlerTest extends TestCase
 
 		$this->assertSame(3, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('ns1:test', $match->tagName);
 
 		// Test Issue #30:
@@ -240,6 +257,7 @@ class QueryPathEventHandlerTest extends TestCase
 
 		$this->assertSame(1, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('ns1:inside', $match->tagName);
 	}
 
@@ -256,10 +274,11 @@ class QueryPathEventHandlerTest extends TestCase
 
 		$this->assertSame(3, $matches->count());
 		$match = $this->firstMatch($matches);
+		$this->assertInstanceOf(DOMElement::class, $match);
 		$this->assertSame('test', $match->tagName);
 
 		$doc = new DomDocument();
-		$doc->loadXML($this->xml);
+		$doc->loadXML(self::xml);
 
 		// Test handing it a DOM Document
 		$handler = new QueryPathEventHandler($doc);
@@ -295,7 +314,7 @@ class QueryPathEventHandlerTest extends TestCase
 
 		// Test class in element
 		$doc = new DomDocument();
-		$doc->loadXML($this->xml);
+		$doc->loadXML(self::xml);
 		$handler = new QueryPathEventHandler($doc);
 		$handler->find('li.Odd');
 		$matches = $handler->getMatches();
@@ -504,7 +523,7 @@ class QueryPathEventHandlerTest extends TestCase
 	{
 		$xml = '<?xml version="1.0"?><a><b href="foo"/><c href="foo"/></a>';
 		$qp = qp($xml, ':link');
-		$this->assertSame(2, $qp->size());
+		$this->assertSame(2, $qp->count());
 	}
 
 	public function testPseudoClassXReset() : void
@@ -569,6 +588,7 @@ class QueryPathEventHandlerTest extends TestCase
 		$handler->find('#one');
 		$matches = $handler->getMatches();
 		$peers = $handler->listPeerElements($this->firstMatch($matches));
+		$this->assertTrue(is_countable($peers));
 		$this->assertCount(6, $peers);
 	}
 
@@ -1322,13 +1342,13 @@ class QueryPathEventHandlerTest extends TestCase
 		$handler->find('outer::first-letter');
 		$matches = $handler->getMatches();
 		$this->assertSame(1, $matches->count());
-		$this->assertSame('T', $this->firstMatch($matches)->textContent);
+		$this->assertSame('T', $this->firstMatch($matches, true)->textContent);
 
 		$handler = new QueryPathEventHandler($doc);
 		$handler->find('outer::first-line');
 		$matches = $handler->getMatches();
 		$this->assertSame(1, $matches->count());
-		$this->assertSame('Texts', $this->firstMatch($matches)->textContent);
+		$this->assertSame('Texts', $this->firstMatch($matches, true)->textContent);
 	}
 
 	public function testAdjacent() : void
@@ -1466,19 +1486,71 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('inner-inner-one', $this->nthMatch($matches, 1)->getAttribute('id'));
 	}
 
-	private function firstMatch($matches)
+	/**
+	 * @template T as bool
+	 *
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $matches
+	 *
+	 * @return (T is false ? DOMElement : (DOMElement|TextContent))
+	 */
+	private function firstMatch(SplObjectStorage $matches, bool $usingTextContentOnly = false) : DOMElement|TextContent
 	{
 		$matches->rewind();
 
-		return $matches->current();
+		$current = $matches->current();
+
+		if (
+			( ! $usingTextContentOnly && ! ($current instanceof DOMElement))
+			|| (
+				$usingTextContentOnly
+				&& ! (
+					($current instanceof DOMElement)
+					|| ($current instanceof TextContent)
+				)
+			)
+		) {
+			throw new UnexpectedValueException(
+				'nth match not found!'
+			);
+		}
+
+		return $current;
 	}
 
-	private function nthMatch($matches, $n = 0)
+	/**
+	 * @template T as bool
+	 *
+	 * @param SplObjectStorage<DOMNode|TextContent, mixed> $matches
+	 *
+	 * @return (T is false ? DOMElement : (DOMElement|TextContent))
+	 */
+	private function nthMatch(SplObjectStorage $matches, int $n = 0, bool $usingTextContentOnly = false) : DOMElement|TextContent
 	{
+		/** @var DOMNode|TextContent|null */
+		$match = null;
+
 		foreach ($matches as $m) {
 			if ($matches->key() === $n) {
-				return $m;
+				$match = $m;
+				break;
 			}
 		}
+
+		if (
+			( ! $usingTextContentOnly && ! ($match instanceof DOMElement))
+			|| (
+				$usingTextContentOnly
+				&& ! (
+					($match instanceof DOMElement)
+					|| ($match instanceof TextContent)
+				)
+			)
+		) {
+			throw new UnexpectedValueException(
+				'nth match not found!'
+			);
+		}
+
+		return $match;
 	}
 }

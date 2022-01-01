@@ -15,14 +15,13 @@ use QueryPath\Extension;
  */
 class StubExtensionOne implements Extension
 {
-	private $qp = null;
-
-	public function __construct(\QueryPath\Query $qp)
+	public function __construct(
+		private \QueryPath\Query $qp
+	)
 	{
-		$this->qp = $qp;
 	}
 
-	public function stubToe()
+	public function stubToe() : \QueryPath\Query
 	{
 		$this->qp->top()->append('<toe/>')->end();
 

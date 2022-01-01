@@ -335,7 +335,6 @@ class ParserTest extends TestCase
 		$parser = new Parser($selector, $handler);
 		$parser->parse();
 
-		//$handler->dumpStack();
 		$this->assertTrue($handler->success());
 	}
 
@@ -367,7 +366,6 @@ class ParserTest extends TestCase
 		$parser = new Parser($selector, $handler);
 		$parser->parse();
 
-		//$handler->dumpStack();
 
 		$this->assertTrue($handler->success());
 
@@ -380,7 +378,6 @@ class ParserTest extends TestCase
 		$parser = new Parser($selector, $handler);
 		$parser->parse();
 
-		$handler->dumpStack();
 		$this->assertTrue($handler->success());
 		*/
 	}

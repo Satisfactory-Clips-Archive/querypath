@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace QueryPathTests;
 
+use Exception;
+use QueryPath\DOMQuery;
 use QueryPath\Extension;
 use QueryPath\ExtensionRegistry;
 
@@ -38,7 +40,9 @@ class QueryPathExtensionTest extends TestCase
 
 	public function testStubToe() : void
 	{
-		$this->assertSame(1, qp(self::DATA_FILE_XML, 'unary')->stubToe()->top(':root > toe')->size());
+		$qp = qp(self::DATA_FILE_XML, 'unary')->stubToe();
+		$this->assertInstanceOf(DOMQuery::class, $qp);
+		$this->assertSame(1, $qp->top(':root > toe')->count());
 	}
 
 	public function testStuble() : void

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPathTests;
 
+use QueryPath\DOMQuery;
 use QueryPath\QueryPath;
 
 class QueryPathTest extends TestCase
@@ -12,28 +13,28 @@ class QueryPathTest extends TestCase
 	{
 		$qp = QueryPath::with(QueryPath::XHTML_STUB);
 
-		$this->assertInstanceOf('\QueryPath\DOMQuery', $qp);
+		$this->assertInstanceOf(DOMQuery::class, $qp);
 	}
 
 	public function testWithHTML() : void
 	{
 		$qp = QueryPath::with(QueryPath::HTML_STUB);
 
-		$this->assertInstanceOf('\QueryPath\DOMQuery', $qp);
+		$this->assertInstanceOf(DOMQuery::class, $qp);
 	}
 
 	public function testWithHTML5() : void
 	{
 		$qp = QueryPath::withHTML5(QueryPath::HTML5_STUB);
 
-		$this->assertInstanceOf('\QueryPath\DOMQuery', $qp);
+		$this->assertInstanceOf(DOMQuery::class, $qp);
 	}
 
 	public function testWithXML() : void
 	{
 		$qp = QueryPath::with(QueryPath::XHTML_STUB);
 
-		$this->assertInstanceOf('\QueryPath\DOMQuery', $qp);
+		$this->assertInstanceOf(DOMQuery::class, $qp);
 	}
 
 	public function testEnable() : void
@@ -43,18 +44,5 @@ class QueryPathTest extends TestCase
 		$qp = QueryPath::with(QueryPath::XHTML_STUB);
 
 		$this->assertTrue($qp->grrrrrrr());
-	}
-}
-
-class DummyExtension implements \QueryPath\Extension
-{
-	public function __construct(\QueryPath\Query $qp)
-	{
-		$this->qp = $qp;
-	}
-
-	public function grrrrrrr()
-	{
-		return true;
 	}
 }

@@ -13,14 +13,13 @@ use QueryPath\Extension;
  */
 class StubExtensionTwo implements Extension
 {
-	private $qp = null;
-
-	public function __construct(\QueryPath\Query $qp)
+	public function __construct(
+		private \QueryPath\Query $qp
+	)
 	{
-		$this->qp = $qp;
 	}
 
-	public function stuble($arg1, $arg2)
+	public function stuble(string $arg1, string $arg2) : string
 	{
 		return $arg1 . $arg2;
 	}

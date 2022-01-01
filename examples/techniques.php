@@ -51,7 +51,7 @@ function callbackFunction($index, $element) {
 $qp->each('callbackFunction');
 
 // Loop through by index/count
-for ($i = 0; $i < $qp->size(); ++$i) {
+for ($i = 0; $i < $qp->count(); ++$i) {
   $domElement = $qp->get($i);
   print $domElement->tagName . PHP_EOL;
 }

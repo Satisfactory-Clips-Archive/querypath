@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace QueryPathTests\CSS;
 
 use QueryPath\CSS\EventHandler;
+use QueryPath\CSS\Selector;
 use QueryPath\CSS\SimpleSelector;
 use QueryPathTests\TestCase;
 
@@ -71,6 +72,7 @@ class SelectorTest extends TestCase
 	{
 		$selector = $this->parse('[myns|foo=bar]')->toArray();
 
+		/** @var array{ns:string, name:string} */
 		$attr = $selector[0][0]->attributes[0];
 
 		$this->assertSame('myns', $attr['ns']);
@@ -119,10 +121,10 @@ class SelectorTest extends TestCase
 		$selector = $this->parse('foo::bar');
 
 		$iterator = $selector->getIterator();
-		$this->assertInstanceOf('\Iterator', $iterator);
+		$this->assertInstanceOf(\Iterator::class, $iterator);
 	}
 
-	protected function parse($selector)
+	protected function parse(string $selector) : Selector
 	{
 		$handler = new \QueryPath\CSS\Selector();
 		$parser = new \QueryPath\CSS\Parser($selector, $handler);

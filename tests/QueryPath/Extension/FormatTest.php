@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace QueryPathTests\Extension;
 
 use DOMElement;
+use QueryPath\DOMQuery;
 use QueryPath\Extension\Format;
 use QueryPath\QueryPath;
 use QueryPath\TextContent;
@@ -21,7 +22,13 @@ class FormatTest extends TestCase
 	{
 		QueryPath::enable(Format::class);
 		$qp = qp('<?xml version="1.0"?><root><div>_apple_</div><div>_orange_</div></root>');
-		$qp->find('div')->format('strtoupper')->format('trim', '_')->format(static function ($text) {
+		$qp_find = $qp->find('div');
+		$this->assertInstanceOf(DOMQuery::class, $qp_find);
+		$qp_format1 = $qp_find->format('strtoupper');
+		$this->assertInstanceOf(DOMQuery::class, $qp_format1);
+		$qp_format2 = $qp_format1->format('trim', '_');
+		$this->assertInstanceOf(DOMQuery::class, $qp_format2);
+		$qp_format2->format(static function (string $text) {
 			return '*' . $text . '*';
 		});
 
@@ -46,8 +53,11 @@ class FormatTest extends TestCase
 			'<item label="_orange_" total="987,654,321" />' .
 			'</root>');
 
-		$qp->find('item')
-			->formatAttr('label', 'trim', '_')
+		$qp_format1 = $qp->find('item');
+		$this->assertInstanceOf(DOMQuery::class, $qp_format1);
+		$qp_format2 = $qp_format1->formatAttr('label', 'trim', '_');
+		$this->assertInstanceOf(DOMQuery::class, $qp_format2);
+		$qp_format2
 			->formatAttr('total', 'str_replace[2]', ',', '')
 		;
 
