@@ -43,6 +43,11 @@
 	},
 	"require": {
 		"php": "^8.1",
+		"ext-ctype": "*",
+		"ext-dom": "*",
+		"ext-filter": "*",
+		"ext-libxml": "*",
+		"ext-mbstring": "*",
 		"ext-xsl": "*",
 		"masterminds/html5": "^2.7"
 	},
