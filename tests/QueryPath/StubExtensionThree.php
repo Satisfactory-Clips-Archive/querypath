@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace QueryPathTests;
 
 use QueryPath\Extension;
-use QueryPath\ExtensionRegistry;
 use QueryPath\Query;
 
 /**
