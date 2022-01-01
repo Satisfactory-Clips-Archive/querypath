@@ -82,28 +82,6 @@ class Parser
 	}
 
 	/**
-	 * A restricted parser that can only parse simple selectors.
-	 * The pseudoClass handler for this parser will throw an
-	 * exception if it encounters a pseudo-element or the
-	 * negation pseudo-class.
-	 *
-	 * @deprecated this is not used anywhere in QueryPath and
-	 *  may be removed
-	 */ /*
-  public function parseSimpleSelector() {
-	while ($this->getScanner()->token !== FALSE) {
-	  $this->allElements();
-	  $this->elementName();
-	  $this->elementClass();
-	  $this->elementID();
-	  $this->pseudoClass(TRUE); // Operate in restricted mode.
-	  $this->attribute();
-
-	  // TODO: Need to add failure conditions here.
-	}
-  }*/
-
-	/**
 	 * Handle an entire CSS selector.
 	 *
 	 * @throws Exception
@@ -321,42 +299,7 @@ class Parser
 	private function pseudoClassValue() : ?string
 	{
 		if (Token::LPAREN === $this->getScanner()->token) {
-			$buf = '';
-
-			// For now, just leave pseudoClass value vague.
-			/*
-			// We have to peek to see if next char is a colon because
-			// pseudo-classes and pseudo-elements are legal strings here.
-			print $this->getScanner()->peek();
-			if ($this->getScanner()->peek() == ':') {
-			  print "Is pseudo\n";
-			  $this->getScanner()->nextToken();
-
-			  // Pseudo class
-			  if ($this->getScanner()->token == Token::colon) {
-				$buf .= ':';
-				$this->getScanner()->nextToken();
-				// Pseudo element
-				if ($this->getScanner()->token == Token::colon) {
-				  $buf .= ':';
-				  $this->getScanner()->nextToken();
-				}
-				// Ident
-				$buf .= $this->getScanner()->getNameString();
-			  }
-			}
-			else {
-			  print "fetching string.\n";
-			  $buf .= $this->getScanner()->getQuotedString();
-			  if ($this->getScanner()->token != Token::rparen) {
-				$this->throwError(Token::rparen, $this->getScanner()->token);
-			  }
-			  $this->getScanner()->nextToken();
-			}
-			return $buf;
-			*/
-			//$buf .= $this->getScanner()->getQuotedString();
-			$buf .= $this->getScanner()->getPseudoClassString();
+			$buf = $this->getScanner()->getPseudoClassString();
 
 			return $buf;
 		}

@@ -160,18 +160,15 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 					}
 				}
 			} elseif ($document instanceof self) {
-				//$this->matches = $document->get(NULL, TRUE);
 				$this->setMatches($document->get(null, true));
 				if ($this->getMatches()->count() > 0) {
 					$this->document = $this->getFirstMatch()->ownerDocument ?? null;
 				}
 			} elseif ($document instanceof DOMDocument) {
 				$this->document = $document;
-				//$this->matches = $this->matches($document->documentElement);
 				$this->setMatches($document->documentElement);
 			} elseif ($document instanceof DOMNode) {
 				$this->document = $document->ownerDocument;
-				//$this->matches = array($document);
 				$this->setMatches($document);
 			} elseif ($document instanceof \Masterminds\HTML5) {
 				$this->document = $document;
@@ -191,18 +188,15 @@ abstract class DOM implements Query, IteratorAggregate, Countable
 			} else { // SimpleXMLElement
 				$import = dom_import_simplexml($document);
 				$this->document = $import->ownerDocument;
-				//$this->matches = array($import);
 				$this->setMatches($import);
 			}
 		} elseif (is_array($document)) {
-			//trigger_error('Detected deprecated array support', E_USER_NOTICE);
 			if ((($document[0] ?? null) instanceof DOMNode)) {
 				/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 				$found = new SplObjectStorage();
 				foreach ($document as $item) {
 					$found->attach($item);
 				}
-				//$this->matches = $found;
 				$this->setMatches($found);
 				$this->document = $this->getFirstMatch()->ownerDocument ?? null;
 			}

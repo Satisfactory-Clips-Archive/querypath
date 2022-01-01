@@ -21,7 +21,6 @@ class XMLIshTest extends TestCase
 			"this is just some plain\ntext with a line break." => false,
 			'2 > 1' => false,
 			'1 < 2' => false,
-			//'1 < 2 > 1' => FALSE,
 			'<html/>' => true,
 			'<?xml version="1.0"?><root/>' => true,
 			'<tag/><tag/><tag/>' => true, // It's not valid, but HTML parser will try it.

@@ -733,12 +733,6 @@ class PseudoClassTest extends TestCase
 		$this->assertTrue($ret);
 	}
 
-	/* Deprecated and removed.
-	public function testXRoot() {
-	}
-	public function testXReset() {
-	}
-	 */
 	public function testLt() : void
 	{
 		$xml = '<?xml version="1.0"?><root>';

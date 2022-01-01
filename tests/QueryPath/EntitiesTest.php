@@ -43,7 +43,6 @@ class EntitiesTest extends TestCase
 	public function testQPEntityReplacement() : void
 	{
 		$test = '<?xml version="1.0"?><root>&amp;&copy;&#38;& nothing.</root>';
-		/*$expect = '<?xml version="1.0"?><root>&#38;&#169;&#38;&#38; nothing.</root>';*/
 		// We get this because the DOM serializer re-converts entities.
 		$expect = '<?xml version="1.0"?>
 <root>&amp;&#xA9;&amp;&amp; nothing.</root>';

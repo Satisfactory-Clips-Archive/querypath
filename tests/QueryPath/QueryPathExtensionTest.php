@@ -89,12 +89,4 @@ class QueryPathExtensionTest extends TestCase
 		$this->expectException(\QueryPath\Exception::class);
 		qp()->foo();
 	}
-
-	// This does not (and will not) throw an exception.
-	// /**
-	//   * @expectedException QueryPathException
-	//   */
-	//  public function testExtendNoSuchClass() {
-	//    ExtensionRegistry::extend('StubExtensionFour');
-	//  }
 }

@@ -367,17 +367,5 @@ class ParserTest extends TestCase
 		$parser->parse();
 
 		$this->assertTrue($handler->success());
-
-		/*
-		// Again, with spaces this time:
-		$selector = ' *|ele1 > ele2. class1 + ns1|ele3. class2[ attr=simple] ~ .class2[attr2 ~= "longer string of text."]:pseudoClass(value) .class3::pseudoElement';
-
-		$handler = new TestEventHandler();
-		$handler->expects($expect);
-		$parser = new Parser($selector, $handler);
-		$parser->parse();
-
-		$this->assertTrue($handler->success());
-		*/
 	}
 }

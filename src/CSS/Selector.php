@@ -166,7 +166,6 @@ class Selector implements EventHandler, IteratorAggregate, Countable
 		$this->currSelector->combinator = $combinatorName;
 		$this->currSelector = new SimpleSelector();
 		array_unshift($this->selectors[$this->groupIndex], $this->currSelector);
-		//$this->selectors[]= $this->currSelector;
 	}
 
 	public function directDescendant() : void

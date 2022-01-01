@@ -553,7 +553,6 @@ class DOMQuery extends DOM
 		foreach ($list as $node) {
 			$found->attach($node);
 		}
-		//$this->setMatches($found);
 
 		// Do DOM modifications only if necessary.
 		if ($modifyDOM) {
@@ -763,7 +762,6 @@ class DOMQuery extends DOM
 			}
 
 			// Parse the HTML and insert it into the DOM
-			//$doc = DOMDocument::loadHTML($markup);
 			$doc = $this->document()->createDocumentFragment();
 			$doc->appendXML($markup);
 			$this->removeChildren();

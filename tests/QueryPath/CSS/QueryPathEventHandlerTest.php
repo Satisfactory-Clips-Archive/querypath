@@ -567,28 +567,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('test', $this->firstMatch($matches)->tagName);
 	}
 
-	/*
-	public function testChildAtIndex() {
-	  $xml = '<?xml version="1.0" ?>
-	  <test>
-		<i class="odd" id="one"/>
-		<i class="even" id="two"/>
-		<i class="odd" id="three"/>
-		<i class="even" id="four"/>
-		<i class="odd" id="five"/>
-		<e class="even" id="six"/>
-	  </test>';
-	  $doc = new \DomDocument();
-	  $doc->loadXML($xml);
-
-	  // Test full list
-	  $handler = new QueryPathEventHandler($doc);
-	  $handler->find('test:child-at-index(1)');
-	  $matches = $handler->getMatches();
-	  $this->assertEquals(1, $matches->count());
-	  $this->assertEquals('one', $this->nthMatch($matches, 1)->getAttribute('id'));
-	}*/
-
 	public function testPseudoClassNthChild() : void
 	{
 		$xml = '<?xml version="1.0" ?>
@@ -645,14 +623,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame(2, $matches->count());
 		$this->assertSame('four', $this->nthMatch($matches, 1)->getAttribute('id'));
 
-		// Not totally sure what should be returned here
-		// Test nth-child(-2n)
-		// $handler = new QueryPathEventHandler($doc);
-		//     $handler->find('i:nth-child(-2n)');
-		//     $matches = $handler->getMatches();
-		//     $this->assertEquals(2, $matches->count());
-		//     $this->assertEquals('four', $this->nthMatch($matches, 1)->getAttribute('id'));
-
 		// Test nth-child(2n-1) (odd, equiv to 2n + 1)
 		$handler = new QueryPathEventHandler($doc);
 		$handler->find('i:nth-child(2n-1)');
@@ -688,12 +658,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$matches = $handler->getMatches();
 		$this->assertSame(0, $matches->count());
 
-		// Test nth-child(-n+3) (First three lines)
-		// $handler = new QueryPathEventHandler($doc);
-		// $handler->find('i:nth-child(-n+3)');
-		// $matches = $handler->getMatches();
-		// $this->assertEquals(3, $matches->count());
-
 		$xml = '<?xml version="1.0" ?>
     <test>
       <i class="odd" id="one"/>
@@ -719,9 +683,7 @@ class QueryPathEventHandlerTest extends TestCase
 			static::assertInstanceOf(DOMElement::class, $m);
 			$matchIDs[] = $m->getAttribute('id');
 		}
-		//    $matchIDs = sort($matchIDs);
 		$this->assertSame(['one', 'three', 'inner-one', 'five'], $matchIDs);
-		//$this->assertEquals('inner-one', $matches[3]->getAttribute('id'));
 	}
 
 	public function testPseudoClassOnlyChild() : void
@@ -753,7 +715,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$handler->find('i:only-child');
 		$matches = $handler->getMatches();
 		$this->assertSame(0, $matches->count());
-		//$this->assertEquals('one', $this->firstMatch($matches)->getAttribute('id'));
 	}
 
 	public function testPseudoClassOnlyOfType() : void
@@ -891,7 +852,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$handler = new QueryPathEventHandler($doc);
 		$handler->find('#four > i:nth-last-child(-1n+2)');
 		$matches = $handler->getMatches();
-		//print $this->firstMatch($matches)->getAttribute('id');
 		$this->assertSame(2, $matches->count());
 		$this->assertSame('inner-three', $this->nthMatch($matches, 0)->getAttribute('id'));
 		$this->assertSame('inner-four', $this->nthMatch($matches, 1)->getAttribute('id'));
@@ -1380,7 +1340,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$handler = new QueryPathEventHandler($doc);
 		$handler->find('#one, #two');
 		$matches = $handler->getMatches();
-		//print $this->firstMatch($matches)->getAttribute('id') . PHP_EOL;
 		$this->assertSame(2, $matches->count());
 		$this->assertSame('two', $this->nthMatch($matches, 1)->getAttribute('id'));
 	}
@@ -1406,21 +1365,17 @@ class QueryPathEventHandlerTest extends TestCase
 		$handler = new QueryPathEventHandler($doc);
 		$handler->find('#one ~ li');
 		$matches = $handler->getMatches();
-		//print $this->firstMatch($matches)->getAttribute('id') . PHP_EOL;
 		$this->assertSame(4, $matches->count());
 		$this->assertSame('three', $this->nthMatch($matches, 1)->getAttribute('id'));
 
 		$handler = new QueryPathEventHandler($doc);
 		$handler->find('#two ~ li');
 		$matches = $handler->getMatches();
-		//print $this->firstMatch($matches)->getAttribute('id') . PHP_EOL;
 		$this->assertSame(3, $matches->count());
-		//$this->assertEquals('three', $this->nthMatch($matches, 1)->getAttribute('id'));
 
 		$handler = new QueryPathEventHandler($doc);
 		$handler->find('#inner-one > li ~ il');
 		$matches = $handler->getMatches();
-		//print $this->firstMatch($matches)->getAttribute('id') . PHP_EOL;
 		$this->assertSame(1, $matches->count());
 		$this->assertSame('inner-inner-two', $this->firstMatch($matches)->getAttribute('id'));
 	}

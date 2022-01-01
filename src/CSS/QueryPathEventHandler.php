@@ -258,9 +258,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			if ($item->tagName == $name) {
 				$found->attach($item);
 			}
-			// Search for matching kids.
-			//$nl = $item->getElementsByTagName($name);
-			//$found = array_merge($found, $this->nodeListToArray($nl));
 		}
 
 		$this->matches = $found;
@@ -308,8 +305,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 					)
 				);
 				$nl = $item->getElementsByTagNameNS($nsuri, $name);
-				// If something is found, merge them:
-				//if (!empty($nl)) $found = array_merge($found, $this->nodeListToArray($nl));
 				if (count($nl)) {
 					$this->attachNodeList($nl, $found);
 				}
@@ -320,7 +315,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 						'match not a DOMElement instance!'
 					)
 				);
-				//$nl = $item->getElementsByTagName($namespace . ':' . $name);
 				$nl = $item->getElementsByTagName($name);
 				$tagname = ($namespace ?? '') . ':' . $name;
 				foreach ($nl as $node) {
@@ -329,8 +323,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 						$found->attach($node);
 					}
 				}
-				// If something is found, merge them:
-				//if (!empty($nsmatches)) $found = array_merge($found, $nsmatches);
 			}
 		}
 		$this->matches = $found;
@@ -340,7 +332,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
-		//$this->findAnyElement = TRUE;
 		$matches = $this->candidateList();
 		foreach ($matches as $item) {
 			$found->attach($item); // Add self
@@ -362,7 +353,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				'dom property was not a DOMNode instance!'
 			)
 		);
-		//$this->findAnyElement = TRUE;
 		$nsuri = $this->dom->lookupNamespaceURI($ns);
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
@@ -441,8 +431,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			return;
 		}
 
-		// Get the namespace URI for the given label.
-		//$uri = $matches[0]->lookupNamespaceURI($ns);
 		$matches->rewind();
 		$e = $matches->current();
 		assert(
@@ -460,9 +448,7 @@ class QueryPathEventHandler implements EventHandler, Traverser
 					'match was not a DOMElement instance!'
 				)
 			);
-			//foreach ($item->attributes as $attr) {
-			//  print "$attr->prefix:$attr->localName ($attr->namespaceURI), Value: $attr->nodeValue\n";
-			//}
+
 			if ($item->hasAttributeNS($uri, $name)) {
 				if (isset($value)) {
 					if ($this->attrValMatches($value, $item->getAttributeNS($uri, $name), $operation)) {
@@ -834,7 +820,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	{
 		$this->findAnyElement = false;
 		// List of nodes that are immediately adjacent to the current one.
-		//$found = array();
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($this->matches as $item) {
@@ -889,13 +874,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 			$sibs = new SplObjectStorage();
 			foreach ($this->matches as $item) {
-				/*$candidates = $item->parentNode->childNodes;
-				foreach ($candidates as $candidate) {
-				  if ($candidate->nodeType === XML_ELEMENT_NODE && $candidate !== $item) {
-					$sibs->attach($candidate);
-				  }
-				}
-				*/
 				while (null != ($item->nextSibling ?? null)) {
 					$item = $item->nextSibling ?? null;
 					if ($item instanceof DOMElement) {
@@ -929,17 +907,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		// Set depth flag:
 		$this->findAnyElement = true;
 	}
-	/*
-	public function nodeListToArray($nodeList) {
-	  $array = array();
-	  foreach ($nodeList as $node) {
-		if ($node->nodeType == XML_ELEMENT_NODE) {
-		  $array[] = $node;
-		}
-	  }
-	  return $array;
-	}
-	*/
 
 	/**
 	 * Attach all nodes in a node list to the given \SplObjectStorage.
@@ -1042,27 +1009,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	}
 
 	/**
-	 * Reverse a set of matches.
-	 *
-	 * This is now necessary because internal matches are no longer represented
-	 * as arrays.
-	 *
-	 * @since QueryPath 2.0
-	 *
-	 * @param mixed $groupSize
-	 * @param mixed $elementInGroup
-	 */ /*
-  private function reverseMatches() {
-	// Reverse the candidate list. There must be a better way of doing
-	// this.
-	$arr = array();
-	foreach ($this->matches as $m) array_unshift($arr, $m);
-
-	$this->found = new \SplObjectStorage();
-	foreach ($arr as $item) $this->found->attach($item);
-  }*/
-
-	/**
 	 * Pseudo-class handler for :nth-last-child and related pseudo-classes.
 	 */
 	protected function nthLastChild(int $groupSize, int $elementInGroup) : void
@@ -1070,108 +1016,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		// New in Quark.
 		$this->nthChild($groupSize, $elementInGroup, true);
 	}
-
-	/**
-	 * Get a list of peer elements.
-	 * If $requireSameTag is TRUE, then only peer elements with the same
-	 * tagname as the given element will be returned.
-	 *
-	 * @param $element
-	 *  A DomElement
-	 * @param $requireSameTag
-	 *  Boolean flag indicating whether all matches should have the same
-	 *  element name (tagName) as $element
-	 * @param mixed $groupSize
-	 * @param mixed $elementInGroup
-	 * @param mixed $lastChild
-	 *
-	 * @return
-	 *  Array of peer elements
-	 */ /*
-  protected function listPeerElements($element, $requireSameTag = FALSE) {
-	$peers = array();
-	$parent = $element->parentNode;
-	foreach ($parent->childNodes as $node) {
-	  if ($node->nodeType == XML_ELEMENT_NODE) {
-		if ($requireSameTag) {
-		  // Need to make sure that the tag matches:
-		  if ($element->tagName == $node->tagName) {
-			$peers[] = $node;
-		  }
-		}
-		else {
-		  $peers[] = $node;
-		}
-	  }
-	}
-	return $peers;
-  }
-  */
-	/**
-	 * Get the nth child (by index) from matching candidates.
-	 *
-	 * This is used by pseudo-class handlers.
-	 */
-	/*
-   protected function childAtIndex($index, $tagName = NULL) {
-	 $restrictToElement = !$this->findAnyElement;
-	 $matches = $this->candidateList();
-	 $defaultTagName = $tagName;
-
-	 // XXX: Added in Quark: I believe this should return an empty
-	 // match set if no child was found tat the index.
-	 $this->matches = new \SplObjectStorage();
-
-	 foreach ($matches as $item) {
-	   $parent = $item->parentNode;
-
-	   // If a default tag name is supplied, we always use it.
-	   if (!empty($defaultTagName)) {
-		 $tagName = $defaultTagName;
-	   }
-	   // If we are inside of an element selector, we use the
-	   // tag name of the given elements.
-	   elseif ($restrictToElement) {
-		 $tagName = $item->tagName;
-	   }
-	   // Otherwise, we skip the tag name match.
-	   else {
-		 $tagName = NULL;
-	   }
-
-	   // Loop through all children looking for matches.
-	   $i = 0;
-	   foreach ($parent->childNodes as $child) {
-		 if ($child->nodeType !== XML_ELEMENT_NODE) {
-		   break; // Skip non-elements
-		 }
-
-		 // If type is set, then we do type comparison
-		 if (!empty($tagName)) {
-		   // Check whether tag name matches the type.
-		   if ($child->tagName == $tagName) {
-			 // See if this is the index we are looking for.
-			 if ($i == $index) {
-			   //$this->matches = new \SplObjectStorage();
-			   $this->matches->attach($child);
-			   return;
-			 }
-			 // If it's not the one we are looking for, increment.
-			 ++$i;
-		   }
-		 }
-		 // We don't care about type. Any tagName will match.
-		 else {
-		   if ($i == $index) {
-			 $this->matches->attach($child);
-			 return;
-		   }
-		   ++$i;
-		 }
-	   } // End foreach
-	 }
-
-   }*/
 
 	/**
 	 * Pseudo-class handler for nth-of-type-child.
@@ -1310,7 +1154,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 	protected function not(string $filter) : void
 	{
 		$matches = $this->candidateList();
-		//$found = array();
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		foreach ($matches as $item) {
@@ -1478,7 +1321,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				if (XML_ELEMENT_NODE == $kid->nodeType
 					&& $kid->tagName == $item->tagName
 					&& $kid !== $item) {
-					//$this->matches = new \SplObjectStorage();
 					$onlyOfType = false;
 					break;
 				}
@@ -1591,20 +1433,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 					$found->attach($item);
 				}
 				break;
-			// case 'even':
-			//         for ($i = 1; $i <= count($matches); ++$i) {
-			//           if ($i % 2 == 0) {
-			//             $found[] = $matches[$i];
-			//           }
-			//         }
-			//         break;
-			//       case 'odd':
-			//         for ($i = 1; $i <= count($matches); ++$i) {
-			//           if ($i % 2 == 0) {
-			//             $found[] = $matches[$i];
-			//           }
-			//         }
-			//         break;
 			case 'lt':
 				$i = 0;
 				foreach ($matches as $item) {
@@ -1668,7 +1496,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 			$found->attach($item); // put self in
 			/** @var DOMNodeList<DOMNode> */
 			$nl = $item->getElementsByTagName('*');
-			//foreach ($nl as $node) $found[] = $node;
 			$this->attachNodeList($nl, $found);
 		}
 

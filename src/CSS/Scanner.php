@@ -98,18 +98,16 @@ final class Scanner
 				gettype($ch)
 			))
 		);
-		//print __FUNCTION__ . " Testing $ch.\n";
 		if (ctype_space($ch)) {
 			$this->value = ' '; // Collapse all WS to a space.
 			$this->token = $tok = Token::WHITE;
 
-			//$ch = $this->is->consume();
 			return $tok;
 		}
 
 		if ('-' === $ch || '_' === $ch || ctype_alnum($ch)) {
 			// It's a character
-			$this->value = $ch; //strtolower($ch);
+			$this->value = $ch;
 			$this->token = $tok = Token::CHAR;
 
 			return $tok;
@@ -249,7 +247,6 @@ final class Scanner
 				if (Token::BSLASH == $this->token && ! $escape) {
 					// XXX: The backslash (\) is removed here.
 					// Turn on escaping.
-					//$buf .= $this->value;
 					$escape = true;
 				} elseif ($escape) {
 					// Turn off escaping
@@ -288,7 +285,6 @@ final class Scanner
 				if (Token::BSLASH === $this->token && ! $escape) {
 					// XXX: The backslash (\) is removed here.
 					// Turn on escaping.
-					//$buf .= $this->value;
 					$escape = true;
 				} elseif ($escape) {
 					// Turn off escaping
@@ -315,22 +311,4 @@ final class Scanner
 
 		return '';
 	}
-
-	/**
-	 * Get a string from the input stream.
-	 * This is a convenience function for getting a string of
-	 * characters that are either alphanumber or whitespace. See
-	 * the Token::white and Token::char definitions.
-	 *
-	 * @deprecated this is not used anywhere in QueryPath
-	 */ /*
-  public function getStringPlusWhitespace() {
-	$buf = '';
-	if($this->token === FALSE) {return '';}
-	while ($this->token === Token::char || $this->token == Token::white) {
-	  $buf .= $this->value;
-	  $this->nextToken();
-	}
-	return $buf;
-  }*/
 }

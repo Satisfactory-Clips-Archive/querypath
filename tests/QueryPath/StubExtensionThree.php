@@ -24,6 +24,3 @@ class StubExtensionThree implements Extension
 		return $arg1 . $arg2;
 	}
 }
-
-//ExtensionRegistry::extend('StubExtensionOne');
-//ExtensionRegistry::extend('StubExtensionTwo');

@@ -102,14 +102,6 @@ class DOMTraverser implements Traverser
 				$this->scopeNode = $this->dom->documentElement ?? null;
 			}
 		}
-
-		// This assumes a DOM. Need to also accomodate the case
-		// where we get a set of elements.
-		/*
-		$this->dom = $dom;
-		$this->matches = new \SplObjectStorage();
-		$this->matches->attach($this->dom);
-		 */
 	}
 
 	/**
@@ -145,7 +137,6 @@ class DOMTraverser implements Traverser
 
 			/** @var DOMElement $candidate */
 			foreach ($candidates as $candidate) {
-				// fprintf(STDOUT, "Testing %s against %s.\n", $candidate->tagName, $selectorGroup[0]);
 				if ($this->matchesSelector($candidate, $selectorGroup)) {
 					$found->attach($candidate);
 				}
@@ -221,20 +212,7 @@ class DOMTraverser implements Traverser
 			&& $this->matchPseudoElements($node, $selector->pseudoElements);
 
 		$isNextRule = isset($selectors[++$index]);
-		// If there is another selector, we process that if there a match
-		// hasn't been found.
-		/*
-		if ($isNextRule && $selectors[$index]->combinator == SimpleSelector::anotherSelector) {
-		  // We may need to re-initialize the match set for the next selector.
-		  if (!$this->initialized) {
-			$this->initialMatch($selectors[$index]);
-		  }
-		  if (!$result) fprintf(STDOUT, "Element: %s, Next selector: %s\n", $node->tagName, $selectors[$index]);
-		  return $result || $this->matchesSimpleSelector($node, $selectors, $index);
-		}
-		// If we have a match and we have a combinator, we need to
-		// recurse up the tree.
-		else*/
+
 		if ($isNextRule && $result) {
 			$result = $this->combine($node, $selectors, $index);
 		}
@@ -446,8 +424,7 @@ class DOMTraverser implements Traverser
 		// Experimental: ID queries use XPath to match, since
 		// this should give us only a single matched element
 		// to work with.
-		if (/*$element == '*' &&*/
-		! empty($selector->id)) {
+		if ( ! empty($selector->id)) {
 			$initialMatches = $this->initialMatchOnID($selector, $matches);
 		} // If a namespace is set, find the namespace matches.
 		elseif ( ! empty($selector->ns)) {
@@ -655,21 +632,6 @@ class DOMTraverser implements Traverser
 		// Compare local name to given element name.
 		return '*' === $element || $node->localName === $element;
 	}
-
-	/**
-	 * Checks to see if the given DOMNode matches an "any element" (*).
-	 *
-	 * This does not handle namespaced whildcards.
-	 *
-	 * @param mixed $node
-	 */
-	/*
-	protected function matchAnyElement($node) {
-	  $ancestors = $this->ancestors($node);
-
-	  return count($ancestors) > 0;
-	}
-	 */
 
 	/**
 	 * Get a list of ancestors to the present node.

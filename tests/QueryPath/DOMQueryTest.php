@@ -533,7 +533,6 @@ class DOMQueryTest extends TestCase
 		$list->push($ele);
 		$list->push($ele2);
 		$this->assertCount(2, $list);
-		//$this->assertEquals(2, )
 		$this->assertTrue($qp->top('#one,#two')->is($list));
 	}
 
@@ -755,7 +754,6 @@ class DOMQueryTest extends TestCase
 		// Issue #7: Failure issues warnings
 		// This seems to be working as expected -- libxml emits
 		// parse errors.
-		//$this->assertEquals(NULL, qp()->append('<test'));
 
 		// Test loading SimpleXML.
 		$simp = simplexml_load_file($file);
@@ -767,7 +765,6 @@ class DOMQueryTest extends TestCase
 		// Note that we are using a UTF-8 » character, not an ASCII 187. This seems to cause
 		// problems on some Windows IDEs. So here we do it the ugly way.
 		$utf8raquo = '<p>' . mb_convert_encoding(chr(187), 'utf-8', 'iso-8859-1') . '</p>';
-		//$this->assertEquals('<p>»</p>', $qp->find('p')->html(), 'Entities are decoded to UTF-8 correctly.');
 		$this->assertSame($utf8raquo, $qp->find('p')->html(), 'Entities are decoded to UTF-8 correctly.');
 
 		// Test with empty, mainly to make sure it doesn't explode.
@@ -862,7 +859,6 @@ class DOMQueryTest extends TestCase
 		$file = DATA_FILE;
 		$dest = qp('<?xml version="1.0"?><root><dest/></root>', 'dest');
 		qp($file, 'li')->insertAfter($dest);
-		//print $dest->get(0)->ownerDocument->saveXML();
 		$this->assertSame(5, $dest->top(':root > li')->count());
 	}
 
@@ -870,11 +866,9 @@ class DOMQueryTest extends TestCase
 	{
 		$file = DATA_FILE;
 		$qp = qp($file, 'unary')->replaceWith('<test><foo/></test>')->top('test');
-		//print $qp->get(0)->ownerDocument->saveXML();
 		$this->assertSame(1, $qp->count());
 
 		$qp = qp($file, 'unary')->replaceWith(qp('<?xml version="1.0"?><root><test/><test/></root>', 'test'));
-		//print $qp->get(0)->ownerDocument->saveXML();
 		$this->assertSame(2, $qp->top()->find('test')->count());
 	}
 
@@ -1623,8 +1617,6 @@ class DOMQueryTest extends TestCase
 
 		$testarray = ['new paragraph', 'Goodbye', 'new paragraph'];
 
-		//throw new Exception($qp->top()->xml());
-
 		$qp = $qp->top('p:first-of-type');
 		$this->assertSame('Hello', $qp->text(), 'Test First P ' . (string) $qp->top()->html());
 		$i = 0;
@@ -1637,9 +1629,6 @@ class DOMQueryTest extends TestCase
 			++$i;
 		}
 		$this->assertSame(3, $i);
-		//    $this->assertEquals('new paragraph', $qp->next()->text(), "Test Newly Added P");
-		//    $this->assertEquals('Goodbye', $qp->next()->text(), "Test third P");
-		//    $this->assertEquals('new paragraph', $qp->next()->text(), "Test Other Newly Added P");
 	}
 
 	public function testPrev() : void
@@ -1826,27 +1815,6 @@ class DOMQueryTest extends TestCase
 		$this->assertSame(1, $qp->find('testDocument')->count());
 	}
 
-	/*
-	public function test__get() {
-	  // Test that other properties are not interferred with by __get().
-	  $file = DATA_FILE;
-	  $options = array('QueryPath_class' => 'QueryPathExtended');
-	  $foo = qp($file,'li', $options)->foo;
-
-	  $this->assertEquals('bar', $foo);
-	}
-	*/
-
-	/**
-	 * @  expectedException \QueryPath\Exception
-	 */
-	/*
-   public function testFailed__get() {
-	 // This should generate an error because 'last' is protected.
-	 qp(DATA_FILE)->last;
-   }
-   */
-
 	public function testDetach() : void
 	{
 		$file = DATA_FILE;
@@ -1902,14 +1870,6 @@ class DOMQueryTest extends TestCase
 		$target = $qp->get(0);
 		$this->assertInstanceOf(DOMElement::class, $target);
 		$this->assertSame('inner', $target->tagName, 'Inner has li.');
-
-		/*
-		$this->assertEquals(qp($file, '#one')->children()->get(), qp($file, '#inner-one')->has($selector)->get(), "Both should be empty/false");
-		$qp = qp($file, 'root')->children("inner");
-		$selector = qp($file, '#two');
-		$this->assertNotEquals(qp($file, '#head'), qp($file, '#inner-one')->has($selector));
-		$this->assertEquals(qp($file, 'root'), qp($file, 'root')->has($selector), "Should both have 1 element - root");
-		*/
 	}
 
 	public function testNextUntil() : void
@@ -2117,11 +2077,8 @@ class DOMQueryTest extends TestCase
 	 */
 	private function contentsRecurse(DOMQuery $source, array &$pack = []) : array
 	{
-		//static $i = 0;
-		//static $filter = "%d. Node type: %d, Content: '%s'\n";
 		$children = $source->contents();
-		//$node = $source->get(0);
-		$pack[] = 1; //sprintf($filter, ++$i, $node->nodeType, $source->html());
+		$pack[] = 1;
 
 		/** @var DOMQuery */
 		foreach ($children as $child) {
