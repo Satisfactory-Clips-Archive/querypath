@@ -23,7 +23,7 @@ use QueryPath\CSS\EventHandler;
 use QueryPath\CSS\NotImplementedException;
 use QueryPath\CSS\ParseException;
 use QueryPath\TextContent;
-use SPLObjectStorage;
+use SplObjectStorage;
 use const XML_ELEMENT_NODE;
 use const XML_TEXT_NODE;
 
@@ -364,7 +364,7 @@ class PseudoClass
 	protected function has(DOMNode $node, ?string $selector) : bool
 	{
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
-		$splos = new SPLObjectStorage();
+		$splos = new SplObjectStorage();
 		$splos->attach($node);
 		$traverser = new \QueryPath\CSS\DOMTraverser($splos, true);
 		$results = $traverser->find($selector ?? '')->matches();

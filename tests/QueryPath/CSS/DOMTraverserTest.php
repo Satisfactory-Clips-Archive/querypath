@@ -11,7 +11,7 @@ use DOMNode;
 use QueryPath\CSS\DOMTraverser;
 use QueryPath\TextContent;
 use QueryPathTests\TestCase;
-use SPLObjectStorage;
+use SplObjectStorage;
 use const STDOUT;
 
 /**
@@ -28,7 +28,7 @@ class DOMTraverserTest extends TestCase
 		$dom->load(self::TRAVERSER_XML);
 
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
-		$splos = new SPLObjectStorage();
+		$splos = new SplObjectStorage();
 		$splos->attach($dom);
 
 		$traverser = new DOMTraverser($splos);
@@ -365,7 +365,7 @@ class DOMTraverserTest extends TestCase
 		$dom->load(self::TRAVERSER_XML);
 
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
-		$splos = new SPLObjectStorage();
+		$splos = new SplObjectStorage();
 		$splos->attach($dom->documentElement);
 
 		$traverser = new DOMTraverser($splos);
