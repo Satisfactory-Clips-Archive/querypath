@@ -7,10 +7,10 @@
  *
  * This does two HTTP requests -- one to get information about a band, and another
  * to get a list of albums put out by that band.
- * 
+ *
  * TODO: Fix the output.
  *
- * 
+ *
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
  * @see http://musicbrainz.org
@@ -28,7 +28,7 @@ try {
     print '</p><p>Albums for this artist' . PHP_EOL;
     print '</p><p><a href="'.$album_url . urlencode($id).'">'.$album_url.'</a></p>';
     $albums = qp($album_url . urlencode($id))->writeXML();
-    
+
     foreach ($albums as $album) {
       print $album->find('title')->text() . PHP_EOL;
       // Fixme: Label is broken. See Drupal QueryPath module.

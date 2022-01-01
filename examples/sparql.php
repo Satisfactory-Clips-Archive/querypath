@@ -3,14 +3,14 @@
  * Use QueryPath to query SPARQL endpoints on semantic web servers.
  *
  * This example runs a SPARQL query against a remote database server
- * ({@link http://dbpedia.org}) and then parses the returned XML data, 
+ * ({@link http://dbpedia.org}) and then parses the returned XML data,
  * displaying it as an HTML table.
  *
- * This demo shows how a more complex GET query can be built up in 
+ * This demo shows how a more complex GET query can be built up in
  * QueryPath. POST queries are supported, too. Use a stream context
  * to create those.
  *
- * 
+ *
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
  * @see http://www.w3.org/2009/sparql/wiki/Main_Page
@@ -19,7 +19,7 @@
  * @see musicbrainz.php
  * @see http://drupal.org/project/querypath
  */
- 
+
 require '../src/QueryPath/QueryPath.php';
 
 // We are using the dbpedia database to execute a SPARQL query.

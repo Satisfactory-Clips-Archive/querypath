@@ -12,7 +12,7 @@
           <li>list item 3</li>
         </ul>
         <p>a paragraph</p>
-        
+
         $('li').add('<p id="new">new paragraph</p>')
         .css('background-color', 'red');
       </code>
@@ -133,7 +133,7 @@
   </entry>
   <entry name="all">
     <desc>
-      
+
     </desc>
     <jquery>
       <code>
@@ -180,8 +180,8 @@
             <script src="http://code.jquery.com/jquery-latest.min.js"></script>
             <script>
               // Add yellow background to span.
-              $("p").add("span").css("background", "yellow");   
-              // Add yellow background to children.    
+              $("p").add("span").css("background", "yellow");
+              // Add yellow background to children.
               $('ul.level-2').children().css('background-color', 'yellow');
             </script>
           </head>
@@ -220,7 +220,7 @@
           </body>
         </html>
       </code>
-      
+
       test.php
       <code>
       require_once 'QueryPath.php';

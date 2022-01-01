@@ -4,7 +4,7 @@
  *
  * For namespaces use | instead of :
  *
- * 
+ *
  * @author Emily Brand
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
  * @see http://www.urbandictionary.com/
@@ -103,4 +103,4 @@ function readZippedXML($archiveFile, $dataFile) {
 
     // In case of failure return empty string
     return $zip->getStatusString();
-} 
+}

@@ -2,11 +2,11 @@
 /**
  * Compare jQuery documentation to QueryPath documentation
  *
- * 
+ *
  * @author Emily Brand
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
  * @see http://api.jquery.com/api/
- * 
+ *
  * TODO: add to the xml file
  */
 
@@ -14,7 +14,7 @@ require_once '../src/QueryPath/QueryPath.php';
 
 /**
  * Add the link & class to each key to show in the left div.
- * 
+ *
  * @param String $v
  */
 function addClasses($v) {
@@ -27,8 +27,8 @@ $qpdoc = htmlqp('doc.html', 'body');
 $key = $_GET['key'];
 
 // The jQuery categories that are used in QueryPath
-$qparray = array('Tree Traversal', 'Child Filter', 'Attribute', 'Content Filter', 'Basic Filter', 
-'Hierarchy', 'Basic', 'Filtering', 'Miscellaneous Traversing', 'DOM Insertion, Outside', 
+$qparray = array('Tree Traversal', 'Child Filter', 'Attribute', 'Content Filter', 'Basic Filter',
+'Hierarchy', 'Basic', 'Filtering', 'Miscellaneous Traversing', 'DOM Insertion, Outside',
 'DOM Insertion, Inside', 'Attributes', 'Style Properties');
 
 $jqnames = array();
@@ -36,9 +36,9 @@ $qpnames = array();
 
 // Search through the xml file to find any entries of jQuery entities
 foreach(qp('querypath.xml', 'entry') as $entry) {
-  $qpnames[$entry->attr('name')] =  
-      array('desc' => $entry->find('desc')->innerXML(), 
-            'jquery' => $entry->parent()->find('jquery')->innerXML(), 
+  $qpnames[$entry->attr('name')] =
+      array('desc' => $entry->find('desc')->innerXML(),
+            'jquery' => $entry->parent()->find('jquery')->innerXML(),
             'querypath' => $entry->parent()->find('querypath')->innerXML());
 }
 
@@ -51,8 +51,8 @@ foreach(htmlqp('http://api.jquery.com/api/', 'entry') as $entry) {
     if($category) break;
   }
   if($category) {
-    $jqnames[$entry->parent()->attr('name')] =  
-      array('longdesc' => $entry->find('longdesc')->innerXML(), 
+    $jqnames[$entry->parent()->attr('name')] =
+      array('longdesc' => $entry->find('longdesc')->innerXML(),
             'name' => $entry->parent()->find('category')->attr('name'));
   }
 }

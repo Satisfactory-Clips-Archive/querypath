@@ -8,21 +8,21 @@
  * It uses two stubs -- one for the main RSS file, and one for an RSS entry --
  * and it merges data into the stubs.
  *
- * The method exhibited here is one of the more primitive ways of templating 
+ * The method exhibited here is one of the more primitive ways of templating
  * information. See the {@link techniques.php techniques} example for multiple
- * methods of looping. An even more advanced method would be to use the 
- * {@link QPTPL} library. 
+ * methods of looping. An even more advanced method would be to use the
+ * {@link QPTPL} library.
  *
- * 
+ *
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
  */
- 
+
 require_once '../src/QueryPath/QueryPath.php';
 
 // This is the stub RSS document.
 $rss_stub ='<?xml version="1.0"?>
-<rss version="2.0" 
+<rss version="2.0"
   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
    <title></title>
@@ -47,7 +47,7 @@ $rss_item_stub = '<?xml version="1.0"?>
   <guid isPermaLink="false"></guid>
 </item>';
 
-// Here are some dummy items. For the same of 
+// Here are some dummy items. For the same of
 // simplicity, we are just using a nested array. Of
 // course, this could be a database lookup or whatever.
 $items = array(
@@ -78,14 +78,14 @@ $qp = qp($rss_stub, 'title')
   ->next('description')->text('QueryPath: Find your way.')
   ->parent();
 
-// For each element in the array above, we create a new 
+// For each element in the array above, we create a new
 // QueryPath and then populate the XML fragment with data.
 foreach ($items as $item) {
-  
+
   // Begin with the stub RSS item, with title currently selected.
   $qpi = qp($rss_item_stub, 'title')
     // Add a title.
-    ->text($item['title']) 
+    ->text($item['title'])
     // Add a link. Note that we are giving no args to next() for the
     // sake of simplicity.
     ->next()->text($item['link'])
@@ -97,7 +97,7 @@ foreach ($items as $item) {
     ->next()->text($item['category'])
     ->next()->text($item['pubDate'])
     ->next()->text($item['guid']);
-    
+
   // Now we append it.
   $qp->append($qpi->top());
 }

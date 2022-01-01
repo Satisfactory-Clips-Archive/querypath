@@ -8,11 +8,11 @@
  * to match just part of the contents of an element. This example
  * illustrates how to accomplish this with a filter callback.
  *
- * As of QueryPath 2.1beta2, `:contains()` performs a substring match instead of 
+ * As of QueryPath 2.1beta2, `:contains()` performs a substring match instead of
  * and exact match, so the method outline below is roughly the same as merely
  * using `:contains(Release)`.
  *
- * 
+ *
  * @author M Butcher <matt@aleph-null.tv>
  * @license LGPL The GNU Lesser GPL (LGPL) or an MIT-like license.
  */
@@ -22,7 +22,7 @@ require_once '../src/QueryPath/QueryPath.php';
 
 /**
  * Check if the string 'Release' is in the text content of any matched nodes.
- * 
+ *
  * Returns TRUE if the text is found, FALSE otherwise. Anytime a filter callback
  * returns FALSE, QueryPath will remove it from the matches.
  *

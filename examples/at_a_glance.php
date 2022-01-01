@@ -23,7 +23,7 @@ print "\nExample 2: \n";
 print qp($xml, '#row2>td:nth(3)')->text();
 
 print "\nExample 3: \n";
-// Or append another row to the XML and then write the 
+// Or append another row to the XML and then write the
 // result to standard output:
 qp($xml, 'tr:last')->after('<tr><td/><td/><td/></tr>')->writeXML();
 
