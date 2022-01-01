@@ -4,54 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94faf7e07b011e0dde8f18ac46b48980",
+    "content-hash": "c12c0fc1556160bf84be98c66086b9ef",
     "packages": [
-        {
-            "name": "lombax85/create_function",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lombax85/create_function.git",
-                "reference": "d14b98647bbd8e70e0284944ebd768f8437452e6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lombax85/create_function/zipball/d14b98647bbd8e70e0284944ebd768f8437452e6",
-                "reference": "d14b98647bbd8e70e0284944ebd768f8437452e6",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ],
-                "files": [
-                    "src/helper.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabio Lombardo",
-                    "email": "lombax85@gmail.com"
-                }
-            ],
-            "description": "A replacement for the function create_function for PHP 8",
-            "support": {
-                "issues": "https://github.com/lombax85/create_function/issues",
-                "source": "https://github.com/lombax85/create_function/tree/1.0.3"
-            },
-            "time": "2021-04-17T22:40:34+00:00"
-        },
         {
             "name": "masterminds/html5",
             "version": "2.7.5",

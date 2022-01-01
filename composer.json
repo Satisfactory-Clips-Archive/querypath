@@ -43,7 +43,6 @@
 	"require": {
 		"php": "^8.1",
 		"ext-xsl": "*",
-		"lombax85/create_function": "^1.0",
 		"masterminds/html5": "^2.7"
 	},
 	"require-dev": {

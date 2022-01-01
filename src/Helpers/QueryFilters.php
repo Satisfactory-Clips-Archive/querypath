@@ -7,7 +7,6 @@ namespace QueryPath\Helpers;
 use function assert;
 use function call_user_func;
 use function count;
-use function create_function;
 use DOMElement;
 use DOMNode;
 use function in_array;
@@ -94,13 +93,15 @@ trait QueryFilters
 	 * Example:
 	 *
 	 * @code
-	 * qp('li')->filterLambda('qp($item)->attr("id") == "test"');
+	 * qp('li')->filterLambda(static function(int $_index, DOMNode|TextContent $item) : bool {
+	 *	return qp($item)->attr("id") == "test";
+	 * });
 	 * @endcode
 	 *
 	 * The above would filter down the list to only an item whose ID is
 	 * 'text'.
 	 *
-	 * @param string $fn
+	 * @param callable(int, DOMNode|TextContent):bool $fn
 	 *  Inline lambda function in a string
 	 *
 	 * @throws ParseException
@@ -110,10 +111,8 @@ trait QueryFilters
 	 * @see mapLambda()
 	 * @see filterCallback()
 	 */
-	public function filterLambda($fn) : DOMQuery
+	public function filterLambda(callable $function) : DOMQuery
 	{
-		/** @var callable(int, DOMNode|TextContent) */
-		$function = create_function('$index, $item', $fn);
 		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
 		$found = new SplObjectStorage();
 		$i = 0;

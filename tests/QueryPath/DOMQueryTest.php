@@ -572,8 +572,11 @@ class DOMQueryTest extends TestCase
 	{
 		$file = DATA_FILE;
 		// Get all evens:
-		$l = 'return (($index + 1) % 2 == 0);';
-		$this->assertSame(2, qp($file, 'li')->filterLambda($l)->count());
+		$this->assertSame(2, qp($file, 'li')->filterLambda(
+			static function (int $index) : bool {
+				return (($index + 1) % 2 == 0);
+			}
+		)->count());
 	}
 
 	public function testFilterCallback() : void
