@@ -17,8 +17,7 @@ class StubExtensionOne implements Extension
 {
 	public function __construct(
 		private \QueryPath\Query $qp
-	)
-	{
+	) {
 	}
 
 	public function stubToe() : \QueryPath\Query

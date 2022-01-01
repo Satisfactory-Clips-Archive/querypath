@@ -8,8 +8,7 @@ class DummyExtension implements \QueryPath\Extension
 {
 	public function __construct(
 		private \QueryPath\Query $qp
-	)
-	{
+	) {
 	}
 
 	public function grrrrrrr() : bool

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QueryPathTests\CSS;
 
+use Iterator;
 use QueryPath\CSS\EventHandler;
 use QueryPath\CSS\Selector;
 use QueryPath\CSS\SimpleSelector;
@@ -121,7 +122,7 @@ class SelectorTest extends TestCase
 		$selector = $this->parse('foo::bar');
 
 		$iterator = $selector->getIterator();
-		$this->assertInstanceOf(\Iterator::class, $iterator);
+		$this->assertInstanceOf(Iterator::class, $iterator);
 	}
 
 	protected function parse(string $selector) : Selector

@@ -22,7 +22,7 @@ use UnexpectedValueException;
  */
 class QueryPathEventHandlerTest extends TestCase
 {
-	const xml = '<?xml version="1.0" ?>
+	public const xml = '<?xml version="1.0" ?>
   <html>
   <head>
     <title>This is the title</title>

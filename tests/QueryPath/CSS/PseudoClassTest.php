@@ -7,7 +7,6 @@ namespace QueryPathTests\CSS;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
-use DOMNodeList;
 use QueryPath\CSS\DOMTraverser\PseudoClass;
 use QueryPathTests\TestCase;
 

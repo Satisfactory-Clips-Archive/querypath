@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace QueryPathTests;
 
-use function func_get_args;
-
 /**
  * Simple utility object for use with the TestEventHandler.
  *

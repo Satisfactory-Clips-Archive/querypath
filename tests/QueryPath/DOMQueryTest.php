@@ -2111,7 +2111,6 @@ class DOMQueryTest extends TestCase
 	 * Helper function for testContents().
 	 * Based on problem reported in issue 51.
 	 *
-	 * @param DOMQuery $source
 	 * @param list<1> $pack
 	 *
 	 * @return list<1>

@@ -15,8 +15,7 @@ class StubExtensionTwo implements Extension
 {
 	public function __construct(
 		private \QueryPath\Query $qp
-	)
-	{
+	) {
 	}
 
 	public function stuble(string $arg1, string $arg2) : string

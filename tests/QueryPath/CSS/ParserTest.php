@@ -366,7 +366,6 @@ class ParserTest extends TestCase
 		$parser = new Parser($selector, $handler);
 		$parser->parse();
 
-
 		$this->assertTrue($handler->success());
 
 		/*

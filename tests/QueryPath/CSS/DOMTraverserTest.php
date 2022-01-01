@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace QueryPathTests\CSS;
 
 use function count;
-use function define;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
@@ -21,7 +20,7 @@ use const STDOUT;
  */
 class DOMTraverserTest extends TestCase
 {
-	const TRAVERSER_XML = __DIR__ . '/../../DOMTraverserTest.xml';
+	public const TRAVERSER_XML = __DIR__ . '/../../DOMTraverserTest.xml';
 
 	public function testConstructor() : void
 	{
