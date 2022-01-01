@@ -52,6 +52,7 @@ use DOMNodeList;
 use function get_class;
 use function in_array;
 use function is_array;
+use function is_null;
 use QueryPath\TextContent;
 use SplObjectStorage;
 use function strlen;
@@ -763,11 +764,11 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				foreach ($matches as $item) {
 					$str = $item->textContent;
 					$lines = explode("\n", $str);
-						$line = trim($lines[0]);
-						if ( ! empty($line)) {
-							$o = new TextContent($line);
-							$found->attach($o); //trim($lines[0]);
-						}
+					$line = trim($lines[0]);
+					if ( ! empty($line)) {
+						$o = new TextContent($line);
+						$found->attach($o); //trim($lines[0]);
+					}
 				}
 				$this->matches = $found;
 				break;

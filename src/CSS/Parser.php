@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace QueryPath\CSS;
 
 use function in_array;
-use const PHP_EOL;
 use QueryPath\Exception;
 
 /**

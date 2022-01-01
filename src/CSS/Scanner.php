@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace QueryPath\CSS;
 
+use function assert;
 use function chr;
+use function gettype;
 use function is_string;
 use function ord;
 use UnexpectedValueException;
