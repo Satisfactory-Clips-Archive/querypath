@@ -323,7 +323,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 				//$nl = $item->getElementsByTagName($namespace . ':' . $name);
 				$nl = $item->getElementsByTagName($name);
 				$tagname = ($namespace ?? '') . ':' . $name;
-				$nsmatches = [];
 				foreach ($nl as $node) {
 					if ($node->tagName == $tagname) {
 						//$nsmatches[] = $node;
@@ -952,75 +951,6 @@ class QueryPathEventHandler implements EventHandler, Traverser
 		foreach ($nodeList as $item) {
 			$splos->attach($item);
 		}
-	}
-
-	/**
-	 * Helper function to find all elements with exact matches.
-	 *
-	 * @deprecated all use cases seem to be covered by attribute()
-	 */
-	protected function searchForAttr(string $name, string $value = null) : void
-	{
-		/** @var SplObjectStorage<DOMNode|TextContent, mixed> */
-		$found = new SplObjectStorage();
-		$matches = $this->candidateList();
-		foreach ($matches as $candidate) {
-			assert(
-				($candidate instanceof DOMElement),
-				new UnexpectedValueException(
-					'candidate not a DOMElement instance!'
-				)
-			);
-			if ($candidate->hasAttribute($name)) {
-				// If value is required, match that, too.
-				if (isset($value) && $value == $candidate->getAttribute($name)) {
-					$found->attach($candidate);
-				} // Otherwise, it's a match on name alone.
-				else {
-					$found->attach($candidate);
-				}
-			}
-		}
-
-		$this->matches = $found;
-	}
-
-	/**
-	 * Parse an an+b rule for CSS pseudo-classes.
-	 *
-	 * @param string $rule
-	 *  Some rule in the an+b format
-	 *
-	 * @throws ParseException
-	 *  If the rule does not follow conventions
-	 *
-	 * @return array{0:int, 1:int}
-	 *  Array (list($aVal, $bVal)) of the two values
-	 */
-	protected function parseAnB(string $rule) : array
-	{
-		if ('even' == $rule) {
-			return [2, 0];
-		} elseif ('odd' == $rule) {
-			return [2, 1];
-		} elseif ('n' == $rule) {
-			return [1, 0];
-		} elseif (is_numeric($rule)) {
-			return [0, (int) $rule];
-		}
-
-		$rule = explode('n', $rule);
-		if (0 == count($rule)) {
-			throw new ParseException('nth-child value is invalid.');
-		}
-
-		// Each of these is legal: 1, -1, and -. '-' is shorthand for -1.
-		$aVal = trim($rule[0]);
-		$aVal = ('-' == $aVal) ? -1 : (int) $aVal;
-
-		$bVal = ! empty($rule[1]) ? (int) trim($rule[1]) : 0;
-
-		return [$aVal, $bVal];
 	}
 
 	/**

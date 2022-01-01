@@ -29,7 +29,6 @@ use QueryPath\Exception;
 class Parser
 {
 	protected Scanner $scanner;
-	protected string $buffer = '';
 	protected EventHandler $handler;
 
 	private bool $strict = false;

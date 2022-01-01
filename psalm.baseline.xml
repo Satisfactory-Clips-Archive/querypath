@@ -6,31 +6,16 @@
       <code>getMatches</code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="src/CSS/Parser.php">
-    <PossiblyUnusedProperty occurrences="1">
-      <code>$buffer</code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="src/CSS/QueryPathEventHandler.php">
-    <PossiblyUnusedMethod occurrences="2">
-      <code>parseAnB</code>
-      <code>searchForAttr</code>
-    </PossiblyUnusedMethod>
-    <UnusedVariable occurrences="1">
-      <code>$nsmatches</code>
-    </UnusedVariable>
-  </file>
   <file src="src/CSS/SimpleSelector.php">
     <PossiblyUnusedMethod occurrences="1">
       <code>notEmpty</code>
     </PossiblyUnusedMethod>
   </file>
   <file src="src/DOMQuery.php">
-    <PossiblyUnusedMethod occurrences="5">
+    <PossiblyUnusedMethod occurrences="4">
       <code>html5</code>
       <code>innerHTML5</code>
       <code>toArray</code>
-      <code>val</code>
       <code>xinclude</code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedReturnValue occurrences="1">
@@ -42,54 +27,28 @@
       <code>__construct</code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="src/Extension/Format.php">
-    <PossiblyUnusedMethod occurrences="2">
-      <code>format</code>
-      <code>formatAttr</code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="src/Extension/QPXML.php">
-    <PossiblyUnusedMethod occurrences="7">
+    <PossiblyUnusedMethod occurrences="4">
       <code>appendElement</code>
-      <code>cdata</code>
-      <code>comment</code>
       <code>createNilElement</code>
-      <code>pi</code>
       <code>schema</code>
       <code>toXml</code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="src/Extension/QPXSL.php">
-    <PossiblyUnusedMethod occurrences="1">
-      <code>xslt</code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="src/Helpers/QueryMutators.php">
-    <PossiblyUnusedMethod occurrences="1">
-      <code>emptyElement</code>
-    </PossiblyUnusedMethod>
     <UnsafeInstantiation occurrences="2">
       <code>new static($found)</code>
       <code>new static()</code>
     </UnsafeInstantiation>
   </file>
   <file src="src/QueryPath.php">
-    <PossiblyUnusedMethod occurrences="2">
-      <code>enabledExtensions</code>
+    <PossiblyUnusedMethod occurrences="1">
       <code>withXML</code>
     </PossiblyUnusedMethod>
     <UnsafeInstantiation occurrences="2">
       <code>new $qpClass($document, $selector, $options)</code>
       <code>new $qpClass($source, $selector, $options)</code>
     </UnsafeInstantiation>
-  </file>
-  <file src="tests/QueryPath/CSS/QueryPathEventHandlerTest.php">
-    <PossiblyUnusedMethod occurrences="1">
-      <code>xtestListPeerElements</code>
-    </PossiblyUnusedMethod>
-    <UndefinedMethod occurrences="1">
-      <code>listPeerElements</code>
-    </UndefinedMethod>
   </file>
   <file src="tests/QueryPath/DOMQueryTest.php">
     <DeprecatedMethod occurrences="3">
@@ -98,24 +57,9 @@
       <code>replaceAll</code>
     </DeprecatedMethod>
   </file>
-  <file src="tests/QueryPath/DummyExtension.php">
-    <UnusedProperty occurrences="1">
-      <code>$qp</code>
-    </UnusedProperty>
-  </file>
   <file src="tests/QueryPath/StubExtensionOne.php">
     <DeprecatedMethod occurrences="1">
       <code>end</code>
     </DeprecatedMethod>
-  </file>
-  <file src="tests/QueryPath/StubExtensionThree.php">
-    <UnusedProperty occurrences="1">
-      <code>$qp</code>
-    </UnusedProperty>
-  </file>
-  <file src="tests/QueryPath/StubExtensionTwo.php">
-    <UnusedProperty occurrences="1">
-      <code>$qp</code>
-    </UnusedProperty>
   </file>
 </files>

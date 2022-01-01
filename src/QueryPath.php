@@ -340,28 +340,6 @@ class QueryPath
 	}
 
 	/**
-	 * Get a list of all of the enabled extensions.
-	 *
-	 * This example dumps a list of extensions to standard output:
-	 *
-	 * @code
-	 * <?php
-	 * $extensions = QueryPath::enabledExtensions();
-	 * print_r($extensions);
-	 * ?>
-	 * @endcode
-	 *
-	 * @return array
-	 *   An array of extension names
-	 *
-	 * @see QueryPath::ExtensionRegistry
-	 */
-	public static function enabledExtensions() : array
-	{
-		return ExtensionRegistry::extensionNames();
-	}
-
-	/**
 	 * A static function for transforming data into a Data URL.
 	 *
 	 * This can be used to create Data URLs for injection into CSS, JavaScript, or other

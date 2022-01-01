@@ -27,30 +27,6 @@ use UnexpectedValueException;
 trait QueryMutators
 {
 	/**
-	 * Empty everything within the specified element.
-	 *
-	 * A convenience function for removeChildren(). This is equivalent to jQuery's
-	 * empty() function. However, `empty` is a built-in in PHP, and cannot be used as a
-	 * function name.
-	 *
-	 * @return $this
-	 *  The DOMQuery object with the newly emptied elements
-	 *
-	 * @see        removeChildren()
-	 * @since      2.1
-	 *
-	 * @author     eabrand
-	 *
-	 * @deprecated the removeChildren() function is the preferred method
-	 */
-	public function emptyElement() : DOMQuery
-	{
-		$this->removeChildren();
-
-		return $this;
-	}
-
-	/**
 	 * Insert the given markup as the last child.
 	 *
 	 * The markup will be inserted into each match in the set.

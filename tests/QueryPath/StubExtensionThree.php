@@ -6,6 +6,7 @@ namespace QueryPathTests;
 
 use QueryPath\Extension;
 use QueryPath\ExtensionRegistry;
+use QueryPath\Query;
 
 /**
  * Create a stub extension.
@@ -14,9 +15,8 @@ use QueryPath\ExtensionRegistry;
  */
 class StubExtensionThree implements Extension
 {
-	public function __construct(
-		private \QueryPath\Query $qp
-	) {
+	public function __construct(Query $_qp)
+	{
 	}
 
 	public function stuble(string $arg1, string $arg2) : string

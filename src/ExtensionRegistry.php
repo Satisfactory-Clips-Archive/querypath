@@ -139,11 +139,6 @@ class ExtensionRegistry
 		return $extInstances;
 	}
 
-	public static function extensionNames() : array
-	{
-		return self::$extensionRegistry;
-	}
-
 	/**
 	 * Enable or disable automatic extension loading.
 	 *

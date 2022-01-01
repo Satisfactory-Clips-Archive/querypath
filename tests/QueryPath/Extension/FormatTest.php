@@ -22,10 +22,13 @@ class FormatTest extends TestCase
 	{
 		QueryPath::enable(Format::class);
 		$qp = qp('<?xml version="1.0"?><root><div>_apple_</div><div>_orange_</div></root>');
+		/** @var DOMQuery&Format */
 		$qp_find = $qp->find('div');
 		$this->assertInstanceOf(DOMQuery::class, $qp_find);
+		/** @var DOMQuery&Format */
 		$qp_format1 = $qp_find->format('strtoupper');
 		$this->assertInstanceOf(DOMQuery::class, $qp_format1);
+		/** @var DOMQuery&Format */
 		$qp_format2 = $qp_format1->format('trim', '_');
 		$this->assertInstanceOf(DOMQuery::class, $qp_format2);
 		$qp_format2->format(static function (string $text) {
@@ -53,6 +56,7 @@ class FormatTest extends TestCase
 			'<item label="_orange_" total="987,654,321" />' .
 			'</root>');
 
+		/** @var DOMQuery&Format */
 		$qp_format1 = $qp->find('item');
 		$this->assertInstanceOf(DOMQuery::class, $qp_format1);
 		$qp_format2 = $qp_format1->formatAttr('label', 'trim', '_');

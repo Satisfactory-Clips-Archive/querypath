@@ -567,31 +567,6 @@ class QueryPathEventHandlerTest extends TestCase
 		$this->assertSame('test', $this->firstMatch($matches)->tagName);
 	}
 
-	// Test removed so I can re-declare
-	// listPeerElements as private.
-	public function xtestListPeerElements() : void
-	{
-		$xml = '<?xml version="1.0" ?>
-    <test>
-      <i class="odd" id="one"/>
-      <i class="even" id="two"/>
-      <i class="odd" id="three"/>
-      <i class="even" id="four"/>
-      <i class="odd" id="five"/>
-      <e class="even" id="six"/>
-    </test>';
-		$doc = new DomDocument();
-		$doc->loadXML($xml);
-
-		// Test full list
-		$handler = new QueryPathEventHandler($doc);
-		$handler->find('#one');
-		$matches = $handler->getMatches();
-		$peers = $handler->listPeerElements($this->firstMatch($matches));
-		$this->assertTrue(is_countable($peers));
-		$this->assertCount(6, $peers);
-	}
-
 	/*
 	public function testChildAtIndex() {
 	  $xml = '<?xml version="1.0" ?>

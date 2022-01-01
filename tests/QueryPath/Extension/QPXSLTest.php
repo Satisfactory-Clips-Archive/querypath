@@ -50,7 +50,9 @@ class QPXSLTest extends TestCase
     </xsl:stylesheet>
     ';
 
-		$qp = qp($orig)->xslt($template);
+		/** @var DOMQuery&QPXSL */
+		$with_xslt = qp($orig);
+		$qp = $with_xslt->xslt($template);
 		$this->assertInstanceOf(DOMQuery::class, $qp);
 		$this->assertSame(2, $qp->top('h1')->count(), 'Make sure that data was formatted');
 	}

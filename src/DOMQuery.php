@@ -380,10 +380,8 @@ class DOMQuery extends DOM
 
 	/**
 	 * On an XML document, load all XIncludes.
-	 *
-	 * @return \QueryPath\DOMQuery
 	 */
-	public function xinclude()
+	public function xinclude() : DOMQuery
 	{
 		$this->document()->xinclude();
 
@@ -1175,41 +1173,6 @@ class DOMQuery extends DOM
 		}
 
 		return $buffer;
-	}
-
-	/**
-	 * Set or get the value of an element's 'value' attribute.
-	 *
-	 * The 'value' attribute is common in HTML form elements. This is a
-	 * convenience function for accessing the values. Since this is not  common
-	 * task on the server side, this method may be removed in future releases. (It
-	 * is currently provided for jQuery compatibility.)
-	 *
-	 * If a value is provided in the params, then the value will be set for all
-	 * matches. If no params are given, then the value of the first matched element
-	 * will be returned. This may be NULL.
-	 *
-	 * @deprecated Just use attr(). There's no reason to use this on the server.
-	 * @see        attr()
-	 *
-	 * @template T as string|null
-	 *
-	 * @param T $value
-	 *
-	 * @return (T is string ? DOMQuery : (string|null))
-	 *  Returns a DOMQuery if a string was passed in, and a string if no string
-	 *  was passed in. In the later case, an error will produce NULL.
-	 */
-	public function val(string $value = null) : DOMQuery|string|null
-	{
-		if (isset($value)) {
-			$this->attr('value', $value);
-
-			return $this;
-		}
-
-		/** @var string|null */
-		return $this->attr('value');
 	}
 
 	/**
