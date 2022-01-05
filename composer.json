@@ -37,7 +37,7 @@
 		"sort-packages": true
 	},
 	"conflict": {
-		"vimeo/psalm": "<4.16",
+		"vimeo/psalm": "<4.17",
 		"arthurkushman/query-path": "*",
 		"querypath/querypath": "*"
 	},
@@ -57,6 +57,6 @@
 		"psalm/plugin-phpunit": "^0.16.1",
 		"roave/security-advisories": "dev-latest",
 		"signpostmarv/php-cs-fixer-config": "^0.22.0",
-		"vimeo/psalm": "^4.16"
+		"vimeo/psalm": "^4.17"
 	}
 }
