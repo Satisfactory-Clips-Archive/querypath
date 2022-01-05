@@ -10,7 +10,7 @@
 		"css",
 		"jquery",
 		"xslt",
-		"php7"
+		"php8"
 	],
 	"autoload": {
 		"psr-4": {
